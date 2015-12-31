@@ -117,10 +117,10 @@ namespace CodeImp.DoomBuilder
 		//internal const int SIF_ALL = SIF_RANGE + SIF_PAGE + SIF_POS + SIF_TRACKPOS;
 		
 		// Files and Folders
-		private const string SETTINGS_FILE = "GZBuilder.cfg";
-		private const string DEFAULT_SETTINGS_FILE = "GZBuilder.default.cfg"; //mxd
-		private const string SETTINGS_DIR = "Doom Builder";
-		private const string LOG_FILE = "GZBuilder.log";
+		private const string SETTINGS_FILE = "ZoneBuilder.cfg";
+		private const string DEFAULT_SETTINGS_FILE = "ZoneBuilder.default.cfg"; //mxd
+		private const string SETTINGS_DIR = "Zone Builder";
+		private const string LOG_FILE = "ZoneBuilder.log";
 		private const string GAME_CONFIGS_DIR = "Configurations";
 		private const string COMPILERS_DIR = "Compilers";
 		private const string PLUGINS_DIR = "Plugins";
@@ -594,7 +594,7 @@ namespace CodeImp.DoomBuilder
 			
 			// Remove the previous log file and start logging
 			if(File.Exists(logfile)) File.Delete(logfile);
-			General.WriteLogLine("GZDoom Builder R" + thisasm.GetName().Version.Revision + " startup"); //mxd
+			General.WriteLogLine("Zone Builder R" + thisasm.GetName().Version.Revision + " startup"); //mxd
 			General.WriteLogLine("Application path:        " + apppath);
 			General.WriteLogLine("Temporary path:          " + temppath);
 			General.WriteLogLine("Local settings path:     " + settingspath);

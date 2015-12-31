@@ -94,7 +94,7 @@ namespace CodeImp.DoomBuilder.Controls
 			this.SetStyle(ControlStyles.Opaque, false);
 			this.UpdateStyles();
 			this.BackColor = SystemColors.ControlDarkDark;
-			this.BackgroundImage = Properties.Resources.Splash3_trans;
+			this.BackgroundImage = Properties.Resources.zonebuilder;
 			this.BackgroundImageLayout = ImageLayout.Center;
 		}
 		

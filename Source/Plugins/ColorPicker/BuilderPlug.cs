@@ -134,7 +134,7 @@ namespace CodeImp.DoomBuilder.ColorPicker
 			} 
 			else //wrong mode
 			{ 
-				General.Interface.DisplayStatus(StatusType.Warning, "Switch to" + (General.Map.UDMF ? " Sectors," : "") + " Things or GZDoom Visual Mode first!");
+				General.Interface.DisplayStatus(StatusType.Warning, "Switch to" + (General.Map.UDMF ? " Sectors," : "") + " Things or Visual Mode first!");
 				return;
 			}
 

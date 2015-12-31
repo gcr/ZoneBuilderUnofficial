@@ -72,7 +72,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 								  "At least it's not BSoD...",
 								  "User Error. Please Replace User",
 								  "Brought to you by MaxED!",
-								  "GZDoom Builder proudly presents:",
+								  "Zone Builder proudly presents:",
 								  "You aren't expected to understand this",
 								  "Back to the drawing board...",
 								  "I'm sorry... :(",
@@ -103,7 +103,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 								  "Freeze mode enabled",
 								  "You feel strange...",
 								  "That doesn't seem to work",
-								  "This function is only available in the retail version of GZDoom Builder",
+								  "This function is only available in the retail version of Zone Builder",
 								  "You picked up the Random Exception.",
 								  "Pinky says that you're the new hope. Bear that in mind.",
 								  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
@@ -148,8 +148,8 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 				}
 			}
 
-			// Get GZDB version
-			result += "GZDB: R" + General.ThisAssembly.GetName().Version.Revision + Environment.NewLine + Environment.NewLine;
+			// Get Zone Builder version
+			result += "ZB: R" + General.ThisAssembly.GetName().Version.Revision + Environment.NewLine + Environment.NewLine;
 
 			return result;
 		}

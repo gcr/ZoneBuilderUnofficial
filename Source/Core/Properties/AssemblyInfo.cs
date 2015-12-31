@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GZDoom Builder")]
-[assembly: AssemblyDescription("ZDoom, GZDoom and Zandronum map editor")]
+[assembly: AssemblyTitle("Zone Builder")]
+[assembly: AssemblyDescription("SRB2 map editor, forked from GZDoom Builder")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CodeImp, MaxED")]
-[assembly: AssemblyProduct("GZDoom Builder")]
+[assembly: AssemblyCompany("CodeImp, MaxED, MascaraSnake")]
+[assembly: AssemblyProduct("Zone Builder")]
 [assembly: AssemblyCopyright("Copyright © 2007, 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

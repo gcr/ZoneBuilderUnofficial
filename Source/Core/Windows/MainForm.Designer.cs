@@ -1207,7 +1207,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.itemhelpabout.Image = global::CodeImp.DoomBuilder.Properties.Resources.About;
 			this.itemhelpabout.Name = "itemhelpabout";
 			this.itemhelpabout.Size = new System.Drawing.Size(232, 22);
-			this.itemhelpabout.Text = "&About GZDoom Builder...";
+			this.itemhelpabout.Text = "&About Zone Builder...";
 			this.itemhelpabout.Click += new System.EventHandler(this.itemhelpabout_Click);
 			// 
 			// toolbar
@@ -2445,7 +2445,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.Name = "MainForm";
 			this.Opacity = 1;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "GZDoom Builder";
+			this.Text = "Zone Builder";
 			this.Deactivate += new System.EventHandler(this.MainForm_Deactivate);
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);

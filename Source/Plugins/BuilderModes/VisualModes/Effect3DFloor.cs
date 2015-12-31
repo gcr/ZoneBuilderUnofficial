@@ -164,7 +164,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			ceiling.splitsides = (!clipsides && !ignorebottomheight); // if "ignorebottomheight" flag is set, both ceiling and floor will be at the same level and sidedef clipping with floor level will fail resulting in incorrect light props transfer in some cases
 
 			//mxd. Check slopes, cause GZDoom can't handle sloped translucent 3d floors...
-			sloped3dfloor = ((alpha < 255 || renderadditive) &&
+            //MascaraSnake: SRB2 can, so only check in Doom
+			sloped3dfloor = (!General.Map.FormatInterface.HasTranslucent3DFloors && (alpha < 255 || renderadditive) &&
 							 (Angle2D.RadToDeg(ceiling.plane.Normal.GetAngleZ()) != 270 ||
 							  Angle2D.RadToDeg(floor.plane.Normal.GetAngleZ()) != 90));
 			

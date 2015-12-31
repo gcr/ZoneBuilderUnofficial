@@ -855,8 +855,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 							{
 								switch(t.Type)
 								{
-									case 1504: slopefloorthings.Add(t); break;
-									case 1505: slopeceilingthings.Add(t); break;
+									//case 1504: slopefloorthings.Add(t); break;
+									//case 1505: slopeceilingthings.Add(t); break;
 								}
 							}
 						}
@@ -884,123 +884,133 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					sd.AddEffectGlowingFlat(s);
 				}
 			}
-			
-			// Find interesting linedefs (such as line slopes)
-			foreach(Linedef l in General.Map.Map.Linedefs)
-			{
-				switch(l.Action)
-				{
-					// ========== Plane Align (see http://zdoom.org/wiki/Plane_Align) ==========
-					case 181:
-						if(((l.Args[0] == 1) || (l.Args[1] == 1)) && (l.Front != null))
-						{
-							SectorData sd = GetSectorData(l.Front.Sector);
-							sd.AddEffectLineSlope(l);
-						}
-						if(((l.Args[0] == 2) || (l.Args[1] == 2)) && (l.Back != null))
-						{
-							SectorData sd = GetSectorData(l.Back.Sector);
-							sd.AddEffectLineSlope(l);
-						}
-						break;
 
-					// ========== Plane Copy (mxd) (see http://zdoom.org/wiki/Plane_Copy) ==========
-					case 118: 
-					{
-						//check the flags...
-						bool floorCopyToBack = false;
-						bool floorCopyToFront = false;
-						bool ceilingCopyToBack = false;
-						bool ceilingCopyToFront = false;
+            // Find interesting linedefs (such as line slopes)
+            foreach (Linedef l in General.Map.Map.Linedefs)
+            {
+                // MascaraSnake: Slope handling
+                // ========== Plane Align (see http://zdoom.org/wiki/Plane_Align) ==========
+                if (l.IsSlope)
+                {
+                    if (!General.Map.FormatInterface.HasLinedefParameters) l.SetSlopeArgs();
+                    if (((l.Args[0] == 1) || (l.Args[1] == 1)) && (l.Front != null))
+                    {
+                        SectorData sd = GetSectorData(l.Front.Sector);
+                        sd.AddEffectLineSlope(l);
+                    }
+                    if (((l.Args[0] == 2) || (l.Args[1] == 2)) && (l.Back != null))
+                    {
+                        SectorData sd = GetSectorData(l.Back.Sector);
+                        sd.AddEffectLineSlope(l);
+                    }
+                }
 
-						if(l.Args[4] > 0 && l.Args[4] != 3 && l.Args[4] != 12) 
-						{
-							floorCopyToBack = (l.Args[4] & 1) == 1;
-							floorCopyToFront = (l.Args[4] & 2) == 2;
-							ceilingCopyToBack = (l.Args[4] & 4) == 4;
-							ceilingCopyToFront = (l.Args[4] & 8) == 8;
-						}
-					
-						// Copy slope to front sector
-						if(l.Front != null) 
-						{
-							if( (l.Args[0] > 0 || l.Args[1] > 0) || (l.Back != null && (floorCopyToFront || ceilingCopyToFront)) ) 
-							{
-								SectorData sd = GetSectorData(l.Front.Sector);
-								sd.AddEffectPlaneClopySlope(l, true);
-							}
-						}
+                // MascaraSnake: Slope handling
+                // ========== Plane Copy (mxd) (see http://zdoom.org/wiki/Plane_Copy) ==========
+                if (l.IsSlopeCopy)
+                {
+                    if (!General.Map.FormatInterface.HasLinedefParameters) l.SetSlopeCopyArgs();
+                    //check the flags...
+                    bool floorCopyToBack = false;
+                    bool floorCopyToFront = false;
+                    bool ceilingCopyToBack = false;
+                    bool ceilingCopyToFront = false;
 
-						// Copy slope to back sector
-						if(l.Back != null) 
-						{
-							if( (l.Args[2] > 0 || l.Args[3] > 0) || (l.Front != null && (floorCopyToBack || ceilingCopyToBack)) ) 
-							{
-								SectorData sd = GetSectorData(l.Back.Sector);
-								sd.AddEffectPlaneClopySlope(l, false);
-							}
-						}
-					}
-						break;
+                    if (l.Args[4] > 0 && l.Args[4] != 3 && l.Args[4] != 12)
+                    {
+                        floorCopyToBack = (l.Args[4] & 1) == 1;
+                        floorCopyToFront = (l.Args[4] & 2) == 2;
+                        ceilingCopyToBack = (l.Args[4] & 4) == 4;
+                        ceilingCopyToFront = (l.Args[4] & 8) == 8;
+                    }
 
-					// ========== Sector 3D floor (see http://zdoom.org/wiki/Sector_Set3dFloor) ==========
-					case 160:
-						if(l.Front != null)
-						{
-							//mxd. Added hi-tag/line ID check 
-							int sectortag = (General.Map.UDMF || (l.Args[1] & (int)Effect3DFloor.FloorTypes.HiTagIsLineID) != 0) ? l.Args[0] : l.Args[0] + (l.Args[4] << 8);
-							if(sectortags.ContainsKey(sectortag)) 
-							{
-								List<Sector> sectors = sectortags[sectortag];
-								foreach(Sector s in sectors) 
-								{
-									SectorData sd = GetSectorData(s);
-									sd.AddEffect3DFloor(l);
-								}
-							}
-						}
-						break;
+                    // Copy slope to front sector
+                    if (l.Front != null)
+                    {
+                        if ((l.Args[0] > 0 || l.Args[1] > 0) || (l.Back != null && (floorCopyToFront || ceilingCopyToFront)))
+                        {
+                            SectorData sd = GetSectorData(l.Front.Sector);
+                            sd.AddEffectPlaneClopySlope(l, true);
+                        }
+                    }
 
-					// ========== Transfer Brightness (see http://zdoom.org/wiki/ExtraFloor_LightOnly) =========
-					case 50:
-						if(l.Front != null && sectortags.ContainsKey(l.Args[0]))
-						{
-							List<Sector> sectors = sectortags[l.Args[0]];
-							foreach(Sector s in sectors) 
-							{
-								SectorData sd = GetSectorData(s);
-								sd.AddEffectBrightnessLevel(l);
-							}
-						}
-						break;
+                    // Copy slope to back sector
+                    if (l.Back != null)
+                    {
+                        if ((l.Args[2] > 0 || l.Args[3] > 0) || (l.Front != null && (floorCopyToBack || ceilingCopyToBack)))
+                        {
+                            SectorData sd = GetSectorData(l.Back.Sector);
+                            sd.AddEffectPlaneClopySlope(l, false);
+                        }
+                    }
+                }
 
-					// ========== mxd. Transfer Floor Brightness (see http://www.zdoom.org/w/index.php?title=Transfer_FloorLight) =========
-					case 210:
-						if(l.Front != null && sectortags.ContainsKey(l.Args[0])) 
-						{
-							List<Sector> sectors = sectortags[l.Args[0]];
-							foreach(Sector s in sectors) 
-							{
-								SectorData sd = GetSectorData(s);
-								sd.AddEffectTransferFloorBrightness(l);
-							}
-						}
-						break;
+                // MascaraSnake: 3D floor handling
+                // ========== Sector 3D floor (see http://zdoom.org/wiki/Sector_Set3dFloor) ==========
+                if (l.Is3DFloor)
+                {
+                    if (l.Front != null)
+                    {
+                        if (!General.Map.FormatInterface.HasLinedefParameters) l.Set3DFloorArgs();
+                        //mxd. Added hi-tag/line ID check 
+                        int sectortag = (General.Map.UDMF || (l.Args[1] & (int)Effect3DFloor.FloorTypes.HiTagIsLineID) != 0) ? l.Args[0] : l.Args[0] + (l.Args[4] << 8);
+                        if (sectortags.ContainsKey(sectortag))
+                        {
+                            List<Sector> sectors = sectortags[sectortag];
+                            foreach (Sector s in sectors)
+                            {
+                                SectorData sd = GetSectorData(s);
+                                sd.AddEffect3DFloor(l);
+                            }
+                        }
+                    }
 
-					// ========== mxd. Transfer Ceiling Brightness (see http://www.zdoom.org/w/index.php?title=Transfer_CeilingLight) =========
-					case 211:
-						if(l.Front != null && sectortags.ContainsKey(l.Args[0])) 
-						{
-							List<Sector> sectors = sectortags[l.Args[0]];
-							foreach(Sector s in sectors) 
-							{
-								SectorData sd = GetSectorData(s);
-								sd.AddEffectTransferCeilingBrightness(l);
-							}
-						}
-						break;
-				}
-			}
+                }
+                if (General.Map.FormatInterface.HasLinedefParameters)
+                {
+                    switch (l.Action)
+                    {
+                        // ========== Transfer Brightness (see http://zdoom.org/wiki/ExtraFloor_LightOnly) =========
+                        case 50:
+                            if (l.Front != null && sectortags.ContainsKey(l.Args[0]))
+                            {
+                                List<Sector> sectors = sectortags[l.Args[0]];
+                                foreach (Sector s in sectors)
+                                {
+                                    SectorData sd = GetSectorData(s);
+                                    sd.AddEffectBrightnessLevel(l);
+                                }
+                            }
+                            break;
+
+                        // ========== mxd. Transfer Floor Brightness (see http://www.zdoom.org/w/index.php?title=Transfer_FloorLight) =========
+                        case 210:
+                            if (l.Front != null && sectortags.ContainsKey(l.Args[0]))
+                            {
+                                List<Sector> sectors = sectortags[l.Args[0]];
+                                foreach (Sector s in sectors)
+                                {
+                                    SectorData sd = GetSectorData(s);
+                                    sd.AddEffectTransferFloorBrightness(l);
+                                }
+                            }
+                            break;
+
+                        // ========== mxd. Transfer Ceiling Brightness (see http://www.zdoom.org/w/index.php?title=Transfer_CeilingLight) =========
+                        case 211:
+                            if (l.Front != null && sectortags.ContainsKey(l.Args[0]))
+                            {
+                                List<Sector> sectors = sectortags[l.Args[0]];
+                                foreach (Sector s in sectors)
+                                {
+                                    SectorData sd = GetSectorData(s);
+                                    sd.AddEffectTransferCeilingBrightness(l);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
 
 			// Find interesting things (such as sector slopes)
 			foreach(Thing t in General.Map.Map.Things)
@@ -3589,12 +3599,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				//assign/remove action
 				if(vg.GeometryType == VisualGeometryType.WALL_LOWER) 
 				{
-					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.Action == 181 && vg.Sidedef.Line.Args[0] == 0)) 
+                    // MascaraSnake: Slope handling
+					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[0] == 0)) 
 					{
 						//check if the sector already has floor slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-							if(side == vg.Sidedef || side.Line.Action != 181) continue;
+                            // MascaraSnake: Slope handling
+							if(side == vg.Sidedef || !side.Line.IsSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3616,12 +3628,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				} 
 				else if(vg.GeometryType == VisualGeometryType.WALL_UPPER) 
 				{
-					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.Action == 181 && vg.Sidedef.Line.Args[1] == 0)) 
+                    // MascaraSnake: Slope handling
+                    if (vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[1] == 0)) 
 					{
 						//check if the sector already has ceiling slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-							if(side == vg.Sidedef || side.Line.Action != 181) continue;
+                            // MascaraSnake: Slope handling
+                            if (side == vg.Sidedef || !side.Line.IsSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3646,7 +3660,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					//check if the sector has ceiling slopes
 					foreach(Sidedef side in vg.Sector.Sector.Sidedefs) 
 					{
-						if(side.Line.Action != 181)	continue;
+                        // MascaraSnake: Slope handling
+                        if (!side.Line.IsSlope)	continue;
 
 						int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3667,7 +3682,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					//check if the sector has floor slopes
 					foreach(Sidedef side in vg.Sector.Sector.Sidedefs) 
 					{
-						if(side.Line.Action != 181)	continue;
+                        // MascaraSnake: Slope handling
+                        if (!side.Line.IsSlope)	continue;
 
 						int arg = (side == side.Line.Front ? 1 : 2);
 

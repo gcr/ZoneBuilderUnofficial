@@ -576,7 +576,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 				foreach(Sidedef side in Sector.Sector.Sidedefs) 
 				{
-					if(side.Line.Action == 181) 
+                    // MascaraSnake: Slope handling
+					if(side.Line.IsSlope) 
 					{
 						if(side.Line.Args[1] == 1 && side.Line.Front != null && side.Line.Front == side) 
 						{

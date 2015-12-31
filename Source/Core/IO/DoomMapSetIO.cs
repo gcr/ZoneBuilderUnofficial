@@ -30,16 +30,25 @@ namespace CodeImp.DoomBuilder.IO
 {
 	internal class DoomMapSetIO : MapSetIO
 	{
-		#region ================== Constants
+        #region ================== Constants
 
-		#endregion
+        #endregion
 
-		#region ================== Constructor / Disposer
+        #region ================== Variables
+        protected Dictionary<int, int[]> threeDFloorTypes;
+        protected Dictionary<int, int[]> slopeTypes;
+        protected Dictionary<int, int[]> slopeCopyTypes;
+        #endregion
 
-		// Constructor
-		public DoomMapSetIO(WAD wad, MapManager manager) : base(wad, manager)
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        public DoomMapSetIO(WAD wad, MapManager manager) : base(wad, manager)
 		{
-		}
+            threeDFloorTypes = new Dictionary<int, int[]>() { { 160, new int[3] { -1, -1, -1 } } };
+            slopeTypes = new Dictionary<int, int[]>() { { 181, new int[2] { -1, -1 } } };
+            slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
+        }
 
 		#endregion
 
@@ -66,7 +75,9 @@ namespace CodeImp.DoomBuilder.IO
 		public override bool HasNumericLinedefFlags { get { return true; } }
 		public override bool HasNumericThingFlags { get { return true; } }
 		public override bool HasNumericLinedefActivations { get { return true; } }
-		public override int MaxTag { get { return ushort.MaxValue; } }
+        public override bool HasLinedefParameters { get { return true; } }
+        public override bool HasTranslucent3DFloors { get { return false; } }
+        public override int MaxTag { get { return ushort.MaxValue; } }
 		public override int MinTag { get { return ushort.MinValue; } }
 		public override int MaxAction { get { return ushort.MaxValue; } }
 		public override int MinAction { get { return ushort.MinValue; } }
@@ -78,18 +89,24 @@ namespace CodeImp.DoomBuilder.IO
 		public override int MinBrightness { get { return short.MinValue; } }
 		public override int MaxThingType { get { return ushort.MaxValue; } }
 		public override int MinThingType { get { return ushort.MinValue; } }
-		public override float MaxCoordinate { get { return short.MaxValue; } }
+        public override int MaxThingHeight { get { return int.MaxValue; } }
+        public override int MinThingHeight { get { return int.MinValue; } }
+        public override float MaxCoordinate { get { return short.MaxValue; } }
 		public override float MinCoordinate { get { return short.MinValue; } }
 		public override int MaxThingAngle { get { return short.MaxValue; } }
 		public override int MinThingAngle { get { return short.MinValue; } }
 		public override Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get { return uifields; } } //mxd
-		
-		#endregion
+        public override Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
+        public override Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
+        public override Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
+        public override int Custom3DFloorType { get { return 160; } }
 
-		#region ================== Reading
+        #endregion
 
-		// This reads a map from the file and returns a MapSet
-		public override MapSet Read(MapSet map, string mapname)
+        #region ================== Reading
+
+        // This reads a map from the file and returns a MapSet
+        public override MapSet Read(MapSet map, string mapname)
 		{
 			// Find the index where first map lump begins
 			int firstindex = wad.FindLumpIndex(mapname) + 1;
@@ -113,8 +130,8 @@ namespace CodeImp.DoomBuilder.IO
 			return map;
 		}
 
-		// This reads the THINGS from WAD file
-		private void ReadThings(MapSet map, int firstindex)
+        // This reads the THINGS from WAD file
+        protected virtual void ReadThings(MapSet map, int firstindex)
 		{
 			// Get the lump from wad file
 			Lump lump = wad.FindLump("THINGS", firstindex);
@@ -393,8 +410,8 @@ namespace CodeImp.DoomBuilder.IO
 			WriteThings(map, position, manager.Config.MapLumps);
 		}
 
-		// This writes the THINGS to WAD file
-		private void WriteThings(MapSet map, int position, Dictionary<string, MapLumpInfo> maplumps)
+        // This writes the THINGS to WAD file
+        protected virtual void WriteThings(MapSet map, int position, Dictionary<string, MapLumpInfo> maplumps)
 		{
 			// Create memory to write to
 			MemoryStream mem = new MemoryStream();

@@ -616,9 +616,11 @@ namespace CodeImp.DoomBuilder.Rendering
 			//find lines with 3d floor action and collect sector tags
 			foreach(Linedef l in General.Map.Map.Linedefs)
 			{
-				if(l.Action == 160) 
-				{
-					int sectortag = (General.Map.UDMF || (l.Args[1] & 8) != 0) ? l.Args[0] : l.Args[0] + (l.Args[4] << 8);
+                //MascaraSnake: 3D floor handling
+				if(l.Is3DFloor)
+                {
+                    if (!General.Map.FormatInterface.HasLinedefParameters) l.Set3DFloorArgs();
+                    int sectortag = (General.Map.UDMF || (l.Args[1] & 8) != 0) ? l.Args[0] : l.Args[0] + (l.Args[4] << 8);
 					if(sectortag != 0 && !tags.Contains(sectortag)) tags.Add(sectortag);
 				}
 			}

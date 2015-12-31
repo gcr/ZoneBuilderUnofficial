@@ -138,12 +138,32 @@ namespace CodeImp.DoomBuilder.Windows
 			thingtype.Setup();
 		}
 
-		#endregion
+        #endregion
 
-		#region ================== Methods
+        #region ================== Methods
 
-		// This sets up the form to edit the given things
-		public void Setup(ICollection<Thing> things)
+        private string evaluateFlagsValue()
+        {
+            int i = 1;
+            int value = 0;
+            foreach (CheckBox box in flags.Checkboxes)
+            {
+                if (box.CheckState == CheckState.Indeterminate) return "";
+                if (box.CheckState == CheckState.Checked) value += i;
+                i *= 2;
+            }
+
+            float z = General.GetByIndex(things, 0).Position.z;
+            foreach (Thing t in things)
+            {
+                if (t.Position.z != z) return "";
+            }
+
+            return (value + ((int)z << 4)).ToString();
+        }
+
+        // This sets up the form to edit the given things
+        public void Setup(ICollection<Thing> things)
 		{
 			preventchanges = true;
 
@@ -256,8 +276,9 @@ namespace CodeImp.DoomBuilder.Windows
 			angle_WhenTextChanged(angle, EventArgs.Empty);
 			flags_OnValueChanged(flags, EventArgs.Empty);
 			preventmapchange = false;
+            flagsvalue.Text = evaluateFlagsValue();
 
-			argscontrol.UpdateScriptControls(); //mxd
+            argscontrol.UpdateScriptControls(); //mxd
 			actionhelp.UpdateAction(action.GetValue()); //mxd
 		}
 
@@ -526,11 +547,12 @@ namespace CodeImp.DoomBuilder.Windows
 					float z = posZ.GetResultFloat(thingprops[i++].Z);
 					if(useabsoluteheight && !posZ.CheckIsRelative() && t.Sector != null)
 						z -= (float)Math.Round(Sector.GetFloorPlane(t.Sector).GetZ(t.Position.x, t.Position.y), General.Map.FormatInterface.VertexDecimals);
-					t.Move(new Vector3D(t.Position.x, t.Position.y, z));
+					t.Move(new Vector3D(t.Position.x, t.Position.y, General.Clamp(z, General.Map.FormatInterface.MinThingHeight, General.Map.FormatInterface.MaxThingHeight)));
 				}
 			}
 
-			General.Map.IsChanged = true;
+            flagsvalue.Text = evaluateFlagsValue();
+            General.Map.IsChanged = true;
 			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
 		}
 
@@ -613,7 +635,8 @@ namespace CodeImp.DoomBuilder.Windows
 			//everything is OK
 			missingflags.Visible = false;
 			settingsgroup.ForeColor = SystemColors.ControlText;
-		}
+            flagsvalue.Text = evaluateFlagsValue();
+        }
 
 		#endregion
 

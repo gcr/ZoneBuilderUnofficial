@@ -70,7 +70,9 @@ namespace CodeImp.DoomBuilder.IO
 		public abstract bool HasNumericLinedefFlags { get; }
 		public abstract bool HasNumericThingFlags { get; }
 		public abstract bool HasNumericLinedefActivations { get; }
-		public abstract int MaxTag { get; }
+        public abstract bool HasLinedefParameters { get; }
+        public abstract bool HasTranslucent3DFloors { get; }
+        public abstract int MaxTag { get; }
 		public abstract int MinTag { get; }
 		public abstract int MaxAction { get; }
 		public abstract int MinAction { get; }
@@ -82,18 +84,24 @@ namespace CodeImp.DoomBuilder.IO
 		public abstract int MinBrightness { get; }
 		public abstract int MaxThingType { get; }
 		public abstract int MinThingType { get; }
-		public abstract float MaxCoordinate { get; }
+        public abstract int MaxThingHeight { get; }
+        public abstract int MinThingHeight { get; }
+        public abstract float MaxCoordinate { get; }
 		public abstract float MinCoordinate { get; }
 		public abstract int MaxThingAngle { get; }
 		public abstract int MinThingAngle { get; }
 		public abstract Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get; } //mxd
-		
-		#endregion
+        public abstract Dictionary<int, int[]> ThreeDFloorTypes { get; }
+        public abstract Dictionary<int, int[]> SlopeTypes { get; }
+        public abstract Dictionary<int, int[]> SlopeCopyTypes { get; }
+        public abstract int Custom3DFloorType { get; }
 
-		#region ================== Constructor / Disposer
+        #endregion
 
-		// Constructor
-		protected MapSetIO(WAD wad, MapManager manager)
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        protected MapSetIO(WAD wad, MapManager manager)
 		{
 			// Initialize
 			this.wad = wad;

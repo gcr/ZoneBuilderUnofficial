@@ -34,18 +34,27 @@ namespace CodeImp.DoomBuilder.IO
 
 		// Name of the UDMF configuration file
 		private const string UDMF_UI_CONFIG_NAME = "UDMF_UI.cfg";
-		
-		#endregion
-		
-		#region ================== Constructor / Disposer
 
-		// Constructor
-		public UniversalMapSetIO(WAD wad, MapManager manager) : base(wad, manager)
+        #endregion
+
+        #region ================== Variables
+        protected Dictionary<int, int[]> threeDFloorTypes;
+        protected Dictionary<int, int[]> slopeTypes;
+        protected Dictionary<int, int[]> slopeCopyTypes;
+        #endregion
+
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        public UniversalMapSetIO(WAD wad, MapManager manager) : base(wad, manager)
 		{
 			if((manager != null) && (manager.Config != null))
 			{
-				// Make configuration
-				Configuration config = new Configuration();
+                threeDFloorTypes = new Dictionary<int, int[]>() { { 160, new int[3] { -1, -1, -1 } } };
+                slopeTypes = new Dictionary<int, int[]>() { { 181, new int[2] { -1, -1 } } };
+                slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
+                // Make configuration
+                Configuration config = new Configuration();
 				
 				//mxd. Find a resource named UDMF_UI.cfg
 				string[] resnames = General.ThisAssembly.GetManifestResourceNames();
@@ -116,7 +125,9 @@ namespace CodeImp.DoomBuilder.IO
 		public override bool HasNumericLinedefFlags { get { return false; } }
 		public override bool HasNumericThingFlags { get { return false; } }
 		public override bool HasNumericLinedefActivations { get { return false; } }
-		public override int MaxTag { get { return int.MaxValue; } }
+        public override bool HasLinedefParameters { get { return true; } }
+        public override bool HasTranslucent3DFloors { get { return false; } }
+        public override int MaxTag { get { return int.MaxValue; } }
 		public override int MinTag { get { return int.MinValue; } }
 		public override int MaxAction { get { return int.MaxValue; } }
 		public override int MinAction { get { return int.MinValue; } }
@@ -128,18 +139,24 @@ namespace CodeImp.DoomBuilder.IO
 		public override int MinBrightness { get { return int.MinValue; } }
 		public override int MaxThingType { get { return int.MaxValue; } }
 		public override int MinThingType { get { return int.MinValue; } }
-		public override float MaxCoordinate { get { return short.MaxValue; } } //mxd. UDMF maps are still bounded to -32768 .. 32767 range
+        public override int MaxThingHeight { get { return int.MaxValue; } }
+        public override int MinThingHeight { get { return int.MinValue; } }
+        public override float MaxCoordinate { get { return short.MaxValue; } } //mxd. UDMF maps are still bounded to -32768 .. 32767 range
 		public override float MinCoordinate { get { return short.MinValue; } } //mxd
 		public override int MaxThingAngle { get { return int.MaxValue; } }
 		public override int MinThingAngle { get { return int.MinValue; } }
 		public override Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get { return uifields; } } //mxd
-		
-		#endregion
+        public override Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
+        public override Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
+        public override Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
+        public override int Custom3DFloorType { get { return 160; } }
 
-		#region ================== Reading
-		
-		// This reads a map from the file and returns a MapSet
-		public override MapSet Read(MapSet map, string mapname)
+        #endregion
+
+        #region ================== Reading
+
+        // This reads a map from the file and returns a MapSet
+        public override MapSet Read(MapSet map, string mapname)
 		{
 			UniversalStreamReader udmfreader = new UniversalStreamReader(uifields); //mxd
 			

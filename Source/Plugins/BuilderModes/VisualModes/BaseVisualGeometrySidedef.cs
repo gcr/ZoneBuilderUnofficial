@@ -509,9 +509,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private void OnTextureChanged() 
 		{
 			//check for 3d floors
-			if(Sidedef.Line.Action == 160) 
+            // MascaraSnake: 3D floor handling
+			if(Sidedef.Line.Is3DFloor) 
 			{
-				int sectortag = ((General.Map.UDMF || (Sidedef.Line.Args[1] & 8) != 0) ? Sidedef.Line.Args[0] : Sidedef.Line.Args[0] + (Sidedef.Line.Args[4] << 8));
+                if (!General.Map.FormatInterface.HasLinedefParameters) Sidedef.Line.Set3DFloorArgs();
+                int sectortag = ((General.Map.UDMF || (Sidedef.Line.Args[1] & 8) != 0) ? Sidedef.Line.Args[0] : Sidedef.Line.Args[0] + (Sidedef.Line.Args[4] << 8));
 				if(sectortag == 0) return;
 
 				foreach(Sector sector in General.Map.Map.Sectors) 

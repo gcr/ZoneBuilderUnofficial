@@ -22,6 +22,7 @@ using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Geometry;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using CodeImp.DoomBuilder.IO;
 
 #endregion
@@ -90,8 +91,10 @@ namespace CodeImp.DoomBuilder.Map
 		internal Dictionary<string, bool> Flags { get { return flags; } }
 		public int Action { get { return action; } set { BeforePropsChange(); action = value; UpdateColorPreset(); } }
 		public int Activate { get { return activate; } set { BeforePropsChange(); activate = value; UpdateColorPreset(); } }
-
-		public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
+        public bool Is3DFloor { get { return General.Map.FormatInterface.ThreeDFloorTypes.ContainsKey(Action); } }
+        public bool IsSlope { get { return General.Map.FormatInterface.SlopeTypes.ContainsKey(Action); } }
+        public bool IsSlopeCopy { get { return General.Map.FormatInterface.SlopeCopyTypes.ContainsKey(Action); } }
+        public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
 		public List<int> Tags { get { return tags; } set { BeforePropsChange(); tags = value; } } //mxd
 		public float LengthSq { get { return lengthsq; } }
 		public float Length { get { return length; } }
@@ -751,13 +754,98 @@ namespace CodeImp.DoomBuilder.Map
 			if(selecteditem.List != null) selecteditem.List.Remove(selecteditem);
 			selecteditem = null;
 		}
-		
-		#endregion
-		
-		#region ================== Methods
 
-		// This checks and returns a flag without creating it
-		public bool IsFlagSet(string flagname)
+        #endregion
+
+        #region ================== Methods
+        public void Set3DFloorArgs()
+        {
+            Args[0] = Tag;
+            Args[1] = 1;
+            Args[2] = 0;
+            Args[3] = 0;
+            Args[4] = 0;
+
+            if (Action == General.Map.FormatInterface.Custom3DFloorType && Back != null)
+            {
+                string tex = Back.HighTexture;
+                Regex r = new Regex("^[A-F0-9]*$");
+                if (r.IsMatch(tex))
+                {
+                    int value = Convert.ToInt32(tex, 16);
+                    bool exists = (value & 0x1) == 0x1;
+                    bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4);
+                    bool render = ((value & 0x8) == 0x8) || ((value & 0x10) == 0x10);
+                    bool water = (value & 0x20) == 0x20;
+                    bool noshade = (value & 0x40) == 0x40;
+                    bool translucent = (value & 0x1000) == 0x1000;
+                    bool fog = (value & 0x2000) == 0x2000;
+                    bool inside = ((value & 0x8000) == 0x8000) || ((value & 0x10000) == 0x10000);
+                    if (exists)
+                    {
+                        Args[1] = water ? 2 : (solid ? 1 : 3);
+                        if (inside) Args[1] += 4;
+                    }
+                    Args[2] = noshade ? 1 : 0;
+                    if (inside) Args[2] += 2;
+                    if (fog) Args[2] += 4;
+                    Args[3] = render ? (translucent ? ParseTranslucency(Front.HighTexture) : 255) : 0;
+                }
+            }
+            else
+            {
+                int[] settings = General.Map.FormatInterface.ThreeDFloorTypes[Action];
+                Args[1] = settings[0];
+                Args[2] = Flags.ContainsKey("64") && Flags["64"] ? settings[3] : settings[1];
+                switch (settings[2])
+                {
+                    case 0:
+                        Args[3] = 0;
+                        break;
+                    case 1:
+                        Args[3] = ParseTranslucency(Front.HighTexture);
+                        break;
+                    case 2:
+                        Args[3] = 255;
+                        break;
+                    default:
+                        Args[3] = 0;
+                        break;
+                }
+            }
+        }
+
+        private int ParseTranslucency(string tex)
+        {
+            int result = 128;
+            if (tex.StartsWith("#") && tex.Length == 4)
+            {
+                int alpha;
+                if (int.TryParse(tex.Substring(1), out alpha) && alpha >= 0 && alpha <= 255) result = alpha;
+            }
+            return result;
+        }
+
+        public void SetSlopeArgs()
+        {
+            int[] settings = General.Map.FormatInterface.SlopeTypes[Action];
+            Args[0] = settings[0];
+            Args[1] = settings[1];
+            Args[2] = 0;
+        }
+
+        public void SetSlopeCopyArgs()
+        {
+            int[] settings = General.Map.FormatInterface.SlopeCopyTypes[Action];
+            if (settings[0] == 1) Args[0] = Tag;
+            if (settings[0] == 2) Args[2] = Tag;
+            if (settings[1] == 1) Args[1] = Tag;
+            if (settings[1] == 2) Args[3] = Tag;
+            Args[4] = 0;
+        }
+
+        // This checks and returns a flag without creating it
+        public bool IsFlagSet(string flagname)
 		{
 			return flags.ContainsKey(flagname) && flags[flagname];
 		}

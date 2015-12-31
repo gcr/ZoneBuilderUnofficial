@@ -47,7 +47,9 @@ namespace CodeImp.DoomBuilder.IO
 		bool HasNumericLinedefFlags { get; }
 		bool HasNumericThingFlags { get; }
 		bool HasNumericLinedefActivations { get; }
-		int MaxTag { get; }
+        bool HasLinedefParameters { get; }
+        bool HasTranslucent3DFloors { get; }
+        int MaxTag { get; }
 		int MinTag { get; }
 		int MaxAction { get; }
 		int MinAction { get; }
@@ -59,12 +61,18 @@ namespace CodeImp.DoomBuilder.IO
 		int MinBrightness { get; }
 		int MaxThingType { get; }
 		int MinThingType { get; }
-		float MaxCoordinate { get; }
+        int MaxThingHeight { get; }
+        int MinThingHeight { get; }
+        float MaxCoordinate { get; }
 		float MinCoordinate { get; }
 		int MaxThingAngle { get; }
 		int MinThingAngle { get; }
 		Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get; } //mxd. Element type (like "sector"), list of uifields.
 		string GetElementName(MapElementType elementtype); //mxd
 		MapElementType GetElementType(string elementname); //mxd
-	}
+        Dictionary<int, int[]> ThreeDFloorTypes { get; }
+        Dictionary<int,int[]> SlopeTypes { get; }
+        Dictionary<int, int[]> SlopeCopyTypes { get; }
+        int Custom3DFloorType { get; }
+    }
 }

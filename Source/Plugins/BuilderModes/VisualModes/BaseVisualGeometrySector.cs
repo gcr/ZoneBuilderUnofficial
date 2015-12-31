@@ -228,9 +228,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				//mxd. 3D floors may need updating...
 				foreach(Sidedef s in level.sector.Sidedefs) 
 				{
-					if(s.Line.Action == 160 && s.Line.Front != null) 
+                    // MascaraSnake: 3D floor handling
+					if(s.Line.Is3DFloor && s.Line.Front != null) 
 					{
-						int sectortag = ((General.Map.UDMF || (s.Line.Args[1] & 8) != 0) ? s.Line.Args[0] : s.Line.Args[0] + (s.Line.Args[4] << 8));
+                        if (!General.Map.FormatInterface.HasLinedefParameters) s.Line.Set3DFloorArgs();
+                        int sectortag = ((General.Map.UDMF || (s.Line.Args[1] & 8) != 0) ? s.Line.Args[0] : s.Line.Args[0] + (s.Line.Args[4] << 8));
 						foreach(Sector sector in General.Map.Map.Sectors) 
 						{
 							if(sector.Tags.Contains(sectortag))

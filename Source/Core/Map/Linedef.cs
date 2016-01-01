@@ -841,6 +841,18 @@ namespace CodeImp.DoomBuilder.Map
             Args[2] = 0; //lineid (irrelevant for SRB2)
         }
 
+        //Finds the appropriate slope type for the current arguments. Sadly there's no better way to do this generically than to iterate over all types. Oh well.
+        public void SetSlopeTypeFromArgs()
+        {
+            foreach (KeyValuePair<int, int[]> type in General.Map.FormatInterface.SlopeTypes)
+            {
+                if ((type.Value[0] == Args[0] && type.Value[1] == Args[1]) || (type.Value[0] == -1 && type.Value[1] == -1)) {
+                        Action = type.Key;
+                        return;
+                }
+            }
+        }
+
         //Set slope arguments for SRB2-style copy slopes. See http://zdoom.org/wiki/Plane_Copy.
         public void SetSlopeCopyArgs()
         {

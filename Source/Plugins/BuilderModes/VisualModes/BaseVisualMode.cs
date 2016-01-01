@@ -3597,33 +3597,34 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				bool update = false;
 
 				//assign/remove action
-				if(vg.GeometryType == VisualGeometryType.WALL_LOWER) 
+				if(vg.GeometryType == VisualGeometryType.WALL_LOWER)
 				{
                     // MascaraSnake: Slope handling
-					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[0] == 0)) 
+					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[0] == 0))
 					{
 						//check if the sector already has floor slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-                            // MascaraSnake: Slope handling
 							if(side == vg.Sidedef || !side.Line.IsSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
 							if(side.Line.Args[0] == arg) 
 							{
-								//if only floor is affected, remove action
-								if(side.Line.Args[1] == 0)
-									side.Line.Action = 0;
-								else //clear floor alignment
-									side.Line.Args[0] = 0;
+                                //if only floor is affected, remove action
+                                if (side.Line.Args[1] == 0)
+                                    side.Line.Action = 0;
+                                else { //clear floor alignment
+                                    side.Line.Args[0] = 0;
+                                    side.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Arguments changed, so update slope type
+                                }
 							}
 						}
 
 						//set action
-						vg.Sidedef.Line.Action = 181;
 						vg.Sidedef.Line.Args[0] = (vg.Sidedef == vg.Sidedef.Line.Front ? 1 : 2);
-						update = true;
+                        vg.Sidedef.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Set slope type
+                        update = true;
 					}
 				} 
 				else if(vg.GeometryType == VisualGeometryType.WALL_UPPER) 
@@ -3634,25 +3635,26 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						//check if the sector already has ceiling slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-                            // MascaraSnake: Slope handling
                             if (side == vg.Sidedef || !side.Line.IsSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
 							if(side.Line.Args[1] == arg) 
 							{
-								//if only ceiling is affected, remove action
-								if(side.Line.Args[0] == 0)
-									side.Line.Action = 0;
-								else //clear ceiling alignment
-									side.Line.Args[1] = 0;
+                                //if only ceiling is affected, remove action
+                                if (side.Line.Args[0] == 0)
+                                    side.Line.Action = 0;
+                                else { //clear ceiling alignment
+                                    side.Line.Args[1] = 0;
+                                    side.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Arguments changed, so update slope type
+                                }
 							}
 						}
 
 						//set action
-						vg.Sidedef.Line.Action = 181;
 						vg.Sidedef.Line.Args[1] = (vg.Sidedef == vg.Sidedef.Line.Front ? 1 : 2);
-						update = true;
+                        vg.Sidedef.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Set slope type
+                        update = true;
 					}
 				} 
 				else if(vg.GeometryType == VisualGeometryType.CEILING) 
@@ -3667,13 +3669,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 						if(side.Line.Args[1] == arg) 
 						{
-							//if only ceiling is affected, remove action
-							if(side.Line.Args[0] == 0)
-								side.Line.Action = 0;
-							else //clear ceiling alignment
-								side.Line.Args[1] = 0;
+                            //if only ceiling is affected, remove action
+                            if (side.Line.Args[0] == 0)
+                                side.Line.Action = 0;
+                            else { //clear ceiling alignment
+                                side.Line.Args[1] = 0;
+                                side.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Arguments changed, so update slope type
+                            }
 
-							update = true;
+                            update = true;
 						}
 					}
 				} 
@@ -3692,10 +3696,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 							//if only floor is affected, remove action
 							if(side.Line.Args[1] == 0)
 								side.Line.Action = 0;
-							else //clear floor alignment
+							else { //clear floor alignment
 								side.Line.Args[0] = 0;
-
-							update = true;
+                                side.Line.SetSlopeTypeFromArgs(); //MascaraSnake: Arguments changed, so update slope type
+                            }
+                            update = true;
 						}
 					}
 				}

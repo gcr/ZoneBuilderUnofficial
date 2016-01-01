@@ -509,6 +509,7 @@
     <EmbeddedResource Include="Interface\WavefrontSettingsForm.resx">
       <DependentUpon>WavefrontSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
+	<EmbeddedResource Include="Resources\VisualMode.png" />
     <EmbeddedResource Include="Resources\VisualModeGZ.png" />
   </ItemGroup>
   <ItemGroup>

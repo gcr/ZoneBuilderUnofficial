@@ -776,21 +776,22 @@ namespace CodeImp.DoomBuilder.Map
                 if (r.IsMatch(tex))
                 {
                     int value = Convert.ToInt32(tex, 16);
-                    bool exists = (value & 0x1) == 0x1;
-                    bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4);
-                    bool render = ((value & 0x8) == 0x8) || ((value & 0x10) == 0x10);
-                    bool water = (value & 0x20) == 0x20;
-                    bool noshade = (value & 0x40) == 0x40;
-                    bool translucent = (value & 0x1000) == 0x1000;
-                    bool fog = (value & 0x2000) == 0x2000;
-                    bool inside = ((value & 0x8000) == 0x8000) || ((value & 0x10000) == 0x10000);
+                    bool exists = (value & 0x1) == 0x1; //FF_EXISTS
+                    bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4); //FF_BLOCKPLAYER/FF_BLOCKOTHERS/FF_SOLID
+                    bool render = ((value & 0x8) == 0x8) || ((value & 0x10) == 0x10); //FF_RENDERSIDES/FF_RENDERPLANES/FF_RENDERALL
+                    bool water = (value & 0x20) == 0x20; //FF_SWIMMABLE
+                    bool noshade = (value & 0x40) == 0x40; //FF_NOSHADE
+                    bool translucent = (value & 0x1000) == 0x1000; //FF_TRANSLUCENT
+                    bool fog = (value & 0x2000) == 0x2000; //FF_FOG
+                    bool inside = ((value & 0x8000) == 0x8000) || ((value & 0x10000) == 0x10000); //FF_ALLSIDES/FF_INVERTSIDES
+                    bool doubleshadow = (value & 0x20000) == 0x20000; //FF_DOUBLESHADOW
                     if (exists)
                     {
                         Args[1] = water ? 2 : (solid ? 1 : 3);
                         if (inside) Args[1] += 4;
                     }
-                    Args[2] = noshade ? 1 : 0;
-                    if (inside) Args[2] += 2;
+                    if (noshade) Args[2] += 1;
+                    if (doubleshadow) Args[2] += 2;
                     if (fog) Args[2] += 4;
                     Args[3] = render ? (translucent ? ParseTranslucency(Front.HighTexture) : 255) : 0;
                 }

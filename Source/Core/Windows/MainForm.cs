@@ -429,7 +429,7 @@ namespace CodeImp.DoomBuilder.Windows
 #if DEBUG
 				this.Text = Application.ProductName + " - DEVBUILD";
 #else
-				this.Text = Application.ProductName + " R" + General.ThisAssembly.GetName().Version.Revision;
+				this.Text = Application.ProductName + " v" + General.ThisAssembly.GetName().Version.Major + "." + General.ThisAssembly.GetName().Version.Minor;
 #endif
 			}
 		}

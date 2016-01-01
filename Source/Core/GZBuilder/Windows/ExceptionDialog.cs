@@ -149,7 +149,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 			}
 
 			// Get Zone Builder version
-			result += "ZB: R" + General.ThisAssembly.GetName().Version.Revision + Environment.NewLine + Environment.NewLine;
+			result += "Zone Builder: v" + General.ThisAssembly.GetName().Version.Major + "." + General.ThisAssembly.GetName().Version.Minor + Environment.NewLine + Environment.NewLine;
 
 			return result;
 		}

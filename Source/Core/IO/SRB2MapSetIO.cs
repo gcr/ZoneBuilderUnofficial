@@ -38,6 +38,10 @@ namespace CodeImp.DoomBuilder.IO
         // Constructor
         public SRB2MapSetIO(WAD wad, MapManager manager) : base(wad, manager)
         {
+            //Dictionary contents: Type, flags, translucency, flags when noclimb is active
+            //Type: 1 = solid, 2 = water, 3 = intangible, +4 = render insides
+            //Flags: 1 = disable lighting effects (e.g. shadows), 2 = restrict lighting effects to insides, 4 = fog
+            //Translucency: 0 = invisible, 1 = read from front upper texture, 2 = opaque
             threeDFloorTypes = new Dictionary<int, int[]>() {
                 { 100, new int[4] { 1, 0, 2, 0} },
                 { 101, new int[4] { 1, 1, 2, 1} },
@@ -98,6 +102,7 @@ namespace CodeImp.DoomBuilder.IO
                 { 259, new int[4] { 1, 0, 2, 0} }
             };
 
+            //Dictionary contents: floor, ceiling (0 = no slope, 1 = slope front, 2 = slope back)
             slopeTypes = new Dictionary<int, int[]>() {
                 { 700, new int[2] { 1, 0 } },
                 { 701, new int[2] { 0, 1 } },
@@ -109,6 +114,7 @@ namespace CodeImp.DoomBuilder.IO
                 { 713, new int[2] { 2, 1 } }
             };
 
+            //Dictionary contents: floor, ceiling (0 = no slope, 1 = slope front, 2 = slope back)
             slopeCopyTypes = new Dictionary<int, int[]>() {
                 { 720, new int[2] { 1, 0 } },
                 { 721, new int[2] { 0, 1 } },

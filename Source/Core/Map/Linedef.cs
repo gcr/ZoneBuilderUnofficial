@@ -758,16 +758,19 @@ namespace CodeImp.DoomBuilder.Map
         #endregion
 
         #region ================== Methods
+        //Set 3D floor arguments for SRB2-style 3D floors. See http://zdoom.org/wiki/Sector_Set3dFloor.
         public void Set3DFloorArgs()
         {
-            Args[0] = Tag;
-            Args[1] = 1;
-            Args[2] = 0;
-            Args[3] = 0;
-            Args[4] = 0;
+            Args[0] = Tag; //tag
+            Args[1] = 1; //type
+            Args[2] = 0; //flags
+            Args[3] = 0; //alpha
+            Args[4] = 0; //hi-tag/line ID (irrelevant for SRB2)
 
+            //Handle the custom 3D floor type (259)
             if (Action == General.Map.FormatInterface.Custom3DFloorType && Back != null)
             {
+                //Read 3D floor flags from upper back texture
                 string tex = Back.HighTexture;
                 Regex r = new Regex("^[A-F0-9]*$");
                 if (r.IsMatch(tex))
@@ -794,9 +797,10 @@ namespace CodeImp.DoomBuilder.Map
             }
             else
             {
+                //Read settings for preconfigured 3D floor type
                 int[] settings = General.Map.FormatInterface.ThreeDFloorTypes[Action];
                 Args[1] = settings[0];
-                Args[2] = Flags.ContainsKey("64") && Flags["64"] ? settings[3] : settings[1];
+                Args[2] = Flags.ContainsKey("64") && Flags["64"] ? settings[3] : settings[1]; //Flags may depend on whether the noclimb flag is set
                 switch (settings[2])
                 {
                     case 0:
@@ -815,6 +819,7 @@ namespace CodeImp.DoomBuilder.Map
             }
         }
 
+        //Read translucency value from texture name (#000-#255)
         private int ParseTranslucency(string tex)
         {
             int result = 128;
@@ -826,22 +831,24 @@ namespace CodeImp.DoomBuilder.Map
             return result;
         }
 
+        //Set slope arguments for SRB2-style slopes. See http://zdoom.org/wiki/Plane_Align.
         public void SetSlopeArgs()
         {
             int[] settings = General.Map.FormatInterface.SlopeTypes[Action];
-            Args[0] = settings[0];
-            Args[1] = settings[1];
-            Args[2] = 0;
+            Args[0] = settings[0]; //floor
+            Args[1] = settings[1]; //ceiling
+            Args[2] = 0; //lineid (irrelevant for SRB2)
         }
 
+        //Set slope arguments for SRB2-style copy slopes. See http://zdoom.org/wiki/Plane_Copy.
         public void SetSlopeCopyArgs()
         {
             int[] settings = General.Map.FormatInterface.SlopeCopyTypes[Action];
-            if (settings[0] == 1) Args[0] = Tag;
-            if (settings[0] == 2) Args[2] = Tag;
-            if (settings[1] == 1) Args[1] = Tag;
-            if (settings[1] == 2) Args[3] = Tag;
-            Args[4] = 0;
+            if (settings[0] == 1) Args[0] = Tag; //front floor
+            if (settings[0] == 2) Args[2] = Tag; //back floor
+            if (settings[1] == 1) Args[1] = Tag; //front ceiling
+            if (settings[1] == 2) Args[3] = Tag; //back ceiling
+            Args[4] = 0; //share (irrelevant for SRB2)
         }
 
         // This checks and returns a flag without creating it

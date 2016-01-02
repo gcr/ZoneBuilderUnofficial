@@ -119,13 +119,15 @@ namespace CodeImp.DoomBuilder.Map
 		public bool IsModel { get { return ismodel; } } //mxd
 		public bool IsDirectional { get { return directional; } } //mxd
 		public bool Highlighted { get { return highlighted; } set { highlighted = value; } } //mxd
+        public bool IsSlopeVertex { get { return General.Map.FormatInterface.SlopeVertexType == this.Type; } }
 
-		#endregion
 
-		#region ================== Constructor / Disposer
+        #endregion
 
-		// Constructor
-		internal Thing(MapSet map, int listindex)
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        internal Thing(MapSet map, int listindex)
 		{
 			// Initialize
 			this.elementtype = MapElementType.THING; //mxd

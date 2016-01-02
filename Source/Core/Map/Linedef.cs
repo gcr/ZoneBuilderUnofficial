@@ -94,6 +94,7 @@ namespace CodeImp.DoomBuilder.Map
         public bool Is3DFloor { get { return General.Map.FormatInterface.ThreeDFloorTypes.ContainsKey(Action); } }
         public bool IsSlope { get { return General.Map.FormatInterface.SlopeTypes.ContainsKey(Action); } }
         public bool IsSlopeCopy { get { return General.Map.FormatInterface.SlopeCopyTypes.ContainsKey(Action); } }
+        public bool IsVertexSlope { get { return General.Map.FormatInterface.VertexSlopeTypes.ContainsKey(Action); } }
         public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
 		public List<int> Tags { get { return tags; } set { BeforePropsChange(); tags = value; } } //mxd
 		public float LengthSq { get { return lengthsq; } }
@@ -801,7 +802,7 @@ namespace CodeImp.DoomBuilder.Map
                 //Read settings for preconfigured 3D floor type
                 int[] settings = General.Map.FormatInterface.ThreeDFloorTypes[Action];
                 Args[1] = settings[0];
-                Args[2] = Flags.ContainsKey("64") && Flags["64"] ? settings[3] : settings[1]; //Flags may depend on whether the noclimb flag is set
+                Args[2] = IsFlagSet("64") ? settings[3] : settings[1]; //Flags may depend on whether the noclimb flag is set
                 switch (settings[2])
                 {
                     case 0:
@@ -862,6 +863,16 @@ namespace CodeImp.DoomBuilder.Map
             if (settings[1] == 1) Args[1] = Tag; //front ceiling
             if (settings[1] == 2) Args[3] = Tag; //back ceiling
             Args[4] = 0; //share (irrelevant for SRB2)
+        }
+
+        //Set slope arguments for SRB2-style vertex slopes. These are fake arguments I invented to make their handling easier.
+        //Args[0]: 0 = slope front sector, 1 = slope back sector
+        //Args[1]: 0 = slope floor, 1 = slope ceiling
+        public void SetVertexSlopeArgs()
+        {
+            int[] settings = General.Map.FormatInterface.VertexSlopeTypes[Action];
+            Args[0] = settings[0];
+            Args[1] = settings[1];
         }
 
         // This checks and returns a flag without creating it

@@ -97,6 +97,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool doommapformat;
 		private readonly bool hexenmapformat;
 		private readonly bool universalmapformat;
+        private readonly bool srb2mapformat;
 		
 		// Texture/flat/voxel sources
 		private readonly IDictionary textureranges;
@@ -213,6 +214,7 @@ namespace CodeImp.DoomBuilder.Config
 		public bool UDMF { get { return universalmapformat; } }
 		public bool HEXEN { get { return hexenmapformat; } }
 		public bool DOOM { get { return doommapformat; } }
+        public bool SRB2 { get { return srb2mapformat; } }
 
 		// Texture/flat/voxel sources
 		public IDictionary TextureRanges { get { return textureranges; } }
@@ -354,6 +356,7 @@ namespace CodeImp.DoomBuilder.Config
 			universalmapformat = (formatinterface == "UniversalMapSetIO");
 			hexenmapformat = (formatinterface == "HexenMapSetIO");
 			doommapformat = (formatinterface == "DoomMapSetIO");
+            srb2mapformat = (formatinterface == "SRB2MapSetIO");
 
 			//mxd. Texture names length
 			longtexturenames = cfg.ReadSetting("longtexturenames", false);

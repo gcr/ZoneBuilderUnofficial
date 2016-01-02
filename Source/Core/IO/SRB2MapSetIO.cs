@@ -120,6 +120,16 @@ namespace CodeImp.DoomBuilder.IO
                 { 721, new int[2] { 0, 1 } },
                 { 722, new int[2] { 1, 1 } },
             };
+
+            //Dictionary contents:
+            //1. 0 = slope front, 1 = slope back
+            //2. 0 = slope floor, 1 = slope ceiling
+            vertexSlopeTypes = new Dictionary<int, int[]>() {
+                { 704, new int[2] { 0, 0 } },
+                { 705, new int[2] { 0, 1 } },
+                { 714, new int[2] { 1, 0 } },
+                { 715, new int[2] { 1, 1 } },
+            };
         }
 
         #endregion
@@ -129,6 +139,7 @@ namespace CodeImp.DoomBuilder.IO
         public override bool HasLinedefParameters { get { return false; } }
         public override bool HasTranslucent3DFloors { get { return true; } }
         public override int Custom3DFloorType { get { return 259; } }
+        public override int SlopeVertexType { get { return 750; } }
         public override int MaxThingHeight { get { return 4095; } }
         public override int MinThingHeight { get { return 0; } }
         #endregion

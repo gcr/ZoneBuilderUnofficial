@@ -415,6 +415,7 @@
     <Compile Include="VisualModes\EffectPlaneCopySlope.cs" />
     <Compile Include="VisualModes\EffectThingLineSlope.cs" />
     <Compile Include="VisualModes\EffectThingSlope.cs" />
+    <Compile Include="VisualModes\EffectSRB2ThingVertexSlope.cs" />
     <Compile Include="VisualModes\EffectThingVertexSlope.cs" />
     <Compile Include="VisualModes\EffectTransferCeilingBrightness.cs" />
     <Compile Include="VisualModes\EffectTransferFloorBrightness.cs" />
@@ -509,7 +510,7 @@
     <EmbeddedResource Include="Interface\WavefrontSettingsForm.resx">
       <DependentUpon>WavefrontSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Resources\VisualMode.png" />
+    <EmbeddedResource Include="Resources\VisualMode.png" />
     <EmbeddedResource Include="Resources\VisualModeGZ.png" />
   </ItemGroup>
   <ItemGroup>

@@ -833,57 +833,60 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				}
 			}
 
-			// Find sectors with 3 vertices, because they can be sloped
-			foreach(Sector s in General.Map.Map.Sectors)
-			{
-				// ========== Thing vertex slope, vertices with UDMF vertex offsets ==========
-				if(s.Sidedefs.Count == 3)
-				{
-					if(General.Map.UDMF) GetSectorData(s).AddEffectVertexOffset(); //mxd
-					List<Thing> slopeceilingthings = new List<Thing>(3);
-					List<Thing> slopefloorthings = new List<Thing>(3);
-					
-					foreach(Sidedef sd in s.Sidedefs) 
-					{
-						Vertex v = sd.IsFront ? sd.Line.End : sd.Line.Start;
+            if (!General.Map.SRB2)
+            {
+                // Find sectors with 3 vertices, because they can be sloped
+                foreach (Sector s in General.Map.Map.Sectors)
+                {
+                    // ========== Thing vertex slope, vertices with UDMF vertex offsets ==========
+                    if (s.Sidedefs.Count == 3)
+                    {
+                        if (General.Map.UDMF) GetSectorData(s).AddEffectVertexOffset(); //mxd
+                        List<Thing> slopeceilingthings = new List<Thing>(3);
+                        List<Thing> slopefloorthings = new List<Thing>(3);
 
-						// Check if a thing is at this vertex
-						VisualBlockEntry b = blockmap.GetBlock(blockmap.GetBlockCoordinates(v.Position));
-						foreach(Thing t in b.Things) 
-						{
-							if((Vector2D)t.Position == v.Position) 
-							{
-								switch(t.Type)
-								{
-									//case 1504: slopefloorthings.Add(t); break;
-									//case 1505: slopeceilingthings.Add(t); break;
-								}
-							}
-						}
-					}
+                        foreach (Sidedef sd in s.Sidedefs)
+                        {
+                            Vertex v = sd.IsFront ? sd.Line.End : sd.Line.Start;
 
-					// Slope any floor vertices?
-					if(slopefloorthings.Count > 0) 
-					{
-						SectorData sd = GetSectorData(s);
-						sd.AddEffectThingVertexSlope(slopefloorthings, true);
-					}
+                            // Check if a thing is at this vertex
+                            VisualBlockEntry b = blockmap.GetBlock(blockmap.GetBlockCoordinates(v.Position));
+                            foreach (Thing t in b.Things)
+                            {
+                                if ((Vector2D)t.Position == v.Position)
+                                {
+                                    switch (t.Type)
+                                    {
+                                        case 1504: slopefloorthings.Add(t); break;
+                                        case 1505: slopeceilingthings.Add(t); break;
+                                    }
+                                }
+                            }
+                        }
 
-					// Slope any ceiling vertices?
-					if(slopeceilingthings.Count > 0) 
-					{
-						SectorData sd = GetSectorData(s);
-						sd.AddEffectThingVertexSlope(slopeceilingthings, false);
-					}
-				}
-				
-				// ========== mxd. Glowing flats ==========
-				if(General.Map.Data.GlowingFlats.ContainsKey(s.LongFloorTexture) || General.Map.Data.GlowingFlats.ContainsKey(s.LongCeilTexture))
-				{
-					SectorData sd = GetSectorData(s);
-					sd.AddEffectGlowingFlat(s);
-				}
-			}
+                        // Slope any floor vertices?
+                        if (slopefloorthings.Count > 0)
+                        {
+                            SectorData sd = GetSectorData(s);
+                            sd.AddEffectThingVertexSlope(slopefloorthings, true);
+                        }
+
+                        // Slope any ceiling vertices?
+                        if (slopeceilingthings.Count > 0)
+                        {
+                            SectorData sd = GetSectorData(s);
+                            sd.AddEffectThingVertexSlope(slopeceilingthings, false);
+                        }
+                    }
+
+                    // ========== mxd. Glowing flats ==========
+                    if (General.Map.Data.GlowingFlats.ContainsKey(s.LongFloorTexture) || General.Map.Data.GlowingFlats.ContainsKey(s.LongCeilTexture))
+                    {
+                        SectorData sd = GetSectorData(s);
+                        sd.AddEffectGlowingFlat(s);
+                    }
+                }
+            }
 
             // Find interesting linedefs (such as line slopes)
             foreach (Linedef l in General.Map.Map.Linedefs)
@@ -945,6 +948,58 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     }
                 }
 
+                // MascaraSnake: Vertex slopes, SRB2-style
+                if (General.Map.SRB2 && l.IsVertexSlope)
+                {
+                    l.SetVertexSlopeArgs();
+                    bool slopefloor = l.Args[1] == 0;
+                    List<Thing> slopevertices = new List<Thing>(3);
+                    Sector s = (l.Args[0] == 0) ? l.Front.Sector : l.Back.Sector;
+
+                    //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
+                    if (l.IsFlagSet("8192"))
+                    {
+                        bool foundtag = false;
+                        bool foundxoffset = false;
+                        bool foundyoffset = false;
+                        foreach (Thing t in General.Map.Map.Things)
+                        {
+                            if (t.IsSlopeVertex)
+                            {
+                                if (!foundtag && (int)t.AngleDoom == l.Tag)
+                                {
+                                    slopevertices.Add(t);
+                                    foundtag = true;
+                                }
+                                if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
+                                {
+                                    slopevertices.Add(t);
+                                    foundxoffset = true;
+                                }
+                                if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
+                                {
+                                    slopevertices.Add(t);
+                                    foundyoffset = true;
+                                }
+                            }
+                        }
+
+                    }
+                    //Otherwise, just use tag.
+                    else
+                    {
+                        foreach (Thing t in General.Map.Map.Things)
+                        {
+                            if (t.IsSlopeVertex && (int)t.AngleDoom == l.Tag) slopevertices.Add(t);
+                        }
+                    }
+                    if (slopevertices.Count >= 3)
+                    {
+                        SectorData sd = GetSectorData(s);
+                        sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor);
+                    }
+                }
+
                 // MascaraSnake: 3D floor handling
                 // ========== Sector 3D floor (see http://zdoom.org/wiki/Sector_Set3dFloor) ==========
                 if (l.Is3DFloor)
@@ -966,7 +1021,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     }
 
                 }
-                if (General.Map.FormatInterface.HasLinedefParameters)
+                if (!General.Map.SRB2)
                 {
                     switch (l.Action)
                     {
@@ -1012,45 +1067,48 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 }
             }
 
-			// Find interesting things (such as sector slopes)
-			foreach(Thing t in General.Map.Map.Things)
-			{
-				switch(t.Type)
-				{
-					// ========== Copy slope ==========
-					case 9511:
-					case 9510:
-						t.DetermineSector(blockmap);
-						if(t.Sector != null)
-						{
-							SectorData sd = GetSectorData(t.Sector);
-							sd.AddEffectCopySlope(t);
-						}
-						break;
+            if (!General.Map.SRB2)
+            {
+                // Find interesting things (such as sector slopes)
+                foreach (Thing t in General.Map.Map.Things)
+                {
+                    switch (t.Type)
+                    {
+                        // ========== Copy slope ==========
+                        case 9511:
+                        case 9510:
+                            t.DetermineSector(blockmap);
+                            if (t.Sector != null)
+                            {
+                                SectorData sd = GetSectorData(t.Sector);
+                                sd.AddEffectCopySlope(t);
+                            }
+                            break;
 
-					// ========== Thing line slope ==========
-					case 9501:
-					case 9500:
-						t.DetermineSector(blockmap);
-						if(t.Sector != null)
-						{
-							SectorData sd = GetSectorData(t.Sector);
-							sd.AddEffectThingLineSlope(t);
-						}
-						break;
+                        // ========== Thing line slope ==========
+                        case 9501:
+                        case 9500:
+                            t.DetermineSector(blockmap);
+                            if (t.Sector != null)
+                            {
+                                SectorData sd = GetSectorData(t.Sector);
+                                sd.AddEffectThingLineSlope(t);
+                            }
+                            break;
 
-					// ========== Thing slope ==========
-					case 9503:
-					case 9502:
-						t.DetermineSector(blockmap);
-						if(t.Sector != null)
-						{
-							SectorData sd = GetSectorData(t.Sector);
-							sd.AddEffectThingSlope(t);
-						}
-						break;
-				}
-			}
+                        // ========== Thing slope ==========
+                        case 9503:
+                        case 9502:
+                            t.DetermineSector(blockmap);
+                            if (t.Sector != null)
+                            {
+                                SectorData sd = GetSectorData(t.Sector);
+                                sd.AddEffectThingSlope(t);
+                            }
+                            break;
+                    }
+                }
+            }
 		}
 		
 		#endregion

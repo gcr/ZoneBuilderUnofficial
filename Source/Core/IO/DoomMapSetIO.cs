@@ -38,6 +38,7 @@ namespace CodeImp.DoomBuilder.IO
         protected Dictionary<int, int[]> threeDFloorTypes;
         protected Dictionary<int, int[]> slopeTypes;
         protected Dictionary<int, int[]> slopeCopyTypes;
+        protected Dictionary<int, int[]> vertexSlopeTypes;
         #endregion
 
         #region ================== Constructor / Disposer
@@ -48,6 +49,7 @@ namespace CodeImp.DoomBuilder.IO
             threeDFloorTypes = new Dictionary<int, int[]>() { { 160, new int[3] { -1, -1, -1 } } };
             slopeTypes = new Dictionary<int, int[]>() { { 181, new int[2] { -1, -1 } } };
             slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
+            vertexSlopeTypes = new Dictionary<int, int[]>() { };
         }
 
 		#endregion
@@ -99,6 +101,8 @@ namespace CodeImp.DoomBuilder.IO
         public override Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
         public override Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
         public override Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
+        public override Dictionary<int, int[]> VertexSlopeTypes { get { return vertexSlopeTypes; } }
+        public override int SlopeVertexType { get { return 9500; } }
         public override int Custom3DFloorType { get { return 160; } }
 
         #endregion

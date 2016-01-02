@@ -772,7 +772,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if((General.Map.UndoRedo.NextUndo == null) || (General.Map.UndoRedo.NextUndo.TicketID != undoticket))
 					undoticket = mode.CreateUndo("Change thing height");
 
-				Thing.Move(Thing.Position + new Vector3D(0.0f, 0.0f, (info.Hangs ? -amount : amount)));
+                Vector3D newPosition = Thing.Position + new Vector3D(0.0f, 0.0f, (info.Hangs ? -amount : amount));
+                newPosition.z = General.Clamp(newPosition.z, General.Map.FormatInterface.MinThingHeight, General.Map.FormatInterface.MaxThingHeight);
+
+                Thing.Move(newPosition);
 
 				mode.SetActionResult("Changed thing height to " + Thing.Position.z + ".");
 				

@@ -10,10 +10,10 @@ Display compile progress=Yes
 Full-text search=Yes
 Index file=Index.hhk
 Language=0x409 Английский (США)
-Title=GZDoom Builder Reference Manual
+Title=Zone Builder Reference Manual
 
 [WINDOWS]
-default="GZDoom Builder Reference Manual","Contents.hhc","Index.hhk","gz_introduction.html","gz_introduction.html",,,,,0x42520,300,0x384e,[150,110,1100,800],0x108b0000,,,,,,0
+default="Zone Builder Reference Manual","Contents.hhc","Index.hhk","gz_introduction.html","gz_introduction.html",,,,,0x42520,300,0x384e,[150,110,1100,800],0x108b0000,,,,,,0
 
 
 [FILES]

@@ -1463,6 +1463,16 @@ namespace CodeImp.DoomBuilder.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ZBLogo {
+            get {
+                object obj = ResourceManager.GetObject("ZBLogo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap zonebuilder {
             get {
                 object obj = ResourceManager.GetObject("zonebuilder", resourceCulture);

@@ -697,6 +697,8 @@
     <EmbeddedResource Include="Resources\MissingTexture3D.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\ZBLogo.bmp" />
+    <None Include="Resources\ZBLogo.png" />
     <Content Include="ZB.ico" />
     <None Include="Resources\zonebuilder.png" />
     <None Include="Resources\ZoneBuilder.bmp" />

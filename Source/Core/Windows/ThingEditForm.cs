@@ -153,13 +153,17 @@ namespace CodeImp.DoomBuilder.Windows
                 i *= 2;
             }
 
-            float z = General.GetByIndex(things, 0).Position.z;
-            foreach (Thing t in things)
+            if (General.Map.SRB2)
             {
-                if (t.Position.z != z) return "";
-            }
+                float z = General.GetByIndex(things, 0).Position.z;
+                foreach (Thing t in things)
+                {
+                    if (t.Position.z != z) return "";
+                }
 
-            return (value + ((int)z << 4)).ToString();
+                return (value + ((int)z << 4)).ToString();
+            }
+            else return value.ToString();
         }
 
         // This sets up the form to edit the given things

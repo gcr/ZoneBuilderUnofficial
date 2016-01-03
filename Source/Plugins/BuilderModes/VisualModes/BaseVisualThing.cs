@@ -43,12 +43,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private bool isloaded;
 		private bool nointeraction; //mxd
 		private ImageData sprite;
+        private ImageData flippedsprite;
 		private float cageradius2;
 		private Vector2D pos2d;
 		private Vector3D boxp1;
 		private Vector3D boxp2;
 		private static List<BaseVisualThing> updateList; //mxd
-		
+        		
 		// Undo/redo
 		private int undoticket;
 
@@ -60,6 +61,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		#region ================== Properties
 
 		public bool Changed { get { return changed; } set { changed |= value; } }
+        private ImageData Sprite { get { return Thing.IsReverse ? flippedsprite : sprite; } set { if (Thing.IsReverse) flippedsprite = value; else sprite = value; } }
 
 		#endregion
 		
@@ -81,7 +83,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				sprite = General.Map.Data.GetSpriteImage(info.Sprite);
 				if(sprite != null) sprite.AddReference();
-			}
+                flippedsprite = General.Map.Data.GetSpriteImage(info.Sprite + "_flipped");
+                if (flippedsprite != null) flippedsprite.AddReference();
+            }
 
 			//mxd
 			if(mode.UseSelectionFromClassicMode && t.Selected)
@@ -191,7 +195,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				sizeless = false;
 			}
 
-			if(sprite != null)
+			if(Sprite != null)
 			{
 				Plane floor = new Plane(); //mxd
 				Plane ceiling = new Plane(); //mxd
@@ -313,22 +317,22 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				}
 				
 				// Check if the texture is loaded
-				sprite.LoadImage();
-				isloaded = sprite.IsImageLoaded;
+				Sprite.LoadImage();
+				isloaded = Sprite.IsImageLoaded;
 				if(isloaded)
 				{
 					float offsetx = 0.0f;
 					float offsety = 0.0f;
 					
-					base.Texture = sprite;
+					base.Texture = Sprite;
 
 					// Determine sprite size and offset
-					float radius = sprite.ScaledWidth * 0.5f;
-					float height = sprite.ScaledHeight;
-					if(sprite is SpriteImage)
+					float radius = Sprite.ScaledWidth * 0.5f;
+					float height = Sprite.ScaledHeight;
+					if(Sprite is SpriteImage)
 					{
-						offsetx = radius - (sprite as SpriteImage).OffsetX;
-						offsety = (sprite as SpriteImage).OffsetY - height;
+						offsetx = radius - (Sprite as SpriteImage).OffsetX;
+						offsety = (Sprite as SpriteImage).OffsetY - height;
 					}
 
 					// Scale by thing type/actor scale
@@ -417,7 +421,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				// Absolute Z position
 				pos.z = Thing.Position.z;
 			}
-			else if(info.Hangs)
+			else if(Thing.IsFlipped)
 			{
 				// Hang from ceiling
 				if(Thing.Sector != null)
@@ -491,8 +495,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					sprite.RemoveReference();
 					sprite = null;
 				}
+                if (flippedsprite != null)
+                {
+                    flippedsprite.RemoveReference();
+                    flippedsprite = null;
+                }
 
-				base.Dispose();
+                base.Dispose();
 			}
 		}
 		
@@ -514,10 +523,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				sprite = General.Map.Data.GetSpriteImage(info.Sprite);
 				if(sprite != null) sprite.AddReference();
-			}
-			
-			// Setup visual thing
-			Setup();
+                flippedsprite = General.Map.Data.GetSpriteImage(info.Sprite +  "_flipped");
+                if (flippedsprite != null) flippedsprite.AddReference();
+            }
+
+            // Setup visual thing
+            Setup();
 		}
 		
 		// This updates the thing when needed
@@ -526,7 +537,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(!isloaded)
 			{
 				// Rebuild sprite geometry when sprite is loaded
-				if(sprite.IsImageLoaded)
+				if(Sprite.IsImageLoaded)
 				{
 					Setup();
 				}
@@ -782,7 +793,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if((General.Map.UndoRedo.NextUndo == null) || (General.Map.UndoRedo.NextUndo.TicketID != undoticket))
 					undoticket = mode.CreateUndo("Change thing height");
 
-                Vector3D newPosition = Thing.Position + new Vector3D(0.0f, 0.0f, (info.Hangs ? -amount : amount));
+                Vector3D newPosition = Thing.Position + new Vector3D(0.0f, 0.0f, (Thing.IsFlipped ? -amount : amount));
                 newPosition.z = General.Clamp(newPosition.z, General.Map.FormatInterface.MinThingHeight, General.Map.FormatInterface.MaxThingHeight);
 
                 Thing.Move(newPosition);
@@ -807,7 +818,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd
 		public void OnChangeScale(int incrementX, int incrementY)
 		{
-			if(!General.Map.UDMF || !sprite.IsImageLoaded) return;
+			if(!General.Map.UDMF || !Sprite.IsImageLoaded) return;
 			
 			if((General.Map.UndoRedo.NextUndo == null) || (General.Map.UndoRedo.NextUndo.TicketID != undoticket))
 				undoticket = mode.CreateUndo("Change thing scale");
@@ -817,20 +828,20 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			if(incrementX != 0) 
 			{
-				float pix = (int)Math.Round(sprite.Width * scaleX) + incrementX;
-				float newscaleX = (float)Math.Round(pix / sprite.Width, 3);
+				float pix = (int)Math.Round(Sprite.Width * scaleX) + incrementX;
+				float newscaleX = (float)Math.Round(pix / Sprite.Width, 3);
 				scaleX = (newscaleX == 0 ? scaleX * -1 : newscaleX);
 			}
 
 			if(incrementY != 0) 
 			{
-				float pix = (int)Math.Round(sprite.Height * scaleY) + incrementY;
-				float newscaleY = (float)Math.Round(pix / sprite.Height, 3);
+				float pix = (int)Math.Round(Sprite.Height * scaleY) + incrementY;
+				float newscaleY = (float)Math.Round(pix / Sprite.Height, 3);
 				scaleY = (newscaleY == 0 ? scaleY * -1 : newscaleY);
 			}
 
 			Thing.SetScale(scaleX, scaleY);
-			mode.SetActionResult("Changed thing scale to " + scaleX.ToString("F03", CultureInfo.InvariantCulture) + ", " + scaleY.ToString("F03", CultureInfo.InvariantCulture) + " (" + (int)Math.Round(sprite.Width * scaleX) + " x " + (int)Math.Round(sprite.Height * scaleY) + ").");
+			mode.SetActionResult("Changed thing scale to " + scaleX.ToString("F03", CultureInfo.InvariantCulture) + ", " + scaleY.ToString("F03", CultureInfo.InvariantCulture) + " (" + (int)Math.Round(Sprite.Width * scaleX) + " x " + (int)Math.Round(Sprite.Height * scaleY) + ").");
 
 			// Update what must be updated
 			this.Changed = true;

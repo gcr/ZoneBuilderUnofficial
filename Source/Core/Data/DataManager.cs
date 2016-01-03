@@ -1363,6 +1363,12 @@ namespace CodeImp.DoomBuilder.Data
 				else
 				{
 					Stream spritedata = null;
+                    bool flip = false;
+                    if (name.EndsWith("_flipped"))
+                    {
+                        name = name.Substring(0, name.Length - 8);
+                        flip = true;
+                    }
 					
 					// Go for all opened containers
 					for(int i = containers.Count - 1; i >= 0; i--)
@@ -1370,13 +1376,13 @@ namespace CodeImp.DoomBuilder.Data
 						// This container provides this sprite?
 						spritedata = containers[i].GetSpriteData(name);
 						if(spritedata != null) break;
-					}
+                    }
 					
 					// Found anything?
 					if(spritedata != null)
 					{
 						// Make new sprite image
-						SpriteImage image = new SpriteImage(name);
+						SpriteImage image = new SpriteImage(name, flip);
 
 						// Add to collection
 						sprites.Add(longname, image);

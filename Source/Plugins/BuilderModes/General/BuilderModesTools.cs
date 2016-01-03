@@ -372,7 +372,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			Vector3D pos = thing.Thing.Position;
 			float thingheight = thing.Thing.Height;
 			bool absolute = thing.Info.AbsoluteZ;
-			bool hangs = thing.Info.Hangs;
+			bool hangs = thing.Thing.IsFlipped;
 			
 			if(absolute && hangs)
 			{
@@ -468,7 +468,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			Vector3D pos = thing.Thing.Position;
 			float thingheight = thing.Thing.Height;
 			bool absolute = thing.Info.AbsoluteZ;
-			bool hangs = thing.Info.Hangs;
+			bool hangs = thing.Thing.IsFlipped;
 			
 			if(absolute && hangs)
 			{
@@ -593,7 +593,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.Type);
 			if(info != null)
 			{
-				if(info.AbsoluteZ && info.Hangs) return t.Position.z; // Not sure what to do here...
+				if(info.AbsoluteZ && t.IsFlipped) return t.Position.z; // Not sure what to do here...
 				if(info.AbsoluteZ)
 				{
 					// Transform to floor-aligned position
@@ -601,7 +601,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					return t.Position.z - nsd.Floor.plane.GetZ(t.Position) + t.Height;
 				}
 
-				if(info.Hangs)
+				if(t.IsFlipped)
 				{
 					// Transform to floor-aligned position. Align top of target thing to the bottom of the hanging thing
 					SectorData nsd = mode.GetSectorData(t.Sector);

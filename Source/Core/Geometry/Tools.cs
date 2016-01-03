@@ -2047,7 +2047,7 @@ namespace CodeImp.DoomBuilder.Geometry
 			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
 			int absz = GetThingAbsoluteZ(t, ti);
 			int height = ti.Height == 0 ? 1 : (int)ti.Height;
-			Rectangle thing =  new Rectangle(0, ti.Hangs ? absz - height : absz, 1, height);
+			Rectangle thing =  new Rectangle(0, t.IsFlipped ? absz - height : absz, 1, height);
 
 			if(front.FloorHeight < back.FloorHeight) 
 			{
@@ -2098,7 +2098,7 @@ namespace CodeImp.DoomBuilder.Geometry
 				ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
 				if(ti.AbsoluteZ) return;
 
-				if(ti.Hangs && initialSector.CeilHeight != t.Sector.CeilHeight) 
+				if(t.IsFlipped && initialSector.CeilHeight != t.Sector.CeilHeight) 
 				{
 					t.Move(t.Position.x, t.Position.y, t.Position.z - (initialSector.CeilHeight - t.Sector.CeilHeight));
 					return;
@@ -2117,7 +2117,7 @@ namespace CodeImp.DoomBuilder.Geometry
 			if(t.Sector != null) 
 			{
 				// Hangs from ceiling?
-				if(ti.Hangs) return (int)(t.Sector.CeilHeight - t.Position.z - ti.Height);
+				if(t.IsFlipped) return (int)(t.Sector.CeilHeight - t.Position.z - ti.Height);
 				
 				return (int)(t.Sector.FloorHeight + t.Position.z);
 			}

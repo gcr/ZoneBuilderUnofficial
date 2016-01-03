@@ -91,8 +91,8 @@ namespace CodeImp.DoomBuilder.Controls
 			}
 			else
 			{
-				// Hangs from ceiling?
-				if(ti.Hangs)
+				// Hangs from ceiling? (MascaraSnake: Or flipped?)
+				if(t.IsFlipped)
 					zinfo = t.Position.z + " (" + ((float)Math.Round(Sector.GetCeilingPlane(t.Sector).GetZ(t.Position) - t.Position.z - ti.Height, General.Map.FormatInterface.VertexDecimals)).ToString(CultureInfo.InvariantCulture) + ")"; //mxd
 				else
 					zinfo = t.Position.z + " (" + ((float)Math.Round(Sector.GetFloorPlane(t.Sector).GetZ(t.Position) + t.Position.z, General.Map.FormatInterface.VertexDecimals)).ToString(CultureInfo.InvariantCulture) + ")"; //mxd

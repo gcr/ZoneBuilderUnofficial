@@ -32,6 +32,7 @@ namespace CodeImp.DoomBuilder.Data
 
 		protected int offsetx;
 		protected int offsety;
+        protected bool flipped;
 		
 		#endregion
 
@@ -45,8 +46,9 @@ namespace CodeImp.DoomBuilder.Data
 		#region ================== Constructor / Disposer
 
 		// Constructor
-		internal SpriteImage(string name)
+		internal SpriteImage(string name, bool flip = false)
 		{
+            flipped = flip;
 			// Initialize
 			SetName(name);
 
@@ -121,7 +123,8 @@ namespace CodeImp.DoomBuilder.Data
 							offsetx = (int)((width * scale.x) * 0.5f);
 							offsety = (int)(height * scale.y);
 						}
-					}
+                        if (flipped) bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipNone);
+                    }
 					else
 					{
 						loadfailed = true;

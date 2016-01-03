@@ -310,7 +310,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 						if(!float.IsNaN(floorz) && !float.IsNaN(ceilz))
 						{
 							float voffset;
-							if(info.Hangs)
+							if(thing.IsFlipped)
 							{
 								float thingz = ceilz - Thing.Position.z + Thing.Height;
 								voffset = 0.01f - floorz - General.Clamp(thingz, 0, ceilz - floorz);
@@ -353,7 +353,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 						if(!float.IsNaN(floorz) && !float.IsNaN(ceilz))
 						{
 							float voffset;
-							if(info.Hangs)
+							if(thing.IsFlipped)
 							{
 								float thingz = ceilz - Math.Max(0, Thing.Position.z) - Thing.Height;
 								voffset = -0.01f - General.Clamp(thingz, 0, ceilz - floorz);

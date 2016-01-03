@@ -120,6 +120,15 @@ namespace CodeImp.DoomBuilder.Map
 		public bool IsDirectional { get { return directional; } } //mxd
 		public bool Highlighted { get { return highlighted; } set { highlighted = value; } } //mxd
         public bool IsSlopeVertex { get { return General.Map.FormatInterface.SlopeVertexType == this.Type; } }
+        public bool IsFlipped
+        {
+            get
+            {
+                ThingTypeInfo ti = General.Map.Data.GetThingInfo(Type);
+                return (ti.Hangs && !IsReverse) || (!ti.Hangs && IsReverse);
+            }
+        }
+        public bool IsReverse { get { return General.Map.SRB2 && IsFlagSet("2"); } }
 
 
         #endregion

@@ -1521,21 +1521,38 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else 
 			{
 				//mxd. Apply classic offsets
-				Sidedef.OffsetX = (Sidedef.OffsetX - horizontal);
-				if(Texture != null) Sidedef.OffsetX %= Texture.Width;
-				Sidedef.OffsetY = (Sidedef.OffsetY - vertical);
-				if(geometrytype != VisualGeometryType.WALL_MIDDLE && Texture != null) Sidedef.OffsetY %= Texture.Height;
+				int newOffsetX = ChangeOffsetX(horizontal);
+                int newOffsetY = ChangeOffsetY(vertical);
 
-				mode.SetActionResult("Changed texture offsets to " + Sidedef.OffsetX + ", " + Sidedef.OffsetY + ".");
+                mode.SetActionResult("Changed texture offsets to " + newOffsetX + ", " + newOffsetY + ".");
 			}
-			
-			// Update sidedef geometry
-			VisualSidedefParts parts = Sector.GetSidedefParts(Sidedef);
-			parts.SetupAllParts();
-		}
 
-		//mxd
-		public virtual void OnChangeScale(int incrementX, int incrementY) 
+            // Update sidedef geometry
+            UpdateAfterTextureOffsetChange();
+        }
+
+        protected virtual int ChangeOffsetX(int amount)
+        {
+            Sidedef.OffsetX -= amount;
+            if (Texture != null) Sidedef.OffsetX %= Texture.Width;
+            return Sidedef.OffsetX;
+        }
+
+        protected virtual int ChangeOffsetY(int amount)
+        {
+            Sidedef.OffsetY -= amount;
+            if (geometrytype != VisualGeometryType.WALL_MIDDLE && Texture != null) Sidedef.OffsetY %= Texture.Height;
+            return Sidedef.OffsetY;
+        }
+
+        protected virtual void UpdateAfterTextureOffsetChange()
+        {
+            VisualSidedefParts parts = Sector.GetSidedefParts(Sidedef);
+            parts.SetupAllParts();
+        }
+
+        //mxd
+        public virtual void OnChangeScale(int incrementX, int incrementY) 
 		{
 			if(!General.Map.UDMF || !Texture.IsImageLoaded) return;
 

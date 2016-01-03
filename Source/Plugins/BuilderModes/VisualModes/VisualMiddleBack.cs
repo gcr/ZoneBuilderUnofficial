@@ -118,10 +118,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Get texture scaled size
 			Vector2D tsz = new Vector2D(base.Texture.ScaledWidth, base.Texture.ScaledHeight);
 			tsz = tsz / tscale;
-			
-			// Get texture offsets
-			Vector2D tof = new Vector2D(Sidedef.OffsetX, Sidedef.OffsetY) + new Vector2D(sourceside.OffsetX, sourceside.OffsetY);
-			tof = tof + toffset1 + toffset2;
+
+            // Get texture offsets
+            // MascaraSnake: In SRB2, take only the X offset of the target sidedef and the Y offset of the source sidedef. Yes, this is silly.
+            Vector2D tof = new Vector2D(Sidedef.OffsetX, General.Map.SRB2 ? 0.0f : Sidedef.OffsetY) + new Vector2D(General.Map.SRB2 ? 0.0f : sourceside.OffsetX, sourceside.OffsetY);
+            tof = tof + toffset1 + toffset2;
 			tof = tof / tscale;
 			if(General.Map.Config.ScaledTextureOffsets && !base.Texture.WorldPanning)
 				tof = tof * base.Texture.Scale;
@@ -279,13 +280,38 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			base.SetVertices(null); //mxd
 			return false;
 		}
-		
-		#endregion
-		
-		#region ================== Methods
 
-		// Return texture name
-		public override string GetTextureName() 
+        #endregion
+
+        #region ================== Methods
+        protected override int ChangeOffsetY(int amount)
+        {
+            if (General.Map.SRB2)
+            {
+                Sidedef sourceside = extrafloor.Linedef.Front;
+                sourceside.OffsetY -= amount;
+                if (geometrytype != VisualGeometryType.WALL_MIDDLE && Texture != null) sourceside.OffsetY %= Texture.Height;
+                return sourceside.OffsetY;
+            }
+            else return base.ChangeOffsetY(amount);
+        }
+
+        protected override void UpdateAfterTextureOffsetChange()
+        {
+            if (General.Map.SRB2)
+            {
+                //Update all sidedefs in the sector, since the Y offset of the 3D floor may have changed.
+                foreach (Sidedef sd in Sidedef.Sector.Sidedefs)
+                {
+                    VisualSidedefParts parts = Sector.GetSidedefParts(sd);
+                    parts.SetupAllParts();
+                }
+            }
+            else base.UpdateAfterTextureOffsetChange();
+        }
+
+        // Return texture name
+        public override string GetTextureName() 
 		{
 			//mxd
 			if((extrafloor.Linedef.Args[2] & (int)Effect3DFloor.Flags.UseUpperTexture) != 0)

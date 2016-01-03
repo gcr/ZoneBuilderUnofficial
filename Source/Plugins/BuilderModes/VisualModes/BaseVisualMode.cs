@@ -3821,9 +3821,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(start.GeometryType == VisualGeometryType.WALL_MIDDLE_3D) 
 			{
 				first.controlSide = start.GetControlLinedef().Front;
-				first.offsetx += first.controlSide.OffsetX;
-				ystartalign += first.controlSide.OffsetY;
-			} 
+                if (General.Map.SRB2) ystartalign = first.controlSide.OffsetY;                    
+                else
+                {
+                    first.offsetx += first.controlSide.OffsetX;
+                    ystartalign += first.controlSide.OffsetY;
+                }
+            } 
 			else 
 			{
 				first.controlSide = start.Sidedef;
@@ -3840,9 +3844,18 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 				if(j.forward) 
 				{
-					// Apply alignment
-					if(alignx) j.controlSide.OffsetX = (int)j.offsetx;
-					if(aligny) j.sidedef.OffsetY = (int)Math.Round((first.ceilingHeight - j.ceilingHeight) / scaley) + ystartalign;
+                    // Apply alignment
+                    if (alignx)
+                    {
+                        if (General.Map.SRB2) j.sidedef.OffsetX = (int)j.offsetx;
+                        else j.controlSide.OffsetX = (int)j.offsetx;
+                    }
+                    if (aligny)
+                    {
+                        int newOffsetY = (int)Math.Round((first.ceilingHeight - j.ceilingHeight) / scaley) + ystartalign;
+                        if (General.Map.SRB2) j.controlSide.OffsetY = newOffsetY;
+                        else j.sidedef.OffsetY = newOffsetY;
+                    }
 					int forwardoffset = (int)j.offsetx + (int)Math.Round(j.sidedef.Line.Length / scalex);
 					int backwardoffset = (int)j.offsetx;
 
@@ -3853,7 +3866,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					if(texture.IsImageLoaded && Tools.SidedefTextureMatch(j.sidedef, texture.LongName)) 
 					{
 						if(alignx) j.sidedef.OffsetX %= texture.Width;
-						if(aligny) j.sidedef.OffsetY %= texture.Height;
+                        if (aligny)
+                        {
+                            if (General.Map.SRB2) j.controlSide.OffsetY %= texture.Height;
+                            else j.sidedef.OffsetY %= texture.Height;
+                        }
 					}
 
 					// Add sidedefs forward (connected to the right vertex)
@@ -3866,9 +3883,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				} 
 				else 
 				{
-					// Apply alignment
-					if(alignx) j.controlSide.OffsetX = (int)j.offsetx - (int)Math.Round(j.sidedef.Line.Length / scalex);
-					if(aligny) j.sidedef.OffsetY = (int)Math.Round((first.ceilingHeight - j.ceilingHeight) / scaley) + ystartalign;
+                    // Apply alignment
+                    if (alignx)
+                    {
+                        int newOffsetX = (int)j.offsetx - (int)Math.Round(j.sidedef.Line.Length / scalex);
+                        if (General.Map.SRB2) j.sidedef.OffsetX = newOffsetX;
+                        else j.controlSide.OffsetX = newOffsetX;
+                    }
+                    if (aligny)
+                    {
+                        int newOffsetY = (int)Math.Round((first.ceilingHeight - j.ceilingHeight) / scaley) + ystartalign;
+                        if (General.Map.SRB2) j.controlSide.OffsetY = newOffsetY;
+                        else j.sidedef.OffsetY = newOffsetY;
+                    }
 					int forwardoffset = (int)j.offsetx;
 					int backwardoffset = (int)j.offsetx - (int)Math.Round(j.sidedef.Line.Length / scalex);
 
@@ -3879,7 +3906,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					if(texture.IsImageLoaded && Tools.SidedefTextureMatch(j.sidedef, texture.LongName)) 
 					{
 						if(alignx) j.sidedef.OffsetX %= texture.Width;
-						if(aligny) j.sidedef.OffsetY %= texture.Height;
+                        if (aligny)
+                        {
+                            if (General.Map.SRB2) j.controlSide.OffsetY %= texture.Height;
+                            else j.sidedef.OffsetY %= texture.Height;
+                        }
 					}
 
 					// Add sidedefs backward (connected to the left vertex)

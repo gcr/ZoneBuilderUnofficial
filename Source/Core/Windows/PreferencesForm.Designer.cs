@@ -282,6 +282,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.checkforupdates.TabIndex = 51;
 			this.checkforupdates.Text = "Check for updates at startup";
 			this.checkforupdates.UseVisualStyleBackColor = true;
+            this.checkforupdates.Visible = false;
 			// 
 			// cbStoreEditTab
 			// 

@@ -636,8 +636,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.ViewSelectionNumbers);
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.ViewSelectionEffects);
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.SeparatorSectors1);
-			General.Interface.AddButton(BuilderPlug.Me.MenusForm.MakeDoor); //mxd
-			General.Interface.AddButton(BuilderPlug.Me.MenusForm.SeparatorSectors2); //mxd
+			if (!General.Map.SRB2) General.Interface.AddButton(BuilderPlug.Me.MenusForm.MakeDoor); //mxd
+            if (!General.Map.SRB2) General.Interface.AddButton(BuilderPlug.Me.MenusForm.SeparatorSectors2); //mxd
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.MakeGradientBrightness);
 			if(General.Map.UDMF) General.Interface.AddButton(BuilderPlug.Me.MenusForm.GradientModeMenu); //mxd
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.GradientInterpolationMenu); //mxd

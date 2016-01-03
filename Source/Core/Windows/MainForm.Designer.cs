@@ -1195,6 +1195,7 @@ namespace CodeImp.DoomBuilder.Windows
 			this.itemhelpcheckupdates.Size = new System.Drawing.Size(232, 22);
 			this.itemhelpcheckupdates.Text = "&Check for updates...";
 			this.itemhelpcheckupdates.Click += new System.EventHandler(this.itemhelpcheckupdates_Click);
+            this.itemhelpcheckupdates.Visible = false;
 			// 
 			// seperatorhelpmanual
 			// 

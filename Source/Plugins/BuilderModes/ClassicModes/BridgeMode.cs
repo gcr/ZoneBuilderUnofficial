@@ -24,7 +24,7 @@ namespace CodeImp.DoomBuilder.BuilderModes.ClassicModes
 			  ButtonGroup = "002_modify",
 			  AllowCopyPaste = false,
 			  Volatile = true,
-			  Optional = false)]
+			  Optional = true)]
 
 	public class BridgeMode : BaseClassicMode
 	{

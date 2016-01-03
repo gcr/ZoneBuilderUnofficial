@@ -100,6 +100,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Initialize
 			InitializeComponent();
 
+            makedooritem.Visible = false;
+
 			// Apply settings
 			buttonselectionnumbers.Checked = BuilderPlug.Me.ViewSelectionNumbers;
 			buttonselectioneffects.Checked = BuilderPlug.Me.ViewSelectionEffects; //mxd

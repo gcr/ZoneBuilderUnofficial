@@ -36,13 +36,20 @@ namespace CodeImp.DoomBuilder.BuilderEffects
 			//restore settings
 			axis = (ImportObjAsTerrainMode.UpAxis)General.Settings.ReadPluginSetting("objexportupaxis", 0);
 			nudScale.Value = (decimal)General.Settings.ReadPluginSetting("objexportscale", 1.0f);
+
 			slopessupported = (General.Map.UDMF || General.Map.Data.GetThingInfoEx(ImportObjAsTerrainMode.VERTEX_HEIGHT_THING_TYPE) != null);
 			if(slopessupported) 
 				cbusevertexheight.Checked = General.Settings.ReadPluginSetting("objusevertexheights", true);
 			else 
 				cbusevertexheight.Enabled = false;
 
-			switch(axis) 
+            if (General.Map.SRB2)
+            {
+                cbusevertexheight.Checked = false;
+                cbusevertexheight.Text += " (warning: broken)";
+            }
+
+            switch (axis) 
 			{
 				case ImportObjAsTerrainMode.UpAxis.X: axisx.Checked = true; break;
 				case ImportObjAsTerrainMode.UpAxis.Y: axisy.Checked = true; break;

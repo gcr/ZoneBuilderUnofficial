@@ -948,58 +948,83 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     }
                 }
 
-                // MascaraSnake: Vertex slopes, SRB2-style
-                if (General.Map.SRB2 && l.IsVertexSlope)
+                if (General.Map.SRB2)
                 {
-                    l.SetVertexSlopeArgs();
-                    bool slopefloor = l.Args[1] == 0;
-                    List<Thing> slopevertices = new List<Thing>(3);
-                    Sector s = (l.Args[0] == 0) ? l.Front.Sector : l.Back.Sector;
-
-                    //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
-                    if (l.IsFlagSet("8192"))
+                    //MascaraSnake: Colormap
+                    if (l.IsColormap && l.Front != null)
                     {
-                        bool foundtag = false;
-                        bool foundxoffset = false;
-                        bool foundyoffset = false;
-                        foreach (Thing t in General.Map.Map.Things)
+                        int sectortag = l.Tag;
+                        int color;
+                        int alpha;
+                        l.ParseColor(l.Front.HighTexture, out color, out alpha);
+                        if (sectortags.ContainsKey(sectortag))
                         {
-                            if (t.IsSlopeVertex)
+                            List<Sector> sectors = sectortags[sectortag];
+                            foreach (Sector s in sectors)
                             {
-                                if (!foundtag && (int)t.AngleDoom == l.Tag)
-                                {
-                                    slopevertices.Add(t);
-                                    foundtag = true;
-                                }
-                                if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
-                                {
-                                    slopevertices.Add(t);
-                                    foundxoffset = true;
-                                }
-                                if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
-                                {
-                                    slopevertices.Add(t);
-                                    foundyoffset = true;
-                                }
+                                s.Fields.BeforeFieldsChange();
+                                if (s.Fields.ContainsKey("lightcolor")) s.Fields["lightcolor"] = new UniValue(UniversalType.Color, color);
+                                else s.Fields.Add("lightcolor", new UniValue(UniversalType.Color, color));
+                                //TODO: Find out why the alpha value is ignored.
+                                /*if (s.Fields.ContainsKey("lightalpha")) s.Fields["lightalpha"] = new UniValue(UniversalType.Integer, alpha);
+                                else s.Fields.Add("lightalpha", new UniValue(UniversalType.Integer, alpha));*/
                             }
                         }
-
                     }
-                    //Otherwise, just use tag.
-                    else
+
+                    // MascaraSnake: Vertex slopes, SRB2-style
+                    if (l.IsVertexSlope)
                     {
-                        foreach (Thing t in General.Map.Map.Things)
+                        l.SetVertexSlopeArgs();
+                        bool slopefloor = l.Args[1] == 0;
+                        List<Thing> slopevertices = new List<Thing>(3);
+                        Sector s = (l.Args[0] == 0) ? l.Front.Sector : l.Back.Sector;
+
+                        //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
+                        if (l.IsFlagSet("8192"))
                         {
-                            if (t.IsSlopeVertex && (int)t.AngleDoom == l.Tag) slopevertices.Add(t);
+                            bool foundtag = false;
+                            bool foundxoffset = false;
+                            bool foundyoffset = false;
+                            foreach (Thing t in General.Map.Map.Things)
+                            {
+                                if (t.IsSlopeVertex)
+                                {
+                                    if (!foundtag && (int)t.AngleDoom == l.Tag)
+                                    {
+                                        slopevertices.Add(t);
+                                        foundtag = true;
+                                    }
+                                    if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
+                                    {
+                                        slopevertices.Add(t);
+                                        foundxoffset = true;
+                                    }
+                                    if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
+                                    {
+                                        slopevertices.Add(t);
+                                        foundyoffset = true;
+                                    }
+                                }
+                            }
+
+                        }
+                        //Otherwise, just use tag.
+                        else
+                        {
+                            foreach (Thing t in General.Map.Map.Things)
+                            {
+                                if (t.IsSlopeVertex && (int)t.AngleDoom == l.Tag) slopevertices.Add(t);
+                            }
+                        }
+                        if (slopevertices.Count >= 3)
+                        {
+                            SectorData sd = GetSectorData(s);
+                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor);
                         }
                     }
-                    if (slopevertices.Count >= 3)
-                    {
-                        SectorData sd = GetSectorData(s);
-                        sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor);
-                    }
                 }
-
+                
                 // MascaraSnake: 3D floor handling
                 // ========== Sector 3D floor (see http://zdoom.org/wiki/Sector_Set3dFloor) ==========
                 if (l.Is3DFloor)

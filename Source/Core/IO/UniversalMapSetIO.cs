@@ -154,6 +154,7 @@ namespace CodeImp.DoomBuilder.IO
         public override Dictionary<int, int[]> VertexSlopeTypes { get { return vertexSlopeTypes; } }
         public override int SlopeVertexType { get { return 9500; } }
         public override int Custom3DFloorType { get { return 160; } }
+        public override int ColormapType { get { return -1; } }
 
         #endregion
 

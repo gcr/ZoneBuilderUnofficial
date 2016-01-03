@@ -97,6 +97,7 @@ namespace CodeImp.DoomBuilder.IO
         public abstract Dictionary<int, int[]> VertexSlopeTypes { get; }
         public abstract int SlopeVertexType { get; }
         public abstract int Custom3DFloorType { get; }
+        public abstract int ColormapType { get; }
 
         #endregion
 

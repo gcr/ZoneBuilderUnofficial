@@ -267,6 +267,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			bool fabs = sector.Fields.GetValue("lightfloorabsolute", false);
 			int clight = sector.Fields.GetValue("lightceiling", 0);
 			bool cabs = sector.Fields.GetValue("lightceilingabsolute", false);
+            //int alpha = sector.Fields.GetValue("lightalpha", 255);
 
 			// Determine colors & light levels
 			PixelColor lightcolor = PixelColor.FromInt(color);

@@ -95,6 +95,7 @@ namespace CodeImp.DoomBuilder.Map
         public bool IsSlope { get { return General.Map.FormatInterface.SlopeTypes.ContainsKey(Action); } }
         public bool IsSlopeCopy { get { return General.Map.FormatInterface.SlopeCopyTypes.ContainsKey(Action); } }
         public bool IsVertexSlope { get { return General.Map.FormatInterface.VertexSlopeTypes.ContainsKey(Action); } }
+        public bool IsColormap { get { return Action == General.Map.FormatInterface.ColormapType; } }
         public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
 		public List<int> Tags { get { return tags; } set { BeforePropsChange(); tags = value; } } //mxd
 		public float LengthSq { get { return lengthsq; } }
@@ -831,6 +832,25 @@ namespace CodeImp.DoomBuilder.Map
                 if (int.TryParse(tex.Substring(1), out alpha) && alpha >= 0 && alpha <= 255) result = alpha;
             }
             return result;
+        }
+
+        //Read color value from texture name (#RRGGBBA)
+        public void ParseColor(string tex, out int color, out int alpha)
+        {
+            color = 0x000000;
+            alpha = 255;
+            if (tex.StartsWith("#") && tex.Length >= 7)
+            {
+                string colorString = tex.Substring(1,6);
+                Regex r = new Regex("^[A-F0-9]*$");
+                if (r.IsMatch(colorString)) color = Convert.ToInt32(colorString, 16);
+                if (tex.Length == 8)
+                {
+                    char alphaChar = tex.ToUpper()[7];
+                    if (alphaChar >= 'A' && alphaChar <= 'Z') alpha = (int)(((float)(alphaChar - 'A' + 10) / 25) * 255);
+                    else if (alphaChar >= '0' && alphaChar <= '9') alpha = (int)(((float)(alphaChar - '0') / 25) * 255);
+                }
+            }
         }
 
         //Set slope arguments for SRB2-style slopes. See http://zdoom.org/wiki/Plane_Align.

@@ -76,5 +76,6 @@ namespace CodeImp.DoomBuilder.IO
         Dictionary<int, int[]> VertexSlopeTypes { get; }
         int SlopeVertexType { get; }
         int Custom3DFloorType { get; }
+        int ColormapType { get; }
     }
 }

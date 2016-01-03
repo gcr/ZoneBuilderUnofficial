@@ -142,6 +142,7 @@ namespace CodeImp.DoomBuilder.IO
         public override int SlopeVertexType { get { return 750; } }
         public override int MaxThingHeight { get { return 4095; } }
         public override int MinThingHeight { get { return 0; } }
+        public override int ColormapType { get { return 606; } }
         #endregion
 
         #region ================== Reading

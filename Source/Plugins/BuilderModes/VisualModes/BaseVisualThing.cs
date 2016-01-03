@@ -402,6 +402,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z;
 				}
 			}
+            else if (General.Map.SRB2 && Thing.IsSlopeVertex)
+            {
+                if (Thing.Sector != null) //mxd
+                {
+                    // This is a special thing that needs special positioning
+                    SectorData sd = mode.GetSectorData(Thing.Sector);
+                    pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z;
+                }
+            }
+
 			else if(info.AbsoluteZ)
 			{
 				// Absolute Z position

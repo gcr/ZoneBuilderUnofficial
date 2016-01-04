@@ -96,6 +96,7 @@ namespace CodeImp.DoomBuilder.Map
         public bool IsSlopeCopy { get { return General.Map.FormatInterface.SlopeCopyTypes.ContainsKey(Action); } }
         public bool IsVertexSlope { get { return General.Map.FormatInterface.VertexSlopeTypes.ContainsKey(Action); } }
         public bool IsColormap { get { return Action == General.Map.FormatInterface.ColormapType; } }
+        public bool IsFlatAlignment { get { return Action == General.Map.FormatInterface.FlatAlignmentType; } }
         public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
 		public List<int> Tags { get { return tags; } set { BeforePropsChange(); tags = value; } } //mxd
 		public float LengthSq { get { return lengthsq; } }

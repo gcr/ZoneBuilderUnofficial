@@ -143,6 +143,7 @@ namespace CodeImp.DoomBuilder.IO
         public override int MaxThingHeight { get { return 4095; } }
         public override int MinThingHeight { get { return 0; } }
         public override int ColormapType { get { return 606; } }
+        public override int FlatAlignmentType { get { return 7; } }
         #endregion
 
         #region ================== Reading

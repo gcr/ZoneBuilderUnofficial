@@ -833,11 +833,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				}
 			}
 
-            if (!General.Map.SRB2)
+            foreach (Sector s in General.Map.Map.Sectors)
             {
-                // Find sectors with 3 vertices, because they can be sloped
-                foreach (Sector s in General.Map.Map.Sectors)
+                if (General.Map.SRB2) s.Fields.Clear(); //Reset fake UDMF properties (since the linedef special that set them might no longer be there)
+                else
                 {
+                    // Find sectors with 3 vertices, because they can be sloped
                     // ========== Thing vertex slope, vertices with UDMF vertex offsets ==========
                     if (s.Sidedefs.Count == 3)
                     {
@@ -950,6 +951,62 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
                 if (General.Map.SRB2)
                 {
+                    //MascaraSnake: Flat alignment
+                    if (l.IsFlatAlignment)
+                    {
+                        int sectortag = l.Tag;
+                        bool alignonlyceiling = l.IsFlagSet("2");
+                        bool alignonlyfloor = l.IsFlagSet("64");
+                        bool rotate = l.IsFlagSet("512");
+                        bool rotateonlyceiling = l.IsFlagSet("1024");
+                        bool rotateonlyfloor = l.IsFlagSet("16384");
+
+                        if (sectortags.ContainsKey(sectortag))
+                        {
+                            List<Sector> sectors = sectortags[sectortag];
+                            foreach (Sector s in sectors)
+                            {
+                                s.Fields.BeforeFieldsChange();
+                                if (rotate)
+                                {
+                                    float rotation = l.AngleDeg;
+
+                                    if (!rotateonlyceiling)
+                                    {
+                                        if (s.Fields.ContainsKey("rotationfloor")) s.Fields["rotationfloor"] = new UniValue(UniversalType.Float, rotation);
+                                        else s.Fields.Add("rotationfloor", new UniValue(UniversalType.Float, rotation));
+                                    }
+                                    if (!rotateonlyfloor)
+                                    {
+                                        if (s.Fields.ContainsKey("rotationceiling")) s.Fields["rotationceiling"] = new UniValue(UniversalType.Float, rotation);
+                                        else s.Fields.Add("rotationceiling", new UniValue(UniversalType.Float, rotation));
+                                    }
+                                }
+                                else
+                                {
+                                    float xoffset = l.Rect.Width;
+                                    float yoffset = l.Rect.Height;
+
+                                    if (!alignonlyceiling)
+                                    {
+                                        if (s.Fields.ContainsKey("xpanningfloor")) s.Fields["xpanningfloor"] = new UniValue(UniversalType.Float, xoffset);
+                                        else s.Fields.Add("xpanningfloor", new UniValue(UniversalType.Float, xoffset));
+                                        if (s.Fields.ContainsKey("ypanningfloor")) s.Fields["ypanningfloor"] = new UniValue(UniversalType.Float, yoffset);
+                                        else s.Fields.Add("ypanningfloor", new UniValue(UniversalType.Float, yoffset));
+                                    }
+                                    if (!alignonlyfloor)
+                                    {
+                                        if (s.Fields.ContainsKey("xpanningceiling")) s.Fields["xpanningceiling"] = new UniValue(UniversalType.Float, xoffset);
+                                        else s.Fields.Add("xpanningceiling", new UniValue(UniversalType.Float, xoffset));
+                                        if (s.Fields.ContainsKey("ypanningceiling")) s.Fields["ypanningceiling"] = new UniValue(UniversalType.Float, yoffset);
+                                        else s.Fields.Add("ypanningceiling", new UniValue(UniversalType.Float, yoffset));
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+
                     //MascaraSnake: Colormap
                     if (l.IsColormap && l.Front != null)
                     {

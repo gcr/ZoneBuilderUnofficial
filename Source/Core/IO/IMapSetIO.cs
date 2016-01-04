@@ -77,5 +77,6 @@ namespace CodeImp.DoomBuilder.IO
         int SlopeVertexType { get; }
         int Custom3DFloorType { get; }
         int ColormapType { get; }
+        int FlatAlignmentType { get; }
     }
 }

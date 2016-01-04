@@ -98,6 +98,7 @@ namespace CodeImp.DoomBuilder.IO
         public abstract int SlopeVertexType { get; }
         public abstract int Custom3DFloorType { get; }
         public abstract int ColormapType { get; }
+        public abstract int FlatAlignmentType { get; }
 
         #endregion
 

@@ -192,20 +192,21 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			CropPoly(ref poly, osd.Floor.plane, true);
 
 			// Determine if we should repeat the middle texture
-			repeatmidtex = Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
-			if(!repeatmidtex) 
+			repeatmidtex = (General.Map.SRB2 && Sidedef.Line.IsFlagSet("1024")) || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
+			if(!repeatmidtex || (General.Map.SRB2 && Sidedef.OffsetX >= 4096)) 
 			{
 				// First determine the visible portion of the texture
 				float textop;
+                int repetitions = General.Map.SRB2 ? (Sidedef.OffsetX / 4096) + 1 : 1;
 
 				// Determine top portion height
 				if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
-					textop = geobottom + tof.y + Math.Abs(tsz.y);
+					textop = geobottom + tof.y + repetitions * Math.Abs(tsz.y);
 				else
 					textop = geotop + tof.y;
 
 				// Calculate bottom portion height
-				float texbottom = textop - Math.Abs(tsz.y);
+				float texbottom = textop - repetitions * Math.Abs(tsz.y);
 
 				// Create crop planes (we also need these for intersection testing)
 				topclipplane = new Plane(new Vector3D(0, 0, -1), textop);

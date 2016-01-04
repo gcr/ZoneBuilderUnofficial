@@ -85,7 +85,7 @@ namespace CodeImp.DoomBuilder.IO
                 { 195, new int[4] { 1, 0, 1, 1} },
                 { 200, new int[4] { 3, 1, 0, 1} },
                 { 201, new int[4] { 3, 0, 0, 0} },
-                { 202, new int[4] { 3, 5, 2, 5} },
+                { 202, new int[4] { 7, 5, 2, 5} },
                 { 220, new int[4] { 3, 0, 2, 0} },
                 { 221, new int[4] { 3, 1, 1, 0} },
                 { 222, new int[4] { 3, 1, 2, 0} },

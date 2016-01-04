@@ -848,8 +848,7 @@ namespace CodeImp.DoomBuilder.Map
                 if (tex.Length == 8)
                 {
                     char alphaChar = tex.ToUpper()[7];
-                    if (alphaChar >= 'A' && alphaChar <= 'Z') alpha = (int)(((float)(alphaChar - 'A' + 10) / 25) * 255);
-                    else if (alphaChar >= '0' && alphaChar <= '9') alpha = (int)(((float)(alphaChar - '0') / 25) * 255);
+                    if (alphaChar >= 'A' && alphaChar <= 'Z') alpha = (int)(((float)(alphaChar - 'A') / 25) * 255);
                 }
             }
         }

@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Zone Builder
-AppVerName=Zone Builder 0.1
+AppVerName=Zone Builder 1.0
 AppPublisher=MascaraSnake
 AppPublisherURL=http://mb.srb2.org/member.php?u=3131
 ;AppSupportURL=http://forum.zdoom.org/viewtopic.php?f=3&t=32392

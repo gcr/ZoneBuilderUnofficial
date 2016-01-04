@@ -39,6 +39,7 @@ namespace CodeImp.DoomBuilder.IO
         protected Dictionary<int, int[]> slopeTypes;
         protected Dictionary<int, int[]> slopeCopyTypes;
         protected Dictionary<int, int[]> vertexSlopeTypes;
+        protected Dictionary<int, float> translucentLineTypes;
         #endregion
 
         #region ================== Constructor / Disposer
@@ -50,13 +51,14 @@ namespace CodeImp.DoomBuilder.IO
             slopeTypes = new Dictionary<int, int[]>() { { 181, new int[2] { -1, -1 } } };
             slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
             vertexSlopeTypes = new Dictionary<int, int[]>() { };
+            translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
         }
 
-		#endregion
+        #endregion
 
-		#region ================== Properties
+        #region ================== Properties
 
-		public override int MaxSidedefs { get { return ushort.MaxValue; } }
+        public override int MaxSidedefs { get { return ushort.MaxValue; } }
 		public override int MaxVertices { get { return ushort.MaxValue; } }
 		public override int MaxLinedefs { get { return ushort.MaxValue; } }
 		public override int MaxSectors { get { return ushort.MaxValue; } }
@@ -102,6 +104,7 @@ namespace CodeImp.DoomBuilder.IO
         public override Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
         public override Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
         public override Dictionary<int, int[]> VertexSlopeTypes { get { return vertexSlopeTypes; } }
+        public override Dictionary<int, float> TranslucentLineTypes { get { return translucentLineTypes; } }
         public override int SlopeVertexType { get { return 9500; } }
         public override int Custom3DFloorType { get { return 160; } }
         public override int ColormapType { get { return -1; } }

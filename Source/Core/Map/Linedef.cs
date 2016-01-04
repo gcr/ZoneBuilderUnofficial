@@ -95,6 +95,7 @@ namespace CodeImp.DoomBuilder.Map
         public bool IsSlope { get { return General.Map.FormatInterface.SlopeTypes.ContainsKey(Action); } }
         public bool IsSlopeCopy { get { return General.Map.FormatInterface.SlopeCopyTypes.ContainsKey(Action); } }
         public bool IsVertexSlope { get { return General.Map.FormatInterface.VertexSlopeTypes.ContainsKey(Action); } }
+        public bool IsTranslucentLine { get { return General.Map.FormatInterface.TranslucentLineTypes.ContainsKey(Action); } }
         public bool IsColormap { get { return Action == General.Map.FormatInterface.ColormapType; } }
         public bool IsFlatAlignment { get { return Action == General.Map.FormatInterface.FlatAlignmentType; } }
         public int Tag { get { return tags[0]; } set { BeforePropsChange(); tags[0] = value; if((value < General.Map.FormatInterface.MinTag) || (value > General.Map.FormatInterface.MaxTag)) throw new ArgumentOutOfRangeException("Tag", "Invalid tag number"); } } //mxd
@@ -893,6 +894,15 @@ namespace CodeImp.DoomBuilder.Map
             int[] settings = General.Map.FormatInterface.VertexSlopeTypes[Action];
             Args[0] = settings[0];
             Args[1] = settings[1];
+        }
+
+        //Set translucent line arguments for SRB2-style translucent walls. See http://zdoom.org/wiki/TranslucentLine.
+        public void SetTranslucentLineArgs()
+        {
+            Args[0] = 0; //lineid (irrelevant for SRB2)
+            Args[1] = (int)(General.Map.FormatInterface.TranslucentLineTypes[Action]*255); //amount
+            Args[2] = 0; //additive
+            Args[3] = 0; //moreflags (irrelevant for SRB2)
         }
 
         // This checks and returns a flag without creating it

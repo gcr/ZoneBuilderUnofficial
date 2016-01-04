@@ -104,8 +104,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			bool canhavealpha = (this is VisualMiddleDouble || this is VisualMiddle3D || this is VisualMiddleBack); //mxd
 
 			// From TranslucentLine action
-			if(Sidedef.Line.Action == 208)
+			if(Sidedef.Line.IsTranslucentLine)
 			{
+                if (!General.Map.FormatInterface.HasLinedefParameters) Sidedef.Line.SetTranslucentLineArgs();
 				alpha = (byte)General.Clamp(Sidedef.Line.Args[1], 0, 255);
 
 				if(canhavealpha && Sidedef.Line.Args[2] == 1)

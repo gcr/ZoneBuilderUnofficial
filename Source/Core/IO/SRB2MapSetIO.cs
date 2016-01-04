@@ -130,6 +130,19 @@ namespace CodeImp.DoomBuilder.IO
                 { 714, new int[2] { 1, 0 } },
                 { 715, new int[2] { 1, 1 } },
             };
+
+            translucentLineTypes = new Dictionary<int, float>() {
+                { 900, 0.9f },
+                { 901, 0.8f },
+                { 902, 0.7f },
+                { 903, 0.6f },
+                { 904, 0.5f },
+                { 905, 0.4f },
+                { 906, 0.3f },
+                { 907, 0.2f },
+                { 908, 0.1f },
+            };
+
         }
 
         #endregion

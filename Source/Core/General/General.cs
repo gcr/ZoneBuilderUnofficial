@@ -1204,7 +1204,7 @@ namespace CodeImp.DoomBuilder
 
 			// Open map file dialog
 			OpenFileDialog openfile = new OpenFileDialog();
-			openfile.Filter = "WAD Files (*.wad)|*.wad|All files|*.*";
+			openfile.Filter = "WAD Files (*.wad)|*.wad|All Files|*.*";
 			openfile.Title = "Open Map";
 			if(!string.IsNullOrEmpty(settings.LastUsedMapFolder) && Directory.Exists(settings.LastUsedMapFolder)) //mxd
 				openfile.InitialDirectory = settings.LastUsedMapFolder; //mxd
@@ -1501,7 +1501,7 @@ namespace CodeImp.DoomBuilder
 
 			// Show save as dialog
 			SaveFileDialog savefile = new SaveFileDialog();
-			savefile.Filter = "WAD Files (*.wad)|*.wad|All files|*.*";
+			savefile.Filter = "WAD Files (*.wad)|*.wad|All Files|*.*";
 			savefile.Title = "Save Map As";
 			savefile.AddExtension = true;
 			savefile.CheckPathExists = true;
@@ -1573,7 +1573,7 @@ namespace CodeImp.DoomBuilder
 
 			// Show save as dialog
 			SaveFileDialog savefile = new SaveFileDialog();
-			savefile.Filter = "WAD Files (*.wad)|*.wad|All files|*.*";
+			savefile.Filter = "WAD Files (*.wad)|*.wad|All Files|*.*";
 			savefile.Title = "Save Map Into";
 			savefile.AddExtension = true;
 			savefile.CheckPathExists = true;

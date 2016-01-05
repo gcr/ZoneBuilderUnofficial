@@ -1077,7 +1077,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         if (slopevertices.Count >= 3)
                         {
                             SectorData sd = GetSectorData(s);
-                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor);
+                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor, blockmap);
                         }
                     }
                 }

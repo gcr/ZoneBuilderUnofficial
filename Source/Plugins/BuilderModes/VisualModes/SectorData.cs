@@ -9,6 +9,10 @@ using CodeImp.DoomBuilder.Rendering;
 
 #endregion
 
+#region ================== Namespaces
+using CodeImp.DoomBuilder.VisualModes;
+#endregion
+
 namespace CodeImp.DoomBuilder.BuilderModes
 {
 	internal class SectorData
@@ -175,9 +179,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		}
 
         // SRB2-style Thing vertex slope effect
-        public void AddEffectSRB2ThingVertexSlope(List<Thing> sourcethings, bool slopefloor)
+        public void AddEffectSRB2ThingVertexSlope(List<Thing> sourcethings, bool slopefloor, VisualBlockMap blockmap)
         {
-            EffectSRB2ThingVertexSlope e = new EffectSRB2ThingVertexSlope(this, sourcethings, slopefloor);
+            EffectSRB2ThingVertexSlope e = new EffectSRB2ThingVertexSlope(this, sourcethings, slopefloor, blockmap);
             alleffects.Add(e);
         }
 

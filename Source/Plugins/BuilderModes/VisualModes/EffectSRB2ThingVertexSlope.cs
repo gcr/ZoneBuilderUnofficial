@@ -6,6 +6,10 @@ using CodeImp.DoomBuilder.Map;
 
 #endregion
 
+#region ================== Namespaces
+using CodeImp.DoomBuilder.VisualModes;
+#endregion
+
 namespace CodeImp.DoomBuilder.BuilderModes
 {
 	internal class EffectSRB2ThingVertexSlope : SectorEffect
@@ -15,12 +19,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		
 		// Floor or ceiling?
 		private bool slopefloor;
+
+        private VisualBlockMap blockmap;
 		
 		// Constructor
-		public EffectSRB2ThingVertexSlope(SectorData data, List<Thing> sourcethings, bool floor) : base(data)
+		public EffectSRB2ThingVertexSlope(SectorData data, List<Thing> sourcethings, bool floor, VisualBlockMap bmap) : base(data)
 		{
 			things = sourcethings;
 			slopefloor = floor;
+            blockmap = bmap;
 			
 			// New effect added: This sector needs an update!
 			if(data.Mode.VisualSectorExists(data.Sector))
@@ -40,7 +47,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
             {
                 ThingData td = data.Mode.GetThingData(t);
                 td.AddUpdateSector(data.Sector, true);
-                verts[index] = t.Position;
+                Vector3D position = t.Position;
+                t.DetermineSector(blockmap);
+                position.z += t.Sector.FloorHeight;
+                verts[index] = position;
                 index++;
                 if (index > 2) break; //Only the first three vertices are used
             }

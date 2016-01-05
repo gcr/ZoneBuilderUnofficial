@@ -303,7 +303,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             // wadfiledialog
             // 
-            this.wadfiledialog.Filter = "Doom WAD Files (*.wad)|*.wad|SRB2 IWAD (*.srb)|*.srb";
+            this.wadfiledialog.Filter = "WAD Files (*.wad;*.srb)|*.wad;*srb";
             this.wadfiledialog.Title = "Browse WAD File";
             // 
             // dirdialog

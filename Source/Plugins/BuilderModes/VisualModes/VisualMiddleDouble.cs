@@ -191,13 +191,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			CropPoly(ref poly, osd.Ceiling.plane, true);
 			CropPoly(ref poly, osd.Floor.plane, true);
 
-			// Determine if we should repeat the middle texture
-			repeatmidtex = (General.Map.SRB2 && Sidedef.Line.IsFlagSet("1024")) || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
-			if(!repeatmidtex || (General.Map.SRB2 && Sidedef.OffsetX >= 4096)) 
+            // Determine if we should repeat the middle texture
+            bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet("1024");
+            repeatmidtex = srb2repeat || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
+			if(!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096)) 
 			{
 				// First determine the visible portion of the texture
 				float textop;
-                int repetitions = General.Map.SRB2 ? (Sidedef.OffsetX / 4096) + 1 : 1;
+                //Due to the condition of the if-block, Sidedef.OffsetX >= 4096 automatically holds if srb2repeat does, so we don't have to handle negative offsets here.
+                int repetitions = srb2repeat ? (Sidedef.OffsetX / 4096) + 1 : 1;
 
 				// Determine top portion height
 				if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))

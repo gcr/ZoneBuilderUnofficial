@@ -32,7 +32,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private readonly HintLabel hintlabel;
 		private Curve curve;
 		private static int segmentLength = 32;
-		private const int MIN_SEGMENT_LENGTH = 16;
+		private const int MIN_SEGMENT_LENGTH = 1;
 		private const int MAX_SEGMENT_LENGTH = 4096; //just some arbitrary number
 
 		//interface

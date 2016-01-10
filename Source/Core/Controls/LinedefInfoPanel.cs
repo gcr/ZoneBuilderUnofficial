@@ -158,7 +158,7 @@ namespace CodeImp.DoomBuilder.Controls
 			infopanel.Text = " Linedef " + l.Index + " ";
 			action.Text = act.ToString();
 			length.Text = l.Length.ToString("0.##");
-			angle.Text = General.ClampAngle(l.AngleDeg) + "\u00B0";
+			angle.Text = General.ClampAngle(l.AngleDeg - 90) + "\u00B0";
 			unpegged.Text = peggedness;
 			unpegged.Enabled = (peggedness != "None"); //mxd
 			peglabel.Enabled = (peggedness != "None"); //mxd

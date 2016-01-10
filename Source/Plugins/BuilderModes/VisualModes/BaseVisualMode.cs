@@ -977,7 +977,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                                 s.Fields.BeforeFieldsChange();
                                 if (rotate)
                                 {
-                                    float rotation = (l.AngleDeg + 90) % 360;
+                                    float rotation = General.ClampAngle(l.AngleDeg - 90);
 
                                     if (!rotateonlyceiling)
                                     {

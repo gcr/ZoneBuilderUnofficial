@@ -133,7 +133,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			float length = delta.GetLength();
 			if(showangle)
 			{
-				int displayangle = General.ClampAngle((int)Math.Round(Angle2D.RadToDeg(delta.GetAngle())));
+				int displayangle = General.ClampAngle((int)Math.Round(Angle2D.RadToDeg(delta.GetAngle())) - 90);
 				label.Text = "l:" + length.ToString(VALUE_FORMAT) + "; a:" + displayangle;
 			}
 			else

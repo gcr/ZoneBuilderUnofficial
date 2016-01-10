@@ -93,7 +93,7 @@ namespace CodeImp.DoomBuilder.Windows
 			//mxd
 			locatetexturegroup.Checked = General.Settings.LocateTextureGroup;
 			cbStoreEditTab.Checked = General.Settings.StoreSelectedEditTab;
-			checkforupdates.Checked = General.Settings.CheckForUpdates;
+            checkforupdates.Checked = General.Settings.CheckForUpdates;
 			toolbar_gzdoom.Checked = General.Settings.GZToolbarGZDoom;
 			cbSynchCameras.Checked = General.Settings.GZSynchCameras;
 			tbDynLightCount.Value = General.Clamp(General.Settings.GZMaxDynamicLights, tbDynLightCount.Minimum, tbDynLightCount.Maximum);
@@ -107,8 +107,9 @@ namespace CodeImp.DoomBuilder.Windows
 			vertexScale.Value = General.Clamp((int)(General.Settings.GZVertexScale2D), vertexScale.Minimum, vertexScale.Maximum);
 			vertexScaleLabel.Text = vertexScale.Value * 100 + "%" + (vertexScale.Value == 1 ? " (default)" : "");
 			cbMarkExtraFloors.Checked = General.Settings.GZMarkExtraFloors;
-			recentFiles.Value = General.Settings.MaxRecentFiles;
-			screenshotsfolderpath.Text = General.Settings.ScreenshotsPath;
+            recentFiles.Value = General.Settings.MaxRecentFiles;
+            maxBackups.Value = General.Settings.MaxBackups;
+            screenshotsfolderpath.Text = General.Settings.ScreenshotsPath;
 			if(Directory.Exists(General.Settings.ScreenshotsPath))
 				browseScreenshotsFolderDialog.SelectedPath = General.Settings.ScreenshotsPath;
 			
@@ -261,10 +262,11 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZToolbarGZDoom = toolbar_gzdoom.Checked; //mxd
 			General.Settings.ShowTextureSizes = showtexturesizes.Checked;
 			General.Settings.StoreSelectedEditTab = cbStoreEditTab.Checked; //mxd
-			General.Settings.CheckForUpdates = checkforupdates.Checked; //mxd
+            General.Settings.CheckForUpdates = checkforupdates.Checked; //mxd
 			General.Settings.LocateTextureGroup = locatetexturegroup.Checked; //mxd
 			General.Settings.MaxRecentFiles = recentFiles.Value; //mxd
-			General.Settings.ScreenshotsPath = screenshotsfolderpath.Text.Trim(); //mxd
+            General.Settings.MaxBackups = maxBackups.Value;
+            General.Settings.ScreenshotsPath = screenshotsfolderpath.Text.Trim(); //mxd
 			
 			// Script font size
 			int fontsize;
@@ -440,8 +442,13 @@ namespace CodeImp.DoomBuilder.Windows
 			labelRecentFiles.Text = recentFiles.Value.ToString();
 		}
 
-		// This updates the script font preview label
-		private void UpdateScriptFontPreview()
+        private void maxBackups_ValueChanged(object sender, EventArgs e)
+        {
+            labelBackups.Text = maxBackups.Value.ToString();
+        }
+
+        // This updates the script font preview label
+        private void UpdateScriptFontPreview()
 		{
 			if((scriptfontname.SelectedIndex > -1) &&
 			   (scriptfontsize.SelectedIndex > -1))

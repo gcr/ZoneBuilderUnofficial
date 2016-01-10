@@ -114,7 +114,8 @@ namespace CodeImp.DoomBuilder.Config
 		private int maxRecentFiles;
 		private bool autoClearSideTextures;
 		private bool storeSelectedEditTab;
-		private bool checkforupdates;
+        private int maxbackups;
+        private bool checkforupdates;
 		private bool rendercomments;
 		private bool rendergrid;
 		private bool dynamicgridsize;
@@ -204,7 +205,8 @@ namespace CodeImp.DoomBuilder.Config
 		public int MaxRecentFiles { get { return maxRecentFiles; } internal set { maxRecentFiles = General.Clamp(value, 8, 25); } }
 		public bool AutoClearSidedefTextures { get { return autoClearSideTextures; } internal set { autoClearSideTextures = value; } }
 		public bool StoreSelectedEditTab { get { return storeSelectedEditTab; } internal set { storeSelectedEditTab = value; } }
-		internal bool CheckForUpdates { get { return checkforupdates; } set { checkforupdates = value; } } //mxd
+        internal int MaxBackups { get { return maxbackups; } set { maxbackups = value; } }
+        internal bool CheckForUpdates { get { return checkforupdates; } set { checkforupdates = value; } } //mxd
 		public bool RenderComments { get { return rendercomments; } internal set { rendercomments = value; } } //mxd
 		public bool RenderGrid { get { return rendergrid; } internal set { rendergrid = value; } } //mxd
 		public bool DynamicGridSize { get { return dynamicgridsize; } internal set { dynamicgridsize = value; } } //mxd
@@ -317,7 +319,8 @@ namespace CodeImp.DoomBuilder.Config
 				maxRecentFiles = cfg.ReadSetting("maxrecentfiles", 8);
 				autoClearSideTextures = cfg.ReadSetting("autoclearsidetextures", true);
 				storeSelectedEditTab = cfg.ReadSetting("storeselectededittab", true);
-				checkforupdates = cfg.ReadSetting("checkforupdates", false); //mxd
+                maxbackups = cfg.ReadSetting("maxbackups", 3);
+                checkforupdates = cfg.ReadSetting("checkforupdates", false); //mxd
 				rendercomments = cfg.ReadSetting("rendercomments", true); //mxd
 				rendergrid = cfg.ReadSetting("rendergrid", true); //mxd
 				dynamicgridsize = cfg.ReadSetting("dynamicgridsize", true); //mxd
@@ -414,7 +417,8 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("maxrecentfiles", maxRecentFiles);
 			cfg.WriteSetting("autoclearsidetextures", autoClearSideTextures);
 			cfg.WriteSetting("storeselectededittab", storeSelectedEditTab);
-			cfg.WriteSetting("checkforupdates", checkforupdates); //mxd
+            cfg.WriteSetting("maxbackups", maxbackups);
+            cfg.WriteSetting("checkforupdates", checkforupdates); //mxd
 			cfg.WriteSetting("rendercomments", rendercomments); //mxd
 			cfg.WriteSetting("rendergrid", rendergrid); //mxd
 			cfg.WriteSetting("dynamicgridsize", dynamicgridsize); //mxd

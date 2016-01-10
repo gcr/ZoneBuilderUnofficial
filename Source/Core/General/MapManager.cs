@@ -828,12 +828,18 @@ namespace CodeImp.DoomBuilder
 						}
 					}
 
-					// Backup existing file, if any
-					if(File.Exists(newfilepathname + ".backup3")) File.Delete(newfilepathname + ".backup3");
-					if(File.Exists(newfilepathname + ".backup2")) File.Move(newfilepathname + ".backup2", newfilepathname + ".backup3");
-					if(File.Exists(newfilepathname + ".backup1")) File.Move(newfilepathname + ".backup1", newfilepathname + ".backup2");
-					File.Copy(newfilepathname, newfilepathname + ".backup1");
-				}
+                    int backups = General.Settings.MaxBackups;
+                    if (backups > 0)
+                    {
+                        // Backup existing file, if any
+                        if (File.Exists(newfilepathname + ".backup" + backups)) File.Delete(newfilepathname + ".backup" + backups);
+                        for (int i = backups - 1; i >= 1; i--)
+                        {
+                            if (File.Exists(newfilepathname + ".backup" + i)) File.Move(newfilepathname + ".backup" + i, newfilepathname + ".backup" + (i+1));
+                        }
+                        File.Copy(newfilepathname, newfilepathname + ".backup1");
+                    }
+                }
 
 				// Except when saving INTO another file,
 				// kill the target file if it is different from source file

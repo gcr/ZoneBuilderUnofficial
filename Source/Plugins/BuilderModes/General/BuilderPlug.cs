@@ -104,7 +104,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private bool editnewthing;
 		private bool editnewsector;
 		private bool additiveselect;
-		private bool autoclearselection;
+        private bool dontusenodes;
+        private bool autoclearselection;
 		private bool visualmodeclearselection;
 		private string copiedtexture;
 		private string copiedflat;
@@ -155,7 +156,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public bool EditNewThing { get { return editnewthing; } }
 		public bool EditNewSector { get { return editnewsector; } }
 		public bool AdditiveSelect { get { return additiveselect; } }
-		public bool AutoClearSelection { get { return autoclearselection; } }
+        public bool DontUseNodes { get { return dontusenodes; } }
+        public bool AutoClearSelection { get { return autoclearselection; } }
 		public bool VisualModeClearSelection { get { return visualmodeclearselection; } }
 		public string CopiedTexture { get { return copiedtexture; } set { copiedtexture = value; } }
 		public string CopiedFlat { get { return copiedflat; } set { copiedflat = value; } }
@@ -280,7 +282,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			editnewthing = General.Settings.ReadPluginSetting("editnewthing", true);
 			editnewsector = General.Settings.ReadPluginSetting("editnewsector", false);
 			additiveselect = General.Settings.ReadPluginSetting("additiveselect", false);
-			autoclearselection = General.Settings.ReadPluginSetting("autoclearselection", false);
+            dontusenodes = General.Settings.ReadPluginSetting("dontusenodes", false);
+            autoclearselection = General.Settings.ReadPluginSetting("autoclearselection", false);
 			visualmodeclearselection = General.Settings.ReadPluginSetting("visualmodeclearselection", false);
 			stitchrange = General.Settings.ReadPluginSetting("stitchrange", 20);
 			highlightrange = General.Settings.ReadPluginSetting("highlightrange", 20);

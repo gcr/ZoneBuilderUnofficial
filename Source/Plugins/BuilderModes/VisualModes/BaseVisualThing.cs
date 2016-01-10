@@ -101,8 +101,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// This builds the thing geometry. Returns false when nothing was created.
 		public bool Setup()
 		{
-			// Find the sector in which the thing resides
-			Thing.DetermineSector(mode.BlockMap);
+            // Find the sector in which the thing resides
+            if (BuilderPlug.Me.DontUseNodes)
+                Thing.DetermineSector(mode.BlockMap);
+            else
+                Thing.DetermineSector(mode.BSP);
 			
 			//mxd. If the thing is inside a sector, apply DECORATE/UDMF alpha/renderstyle overrides
 			byte alpha = 255;

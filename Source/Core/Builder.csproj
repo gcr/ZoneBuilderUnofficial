@@ -187,6 +187,10 @@
       <DependentUpon>ThingStatisticsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IO\SRB2MapSetIO.cs" />
+    <Compile Include="Map\BSP.cs" />
+    <Compile Include="Map\Node.cs" />
+    <Compile Include="Map\Seg.cs" />
+    <Compile Include="Map\Subsector.cs" />
     <Compile Include="VisualModes\VisualBlockMap.cs" />
     <Compile Include="VisualModes\VisualMode.cs" />
     <Compile Include="General\Clock.cs" />

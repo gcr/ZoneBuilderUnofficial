@@ -46,10 +46,10 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			public Vector3D Position { get { return position; } }
 			public bool IsCurved;
 
-			public PathNode(Thing t, VisualBlockMap blockmap)
+			public PathNode(Thing t, VisualBlockMap blockmap, BSP bsp, bool useblockmap)
 			{
 				thing = t;
-				position = new Vector3D(t.Position, (blockmap != null ? t.Position.z + GetCorrectHeight(t, blockmap) : t.Position.z));
+				position = new Vector3D(t.Position, (blockmap != null ? t.Position.z + GetCorrectHeight(t, blockmap, bsp, useblockmap) : t.Position.z));
 				nextnodes = new Dictionary<int, PathNode>();
 				prevnodes = new Dictionary<int, PathNode>();
 			}
@@ -72,13 +72,13 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			}
 		}
 
-		public static List<Line3D> GetThingLinks(IEnumerable<Thing> things) { return GetThingLinks(things, null); }
-		public static List<Line3D> GetThingLinks(IEnumerable<Thing> things, VisualBlockMap blockmap) 
+		public static List<Line3D> GetThingLinks(IEnumerable<Thing> things) { return GetThingLinks(things, null, null, false); }
+		public static List<Line3D> GetThingLinks(IEnumerable<Thing> things, VisualBlockMap blockmap, BSP bsp, bool useblockmap) 
 		{
-			return GetThingLinks(GetSpecialThings(things, blockmap), blockmap);
+			return GetThingLinks(GetSpecialThings(things, blockmap, bsp, useblockmap), blockmap, bsp, useblockmap);
 		}
 
-		private static SpecialThings GetSpecialThings(IEnumerable<Thing> things, VisualBlockMap blockmap) 
+		private static SpecialThings GetSpecialThings(IEnumerable<Thing> things, VisualBlockMap blockmap, BSP bsp, bool useblockmap) 
 		{
 			SpecialThings result = new SpecialThings();
 
@@ -130,7 +130,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 				{
 					case "interpolationpoint":
 						if(!result.InterpolationPoints.ContainsKey(t.Tag)) result.InterpolationPoints.Add(t.Tag, new List<PathNode>());
-						result.InterpolationPoints[t.Tag].Add(new PathNode(t, blockmap));
+						result.InterpolationPoints[t.Tag].Add(new PathNode(t, blockmap, bsp, useblockmap));
 						break;
 
 					case "movingcamera":
@@ -154,7 +154,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			return result;
 		}
 
-		private static List<Line3D> GetThingLinks(SpecialThings result, VisualBlockMap blockmap) 
+		private static List<Line3D> GetThingLinks(SpecialThings result, VisualBlockMap blockmap, BSP bsp, bool useblockmap) 
 		{
 			var lines = new List<Line3D>();
 			var actormovertargets = new Dictionary<int, List<Thing>>();
@@ -180,12 +180,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 					if(!result.PatrolPoints.ContainsKey(t.Args[0])) continue;
 					
 					start = t.Position;
-					start.z += GetCorrectHeight(t, blockmap);
+					start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 					foreach(Thing tt in result.PatrolPoints[t.Args[0]])
 					{
 						end = tt.Position;
-						end.z += GetCorrectHeight(tt, blockmap);
+						end.z += GetCorrectHeight(tt, blockmap, bsp, useblockmap);
 						lines.Add(new Line3D(start, end));
 					}
 				}
@@ -197,12 +197,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 				if(!result.PatrolPoints.ContainsKey(t.Args[1])) continue;
 
 				start = t.Position;
-				start.z += GetCorrectHeight(t, blockmap);
+				start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 				foreach(Thing tt in result.PatrolPoints[t.Args[1]]) 
 				{
 					end = tt.Position;
-					end.z += GetCorrectHeight(tt, blockmap);
+					end.z += GetCorrectHeight(tt, blockmap, bsp, useblockmap);
 
 					lines.Add(new Line3D(start, end, General.Colors.Selection));
 				}
@@ -216,7 +216,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 				bool interpolatepath = ((t.Args[2] & 1) != 1);
 
 				start = t.Position;
-				start.z += GetCorrectHeight(t, blockmap);
+				start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 				foreach(PathNode node in result.InterpolationPoints[targettag]) 
 				{
@@ -237,7 +237,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 					{
 						bool interpolatepath = ((t.Args[2] & 1) != 1);
 						start = t.Position;
-						start.z += GetCorrectHeight(t, blockmap);
+						start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 						foreach(PathNode node in result.InterpolationPoints[targettag])
 						{
@@ -250,12 +250,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 					if(actormovertargets.ContainsKey(t.Args[3]))
 					{
 						start = t.Position;
-						start.z += GetCorrectHeight(t, blockmap);
+						start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 						foreach(Thing tt in actormovertargets[t.Args[3]])
 						{
 							end = tt.Position;
-							end.z += GetCorrectHeight(tt, blockmap);
+							end.z += GetCorrectHeight(tt, blockmap, bsp, useblockmap);
 							lines.Add(new Line3D(start, end, General.Colors.Selection));
 						}
 					}
@@ -270,7 +270,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 				bool interpolatepath = (t.Args[2] & 1) != 1;
 
 				start = t.Position;
-				start.z += GetCorrectHeight(t, blockmap);
+				start.z += GetCorrectHeight(t, blockmap, bsp, useblockmap);
 
 				foreach(PathNode node in result.InterpolationPoints[targettag])
 				{
@@ -286,12 +286,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 				foreach(Thing anchor in group.Value)
 				{
 					start = anchor.Position;
-					start.z += GetCorrectHeight(anchor, blockmap);
+					start.z += GetCorrectHeight(anchor, blockmap, bsp, useblockmap);
 
 					foreach(Thing startspot in result.PolyobjectStartSpots[group.Key]) 
 					{
 						end = startspot.Position;
-						end.z += GetCorrectHeight(startspot, blockmap);
+						end.z += GetCorrectHeight(startspot, blockmap, bsp, useblockmap);
 						lines.Add(new Line3D(start, end, General.Colors.Selection));
 					}
 				}
@@ -385,11 +385,17 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 		}
 
 		// Required only when called from VisualMode
-		private static float GetCorrectHeight(Thing thing, VisualBlockMap blockmap)
+		private static float GetCorrectHeight(Thing thing, VisualBlockMap blockmap, BSP bsp, bool useblockmap)
 		{
 			if(blockmap == null) return 0f;
 			float height = thing.Height / 2f;
-			if(thing.Sector == null) thing.DetermineSector(blockmap);
+            if (thing.Sector == null)
+            {
+                if (useblockmap)
+                    thing.DetermineSector(blockmap);
+                else
+                    thing.DetermineSector(bsp);
+            }
 			if(thing.Sector != null) height += thing.Sector.FloorHeight;
 			return height;
 		}

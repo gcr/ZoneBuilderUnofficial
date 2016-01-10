@@ -274,7 +274,7 @@ namespace CodeImp.DoomBuilder.Map
 			sector = map.GetSectorByCoordinates(pos);
 		}
 
-		// This determines which sector the thing is in and links it
+		// This determines which sector the thing is in by looking at the blockmap and links it
 		public void DetermineSector(VisualBlockMap blockmap)
 		{
 			// Find nearest sectors using the blockmap
@@ -292,8 +292,14 @@ namespace CodeImp.DoomBuilder.Map
 			}
 		}
 
-		// This translates the flags into UDMF fields
-		internal void TranslateToUDMF()
+        // This determines which sector the thing is in by looking at the BSP tree and links it
+        public void DetermineSector(BSP bsp)
+        {
+            sector = bsp.GetSector((Vector2D)pos);
+        }
+
+        // This translates the flags into UDMF fields
+        internal void TranslateToUDMF()
 		{
 			// First make a single integer with all flags
 			int bits = 0;

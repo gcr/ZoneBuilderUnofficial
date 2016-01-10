@@ -179,9 +179,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		}
 
         // SRB2-style Thing vertex slope effect
-        public void AddEffectSRB2ThingVertexSlope(List<Thing> sourcethings, bool slopefloor, VisualBlockMap blockmap)
+        public void AddEffectSRB2ThingVertexSlope(List<Thing> sourcethings, bool slopefloor, VisualBlockMap blockmap, BSP bsp)
         {
-            EffectSRB2ThingVertexSlope e = new EffectSRB2ThingVertexSlope(this, sourcethings, slopefloor, blockmap);
+            EffectSRB2ThingVertexSlope e = new EffectSRB2ThingVertexSlope(this, sourcethings, slopefloor, blockmap, bsp);
             alleffects.Add(e);
         }
 

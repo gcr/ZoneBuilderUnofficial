@@ -97,8 +97,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		private static bool gzdoomRenderingEffects = true; //mxd
 
-		//mxd. Moved here from Tools
-		private struct SidedefAlignJob
+        private BSP bsp;
+
+        //mxd. Moved here from Tools
+        private struct SidedefAlignJob
 		{
 			public Sidedef sidedef;
 
@@ -166,13 +168,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		
 		public bool IsSingleSelection { get { return singleselection; } }
 		public bool SelectionChanged { get { return selectionchanged; } set { selectionchanged |= value; } }
+        public BSP BSP { get { return bsp; } }
 
-		#endregion
-		
-		#region ================== Constructor / Disposer
+        #endregion
 
-		// Constructor
-		public BaseVisualMode()
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        public BaseVisualMode()
 		{
 			// Initialize
 			this.gravity = new Vector3D(0.0f, 0.0f, 0.0f);
@@ -183,6 +186,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.selectioninfoupdatetimer = new Timer();
 			selectioninfoupdatetimer.Interval = 100;
 			selectioninfoupdatetimer.Tick += SelectioninfoupdatetimerOnTick;
+
+            bsp = new BSP(BuilderPlug.Me.DontUseNodes);
 			
 			// We have no destructor
 			GC.SuppressFinalize(this);
@@ -194,10 +199,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Not already disposed?
 			if(!isdisposed)
 			{
-				// Clean up
-				
-				// Done
-				base.Dispose();
+                // Clean up
+                bsp.Dispose();
+                bsp = null;
+
+                // Done
+                base.Dispose();
 			}
 		}
 
@@ -523,7 +530,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			//mxd. Update event lines (still better than updating them on every frame redraw)
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
 		}
 
 		//mxd
@@ -776,6 +783,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			//mxd
 			Sector[] sectorsWithEffects = null;
+            bsp.Update();
 
 			if(!gzdoomRenderingEffects) 
 			{
@@ -1077,7 +1085,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         if (slopevertices.Count >= 3)
                         {
                             SectorData sd = GetSectorData(s);
-                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor, blockmap);
+                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor, blockmap, bsp);
                         }
                     }
                 }
@@ -1223,7 +1231,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			RebuildElementData();
 
 			//mxd. Update event lines
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
 		}
 
 		// When returning to another mode
@@ -3355,7 +3363,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Map.ThingsFilter.Update();
 
 			// Update event lines
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
 		}
 
 		//mxd. We'll just use currently selected objects 

@@ -415,7 +415,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 {
                     // This is a special thing that needs special positioning
                     SectorData sd = mode.GetSectorData(Thing.Sector);
-                    pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z;
+                    pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z - Thing.Height/2;
                 }
             }
 

@@ -1945,12 +1945,12 @@ namespace CodeImp.DoomBuilder.Rendering
 
             // Draw
             graphics.Shaders.Display2D.Begin();
+            graphics.Shaders.Display2D.BeginPass(0);
             foreach (FlatVertex[] v in verts)
             {
-                graphics.Shaders.Display2D.BeginPass(0);
                 graphics.Device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 0, 2, v);
-                graphics.Shaders.Display2D.EndPass();
             }
+            graphics.Shaders.Display2D.EndPass();
             graphics.Shaders.Display2D.End();
         }
 

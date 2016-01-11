@@ -113,6 +113,16 @@ namespace CodeImp.DoomBuilder.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap axis1 {
+            get {
+                object obj = ResourceManager.GetObject("axis1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Brightness {
             get {
                 object obj = ResourceManager.GetObject("Brightness", resourceCulture);

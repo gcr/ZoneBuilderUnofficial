@@ -119,6 +119,7 @@ namespace CodeImp.DoomBuilder.Config
         private bool checkforupdates;
 		private bool rendercomments;
 		private bool rendergrid;
+        private bool rendernightspath;
 		private bool dynamicgridsize;
 		private int ignoredremoterevision;
 		
@@ -211,7 +212,8 @@ namespace CodeImp.DoomBuilder.Config
         internal bool CheckForUpdates { get { return checkforupdates; } set { checkforupdates = value; } } //mxd
 		public bool RenderComments { get { return rendercomments; } internal set { rendercomments = value; } } //mxd
 		public bool RenderGrid { get { return rendergrid; } internal set { rendergrid = value; } } //mxd
-		public bool DynamicGridSize { get { return dynamicgridsize; } internal set { dynamicgridsize = value; } } //mxd
+        public bool RenderNiGHTSPath { get { return rendernightspath; } internal set { rendernightspath = value; } }
+        public bool DynamicGridSize { get { return dynamicgridsize; } internal set { dynamicgridsize = value; } } //mxd
 		internal int IgnoredRemoteRevision { get { return ignoredremoterevision; } set { ignoredremoterevision = value; } } //mxd
 
 		//mxd. Left here for compatibility reasons...
@@ -326,7 +328,8 @@ namespace CodeImp.DoomBuilder.Config
                 checkforupdates = cfg.ReadSetting("checkforupdates", false); //mxd
 				rendercomments = cfg.ReadSetting("rendercomments", true); //mxd
 				rendergrid = cfg.ReadSetting("rendergrid", true); //mxd
-				dynamicgridsize = cfg.ReadSetting("dynamicgridsize", true); //mxd
+                rendernightspath = cfg.ReadSetting("rendernightspath", true);
+                dynamicgridsize = cfg.ReadSetting("dynamicgridsize", true); //mxd
 				ignoredremoterevision = cfg.ReadSetting("ignoredremoterevision", 0); //mxd
 
 				//mxd. Sector defaults
@@ -425,7 +428,8 @@ namespace CodeImp.DoomBuilder.Config
             cfg.WriteSetting("checkforupdates", checkforupdates); //mxd
 			cfg.WriteSetting("rendercomments", rendercomments); //mxd
 			cfg.WriteSetting("rendergrid", rendergrid); //mxd
-			cfg.WriteSetting("dynamicgridsize", dynamicgridsize); //mxd
+            cfg.WriteSetting("rendernightspath", rendernightspath); //mxd
+            cfg.WriteSetting("dynamicgridsize", dynamicgridsize); //mxd
 			cfg.WriteSetting("ignoredremoterevision", ignoredremoterevision); //mxd
 
 			//mxd. Sector defaults

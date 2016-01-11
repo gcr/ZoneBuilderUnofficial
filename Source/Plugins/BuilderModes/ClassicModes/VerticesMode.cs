@@ -157,7 +157,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				renderer.RenderThingSet(General.Map.ThingsFilter.HiddenThings, Presentation.THINGS_HIDDEN_ALPHA);
 				renderer.RenderThingSet(General.Map.ThingsFilter.VisibleThings, Presentation.THINGS_ALPHA);
-				renderer.Finish();
+                renderer.RenderNiGHTSPath();
+                renderer.Finish();
 			}
 
 			// Render selection

@@ -148,7 +148,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if(renderer.StartThings(true))
 				{
 					renderer.RenderThingSet(General.Map.Map.Things, Presentation.THINGS_ALPHA);
-					renderer.Finish();
+                    renderer.RenderNiGHTSPath();
+                    renderer.Finish();
 				}
 			}
 
@@ -182,7 +183,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				renderer.RenderThingSet(General.Map.ThingsFilter.HiddenThings, Presentation.THINGS_HIDDEN_ALPHA);
 				renderer.RenderThingSet(unselectedthings, Presentation.THINGS_ALPHA);
 				renderer.RenderThingSet(selectedthings, Presentation.THINGS_ALPHA);
-				renderer.Finish();
+                renderer.RenderNiGHTSPath();
+                renderer.Finish();
 			}
 
 			// Redraw overlay

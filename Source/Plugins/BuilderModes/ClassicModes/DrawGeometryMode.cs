@@ -562,7 +562,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(renderer.StartThings(true))
 			{
 				renderer.RenderThingSet(General.Map.Map.Things, Presentation.THINGS_ALPHA);
-				renderer.Finish();
+                renderer.RenderNiGHTSPath();
+                renderer.Finish();
 			}
 
 			// Normal update

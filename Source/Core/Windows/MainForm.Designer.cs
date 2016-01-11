@@ -255,7 +255,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.modecontrolsloolbar = new System.Windows.Forms.ToolStrip();
 			this.itemtogglecomments = new System.Windows.Forms.ToolStripMenuItem();
 			this.itemdynamicgridsize = new System.Windows.Forms.ToolStripMenuItem();
-			toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.itemrendernightspath = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
 			toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
@@ -736,6 +737,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.seperatorviewviews,
             this.itemfullbrightness,
             this.itemtogglegrid,
+            this.itemrendernightspath,
             this.itemtogglecomments,
             this.toolStripSeparator4,
             this.menuzoom,
@@ -2427,10 +2429,22 @@ namespace CodeImp.DoomBuilder.Windows
 			this.itemdynamicgridsize.Tag = "builder_toggledynamicgrid";
 			this.itemdynamicgridsize.Text = "Dynamic Grid Size";
 			this.itemdynamicgridsize.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// MainForm
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            // 
+            // itemrendernightspath
+            // 
+            this.itemrendernightspath.Checked = true;
+            this.itemrendernightspath.CheckOnClick = true;
+            this.itemrendernightspath.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.itemrendernightspath.Image = global::CodeImp.DoomBuilder.Properties.Resources.axis1;
+            this.itemrendernightspath.Name = "itemrendernightspath";
+            this.itemrendernightspath.Size = new System.Drawing.Size(215, 22);
+            this.itemrendernightspath.Tag = "builder_togglenightspath";
+            this.itemrendernightspath.Text = "&Show NiGHTS Path";
+            this.itemrendernightspath.Click += new System.EventHandler(this.InvokeTaggedAction);
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.ClientSize = new System.Drawing.Size(1012, 693);
 			this.Controls.Add(this.dockerspanel);
@@ -2689,6 +2703,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private ToolStripButton buttontogglegrid;
 		private ToolStripButton buttontoggledynamicgrid;
 		private ToolStripMenuItem itemdynamicgridsize;
+        private ToolStripMenuItem itemrendernightspath;
 		private ToolStripMenuItem itemtogglecomments;
 	}
 }

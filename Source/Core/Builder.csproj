@@ -703,6 +703,7 @@
   <ItemGroup>
     <None Include="Resources\ZBLogo.bmp" />
     <None Include="Resources\ZBLogo.png" />
+    <None Include="Resources\axis1.png" />
     <Content Include="ZB.ico" />
     <None Include="Resources\zonebuilder.png" />
     <None Include="Resources\ZoneBuilder.bmp" />

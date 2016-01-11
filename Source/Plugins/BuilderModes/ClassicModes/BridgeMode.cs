@@ -373,6 +373,7 @@ namespace CodeImp.DoomBuilder.BuilderModes.ClassicModes
 			if(renderer.StartThings(true)) 
 			{
 				renderer.RenderThingSet(General.Map.Map.Things, Presentation.THINGS_ALPHA);
+                renderer.RenderNiGHTSPath();
 				renderer.Finish();
 			}
 

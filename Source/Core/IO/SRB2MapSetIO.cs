@@ -157,6 +157,8 @@ namespace CodeImp.DoomBuilder.IO
         public override int MinThingHeight { get { return 0; } }
         public override int ColormapType { get { return 606; } }
         public override int FlatAlignmentType { get { return 7; } }
+        public override int AxisType { get { return 1700; } }
+        public override int AxisTransferLineType { get { return 1702; } }
         #endregion
 
         #region ================== Reading

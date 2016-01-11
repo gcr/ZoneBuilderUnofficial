@@ -392,7 +392,22 @@ namespace CodeImp.DoomBuilder.Map
 			if(selecteditem.List != null) selecteditem.List.Remove(selecteditem);
 			selecteditem = null;
 		}
-		
+
+        public int GetFlagsValue()
+        {
+            int flags = 0;
+            foreach (KeyValuePair<string, bool> f in Flags)
+            {
+                int fnum;
+                if (f.Value && int.TryParse(f.Key, out fnum)) flags |= fnum;
+            }
+
+            //SRB2 stores Z position in upper 12 bits of flags. Add Z position to flags.
+            if (General.Map.SRB2) flags |= (UInt16)Position.z << 4;
+
+            return flags;
+
+        }		
 		#endregion
 		
 		#region ================== Changes

@@ -100,6 +100,9 @@ namespace CodeImp.DoomBuilder.IO
         public abstract int Custom3DFloorType { get; }
         public abstract int ColormapType { get; }
         public abstract int FlatAlignmentType { get; }
+        public abstract int AxisType { get; }
+        public abstract int AxisTransferLineType { get; }
+
 
         #endregion
 

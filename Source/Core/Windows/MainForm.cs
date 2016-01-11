@@ -2016,7 +2016,9 @@ namespace CodeImp.DoomBuilder.Windows
 			buttonfullbrightness.Checked = Renderer.FullBrightness; //mxd
 			buttontogglegrid.Visible = General.Settings.ToolbarViewModes && maploaded; //mxd
 			buttontogglegrid.Checked = General.Settings.RenderGrid; //mxd
-			buttontogglecomments.Visible = General.Settings.ToolbarViewModes && maploaded && General.Map.UDMF; //mxd
+            itemrendernightspath.Visible = maploaded && General.Map.SRB2;
+            itemrendernightspath.Checked = General.Settings.RenderNiGHTSPath;
+            buttontogglecomments.Visible = General.Settings.ToolbarViewModes && maploaded && General.Map.UDMF; //mxd
 			buttontogglecomments.Checked = General.Settings.RenderComments; //mxd
 			separatorfullbrightness.Visible = General.Settings.ToolbarViewModes && maploaded; //mxd
 			buttonviewbrightness.Visible = General.Settings.ToolbarViewModes && maploaded;
@@ -2804,8 +2806,19 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Interface.RedrawDisplay();
 		}
 
-		//mxd
-		[BeginAction("toggledynamicgrid")]
+        [BeginAction("togglenightspath")]
+        protected void ToggleNiGHTSPath()
+        {
+            General.Settings.RenderNiGHTSPath = !General.Settings.RenderNiGHTSPath;
+            itemrendernightspath.Checked = General.Settings.RenderNiGHTSPath;
+            General.Interface.DisplayStatus(StatusType.Action, "NiGHTS path rendering is " + (General.Settings.RenderNiGHTSPath ? "ENABLED" : "DISABLED"));
+
+            // Redraw display to show changes
+            General.Interface.RedrawDisplay();
+        }
+
+        //mxd
+        [BeginAction("toggledynamicgrid")]
 		protected void ToggleDynamicGrid()
 		{
 			General.Settings.DynamicGridSize = !General.Settings.DynamicGridSize;

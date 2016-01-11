@@ -58,13 +58,16 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const int FONT_HEIGHT = 0;
 
 		internal const int NUM_VIEW_MODES = 4;
-		
-		#endregion
 
-		#region ================== Variables
+        private const int CIRCLE_PRECISION = 360;
 
-		// Rendertargets
-		private Texture backtex;
+
+        #endregion
+
+        #region ================== Variables
+
+        // Rendertargets
+        private Texture backtex;
 		private Texture plottertex;
 		private Texture thingstex;
 		private Texture overlaytex;
@@ -1428,8 +1431,49 @@ namespace CodeImp.DoomBuilder.Rendering
 		public void RenderThingSet(ICollection<Thing> things, float alpha)
 		{
 			RenderThingsBatch(things, alpha, false, new PixelColor());
-		}
+        }
 		
+
+        public void RenderNiGHTSPath()
+        {
+            if (!General.Settings.RenderNiGHTSPath) return;
+            ICollection<Thing> things = General.Map.Map.Things;
+            List<Thing> axes = new List<Thing>();
+            List<Thing> axistransferlines = new List<Thing>();
+            foreach (Thing t in things)
+            {
+                if (t.Type % 4096 == General.Map.FormatInterface.AxisType) axes.Add(t);
+                if (t.Type % 4096 == General.Map.FormatInterface.AxisTransferLineType) axistransferlines.Add(t);
+            }
+            axistransferlines.Sort((x, y) => x.GetFlagsValue().CompareTo(y.GetFlagsValue()));
+
+            //Render axis transfer lines.
+            int i = 0;
+            int size = axistransferlines.Count;
+            while (i < size - 1)
+            {
+                int iNext = i;
+                while (iNext < size - 1 && axistransferlines[++iNext].GetFlagsValue() <= axistransferlines[i].GetFlagsValue()) ;
+
+                if (iNext < size && axistransferlines[iNext].GetFlagsValue() == axistransferlines[i].GetFlagsValue() + 1)
+                {
+                    RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.Highlight, true);
+                    /* Start looking for partners for the one beyond iNext. */
+                    i = iNext + 1;
+                }
+                else
+                {
+                    /* No partner, so start looking for partners for iNext. */
+                    i = iNext;
+                }
+            }
+
+            //Render axes.
+            foreach (Thing axis in axes)
+            {
+                RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.Highlight, true);
+            }
+        }
 		#endregion
 
 		#region ================== Surface
@@ -1835,63 +1879,108 @@ namespace CodeImp.DoomBuilder.Rendering
 		// This renders a line with given color
 		public void RenderLine(Vector2D start, Vector2D end, float thickness, PixelColor c, bool transformcoords)
 		{
-			FlatVertex[] verts = new FlatVertex[4];
-			
-			// Calculate positions
-			if(transformcoords)
-			{
-				start = start.GetTransformed(translatex, translatey, scale, -scale);
-				end = end.GetTransformed(translatex, translatey, scale, -scale);
-			}
-
-			// Calculate offsets
-			Vector2D delta = end - start;
-			Vector2D dn = delta.GetNormal() * thickness;
-			
-			// Make vertices
-			verts[0].x = start.x - dn.x + dn.y;
-			verts[0].y = start.y - dn.y - dn.x;
-			verts[0].z = 0.0f;
-			verts[0].c = c.ToInt();
-			verts[1].x = start.x - dn.x - dn.y;
-			verts[1].y = start.y - dn.y + dn.x;
-			verts[1].z = 0.0f;
-			verts[1].c = c.ToInt();
-			verts[2].x = end.x + dn.x + dn.y;
-			verts[2].y = end.y + dn.y - dn.x;
-			verts[2].z = 0.0f;
-			verts[2].c = c.ToInt();
-			verts[3].x = end.x + dn.x - dn.y;
-			verts[3].y = end.y + dn.y + dn.x;
-			verts[3].z = 0.0f;
-			verts[3].c = c.ToInt();
-			
-			// Set renderstates for rendering
-			graphics.Device.SetRenderState(RenderState.CullMode, Cull.None);
-			graphics.Device.SetRenderState(RenderState.ZEnable, false);
-			graphics.Device.SetRenderState(RenderState.AlphaBlendEnable, false);
-			graphics.Device.SetRenderState(RenderState.AlphaTestEnable, false);
-			graphics.Device.SetRenderState(RenderState.TextureFactor, -1);
-			graphics.Device.SetRenderState(RenderState.FogEnable, false);
-			SetWorldTransformation(false);
-			graphics.Device.SetTexture(0, General.Map.Data.WhiteTexture.Texture);
-			graphics.Shaders.Display2D.Texture1 = General.Map.Data.WhiteTexture.Texture;
-			graphics.Shaders.Display2D.SetSettings(1f, 1f, 0f, 1f, General.Settings.ClassicBilinear);
-
-			// Draw
-			graphics.Shaders.Display2D.Begin();
-			graphics.Shaders.Display2D.BeginPass(0);
-			graphics.Device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 0, 2, verts);
-			graphics.Shaders.Display2D.EndPass();
-			graphics.Shaders.Display2D.End();
+            RenderLineVerts(new FlatVertex[][] { CreateLineVerts(start, end, thickness, c, transformcoords) });
 		}
 
-		#endregion
+        public void RenderLines(Vector2D[] starts, Vector2D[] ends, float thickness, PixelColor c, bool transformcoords)
+        {
+            if (starts.Length != ends.Length) return;
+            FlatVertex[][] verts = new FlatVertex[starts.Length][];
+            for (int i = 0; i < starts.Length; i++)
+            {
+                verts[i] = CreateLineVerts(starts[i], ends[i], thickness, c, transformcoords);
+            }
 
-		#region ================== Geometry
+            RenderLineVerts(verts);
+        }
 
-		// This renders the linedefs of a sector with special color
-		public void PlotSector(Sector s, PixelColor c)
+        private FlatVertex[] CreateLineVerts(Vector2D start, Vector2D end, float thickness, PixelColor c, bool transformcoords)
+        {
+            FlatVertex[] verts = new FlatVertex[4];
+
+            // Calculate positions
+            if (transformcoords)
+            {
+                start = start.GetTransformed(translatex, translatey, scale, -scale);
+                end = end.GetTransformed(translatex, translatey, scale, -scale);
+            }
+
+            // Calculate offsets
+            Vector2D delta = end - start;
+            Vector2D dn = delta.GetNormal() * thickness;
+
+            // Make vertices
+            verts[0].x = start.x - dn.x + dn.y;
+            verts[0].y = start.y - dn.y - dn.x;
+            verts[0].z = 0.0f;
+            verts[0].c = c.ToInt();
+            verts[1].x = start.x - dn.x - dn.y;
+            verts[1].y = start.y - dn.y + dn.x;
+            verts[1].z = 0.0f;
+            verts[1].c = c.ToInt();
+            verts[2].x = end.x + dn.x + dn.y;
+            verts[2].y = end.y + dn.y - dn.x;
+            verts[2].z = 0.0f;
+            verts[2].c = c.ToInt();
+            verts[3].x = end.x + dn.x - dn.y;
+            verts[3].y = end.y + dn.y + dn.x;
+            verts[3].z = 0.0f;
+            verts[3].c = c.ToInt();
+
+            return verts;
+        }
+        private void RenderLineVerts(FlatVertex[][] verts)
+        {
+            // Set renderstates for rendering
+            graphics.Device.SetRenderState(RenderState.CullMode, Cull.None);
+            graphics.Device.SetRenderState(RenderState.ZEnable, false);
+            graphics.Device.SetRenderState(RenderState.AlphaBlendEnable, false);
+            graphics.Device.SetRenderState(RenderState.AlphaTestEnable, false);
+            graphics.Device.SetRenderState(RenderState.TextureFactor, -1);
+            graphics.Device.SetRenderState(RenderState.FogEnable, false);
+            SetWorldTransformation(false);
+            graphics.Device.SetTexture(0, General.Map.Data.WhiteTexture.Texture);
+            graphics.Shaders.Display2D.Texture1 = General.Map.Data.WhiteTexture.Texture;
+            graphics.Shaders.Display2D.SetSettings(1f, 1f, 0f, 1f, General.Settings.ClassicBilinear);
+
+            // Draw
+            graphics.Shaders.Display2D.Begin();
+            foreach (FlatVertex[] v in verts)
+            {
+                graphics.Shaders.Display2D.BeginPass(0);
+                graphics.Device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 0, 2, v);
+                graphics.Shaders.Display2D.EndPass();
+            }
+            graphics.Shaders.Display2D.End();
+        }
+
+        // This renders a circle with given color
+        public void RenderCircle(Vector2D center, float radius, float thickness, PixelColor c, bool transformcoords)
+        {
+            Vector2D[] points = new Vector2D[CIRCLE_PRECISION];
+            for (int i = 0; i < CIRCLE_PRECISION; i++)
+            {
+                float fAngle = i * 2 * (float)Math.PI / CIRCLE_PRECISION;
+                points[i].x = center.x + ((float)Math.Cos(fAngle) * radius);
+                points[i].y = center.y + ((float)Math.Sin(fAngle) * radius);
+            }
+            Vector2D[] starts = new Vector2D[CIRCLE_PRECISION];
+            Vector2D[] ends = new Vector2D[CIRCLE_PRECISION];
+            for (int i = 0; i < CIRCLE_PRECISION; i++)
+            {
+                starts[i] = points[i];
+                ends[i] = points[(i + 1) % CIRCLE_PRECISION];
+            }
+            RenderLines(starts, ends, thickness, c, transformcoords);
+
+        }
+
+        #endregion
+
+        #region ================== Geometry
+
+        // This renders the linedefs of a sector with special color
+        public void PlotSector(Sector s, PixelColor c)
 		{
 			// Go for all sides in the sector
 			foreach(Sidedef sd in s.Sidedefs)

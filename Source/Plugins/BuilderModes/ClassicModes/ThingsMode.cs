@@ -190,7 +190,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				renderer.RenderThingSet(General.Map.ThingsFilter.HiddenThings, Presentation.THINGS_HIDDEN_ALPHA);
 				renderer.RenderThingSet(General.Map.ThingsFilter.VisibleThings, Presentation.THINGS_ALPHA);
-				for(int i = 0; i < Thing.NUM_ARGS; i++) BuilderPlug.RenderAssociations(renderer, association[i], eventlines);
+                renderer.RenderNiGHTSPath();
+                for (int i = 0; i < Thing.NUM_ARGS; i++) BuilderPlug.RenderAssociations(renderer, association[i], eventlines);
 				
 				if((highlighted != null) && !highlighted.IsDisposed)
 				{

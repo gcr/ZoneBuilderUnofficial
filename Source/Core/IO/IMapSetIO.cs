@@ -79,5 +79,7 @@ namespace CodeImp.DoomBuilder.IO
         int Custom3DFloorType { get; }
         int ColormapType { get; }
         int FlatAlignmentType { get; }
+        int AxisType { get; }
+        int AxisTransferLineType { get; }
     }
 }

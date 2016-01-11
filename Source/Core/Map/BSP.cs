@@ -216,7 +216,7 @@ namespace CodeImp.DoomBuilder.Map
 			for(int i = 0; i < ssectors.Length; i++)
 			{
 				ssectors[i].numsegs = ssecreader.ReadInt16();
-				ssectors[i].firstseg = ssecreader.ReadInt16();
+				ssectors[i].firstseg = ssecreader.ReadUInt16();
 			}
 			ssecreader.Close();
 			ssecstream.Close();

@@ -107,6 +107,7 @@ namespace CodeImp.DoomBuilder.Windows
 			vertexScale.Value = General.Clamp((int)(General.Settings.GZVertexScale2D), vertexScale.Minimum, vertexScale.Maximum);
 			vertexScaleLabel.Text = vertexScale.Value * 100 + "%" + (vertexScale.Value == 1 ? " (default)" : "");
 			cbMarkExtraFloors.Checked = General.Settings.GZMarkExtraFloors;
+            cbDrawFullCrosshair.Checked = General.Settings.DrawFullCrosshair;
             recentFiles.Value = General.Settings.MaxRecentFiles;
             maxBackups.Value = General.Settings.MaxBackups;
             screenshotsfolderpath.Text = General.Settings.ScreenshotsPath;
@@ -316,9 +317,10 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZVertexScale2D = vertexScale.Value;
 			General.Settings.GZOldHighlightMode = cbOldHighlightMode.Checked;
 			General.Settings.GZMarkExtraFloors = cbMarkExtraFloors.Checked;
+            General.Settings.DrawFullCrosshair = cbDrawFullCrosshair.Checked;
 
-			// Paste options
-			General.Settings.PasteOptions = pasteoptions.GetOptions();
+            // Paste options
+            General.Settings.PasteOptions = pasteoptions.GetOptions();
 			
 			// Let the plugins know we're closing
 			General.Plugins.OnClosePreferences(controller);

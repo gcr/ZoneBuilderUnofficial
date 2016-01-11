@@ -39,6 +39,9 @@ namespace CodeImp.DoomBuilder.Windows
             System.Windows.Forms.Label label20;
             System.Windows.Forms.Label label21;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreferencesForm));
+            this.maxBackups = new System.Windows.Forms.TrackBar();
+            this.labelBackups = new System.Windows.Forms.Label();
+            this.label27 = new System.Windows.Forms.Label();
             this.checkforupdates = new System.Windows.Forms.CheckBox();
             this.cbStoreEditTab = new System.Windows.Forms.CheckBox();
             this.locatetexturegroup = new System.Windows.Forms.CheckBox();
@@ -137,6 +140,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.actionkey = new System.Windows.Forms.TextBox();
             this.tabcolors = new System.Windows.Forms.TabPage();
             this.appearancegroup1 = new System.Windows.Forms.GroupBox();
+            this.cbDrawFullCrosshair = new System.Windows.Forms.CheckBox();
             this.capitalizetexturenames = new System.Windows.Forms.CheckBox();
             this.cbMarkExtraFloors = new System.Windows.Forms.CheckBox();
             this.cbOldHighlightMode = new System.Windows.Forms.CheckBox();
@@ -175,9 +179,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.maxBackups = new System.Windows.Forms.TrackBar();
-            this.labelBackups = new System.Windows.Forms.Label();
-            this.label27 = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -187,6 +188,7 @@ namespace CodeImp.DoomBuilder.Windows
             label20 = new System.Windows.Forms.Label();
             label21 = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackups)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.recentFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.vertexScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.zoomfactor)).BeginInit();
@@ -215,7 +217,6 @@ namespace CodeImp.DoomBuilder.Windows
             ((System.ComponentModel.ISupportInitialize)(this.imagebrightness)).BeginInit();
             this.colorsgroup3.SuspendLayout();
             this.tabpasting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackups)).BeginInit();
             this.SuspendLayout();
             // 
             // label7
@@ -279,6 +280,38 @@ namespace CodeImp.DoomBuilder.Windows
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = " Options ";
+            // 
+            // maxBackups
+            // 
+            this.maxBackups.BackColor = System.Drawing.SystemColors.Window;
+            this.maxBackups.LargeChange = 1;
+            this.maxBackups.Location = new System.Drawing.Point(127, 280);
+            this.maxBackups.Maximum = 20;
+            this.maxBackups.Name = "maxBackups";
+            this.maxBackups.Size = new System.Drawing.Size(116, 45);
+            this.maxBackups.TabIndex = 53;
+            this.maxBackups.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.maxBackups.Value = 3;
+            this.maxBackups.ValueChanged += new System.EventHandler(this.maxBackups_ValueChanged);
+            // 
+            // labelBackups
+            // 
+            this.labelBackups.AutoSize = true;
+            this.labelBackups.Location = new System.Drawing.Point(249, 292);
+            this.labelBackups.Name = "labelBackups";
+            this.labelBackups.Size = new System.Drawing.Size(13, 13);
+            this.labelBackups.TabIndex = 55;
+            this.labelBackups.Text = "3";
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(41, 294);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(77, 13);
+            this.label27.TabIndex = 54;
+            this.label27.Text = "Max. backups:";
+            this.toolTip1.SetToolTip(this.label27, "Controls how many backups \r\nare made when a map is saved.");
             // 
             // checkforupdates
             // 
@@ -1433,6 +1466,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.appearancegroup1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.appearancegroup1.Controls.Add(this.cbDrawFullCrosshair);
             this.appearancegroup1.Controls.Add(this.capitalizetexturenames);
             this.appearancegroup1.Controls.Add(this.cbMarkExtraFloors);
             this.appearancegroup1.Controls.Add(this.cbOldHighlightMode);
@@ -1460,6 +1494,18 @@ namespace CodeImp.DoomBuilder.Windows
             this.appearancegroup1.TabIndex = 24;
             this.appearancegroup1.TabStop = false;
             this.appearancegroup1.Text = " Additional Options ";
+            // 
+            // cbDrawFullCrosshair
+            // 
+            this.cbDrawFullCrosshair.AutoSize = true;
+            this.cbDrawFullCrosshair.Location = new System.Drawing.Point(236, 254);
+            this.cbDrawFullCrosshair.Name = "cbDrawFullCrosshair";
+            this.cbDrawFullCrosshair.Size = new System.Drawing.Size(192, 17);
+            this.cbDrawFullCrosshair.TabIndex = 37;
+            this.cbDrawFullCrosshair.Text = "Draw full crosshair in classic modes";
+            this.toolTip1.SetToolTip(this.cbDrawFullCrosshair, "If enabled, the crosshair in classic modes\r\nwill extend to the boundaries of the " +
+        "map.");
+            this.cbDrawFullCrosshair.UseVisualStyleBackColor = true;
             // 
             // capitalizetexturenames
             // 
@@ -1907,38 +1953,6 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.browseScreenshotsFolderDialog.Description = "Select a Folder to Save Screenshots Into";
             // 
-            // maxBackups
-            // 
-            this.maxBackups.BackColor = System.Drawing.SystemColors.Window;
-            this.maxBackups.LargeChange = 1;
-            this.maxBackups.Location = new System.Drawing.Point(127, 280);
-            this.maxBackups.Maximum = 20;
-            this.maxBackups.Name = "maxBackups";
-            this.maxBackups.Size = new System.Drawing.Size(116, 45);
-            this.maxBackups.TabIndex = 53;
-            this.maxBackups.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.maxBackups.Value = 3;
-            this.maxBackups.ValueChanged += new System.EventHandler(this.maxBackups_ValueChanged);
-            // 
-            // labelBackups
-            // 
-            this.labelBackups.AutoSize = true;
-            this.labelBackups.Location = new System.Drawing.Point(249, 292);
-            this.labelBackups.Name = "labelBackups";
-            this.labelBackups.Size = new System.Drawing.Size(13, 13);
-            this.labelBackups.TabIndex = 55;
-            this.labelBackups.Text = "3";
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(41, 294);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(77, 13);
-            this.label27.TabIndex = 54;
-            this.label27.Text = "Max. backups:";
-            this.toolTip1.SetToolTip(this.label27, "Controls how many backups \r\nare made when a map is saved.");
-            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.apply;
@@ -1962,6 +1976,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.PreferencesForm_HelpRequested);
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackups)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.recentFiles)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.vertexScale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.zoomfactor)).EndInit();
@@ -1999,7 +2014,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorsgroup3.ResumeLayout(false);
             this.colorsgroup3.PerformLayout();
             this.tabpasting.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackups)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -2145,5 +2159,6 @@ namespace CodeImp.DoomBuilder.Windows
         private System.Windows.Forms.TrackBar maxBackups;
         private System.Windows.Forms.Label labelBackups;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.CheckBox cbDrawFullCrosshair;
     }
 }

@@ -880,11 +880,29 @@ namespace CodeImp.DoomBuilder.Rendering
 				int cx = (int)center.x;
 				int cy = (int)center.y;
 				PixelColor c = General.Colors.Highlight;
-				gridplotter.DrawLineSolid(cx, cy + MAP_CENTER_SIZE, cx, cy - MAP_CENTER_SIZE, ref c);
-				gridplotter.DrawLineSolid(cx - MAP_CENTER_SIZE, cy, cx + MAP_CENTER_SIZE, cy, ref c);
+                int top, bottom, left, right;
+                if (General.Settings.DrawFullCrosshair)
+                {
+                    Vector2D plusCenter = new Vector2D(General.Map.Config.RightBoundary, General.Map.Config.TopBoundary).GetTransformed(translatex, translatey, scale, -scale);
+                    Vector2D minusCenter = new Vector2D(General.Map.Config.LeftBoundary, General.Map.Config.BottomBoundary).GetTransformed(translatex, translatey, scale, -scale);
+                    top = (int)plusCenter.y;
+                    bottom = (int)minusCenter.y;
+                    left = (int)minusCenter.x;
+                    right = (int)plusCenter.x;
+                }
+                else
+                {
+                    top = cy + MAP_CENTER_SIZE;
+                    bottom = cy - MAP_CENTER_SIZE;
+                    left = cx - MAP_CENTER_SIZE;
+                    right = cx + MAP_CENTER_SIZE;
+                }
+                gridplotter.DrawLineSolid(cx, top, cx, bottom, ref c);
+                gridplotter.DrawLineSolid(left, cy, right, cy, ref c);
 
-				// Done
-				backtex.UnlockRectangle(0);
+
+                // Done
+                backtex.UnlockRectangle(0);
 				lockedrect.Data.Dispose();
 				lastgridscale = scale;
 				lastgridsize = General.Map.Grid.GridSize;

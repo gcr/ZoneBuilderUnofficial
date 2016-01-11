@@ -111,6 +111,7 @@ namespace CodeImp.DoomBuilder.Config
 		private string lastUsedConfigName;
 		private string lastUsedMapFolder;
 		private bool gzMarkExtraFloors;
+        private bool drawFullCrosshair;
 		private int maxRecentFiles;
 		private bool autoClearSideTextures;
 		private bool storeSelectedEditTab;
@@ -202,7 +203,8 @@ namespace CodeImp.DoomBuilder.Config
 		public string LastUsedConfigName { get { return lastUsedConfigName; } internal set { lastUsedConfigName = value; } }
 		public string LastUsedMapFolder { get { return lastUsedMapFolder; } internal set { lastUsedMapFolder = value; } }
 		public bool GZMarkExtraFloors { get { return gzMarkExtraFloors; } internal set { gzMarkExtraFloors = value; } }
-		public int MaxRecentFiles { get { return maxRecentFiles; } internal set { maxRecentFiles = General.Clamp(value, 8, 25); } }
+        public bool DrawFullCrosshair { get { return drawFullCrosshair; } internal set { drawFullCrosshair = value; } }
+        public int MaxRecentFiles { get { return maxRecentFiles; } internal set { maxRecentFiles = General.Clamp(value, 8, 25); } }
 		public bool AutoClearSidedefTextures { get { return autoClearSideTextures; } internal set { autoClearSideTextures = value; } }
 		public bool StoreSelectedEditTab { get { return storeSelectedEditTab; } internal set { storeSelectedEditTab = value; } }
         internal int MaxBackups { get { return maxbackups; } set { maxbackups = value; } }
@@ -316,7 +318,8 @@ namespace CodeImp.DoomBuilder.Config
 				lastUsedConfigName = cfg.ReadSetting("lastusedconfigname", "");
 				lastUsedMapFolder = cfg.ReadSetting("lastusedmapfolder", "");
 				gzMarkExtraFloors = cfg.ReadSetting("gzmarkextrafloors", true);
-				maxRecentFiles = cfg.ReadSetting("maxrecentfiles", 8);
+                drawFullCrosshair = cfg.ReadSetting("drawfullcrosshair", false);
+                maxRecentFiles = cfg.ReadSetting("maxrecentfiles", 8);
 				autoClearSideTextures = cfg.ReadSetting("autoclearsidetextures", true);
 				storeSelectedEditTab = cfg.ReadSetting("storeselectededittab", true);
                 maxbackups = cfg.ReadSetting("maxbackups", 3);
@@ -410,7 +413,8 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("gzshowvisualvertices", gzShowVisualVertices);
 			cfg.WriteSetting("gzvertexscale3d", gzVertexScale3D);
 			cfg.WriteSetting("gzmarkextrafloors", gzMarkExtraFloors);
-			if(!string.IsNullOrEmpty(lastUsedConfigName))
+            cfg.WriteSetting("drawfullcrosshair", drawFullCrosshair);
+            if (!string.IsNullOrEmpty(lastUsedConfigName))
 				cfg.WriteSetting("lastusedconfigname", lastUsedConfigName);
 			if(!string.IsNullOrEmpty(lastUsedMapFolder))
 				cfg.WriteSetting("lastusedmapfolder", lastUsedMapFolder);

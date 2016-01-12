@@ -1457,7 +1457,7 @@ namespace CodeImp.DoomBuilder.Rendering
 
                 if (iNext < size && axistransferlines[iNext].GetFlagsValue() == axistransferlines[i].GetFlagsValue() + 1)
                 {
-                    RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.Highlight, true);
+                    RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.NiGHTSColor, true);
                     /* Start looking for partners for the one beyond iNext. */
                     i = iNext + 1;
                 }
@@ -1471,7 +1471,7 @@ namespace CodeImp.DoomBuilder.Rendering
             //Render axes.
             foreach (Thing axis in axes)
             {
-                RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.Highlight, true);
+                RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.NiGHTSColor, true);
             }
         }
 		#endregion

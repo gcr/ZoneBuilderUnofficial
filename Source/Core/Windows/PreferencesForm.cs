@@ -178,8 +178,9 @@ namespace CodeImp.DoomBuilder.Windows
 			colorMD3.Color = General.Colors.ModelWireframe;
 			colorInfo.Color = General.Colors.InfoLine;
 			color3dFloors.Color = General.Colors.ThreeDFloor;
+            colorNiGHTS.Color = General.Colors.NiGHTSColor;
 
-			colorscriptbackground.Color = General.Colors.ScriptBackground;
+            colorscriptbackground.Color = General.Colors.ScriptBackground;
 			colorlinenumbers.Color = General.Colors.LineNumbers;
 			colorplaintext.Color = General.Colors.PlainText;
 			colorcomments.Color = General.Colors.Comments;
@@ -300,8 +301,9 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Colors.ModelWireframe = colorMD3.Color;
 			General.Colors.InfoLine = colorInfo.Color;
 			General.Colors.ThreeDFloor = color3dFloors.Color;
+            General.Colors.NiGHTSColor = colorNiGHTS.Color;
 
-			General.Colors.CreateAssistColors();
+            General.Colors.CreateAssistColors();
 			General.Settings.BlackBrowsers = blackbrowsers.Checked;
 			General.Settings.CapitalizeTextureNames = capitalizetexturenames.Checked; //mxd
 			General.Settings.ClassicBilinear = classicbilinear.Checked;

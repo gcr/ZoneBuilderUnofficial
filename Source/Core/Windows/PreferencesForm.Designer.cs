@@ -179,6 +179,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.colorNiGHTS = new CodeImp.DoomBuilder.Controls.ColorControl();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -612,6 +613,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.colorsgroup1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.colorsgroup1.Controls.Add(this.colorNiGHTS);
             this.colorsgroup1.Controls.Add(this.color3dFloors);
             this.colorsgroup1.Controls.Add(this.colorInfo);
             this.colorsgroup1.Controls.Add(this.colorMD3);
@@ -638,7 +640,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.color3dFloors.BackColor = System.Drawing.Color.Transparent;
             this.color3dFloors.Label = "3D Floors:";
-            this.color3dFloors.Location = new System.Drawing.Point(15, 286);
+            this.color3dFloors.Location = new System.Drawing.Point(15, 287);
             this.color3dFloors.MaximumSize = new System.Drawing.Size(10000, 23);
             this.color3dFloors.MinimumSize = new System.Drawing.Size(100, 23);
             this.color3dFloors.Name = "color3dFloors";
@@ -671,7 +673,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.doublesidedalpha.BackColor = System.Drawing.SystemColors.Window;
             this.doublesidedalpha.LargeChange = 3;
-            this.doublesidedalpha.Location = new System.Drawing.Point(11, 349);
+            this.doublesidedalpha.Location = new System.Drawing.Point(11, 376);
             this.doublesidedalpha.Name = "doublesidedalpha";
             this.doublesidedalpha.Size = new System.Drawing.Size(130, 45);
             this.doublesidedalpha.TabIndex = 2;
@@ -725,7 +727,7 @@ namespace CodeImp.DoomBuilder.Windows
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 328);
+            this.label2.Location = new System.Drawing.Point(14, 355);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(141, 13);
             this.label2.TabIndex = 14;
@@ -735,7 +737,7 @@ namespace CodeImp.DoomBuilder.Windows
             // doublesidedalphalabel
             // 
             this.doublesidedalphalabel.AutoSize = true;
-            this.doublesidedalphalabel.Location = new System.Drawing.Point(147, 361);
+            this.doublesidedalphalabel.Location = new System.Drawing.Point(147, 388);
             this.doublesidedalphalabel.Name = "doublesidedalphalabel";
             this.doublesidedalphalabel.Size = new System.Drawing.Size(21, 13);
             this.doublesidedalphalabel.TabIndex = 16;
@@ -1953,6 +1955,17 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.browseScreenshotsFolderDialog.Description = "Select a Folder to Save Screenshots Into";
             // 
+            // colorNiGHTS
+            // 
+            this.colorNiGHTS.BackColor = System.Drawing.Color.Transparent;
+            this.colorNiGHTS.Label = "NiGHTS path:";
+            this.colorNiGHTS.Location = new System.Drawing.Point(15, 314);
+            this.colorNiGHTS.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.colorNiGHTS.MinimumSize = new System.Drawing.Size(100, 23);
+            this.colorNiGHTS.Name = "colorNiGHTS";
+            this.colorNiGHTS.Size = new System.Drawing.Size(168, 23);
+            this.colorNiGHTS.TabIndex = 25;
+            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.apply;
@@ -2160,5 +2173,6 @@ namespace CodeImp.DoomBuilder.Windows
         private System.Windows.Forms.Label labelBackups;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.CheckBox cbDrawFullCrosshair;
+        private Controls.ColorControl colorNiGHTS;
     }
 }

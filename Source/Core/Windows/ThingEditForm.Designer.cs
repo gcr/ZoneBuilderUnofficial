@@ -430,15 +430,15 @@ namespace CodeImp.DoomBuilder.Windows
             // flagsvalue
             // 
             this.flagsvalue.AllowDecimal = false;
-            this.flagsvalue.AllowNegative = true;
-            this.flagsvalue.AllowRelative = true;
+            this.flagsvalue.AllowNegative = false;
+            this.flagsvalue.AllowRelative = false;
             this.flagsvalue.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.flagsvalue.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.flagsvalue.Location = new System.Drawing.Point(177, 196);
             this.flagsvalue.Name = "flagsvalue";
-            this.flagsvalue.ReadOnly = true;
             this.flagsvalue.Size = new System.Drawing.Size(72, 20);
             this.flagsvalue.TabIndex = 14;
+            this.flagsvalue.TextChanged += new System.EventHandler(this.flagsvalue_TextChanged);
             // 
             // missingflags
             // 

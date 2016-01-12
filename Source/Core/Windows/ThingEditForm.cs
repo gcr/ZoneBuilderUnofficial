@@ -49,9 +49,11 @@ namespace CodeImp.DoomBuilder.Windows
 		private bool undocreated; //mxd
 		private static bool useabsoluteheight; //mxd
 		private List<ThingProperties> thingprops; //mxd
+        private bool flagsvalue_ignore = false;
+        private bool flags_ignore = false;
 
-		//mxd. Window setup stuff
-		private static Point location = Point.Empty;
+        //mxd. Window setup stuff
+        private static Point location = Point.Empty;
 
 		private struct ThingProperties //mxd
 		{
@@ -449,7 +451,8 @@ namespace CodeImp.DoomBuilder.Windows
 			MakeUndo();
 
 			useabsoluteheight = cbAbsoluteHeight.Checked;
-			zlabel.Text = (useabsoluteheight ? "Z:" : "Height:");
+            flagsvalue.ReadOnly = cbAbsoluteHeight.Checked;
+            zlabel.Text = (useabsoluteheight ? "Z:" : "Height:");
 			
 			preventchanges = true;
 			
@@ -535,7 +538,7 @@ namespace CodeImp.DoomBuilder.Windows
 		private void posZ_WhenTextChanged(object sender, EventArgs e) 
 		{
 			if(preventchanges) return;
-			MakeUndo(); //mxd
+            MakeUndo(); //mxd
 			int i = 0;
 
 			if(string.IsNullOrEmpty(posZ.Text)) 
@@ -556,13 +559,43 @@ namespace CodeImp.DoomBuilder.Windows
 				}
 			}
 
-            flagsvalue.Text = evaluateFlagsValue();
+            if (!flagsvalue_ignore)
+            {
+                flagsvalue_ignore = true;
+                flagsvalue.Text = evaluateFlagsValue();
+                flagsvalue_ignore = false;
+            }
             General.Map.IsChanged = true;
 			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
-		}
+        }
 
-		// Selected type changes
-		private void thingtype_OnTypeChanged(ThingTypeInfo value) 
+        private void flagsvalue_TextChanged(object sender, EventArgs e)
+        {
+            if (!flagsvalue_ignore && !string.IsNullOrEmpty(flagsvalue.Text))
+            {
+                flagsvalue_ignore = true;
+                int value = General.Clamp(flagsvalue.GetResult(0),0,0xFFFF);
+                int i = 1;
+                flags_ignore = true;
+                foreach (CheckBox box in flags.Checkboxes)
+                {
+                    box.Checked = ((value & i) == i);
+                    i *= 2;
+                }
+                flags_ignore = false;
+                flags_OnValueChanged(this, null);
+
+                if (General.Map.SRB2)
+                {
+                    int z = value >> 4;
+                    posZ.Text = z.ToString();
+                }
+                flagsvalue_ignore = false;
+            }
+        }
+
+        // Selected type changes
+        private void thingtype_OnTypeChanged(ThingTypeInfo value) 
 		{
 			thinginfo = value;
 
@@ -617,7 +650,7 @@ namespace CodeImp.DoomBuilder.Windows
 		//mxd
 		private void flags_OnValueChanged(object sender, EventArgs e) 
 		{
-			if(preventchanges) return;
+			if(flags_ignore || preventchanges) return;
 
 			// Gather enabled flags
 			HashSet<string> activeflags = new HashSet<string>();
@@ -640,7 +673,12 @@ namespace CodeImp.DoomBuilder.Windows
 			//everything is OK
 			missingflags.Visible = false;
 			settingsgroup.ForeColor = SystemColors.ControlText;
-            flagsvalue.Text = evaluateFlagsValue();
+            if (!flagsvalue_ignore)
+            {
+                flagsvalue_ignore = true;
+                flagsvalue.Text = evaluateFlagsValue();
+                flagsvalue_ignore = false;
+            }
         }
 
 		#endregion

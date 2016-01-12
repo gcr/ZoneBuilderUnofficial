@@ -58,10 +58,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const int FONT_HEIGHT = 0;
 
 		internal const int NUM_VIEW_MODES = 4;
-
-        private const int CIRCLE_PRECISION = 360;
-
-
         #endregion
 
         #region ================== Variables
@@ -1957,6 +1953,7 @@ namespace CodeImp.DoomBuilder.Rendering
         // This renders a circle with given color
         public void RenderCircle(Vector2D center, float radius, float thickness, PixelColor c, bool transformcoords)
         {
+            int CIRCLE_PRECISION = General.Settings.NiGHTSCirclePrecision;
             Vector2D[] points = new Vector2D[CIRCLE_PRECISION];
             for (int i = 0; i < CIRCLE_PRECISION; i++)
             {

@@ -67,6 +67,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.defaultviewmode = new System.Windows.Forms.ComboBox();
             this.keyusedlabel = new System.Windows.Forms.Label();
             this.colorsgroup1 = new System.Windows.Forms.GroupBox();
+            this.colorNiGHTS = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.color3dFloors = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorInfo = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorMD3 = new CodeImp.DoomBuilder.Controls.ColorControl();
@@ -179,7 +180,9 @@ namespace CodeImp.DoomBuilder.Windows
             this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.colorNiGHTS = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscircleprecision = new System.Windows.Forms.TrackBar();
+            this.label23 = new System.Windows.Forms.Label();
+            this.nightscircleprecisionlabel = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -218,6 +221,7 @@ namespace CodeImp.DoomBuilder.Windows
             ((System.ComponentModel.ISupportInitialize)(this.imagebrightness)).BeginInit();
             this.colorsgroup3.SuspendLayout();
             this.tabpasting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nightscircleprecision)).BeginInit();
             this.SuspendLayout();
             // 
             // label7
@@ -613,6 +617,9 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.colorsgroup1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.colorsgroup1.Controls.Add(this.nightscircleprecision);
+            this.colorsgroup1.Controls.Add(this.label23);
+            this.colorsgroup1.Controls.Add(this.nightscircleprecisionlabel);
             this.colorsgroup1.Controls.Add(this.colorNiGHTS);
             this.colorsgroup1.Controls.Add(this.color3dFloors);
             this.colorsgroup1.Controls.Add(this.colorInfo);
@@ -635,6 +642,17 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorsgroup1.TabStop = false;
             this.colorsgroup1.Text = " Display ";
             this.colorsgroup1.Visible = false;
+            // 
+            // colorNiGHTS
+            // 
+            this.colorNiGHTS.BackColor = System.Drawing.Color.Transparent;
+            this.colorNiGHTS.Label = "NiGHTS path:";
+            this.colorNiGHTS.Location = new System.Drawing.Point(15, 314);
+            this.colorNiGHTS.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.colorNiGHTS.MinimumSize = new System.Drawing.Size(100, 23);
+            this.colorNiGHTS.Name = "colorNiGHTS";
+            this.colorNiGHTS.Size = new System.Drawing.Size(168, 23);
+            this.colorNiGHTS.TabIndex = 25;
             // 
             // color3dFloors
             // 
@@ -1955,16 +1973,38 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.browseScreenshotsFolderDialog.Description = "Select a Folder to Save Screenshots Into";
             // 
-            // colorNiGHTS
+            // nightscircleprecision
             // 
-            this.colorNiGHTS.BackColor = System.Drawing.Color.Transparent;
-            this.colorNiGHTS.Label = "NiGHTS path:";
-            this.colorNiGHTS.Location = new System.Drawing.Point(15, 314);
-            this.colorNiGHTS.MaximumSize = new System.Drawing.Size(10000, 23);
-            this.colorNiGHTS.MinimumSize = new System.Drawing.Size(100, 23);
-            this.colorNiGHTS.Name = "colorNiGHTS";
-            this.colorNiGHTS.Size = new System.Drawing.Size(168, 23);
-            this.colorNiGHTS.TabIndex = 25;
+            this.nightscircleprecision.BackColor = System.Drawing.SystemColors.Window;
+            this.nightscircleprecision.LargeChange = 1;
+            this.nightscircleprecision.Location = new System.Drawing.Point(11, 432);
+            this.nightscircleprecision.Maximum = 36;
+            this.nightscircleprecision.Minimum = 1;
+            this.nightscircleprecision.Name = "nightscircleprecision";
+            this.nightscircleprecision.Size = new System.Drawing.Size(130, 45);
+            this.nightscircleprecision.TabIndex = 26;
+            this.nightscircleprecision.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.nightscircleprecision.Value = 36;
+            this.nightscircleprecision.ValueChanged += new System.EventHandler(this.nightscircleprecision_ValueChanged);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(14, 411);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(123, 13);
+            this.label23.TabIndex = 27;
+            this.label23.Text = "NiGHTS circle precision:";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // nightscircleprecisionlabel
+            // 
+            this.nightscircleprecisionlabel.AutoSize = true;
+            this.nightscircleprecisionlabel.Location = new System.Drawing.Point(147, 444);
+            this.nightscircleprecisionlabel.Name = "nightscircleprecisionlabel";
+            this.nightscircleprecisionlabel.Size = new System.Drawing.Size(25, 13);
+            this.nightscircleprecisionlabel.TabIndex = 28;
+            this.nightscircleprecisionlabel.Text = "360";
             // 
             // PreferencesForm
             // 
@@ -2027,6 +2067,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorsgroup3.ResumeLayout(false);
             this.colorsgroup3.PerformLayout();
             this.tabpasting.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nightscircleprecision)).EndInit();
             this.ResumeLayout(false);
 
 		}
@@ -2174,5 +2215,8 @@ namespace CodeImp.DoomBuilder.Windows
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.CheckBox cbDrawFullCrosshair;
         private Controls.ColorControl colorNiGHTS;
+        private System.Windows.Forms.TrackBar nightscircleprecision;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label nightscircleprecisionlabel;
     }
 }

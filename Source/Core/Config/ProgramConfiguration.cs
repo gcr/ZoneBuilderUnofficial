@@ -51,7 +51,8 @@ namespace CodeImp.DoomBuilder.Config
 		private int imagebrightness;
 		private float doublesidedalpha;
 		private byte doublesidedalphabyte;
-		private float backgroundalpha;
+        private int nightscircleprecision;
+        private float backgroundalpha;
 		private bool qualitydisplay;
 		private bool testmonsters;
 		private int defaultviewmode;
@@ -141,8 +142,9 @@ namespace CodeImp.DoomBuilder.Config
 		public int VisualFOV { get { return visualfov; } internal set { visualfov = value; } }
 		public int ImageBrightness { get { return imagebrightness; } internal set { imagebrightness = value; } }
 		public float DoubleSidedAlpha { get { return doublesidedalpha; } internal set { doublesidedalpha = value; doublesidedalphabyte = (byte)(doublesidedalpha * 255f); } }
-		public byte DoubleSidedAlphaByte { get { return doublesidedalphabyte; } }
-		public float BackgroundAlpha { get { return backgroundalpha; } internal set { backgroundalpha = value; } }
+        public byte DoubleSidedAlphaByte { get { return doublesidedalphabyte; } }
+        public int NiGHTSCirclePrecision { get { return nightscircleprecision; } internal set { nightscircleprecision = value; } }
+        public float BackgroundAlpha { get { return backgroundalpha; } internal set { backgroundalpha = value; } }
 		public float VisualMouseSensX { get { return visualmousesensx; } internal set { visualmousesensx = value; } }
 		public float VisualMouseSensY { get { return visualmousesensy; } internal set { visualmousesensy = value; } }
 		public bool QualityDisplay { get { return qualitydisplay; } internal set { qualitydisplay = value; } }
@@ -260,7 +262,8 @@ namespace CodeImp.DoomBuilder.Config
 				imagebrightness = cfg.ReadSetting("imagebrightness", 3);
 				doublesidedalpha = cfg.ReadSetting("doublesidedalpha", 0.4f);
 				doublesidedalphabyte = (byte)(doublesidedalpha * 255f);
-				backgroundalpha = cfg.ReadSetting("backgroundalpha", 1.0f);
+                nightscircleprecision = cfg.ReadSetting("nightscircleprecision", 360);
+                backgroundalpha = cfg.ReadSetting("backgroundalpha", 1.0f);
 				qualitydisplay = cfg.ReadSetting("qualitydisplay", true);
 				testmonsters = cfg.ReadSetting("testmonsters", true);
 				defaultviewmode = cfg.ReadSetting("defaultviewmode", (int)ViewMode.Normal);
@@ -360,7 +363,8 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("qualitydisplay", qualitydisplay);
 			cfg.WriteSetting("testmonsters", testmonsters);
 			cfg.WriteSetting("doublesidedalpha", doublesidedalpha);
-			cfg.WriteSetting("backgroundalpha", backgroundalpha);
+            cfg.WriteSetting("nightscircleprecision", nightscircleprecision);
+            cfg.WriteSetting("backgroundalpha", backgroundalpha);
 			cfg.WriteSetting("defaultviewmode", defaultviewmode);
 			cfg.WriteSetting("classicbilinear", classicbilinear);
 			cfg.WriteSetting("visualbilinear", visualbilinear);

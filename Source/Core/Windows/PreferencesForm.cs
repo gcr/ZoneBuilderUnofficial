@@ -62,7 +62,8 @@ namespace CodeImp.DoomBuilder.Windows
 			// Interface
 			imagebrightness.Value = General.Settings.ImageBrightness;
 			doublesidedalpha.Value = General.Clamp((int)((1.0f - General.Settings.DoubleSidedAlpha) * 10.0f), doublesidedalpha.Minimum, doublesidedalpha.Maximum);
-			defaultviewmode.SelectedIndex = General.Settings.DefaultViewMode;
+            nightscircleprecision.Value = General.Clamp((int)(General.Settings.NiGHTSCirclePrecision)/10, nightscircleprecision.Minimum, nightscircleprecision.Maximum);
+            defaultviewmode.SelectedIndex = General.Settings.DefaultViewMode;
 			fieldofview.Value = General.Clamp(General.Settings.VisualFOV / 10, fieldofview.Minimum, fieldofview.Maximum);
 			mousespeed.Value = General.Clamp(General.Settings.MouseSpeed / 100, mousespeed.Minimum, mousespeed.Maximum);
 			movespeed.Value = General.Clamp(General.Settings.MoveSpeed / 100, movespeed.Minimum, movespeed.Maximum);
@@ -233,7 +234,8 @@ namespace CodeImp.DoomBuilder.Windows
 			// Apply interface
 			General.Settings.ImageBrightness = imagebrightness.Value;
 			General.Settings.DoubleSidedAlpha = 1.0f - (doublesidedalpha.Value * 0.1f);
-			General.Settings.DefaultViewMode = defaultviewmode.SelectedIndex;
+            General.Settings.NiGHTSCirclePrecision = nightscircleprecision.Value * 10;
+            General.Settings.DefaultViewMode = defaultviewmode.SelectedIndex;
 			General.Settings.VisualFOV = fieldofview.Value * 10;
 			General.Settings.MouseSpeed = mousespeed.Value * 100;
 			General.Settings.MoveSpeed = movespeed.Value * 100;
@@ -959,8 +961,14 @@ namespace CodeImp.DoomBuilder.Windows
 			doublesidedalphalabel.Text = percent + "%";
 		}
 
-		//mxd
-		private void tbDynLightCount_ValueChanged(object sender, EventArgs e) 
+        private void nightscircleprecision_ValueChanged(object sender, EventArgs e)
+        {
+            int value = nightscircleprecision.Value * 10;
+            nightscircleprecisionlabel.Text = value.ToString();
+        }
+
+        //mxd
+        private void tbDynLightCount_ValueChanged(object sender, EventArgs e) 
 		{
 			labelDynLightCount.Text = tbDynLightCount.Value.ToString();
 		}
@@ -1028,8 +1036,8 @@ namespace CodeImp.DoomBuilder.Windows
 				hlpevent.Handled = true;
 			}
 		}
-		
-		/*
+
+        /*
 		// This writes all action help files using a template and some basic info from the actions.
 		// Also writes actioncontents.txt with all files to be inserted into Contents.hhc.
 		// Only used during development. Actual button to call this has been removed.
@@ -1061,5 +1069,5 @@ namespace CodeImp.DoomBuilder.Windows
 			File.WriteAllText(filename, contents.ToString());
 		}
 		*/
-	}
+    }
 }

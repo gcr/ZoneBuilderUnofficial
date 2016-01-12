@@ -423,7 +423,7 @@ namespace CodeImp.DoomBuilder.IO
 		}
 
         // This writes the THINGS to WAD file
-        protected virtual void WriteThings(MapSet map, int position, Dictionary<string, MapLumpInfo> maplumps)
+        private void WriteThings(MapSet map, int position, Dictionary<string, MapLumpInfo> maplumps)
 		{
 			// Create memory to write to
 			MemoryStream mem = new MemoryStream();
@@ -432,20 +432,12 @@ namespace CodeImp.DoomBuilder.IO
 			// Go for all things
 			foreach(Thing t in map.Things)
 			{
-				// Convert flags
-				int flags = 0;
-				foreach(KeyValuePair<string, bool> f in t.Flags)
-				{
-					int fnum;
-					if(f.Value && int.TryParse(f.Key, out fnum)) flags |= fnum;
-				}
-
 				// Write properties to stream
 				writer.Write((Int16)t.Position.x);
 				writer.Write((Int16)t.Position.y);
 				writer.Write((Int16)t.AngleDoom);
 				writer.Write((UInt16)t.Type);
-				writer.Write((UInt16)flags);
+				writer.Write((UInt16)t.GetFlagsValue());
 			}
 			
 			// Find insert position and remove old lump

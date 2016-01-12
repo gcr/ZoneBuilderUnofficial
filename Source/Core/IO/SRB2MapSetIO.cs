@@ -207,48 +207,5 @@ namespace CodeImp.DoomBuilder.IO
             mem.Dispose();
         }
         #endregion
-
-        #region ================== Writing
-        // This writes the THINGS to WAD file
-        protected override void WriteThings(MapSet map, int position, Dictionary<string, MapLumpInfo> maplumps)
-        {
-            // Create memory to write to
-            MemoryStream mem = new MemoryStream();
-            BinaryWriter writer = new BinaryWriter(mem, WAD.ENCODING);
-
-            // Go for all things
-            foreach (Thing t in map.Things)
-            {
-                // Convert flags
-                int flags = 0;
-                foreach (KeyValuePair<string, bool> f in t.Flags)
-                {
-                    int fnum;
-                    if (f.Value && int.TryParse(f.Key, out fnum)) flags |= fnum;
-                }
-
-                // MascaraSnake: SRB2 stores Z position in upper 12 bits of flags. Add Z position to flags.
-                flags |= (UInt16)t.Position.z << 4;
-
-                // Write properties to stream
-                writer.Write((Int16)t.Position.x);
-                writer.Write((Int16)t.Position.y);
-                writer.Write((Int16)t.AngleDoom);
-                writer.Write((UInt16)t.Type);
-                writer.Write((UInt16)flags);
-            }
-
-            // Find insert position and remove old lump
-            int insertpos = MapManager.RemoveSpecificLump(wad, "THINGS", position, MapManager.TEMP_MAP_HEADER, maplumps);
-            if (insertpos == -1) insertpos = position + 1;
-            if (insertpos > wad.Lumps.Count) insertpos = wad.Lumps.Count;
-
-            // Create the lump from memory
-            Lump lump = wad.Insert("THINGS", insertpos, (int)mem.Length);
-            lump.Stream.Seek(0, SeekOrigin.Begin);
-            mem.WriteTo(lump.Stream);
-            mem.Flush();
-        }
-        #endregion
     }
 }

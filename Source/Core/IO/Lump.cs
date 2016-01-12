@@ -80,7 +80,7 @@ namespace CodeImp.DoomBuilder.IO
 			this.length = length;
 
 			// Make name
-			this.name = MakeNormalName(fixedname, WAD.ENCODING).ToUpperInvariant();
+			this.name = MakeNormalName(fixedname, WAD.ENCODING);
 			this.fixedname = MakeFixedName(name, WAD.ENCODING);
 			this.longname = MakeLongName(name, false); //mxd
 			
@@ -149,14 +149,14 @@ namespace CodeImp.DoomBuilder.IO
 			while((length < fixedname.Length) && (fixedname[length] != 0)) length++;
 			
 			// Make normal name
-			return encoding.GetString(fixedname, 0, length).Trim().ToUpper();
+			return encoding.GetString(fixedname, 0, length).Trim();
 		}
 
 		// This makes the fixed name from normal name
 		public static byte[] MakeFixedName(string name, Encoding encoding)
 		{
 			// Make uppercase name and count bytes
-			string uppername = name.Trim().ToUpper();
+			string uppername = name.Trim();
 			int bytes = encoding.GetByteCount(uppername);
 			if(bytes < 8) bytes = 8;
 			
@@ -192,7 +192,7 @@ namespace CodeImp.DoomBuilder.IO
 		{
 			// Make name
 			this.fixedname = MakeFixedName(newname, WAD.ENCODING);
-			this.name = MakeNormalName(this.fixedname, WAD.ENCODING).ToUpperInvariant();
+			this.name = MakeNormalName(this.fixedname, WAD.ENCODING);
 			this.longname = MakeLongName(newname);
 
 			// Write changes

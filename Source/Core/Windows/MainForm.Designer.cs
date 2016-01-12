@@ -1207,7 +1207,7 @@ namespace CodeImp.DoomBuilder.Windows
 			// 
 			// itemhelpabout
 			// 
-			this.itemhelpabout.Image = global::CodeImp.DoomBuilder.Properties.Resources.About;
+			this.itemhelpabout.Image = global::CodeImp.DoomBuilder.Properties.Resources.ZB16;
 			this.itemhelpabout.Name = "itemhelpabout";
 			this.itemhelpabout.Size = new System.Drawing.Size(232, 22);
 			this.itemhelpabout.Text = "&About Zone Builder...";

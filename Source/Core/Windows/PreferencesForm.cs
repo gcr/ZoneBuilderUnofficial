@@ -179,7 +179,6 @@ namespace CodeImp.DoomBuilder.Windows
 			colorMD3.Color = General.Colors.ModelWireframe;
 			colorInfo.Color = General.Colors.InfoLine;
 			color3dFloors.Color = General.Colors.ThreeDFloor;
-            colorNiGHTS.Color = General.Colors.NiGHTSColor;
 
             colorscriptbackground.Color = General.Colors.ScriptBackground;
 			colorlinenumbers.Color = General.Colors.LineNumbers;
@@ -193,9 +192,18 @@ namespace CodeImp.DoomBuilder.Windows
 			classicbilinear.Checked = General.Settings.ClassicBilinear;
 			visualbilinear.Checked = General.Settings.VisualBilinear;
 			qualitydisplay.Checked = General.Settings.QualityDisplay;
-			
-			// Paste options
-			pasteoptions.Setup(General.Settings.PasteOptions.Copy());
+
+            nightscolormare1.Color = General.Colors.GetNiGHTSColor(0);
+            nightscolormare2.Color = General.Colors.GetNiGHTSColor(1);
+            nightscolormare3.Color = General.Colors.GetNiGHTSColor(2);
+            nightscolormare4.Color = General.Colors.GetNiGHTSColor(3);
+            nightscolormare5.Color = General.Colors.GetNiGHTSColor(4);
+            nightscolormare6.Color = General.Colors.GetNiGHTSColor(5);
+            nightscolormare7.Color = General.Colors.GetNiGHTSColor(6);
+            nightscolormare8.Color = General.Colors.GetNiGHTSColor(7);
+
+            // Paste options
+            pasteoptions.Setup(General.Settings.PasteOptions.Copy());
 			UpdateScriptFontPreview(); //mxd
 
 			// Allow plugins to add tabs
@@ -303,7 +311,6 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Colors.ModelWireframe = colorMD3.Color;
 			General.Colors.InfoLine = colorInfo.Color;
 			General.Colors.ThreeDFloor = color3dFloors.Color;
-            General.Colors.NiGHTSColor = colorNiGHTS.Color;
 
             General.Colors.CreateAssistColors();
 			General.Settings.BlackBrowsers = blackbrowsers.Checked;
@@ -312,8 +319,17 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.VisualBilinear = visualbilinear.Checked;
 			General.Settings.QualityDisplay = qualitydisplay.Checked;
 
-			//mxd
-			General.Settings.GZSynchCameras = cbSynchCameras.Checked;
+            General.Colors.SetNiGHTSColor(0, nightscolormare1.Color);
+            General.Colors.SetNiGHTSColor(1, nightscolormare2.Color);
+            General.Colors.SetNiGHTSColor(2, nightscolormare3.Color);
+            General.Colors.SetNiGHTSColor(3, nightscolormare4.Color);
+            General.Colors.SetNiGHTSColor(4, nightscolormare5.Color);
+            General.Colors.SetNiGHTSColor(5, nightscolormare6.Color);
+            General.Colors.SetNiGHTSColor(6, nightscolormare7.Color);
+            General.Colors.SetNiGHTSColor(7, nightscolormare8.Color);
+
+            //mxd
+            General.Settings.GZSynchCameras = cbSynchCameras.Checked;
 			General.Settings.GZMaxDynamicLights = tbDynLightCount.Value;
 			General.Settings.GZDynamicLightRadius = (tbDynLightSize.Value / 10.0f);
 			General.Settings.GZDynamicLightIntensity = (tbDynLightIntensity.Value / 10.0f);

@@ -67,7 +67,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.defaultviewmode = new System.Windows.Forms.ComboBox();
             this.keyusedlabel = new System.Windows.Forms.Label();
             this.colorsgroup1 = new System.Windows.Forms.GroupBox();
-            this.colorNiGHTS = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.color3dFloors = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorInfo = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorMD3 = new CodeImp.DoomBuilder.Controls.ColorControl();
@@ -175,14 +174,23 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorlinenumbers = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorcomments = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.colorplaintext = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.tabnights = new System.Windows.Forms.TabPage();
+            this.nightscolormare8 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare7 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare6 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare5 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare4 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare3 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscolormare2 = new CodeImp.DoomBuilder.Controls.ColorControl();
+            this.nightscircleprecision = new System.Windows.Forms.TrackBar();
+            this.label23 = new System.Windows.Forms.Label();
+            this.nightscircleprecisionlabel = new System.Windows.Forms.Label();
+            this.nightscolormare1 = new CodeImp.DoomBuilder.Controls.ColorControl();
             this.tabpasting = new System.Windows.Forms.TabPage();
             this.label16 = new System.Windows.Forms.Label();
             this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.nightscircleprecision = new System.Windows.Forms.TrackBar();
-            this.label23 = new System.Windows.Forms.Label();
-            this.nightscircleprecisionlabel = new System.Windows.Forms.Label();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -220,8 +228,9 @@ namespace CodeImp.DoomBuilder.Windows
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imagebrightness)).BeginInit();
             this.colorsgroup3.SuspendLayout();
-            this.tabpasting.SuspendLayout();
+            this.tabnights.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nightscircleprecision)).BeginInit();
+            this.tabpasting.SuspendLayout();
             this.SuspendLayout();
             // 
             // label7
@@ -617,10 +626,6 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.colorsgroup1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorsgroup1.Controls.Add(this.nightscircleprecision);
-            this.colorsgroup1.Controls.Add(this.label23);
-            this.colorsgroup1.Controls.Add(this.nightscircleprecisionlabel);
-            this.colorsgroup1.Controls.Add(this.colorNiGHTS);
             this.colorsgroup1.Controls.Add(this.color3dFloors);
             this.colorsgroup1.Controls.Add(this.colorInfo);
             this.colorsgroup1.Controls.Add(this.colorMD3);
@@ -642,17 +647,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorsgroup1.TabStop = false;
             this.colorsgroup1.Text = " Display ";
             this.colorsgroup1.Visible = false;
-            // 
-            // colorNiGHTS
-            // 
-            this.colorNiGHTS.BackColor = System.Drawing.Color.Transparent;
-            this.colorNiGHTS.Label = "NiGHTS path:";
-            this.colorNiGHTS.Location = new System.Drawing.Point(15, 314);
-            this.colorNiGHTS.MaximumSize = new System.Drawing.Size(10000, 23);
-            this.colorNiGHTS.MinimumSize = new System.Drawing.Size(100, 23);
-            this.colorNiGHTS.Name = "colorNiGHTS";
-            this.colorNiGHTS.Size = new System.Drawing.Size(168, 23);
-            this.colorNiGHTS.TabIndex = 25;
             // 
             // color3dFloors
             // 
@@ -691,7 +685,7 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.doublesidedalpha.BackColor = System.Drawing.SystemColors.Window;
             this.doublesidedalpha.LargeChange = 3;
-            this.doublesidedalpha.Location = new System.Drawing.Point(11, 376);
+            this.doublesidedalpha.Location = new System.Drawing.Point(11, 349);
             this.doublesidedalpha.Name = "doublesidedalpha";
             this.doublesidedalpha.Size = new System.Drawing.Size(130, 45);
             this.doublesidedalpha.TabIndex = 2;
@@ -745,7 +739,7 @@ namespace CodeImp.DoomBuilder.Windows
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 355);
+            this.label2.Location = new System.Drawing.Point(14, 328);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(141, 13);
             this.label2.TabIndex = 14;
@@ -755,7 +749,7 @@ namespace CodeImp.DoomBuilder.Windows
             // doublesidedalphalabel
             // 
             this.doublesidedalphalabel.AutoSize = true;
-            this.doublesidedalphalabel.Location = new System.Drawing.Point(147, 388);
+            this.doublesidedalphalabel.Location = new System.Drawing.Point(147, 361);
             this.doublesidedalphalabel.Name = "doublesidedalphalabel";
             this.doublesidedalphalabel.Size = new System.Drawing.Size(21, 13);
             this.doublesidedalphalabel.TabIndex = 16;
@@ -858,6 +852,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.tabs.Controls.Add(this.tabinterface);
             this.tabs.Controls.Add(this.tabkeys);
             this.tabs.Controls.Add(this.tabcolors);
+            this.tabs.Controls.Add(this.tabnights);
             this.tabs.Controls.Add(this.tabpasting);
             this.tabs.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabs.Location = new System.Drawing.Point(11, 13);
@@ -1934,6 +1929,157 @@ namespace CodeImp.DoomBuilder.Windows
             this.colorplaintext.TabIndex = 2;
             this.colorplaintext.ColorChanged += new System.EventHandler(this.scriptcolor_ColorChanged);
             // 
+            // tabnights
+            // 
+            this.tabnights.Controls.Add(this.nightscolormare8);
+            this.tabnights.Controls.Add(this.nightscolormare7);
+            this.tabnights.Controls.Add(this.nightscolormare6);
+            this.tabnights.Controls.Add(this.nightscolormare5);
+            this.tabnights.Controls.Add(this.nightscolormare4);
+            this.tabnights.Controls.Add(this.nightscolormare3);
+            this.tabnights.Controls.Add(this.nightscolormare2);
+            this.tabnights.Controls.Add(this.nightscircleprecision);
+            this.tabnights.Controls.Add(this.label23);
+            this.tabnights.Controls.Add(this.nightscircleprecisionlabel);
+            this.tabnights.Controls.Add(this.nightscolormare1);
+            this.tabnights.Location = new System.Drawing.Point(4, 22);
+            this.tabnights.Name = "tabnights";
+            this.tabnights.Padding = new System.Windows.Forms.Padding(3);
+            this.tabnights.Size = new System.Drawing.Size(682, 533);
+            this.tabnights.TabIndex = 4;
+            this.tabnights.Text = "NiGHTS";
+            this.tabnights.UseVisualStyleBackColor = true;
+            // 
+            // nightscolormare8
+            // 
+            this.nightscolormare8.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare8.Label = "Path color (Mare 8):";
+            this.nightscolormare8.Location = new System.Drawing.Point(238, 118);
+            this.nightscolormare8.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare8.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare8.Name = "nightscolormare8";
+            this.nightscolormare8.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare8.TabIndex = 39;
+            // 
+            // nightscolormare7
+            // 
+            this.nightscolormare7.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare7.Label = "Path color (Mare 7):";
+            this.nightscolormare7.Location = new System.Drawing.Point(238, 89);
+            this.nightscolormare7.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare7.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare7.Name = "nightscolormare7";
+            this.nightscolormare7.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare7.TabIndex = 38;
+            // 
+            // nightscolormare6
+            // 
+            this.nightscolormare6.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare6.Label = "Path color (Mare 6):";
+            this.nightscolormare6.Location = new System.Drawing.Point(238, 60);
+            this.nightscolormare6.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare6.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare6.Name = "nightscolormare6";
+            this.nightscolormare6.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare6.TabIndex = 37;
+            // 
+            // nightscolormare5
+            // 
+            this.nightscolormare5.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare5.Label = "Path color (Mare 5):";
+            this.nightscolormare5.Location = new System.Drawing.Point(238, 31);
+            this.nightscolormare5.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare5.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare5.Name = "nightscolormare5";
+            this.nightscolormare5.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare5.TabIndex = 36;
+            // 
+            // nightscolormare4
+            // 
+            this.nightscolormare4.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare4.Label = "Path color (Mare 4):";
+            this.nightscolormare4.Location = new System.Drawing.Point(21, 118);
+            this.nightscolormare4.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare4.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare4.Name = "nightscolormare4";
+            this.nightscolormare4.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare4.TabIndex = 35;
+            // 
+            // nightscolormare3
+            // 
+            this.nightscolormare3.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare3.Label = "Path color (Mare 3):";
+            this.nightscolormare3.Location = new System.Drawing.Point(21, 89);
+            this.nightscolormare3.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare3.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare3.Name = "nightscolormare3";
+            this.nightscolormare3.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare3.TabIndex = 34;
+            // 
+            // nightscolormare2
+            // 
+            this.nightscolormare2.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare2.Label = "Path color (Mare 2):";
+            this.nightscolormare2.Location = new System.Drawing.Point(21, 60);
+            this.nightscolormare2.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare2.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare2.Name = "nightscolormare2";
+            this.nightscolormare2.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare2.TabIndex = 33;
+            // 
+            // nightscircleprecision
+            // 
+            this.nightscircleprecision.BackColor = System.Drawing.SystemColors.Window;
+            this.nightscircleprecision.LargeChange = 1;
+            this.nightscircleprecision.Location = new System.Drawing.Point(474, 52);
+            this.nightscircleprecision.Maximum = 36;
+            this.nightscircleprecision.Minimum = 1;
+            this.nightscircleprecision.Name = "nightscircleprecision";
+            this.nightscircleprecision.Size = new System.Drawing.Size(130, 45);
+            this.nightscircleprecision.TabIndex = 30;
+            this.nightscircleprecision.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.nightscircleprecision.Value = 36;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label23.Location = new System.Drawing.Point(477, 31);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(102, 13);
+            this.label23.TabIndex = 31;
+            this.label23.Text = "Axis circle precision:";
+            this.label23.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // nightscircleprecisionlabel
+            // 
+            this.nightscircleprecisionlabel.AutoSize = true;
+            this.nightscircleprecisionlabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscircleprecisionlabel.Location = new System.Drawing.Point(610, 64);
+            this.nightscircleprecisionlabel.Name = "nightscircleprecisionlabel";
+            this.nightscircleprecisionlabel.Size = new System.Drawing.Size(25, 13);
+            this.nightscircleprecisionlabel.TabIndex = 32;
+            this.nightscircleprecisionlabel.Text = "360";
+            // 
+            // nightscolormare1
+            // 
+            this.nightscolormare1.BackColor = System.Drawing.Color.Transparent;
+            this.nightscolormare1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nightscolormare1.Label = "Path color (Mare 1):";
+            this.nightscolormare1.Location = new System.Drawing.Point(21, 31);
+            this.nightscolormare1.MaximumSize = new System.Drawing.Size(10000, 23);
+            this.nightscolormare1.MinimumSize = new System.Drawing.Size(100, 23);
+            this.nightscolormare1.Name = "nightscolormare1";
+            this.nightscolormare1.Size = new System.Drawing.Size(168, 23);
+            this.nightscolormare1.TabIndex = 29;
+            // 
             // tabpasting
             // 
             this.tabpasting.Controls.Add(this.label16);
@@ -1972,39 +2118,6 @@ namespace CodeImp.DoomBuilder.Windows
             // browseScreenshotsFolderDialog
             // 
             this.browseScreenshotsFolderDialog.Description = "Select a Folder to Save Screenshots Into";
-            // 
-            // nightscircleprecision
-            // 
-            this.nightscircleprecision.BackColor = System.Drawing.SystemColors.Window;
-            this.nightscircleprecision.LargeChange = 1;
-            this.nightscircleprecision.Location = new System.Drawing.Point(11, 432);
-            this.nightscircleprecision.Maximum = 36;
-            this.nightscircleprecision.Minimum = 1;
-            this.nightscircleprecision.Name = "nightscircleprecision";
-            this.nightscircleprecision.Size = new System.Drawing.Size(130, 45);
-            this.nightscircleprecision.TabIndex = 26;
-            this.nightscircleprecision.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.nightscircleprecision.Value = 36;
-            this.nightscircleprecision.ValueChanged += new System.EventHandler(this.nightscircleprecision_ValueChanged);
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(14, 411);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(123, 13);
-            this.label23.TabIndex = 27;
-            this.label23.Text = "NiGHTS circle precision:";
-            this.label23.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // nightscircleprecisionlabel
-            // 
-            this.nightscircleprecisionlabel.AutoSize = true;
-            this.nightscircleprecisionlabel.Location = new System.Drawing.Point(147, 444);
-            this.nightscircleprecisionlabel.Name = "nightscircleprecisionlabel";
-            this.nightscircleprecisionlabel.Size = new System.Drawing.Size(25, 13);
-            this.nightscircleprecisionlabel.TabIndex = 28;
-            this.nightscircleprecisionlabel.Text = "360";
             // 
             // PreferencesForm
             // 
@@ -2066,8 +2179,10 @@ namespace CodeImp.DoomBuilder.Windows
             ((System.ComponentModel.ISupportInitialize)(this.imagebrightness)).EndInit();
             this.colorsgroup3.ResumeLayout(false);
             this.colorsgroup3.PerformLayout();
-            this.tabpasting.ResumeLayout(false);
+            this.tabnights.ResumeLayout(false);
+            this.tabnights.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nightscircleprecision)).EndInit();
+            this.tabpasting.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}
@@ -2214,9 +2329,17 @@ namespace CodeImp.DoomBuilder.Windows
         private System.Windows.Forms.Label labelBackups;
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.CheckBox cbDrawFullCrosshair;
-        private Controls.ColorControl colorNiGHTS;
-        private System.Windows.Forms.TrackBar nightscircleprecision;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TabPage tabnights;
+        private Controls.ColorControl nightscolormare1;
         private System.Windows.Forms.Label nightscircleprecisionlabel;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TrackBar nightscircleprecision;
+        private Controls.ColorControl nightscolormare2;
+        private Controls.ColorControl nightscolormare8;
+        private Controls.ColorControl nightscolormare7;
+        private Controls.ColorControl nightscolormare6;
+        private Controls.ColorControl nightscolormare5;
+        private Controls.ColorControl nightscolormare4;
+        private Controls.ColorControl nightscolormare3;
     }
 }

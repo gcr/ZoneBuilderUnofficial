@@ -1436,12 +1436,15 @@ namespace CodeImp.DoomBuilder.Rendering
             ICollection<Thing> things = General.Map.Map.Things;
             List<Thing> axes = new List<Thing>();
             List<Thing> axistransferlines = new List<Thing>();
+
             foreach (Thing t in things)
             {
-                if (t.Type % 4096 == General.Map.FormatInterface.AxisType) axes.Add(t);
-                if (t.Type % 4096 == General.Map.FormatInterface.AxisTransferLineType) axistransferlines.Add(t);
+                int type = t.Type % 4096;
+                if (type == General.Map.FormatInterface.AxisType) axes.Add(t);
+                if (type == General.Map.FormatInterface.AxisTransferLineType) axistransferlines.Add(t);
             }
-            axistransferlines.Sort((x, y) => x.GetFlagsValue().CompareTo(y.GetFlagsValue()));
+            //Sort by axis number and mare number.
+            axistransferlines.Sort((x, y) => (x.GetFlagsValue() | (x.Type / 4096)<<16).CompareTo((y.GetFlagsValue() | (y.Type / 4096) << 16)));
 
             //Render axis transfer lines.
             int i = 0;
@@ -1453,7 +1456,8 @@ namespace CodeImp.DoomBuilder.Rendering
 
                 if (iNext < size && axistransferlines[iNext].GetFlagsValue() == axistransferlines[i].GetFlagsValue() + 1)
                 {
-                    RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.NiGHTSColor, true);
+                    int mare = axistransferlines[i].Type / 4096;
+                    RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.GetNiGHTSColor(mare), true);
                     /* Start looking for partners for the one beyond iNext. */
                     i = iNext + 1;
                 }
@@ -1462,12 +1466,12 @@ namespace CodeImp.DoomBuilder.Rendering
                     /* No partner, so start looking for partners for iNext. */
                     i = iNext;
                 }
-            }
-
+            }                
             //Render axes.
             foreach (Thing axis in axes)
             {
-                RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.NiGHTSColor, true);
+                int mare = axis.Type / 4096;
+                RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.GetNiGHTSColor(mare), true);
             }
         }
 		#endregion

@@ -174,7 +174,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.buttonfullbrightness = new System.Windows.Forms.ToolStripButton();
 			this.buttontogglegrid = new System.Windows.Forms.ToolStripButton();
 			this.buttontoggledynamicgrid = new System.Windows.Forms.ToolStripButton();
-			this.separatorfullbrightness = new System.Windows.Forms.ToolStripSeparator();
+            this.buttontogglenightspath = new System.Windows.Forms.ToolStripButton();
+            this.separatorfullbrightness = new System.Windows.Forms.ToolStripSeparator();
 			this.buttonviewnormal = new System.Windows.Forms.ToolStripButton();
 			this.buttonviewbrightness = new System.Windows.Forms.ToolStripButton();
 			this.buttonviewfloors = new System.Windows.Forms.ToolStripButton();
@@ -1255,6 +1256,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.buttontoggledynamicgrid,
             this.buttonautomerge,
             this.buttonautoclearsidetextures,
+            this.buttontogglenightspath,
             this.seperatorgeometry,
             this.buttontogglefx,
             this.dynamiclightmode,
@@ -1585,10 +1587,24 @@ namespace CodeImp.DoomBuilder.Windows
 			this.buttontoggledynamicgrid.Tag = "builder_toggledynamicgrid";
 			this.buttontoggledynamicgrid.Text = "Dynamic Grid Size";
 			this.buttontoggledynamicgrid.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// separatorfullbrightness
-			// 
-			this.separatorfullbrightness.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            // 
+            // buttontogglenightspath
+            // 
+            this.buttontogglenightspath.Checked = true;
+            this.buttontogglenightspath.CheckOnClick = true;
+            this.buttontogglenightspath.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.buttontogglenightspath.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttontogglenightspath.Image = global::CodeImp.DoomBuilder.Properties.Resources.axis1;
+            this.buttontogglenightspath.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttontogglenightspath.Name = "buttontogglenightspath";
+            this.buttontogglenightspath.Size = new System.Drawing.Size(23, 22);
+            this.buttontogglenightspath.Tag = "builder_togglenightspath";
+            this.buttontogglenightspath.Text = "Show NiGHTS Path";
+            this.buttontogglenightspath.Click += new System.EventHandler(this.InvokeTaggedAction);
+            // 
+            // separatorfullbrightness
+            // 
+            this.separatorfullbrightness.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
 			this.separatorfullbrightness.Name = "separatorfullbrightness";
 			this.separatorfullbrightness.Size = new System.Drawing.Size(6, 25);
 			// 
@@ -2702,7 +2718,8 @@ namespace CodeImp.DoomBuilder.Windows
 		private ToolStripMenuItem itemtogglegrid;
 		private ToolStripButton buttontogglegrid;
 		private ToolStripButton buttontoggledynamicgrid;
-		private ToolStripMenuItem itemdynamicgridsize;
+        private ToolStripButton buttontogglenightspath;
+        private ToolStripMenuItem itemdynamicgridsize;
         private ToolStripMenuItem itemrendernightspath;
 		private ToolStripMenuItem itemtogglecomments;
 	}

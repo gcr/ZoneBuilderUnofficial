@@ -2028,7 +2028,9 @@ namespace CodeImp.DoomBuilder.Windows
 			buttonsnaptogrid.Visible = General.Settings.ToolbarGeometry && maploaded;
 			buttontoggledynamicgrid.Visible = General.Settings.ToolbarGeometry && maploaded; //mxd
 			buttontoggledynamicgrid.Checked = General.Settings.DynamicGridSize; //mxd
-			buttonautomerge.Visible = General.Settings.ToolbarGeometry && maploaded;
+            buttontogglenightspath.Visible = maploaded && General.Map.SRB2;
+            buttontogglenightspath.Checked = General.Settings.RenderNiGHTSPath;
+            buttonautomerge.Visible = General.Settings.ToolbarGeometry && maploaded;
 			buttonautoclearsidetextures.Visible = General.Settings.ToolbarGeometry && maploaded; //mxd
 			buttontest.Visible = General.Settings.ToolbarTesting && maploaded;
 
@@ -2811,6 +2813,7 @@ namespace CodeImp.DoomBuilder.Windows
         {
             General.Settings.RenderNiGHTSPath = !General.Settings.RenderNiGHTSPath;
             itemrendernightspath.Checked = General.Settings.RenderNiGHTSPath;
+            buttontogglenightspath.Checked = General.Settings.RenderNiGHTSPath;
             General.Interface.DisplayStatus(StatusType.Action, "NiGHTS path rendering is " + (General.Settings.RenderNiGHTSPath ? "ENABLED" : "DISABLED"));
 
             // Redraw display to show changes

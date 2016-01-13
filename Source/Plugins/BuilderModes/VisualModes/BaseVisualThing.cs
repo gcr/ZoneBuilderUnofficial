@@ -462,6 +462,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					}
 				}
 			}
+
+            if (Thing.IsFloatable && Thing.IsFlagSet("8")) pos.z += Thing.IsFlipped ? -24 : 24;
 			
 			// Apply settings
 			SetPosition(pos);

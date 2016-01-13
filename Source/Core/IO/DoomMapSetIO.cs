@@ -49,6 +49,7 @@ namespace CodeImp.DoomBuilder.IO
             translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
             unflippableTypes = new List<int>();
             startTypes = new List<int>();
+            floatableTypes = new List<int>();
         }
 
         #endregion

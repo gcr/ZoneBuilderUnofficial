@@ -132,6 +132,11 @@ namespace CodeImp.DoomBuilder.Map
         public bool Unflippable { get { return General.Map.FormatInterface.UnflippableTypes.Contains(Type); } }
         public bool IsFloatable { get { return General.Map.FormatInterface.FloatableTypes.Contains(Type); } }
         public bool CenterHitbox { get { return General.Map.FormatInterface.CenterHitboxTypes.Contains(Type); } }
+        public bool IsNiGHTSPathItem { get { return General.Map.FormatInterface.AxisType == Type 
+                                                || General.Map.FormatInterface.AxisTransferType == Type
+                                                || General.Map.FormatInterface.AxisTransferLineType == Type;
+                                            }
+                                     }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -393,22 +398,6 @@ namespace CodeImp.DoomBuilder.Map
 			if(selecteditem.List != null) selecteditem.List.Remove(selecteditem);
 			selecteditem = null;
 		}
-
-        public int GetFlagsValue()
-        {
-            int flags = 0;
-            foreach (KeyValuePair<string, bool> f in Flags)
-            {
-                int fnum;
-                if (f.Value && int.TryParse(f.Key, out fnum)) flags |= fnum;
-            }
-
-            //SRB2 stores Z position in upper 12 bits of flags. Add Z position to flags.
-            if (General.Map.SRB2) flags |= (UInt16)Position.z << 4;
-
-            return flags;
-
-        }		
 		#endregion
 		
 		#region ================== Changes
@@ -636,8 +625,37 @@ namespace CodeImp.DoomBuilder.Map
 			return new Dictionary<string,bool>(flags);
 		}
 
-		// This clears all flags
-		public void ClearFlags()
+        public int GetFlagsValue()
+        {
+            int flags = 0;
+            foreach (KeyValuePair<string, bool> f in Flags)
+            {
+                int fnum;
+                if (f.Value && int.TryParse(f.Key, out fnum)) flags |= fnum;
+            }
+
+            //SRB2 stores Z position in upper 12 bits of flags. Add Z position to flags.
+            if (General.Map.SRB2) flags |= (UInt16)Position.z << 4;
+
+            return flags;
+        }
+
+        public void SetFlagsValue(int value)
+        {
+            Dictionary<string, bool> newflags = new Dictionary<string, bool>(flags);
+            foreach (KeyValuePair<string, bool> f in flags)
+            {
+                int fnum;
+                if (int.TryParse(f.Key, out fnum)) newflags[f.Key] = ((value & fnum) == fnum);
+            }
+            flags = newflags;
+
+            //SRB2 stores Z position in upper 12 bits of flags. Get Z position to flags.
+            if (General.Map.SRB2) pos.z = value >> 4;
+        }
+
+        // This clears all flags
+        public void ClearFlags()
 		{
 			BeforePropsChange();
 			

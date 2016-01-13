@@ -421,15 +421,35 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
             else if (General.Map.SRB2 && Thing.IsSlopeVertex)
             {
-                if (Thing.Sector != null) //mxd
+                if (Thing.Sector != null)
                 {
                     // This is a special thing that needs special positioning
                     SectorData sd = mode.GetSectorData(Thing.Sector);
                     pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z - Thing.Height/2;
                 }
             }
+            else if (Thing.IsNiGHTSPathItem)
+            {
+                //Z position is always 0.
+                if (Thing.Sector != null)
+                {
+                    SectorData sd = mode.GetSectorData(Thing.Sector);
+                    pos.z = sd.Floor.sector.FloorHeight;
+                }
+                else pos.z = 0;
+            }
+            else if (General.Map.SRB2 && Thing.Type == 1705)
+            {
+                //Use the flags value instead of the Z position for the Z position. SRB2 is really stupid sometimes.
+                pos.z = Thing.GetFlagsValue();
+                if (Thing.Sector != null)
+                {
+                    SectorData sd = mode.GetSectorData(Thing.Sector);
+                    pos.z += sd.Floor.sector.FloorHeight;
+                }
+            }
 
-			else if(info.AbsoluteZ)
+            else if (info.AbsoluteZ)
 			{
 				// Absolute Z position
 				pos.z = Thing.Position.z;
@@ -808,20 +828,36 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// Raise/lower thing
 		public void OnChangeTargetHeight(int amount)
 		{
+            if (Thing.IsNiGHTSPathItem) return; //NiGHTS path items have no height.
+
 			if(General.Map.FormatInterface.HasThingHeight)
 			{
 				if((General.Map.UndoRedo.NextUndo == null) || (General.Map.UndoRedo.NextUndo.TicketID != undoticket))
 					undoticket = mode.CreateUndo("Change thing height");
 
-                Vector3D newPosition = Thing.Position + new Vector3D(0.0f, 0.0f, (Thing.IsFlipped ? -amount : amount));
-                newPosition.z = General.Clamp(newPosition.z, General.Map.FormatInterface.MinThingHeight, General.Map.FormatInterface.MaxThingHeight);
+                if (General.Map.SRB2 && Thing.Type == 1705)
+                {
+                    int newZ = General.Clamp(Thing.GetFlagsValue() + amount,0,0xFFFF);
+                    Thing.SetFlagsValue(newZ);
 
-                Thing.Move(newPosition);
+                    int actualZ = newZ >> 4;
+                    Vector3D newPosition = new Vector3D(Thing.Position.x, Thing.Position.y, actualZ);
+                    Thing.Move(newPosition);
 
-				mode.SetActionResult("Changed thing height to " + Thing.Position.z + ".");
-				
-				// Update what must be updated
-				ThingData td = mode.GetThingData(this.Thing);
+                    mode.SetActionResult("Changed thing height to " + newZ + ".");
+                }
+                else
+                {
+                    Vector3D newPosition = Thing.Position + new Vector3D(0.0f, 0.0f, (Thing.IsFlipped ? -amount : amount));
+                    newPosition.z = General.Clamp(newPosition.z, General.Map.FormatInterface.MinThingHeight, General.Map.FormatInterface.MaxThingHeight);
+
+                    Thing.Move(newPosition);
+
+                    mode.SetActionResult("Changed thing height to " + Thing.Position.z + ".");
+                }
+
+                // Update what must be updated
+                ThingData td = mode.GetThingData(this.Thing);
 				foreach(KeyValuePair<Sector, bool> s in td.UpdateAlso)
 				{
 					if(mode.VisualSectorExists(s.Key))

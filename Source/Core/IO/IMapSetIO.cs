@@ -80,6 +80,7 @@ namespace CodeImp.DoomBuilder.IO
         int ColormapType { get; }
         int FlatAlignmentType { get; }
         int AxisType { get; }
+        int AxisTransferType { get; }
         int AxisTransferLineType { get; }
         List<int> UnflippableTypes { get; }
         List<int> StartTypes { get; }

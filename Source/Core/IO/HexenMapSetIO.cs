@@ -104,6 +104,7 @@ namespace CodeImp.DoomBuilder.IO
         public override int ColormapType { get { return -1; } }
         public override int FlatAlignmentType { get { return -1; } }
         public override int AxisType { get { return -1; } }
+        public override int AxisTransferType { get { return -1; } }
         public override int AxisTransferLineType { get { return -1; } }
         #endregion
 

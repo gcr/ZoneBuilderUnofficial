@@ -451,7 +451,6 @@ namespace CodeImp.DoomBuilder.Windows
 			MakeUndo();
 
 			useabsoluteheight = cbAbsoluteHeight.Checked;
-            flagsvalue.ReadOnly = cbAbsoluteHeight.Checked;
             zlabel.Text = (useabsoluteheight ? "Z:" : "Height:");
 			
 			preventchanges = true;
@@ -591,6 +590,7 @@ namespace CodeImp.DoomBuilder.Windows
                     posZ.Text = z.ToString();
                 }
                 flagsvalue_ignore = false;
+                cbAbsoluteHeight.Checked = false;
             }
         }
 

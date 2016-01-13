@@ -38,11 +38,6 @@ namespace CodeImp.DoomBuilder.IO
         #endregion
 
         #region ================== Variables
-        protected Dictionary<int, int[]> threeDFloorTypes;
-        protected Dictionary<int, int[]> slopeTypes;
-        protected Dictionary<int, int[]> slopeCopyTypes;
-        protected Dictionary<int, int[]> vertexSlopeTypes;
-        protected Dictionary<int, float> translucentLineTypes;
         #endregion
 
         #region ================== Constructor / Disposer
@@ -57,6 +52,9 @@ namespace CodeImp.DoomBuilder.IO
                 slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
                 vertexSlopeTypes = new Dictionary<int, int[]>() { };
                 translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
+                unflippableTypes = new List<int>();
+                startTypes = new List<int>();
+
                 // Make configuration
                 Configuration config = new Configuration();
 				
@@ -150,18 +148,12 @@ namespace CodeImp.DoomBuilder.IO
 		public override int MaxThingAngle { get { return int.MaxValue; } }
 		public override int MinThingAngle { get { return int.MinValue; } }
 		public override Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get { return uifields; } } //mxd
-        public override Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
-        public override Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
-        public override Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
-        public override Dictionary<int, int[]> VertexSlopeTypes { get { return vertexSlopeTypes; } }
-        public override Dictionary<int, float> TranslucentLineTypes { get { return translucentLineTypes; } }
         public override int SlopeVertexType { get { return 9500; } }
         public override int Custom3DFloorType { get { return 160; } }
         public override int ColormapType { get { return -1; } }
         public override int FlatAlignmentType { get { return -1; } }
         public override int AxisType { get { return -1; } }
         public override int AxisTransferLineType { get { return -1; } }
-
         #endregion
 
         #region ================== Reading

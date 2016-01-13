@@ -45,11 +45,18 @@ namespace CodeImp.DoomBuilder.IO
 		//mxd
 		protected Dictionary<MapElementType, Dictionary<string, UniversalType>> uifields;
 
-		#endregion
+        protected Dictionary<int, int[]> threeDFloorTypes;
+        protected Dictionary<int, int[]> slopeTypes;
+        protected Dictionary<int, int[]> slopeCopyTypes;
+        protected Dictionary<int, int[]> vertexSlopeTypes;
+        protected Dictionary<int, float> translucentLineTypes;
+        protected List<int> unflippableTypes;
+        protected List<int> startTypes;
+        #endregion
 
-		#region ================== Properties
+        #region ================== Properties
 
-		public abstract int MaxSidedefs { get; }
+        public abstract int MaxSidedefs { get; }
 		public abstract int MaxVertices { get; }
 		public abstract int MaxLinedefs { get; }
 		public abstract int MaxSectors { get; }
@@ -91,19 +98,19 @@ namespace CodeImp.DoomBuilder.IO
 		public abstract int MaxThingAngle { get; }
 		public abstract int MinThingAngle { get; }
 		public abstract Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get; } //mxd
-        public abstract Dictionary<int, int[]> ThreeDFloorTypes { get; }
-        public abstract Dictionary<int, int[]> SlopeTypes { get; }
-        public abstract Dictionary<int, int[]> SlopeCopyTypes { get; }
-        public abstract Dictionary<int, int[]> VertexSlopeTypes { get; }
-        public abstract Dictionary<int, float> TranslucentLineTypes { get; }
+        public Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
+        public Dictionary<int, int[]> SlopeTypes { get { return slopeTypes; } }
+        public Dictionary<int, int[]> SlopeCopyTypes { get { return slopeCopyTypes; } }
+        public Dictionary<int, int[]> VertexSlopeTypes { get { return vertexSlopeTypes; } }
+        public Dictionary<int, float> TranslucentLineTypes { get { return translucentLineTypes; } }
         public abstract int SlopeVertexType { get; }
         public abstract int Custom3DFloorType { get; }
         public abstract int ColormapType { get; }
         public abstract int FlatAlignmentType { get; }
         public abstract int AxisType { get; }
         public abstract int AxisTransferLineType { get; }
-
-
+        public List<int> UnflippableTypes { get { return unflippableTypes; } }
+        public List<int> StartTypes { get { return startTypes; } }
         #endregion
 
         #region ================== Constructor / Disposer

@@ -81,5 +81,7 @@ namespace CodeImp.DoomBuilder.IO
         int FlatAlignmentType { get; }
         int AxisType { get; }
         int AxisTransferLineType { get; }
+        List<int> UnflippableTypes { get; }
+        List<int> StartTypes { get; }
     }
 }

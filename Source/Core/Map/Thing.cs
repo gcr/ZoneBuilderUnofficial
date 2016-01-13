@@ -125,12 +125,11 @@ namespace CodeImp.DoomBuilder.Map
             get
             {
                 ThingTypeInfo ti = General.Map.Data.GetThingInfo(Type);
-                return (ti.Hangs && !IsReverse) || (!ti.Hangs && IsReverse);
+                return ti.Hangs ^ IsReverse;
             }
         }
-        public bool IsReverse { get { return General.Map.SRB2 && IsFlagSet("2"); } }
-
-
+        public bool IsReverse { get { return General.Map.SRB2 && !Unflippable && IsFlagSet("2"); } }
+        public bool Unflippable { get { return General.Map.FormatInterface.UnflippableTypes.Contains(Type); } }
         #endregion
 
         #region ================== Constructor / Disposer

@@ -23,7 +23,7 @@ PrivilegesRequired=admin
 ShowLanguageDialog=no
 LanguageDetectionMethod=none
 MinVersion=0,5.01.2600
-UninstallDisplayIcon={app}\Updater.exe
+UninstallDisplayIcon={app}\Builder.exe
 WizardImageFile=..\Setup\WizardLarge.bmp
 WizardSmallImageFile=..\Setup\WizardSmall.bmp
 

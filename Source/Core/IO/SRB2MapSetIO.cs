@@ -39,29 +39,29 @@ namespace CodeImp.DoomBuilder.IO
         public SRB2MapSetIO(WAD wad, MapManager manager) : base(wad, manager)
         {
             //Dictionary contents: Type, flags, translucency, flags when noclimb is active
-            //Type: 1 = solid, 2 = water, 3 = intangible, +4 = render insides
+            //Type: 1 = solid, 2 = water, 3 = intangible, +4 = render insides, +64 = don't render planes, +128 = don't render sides
             //Flags: 1 = disable lighting effects (e.g. shadows), 2 = restrict lighting effects to insides, 4 = fog
             //Translucency: 0 = invisible, 1 = read from front upper texture, 2 = opaque
             threeDFloorTypes = new Dictionary<int, int[]>() {
                 { 100, new int[4] { 1, 0, 2, 0} },
                 { 101, new int[4] { 1, 1, 2, 1} },
                 { 102, new int[4] { 1, 1, 1, 1} },
-                { 103, new int[4] { 1, 1, 2, 1} },
-                { 104, new int[4] { 1, 1, 2, 0} },
+                { 103, new int[4] { 65, 1, 2, 1} },
+                { 104, new int[4] { 129, 1, 2, 0} },
                 { 105, new int[4] { 1, 1, 0, 1} },
                 { 120, new int[4] { 6, 0, 2, 2} },
                 { 121, new int[4] { 6, 0, 1, 2} },
-                { 122, new int[4] { 6, 0, 2, 2} },
-                { 123, new int[4] { 6, 0, 1, 2} },
+                { 122, new int[4] { 134, 0, 2, 2} },
+                { 123, new int[4] { 134, 0, 1, 2} },
                 { 124, new int[4] { 6, 0, 1, 2} },
-                { 125, new int[4] { 6, 0, 1, 2} },
+                { 125, new int[4] { 134, 0, 1, 2} },
                 { 140, new int[4] { 1, 0, 2, 1} },
                 { 141, new int[4] { 1, 0, 1, 1} },
-                { 142, new int[4] { 1, 0, 1, 1} },
+                { 142, new int[4] { 129, 0, 1, 1} },
                 { 143, new int[4] { 1, 0, 2, 1} },
                 { 144, new int[4] { 1, 0, 1, 1} },
-                { 145, new int[4] { 1, 0, 1, 1} },
-                { 146, new int[4] { 1, 0, 2, 1} },
+                { 145, new int[4] { 129, 0, 1, 1} },
+                { 146, new int[4] { 65, 0, 2, 1} },
                 { 150, new int[4] { 1, 0, 2, 0} },
                 { 151, new int[4] { 1, 0, 2, 0} },
                 { 152, new int[4] { 1, 0, 2, 0} },
@@ -88,7 +88,7 @@ namespace CodeImp.DoomBuilder.IO
                 { 202, new int[4] { 7, 5, 2, 5} },
                 { 220, new int[4] { 3, 0, 2, 0} },
                 { 221, new int[4] { 3, 1, 1, 0} },
-                { 222, new int[4] { 3, 1, 2, 0} },
+                { 222, new int[4] { 67, 1, 2, 0} },
                 { 223, new int[4] { 3, 1, 0, 1} },
                 { 250, new int[4] { 1, 0, 2, 0} },
                 { 251, new int[4] { 1, 0, 2, 0} },

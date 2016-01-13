@@ -206,7 +206,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 				//mxd. This calculates light with doom-style wall shading
 				PixelColor wallbrightness = PixelColor.FromInt(mode.CalculateBrightness(lightlevel, Sidedef));
-				int wallcolor = PixelColor.Modulate(levelcolor, wallbrightness).WithAlpha((byte)extrafloor.Alpha).ToInt();
+                byte alpha = (byte)extrafloor.Alpha;
+                if (extrafloor.DontRenderSides) alpha = 0;
+                int wallcolor = PixelColor.Modulate(levelcolor, wallbrightness).WithAlpha(alpha).ToInt();
 				fogfactor = CalculateFogDensity(lightlevel);
 
 				// Cut off the part above the 3D floor and below the 3D ceiling
@@ -258,9 +260,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					List<WorldVertex> verts = CreatePolygonVertices(polygons, tp, sd, lightvalue, lightabsolute);
 					if(verts.Count > 2)
 					{
-						if(extrafloor.Sloped3dFloor) this.RenderPass = RenderPass.Mask; //mxd
+                        if (extrafloor.Sloped3dFloor) this.RenderPass = RenderPass.Mask; //mxd
 						else if(extrafloor.RenderAdditive) this.RenderPass = RenderPass.Additive; //mxd
-						else if(extrafloor.Alpha < 255) this.RenderPass = RenderPass.Alpha;
+						else if(extrafloor.Alpha < 255 || extrafloor.DontRenderSides) this.RenderPass = RenderPass.Alpha;
 						else this.RenderPass = RenderPass.Mask;
 
 						//mxd. Inner sides always have extrafloor color

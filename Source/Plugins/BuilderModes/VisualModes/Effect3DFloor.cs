@@ -51,9 +51,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public bool IgnoreBottomHeight { get { return ignorebottomheight; } } //mxd
 		public bool Sloped3dFloor { get { return sloped3dfloor; } } //mxd
 		public bool ClipSidedefs { get { return clipsides; } } //mxd
+        public bool DontRenderPlanes { get { return General.Map.SRB2 && (linedef.Args[1] & (int)FloorTypes.DontRenderPlanes) == (int)FloorTypes.DontRenderPlanes; } }
+        public bool DontRenderSides { get { return General.Map.SRB2 && (linedef.Args[1] & (int)FloorTypes.DontRenderSides) == (int)FloorTypes.DontRenderSides; } }
 
-		//mxd. 3D-Floor Flags
-		[Flags]
+    //mxd. 3D-Floor Flags
+    [Flags]
 		public enum Flags
 		{
 			None = 0,
@@ -77,7 +79,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			RenderInside = 4,
 			HiTagIsLineID = 8,
 			InvertVisibilityRules = 16,
-			InvertShootabilityRules = 32
+			InvertShootabilityRules = 32,
+            //Fake flags added for SRB2
+            DontRenderPlanes = 64,
+            DontRenderSides = 128
 		}
 		
 		// Constructor
@@ -153,9 +158,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if(sd.FloorGlow == null || !sd.FloorGlow.Fullbright) ceiling.color = 0;
 			}
 
-			// Apply alpha
-			floor.alpha = alpha;
-			ceiling.alpha = alpha;
+            // Apply alpha
+            floor.alpha = DontRenderPlanes ? 0 : alpha;
+			ceiling.alpha = DontRenderPlanes ? 0 : alpha;
 
 			//mxd
 			floor.extrafloor = true;

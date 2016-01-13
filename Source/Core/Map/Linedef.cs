@@ -782,7 +782,9 @@ namespace CodeImp.DoomBuilder.Map
                     int value = Convert.ToInt32(tex, 16);
                     bool exists = (value & 0x1) == 0x1; //FF_EXISTS
                     bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4); //FF_BLOCKPLAYER/FF_BLOCKOTHERS/FF_SOLID
-                    bool render = ((value & 0x8) == 0x8) || ((value & 0x10) == 0x10); //FF_RENDERSIDES/FF_RENDERPLANES/FF_RENDERALL
+                    bool rendersides = (value & 0x8) == 0x8; //FF_RENDERSIDES
+                    bool renderplanes = (value & 0x10) == 0x10; //FF_RENDERPLANES
+                    bool render = rendersides || renderplanes;
                     bool water = (value & 0x20) == 0x20; //FF_SWIMMABLE
                     bool noshade = (value & 0x40) == 0x40; //FF_NOSHADE
                     bool translucent = (value & 0x1000) == 0x1000; //FF_TRANSLUCENT
@@ -793,6 +795,8 @@ namespace CodeImp.DoomBuilder.Map
                     {
                         Args[1] = water ? 2 : (solid ? 1 : 3);
                         if (inside) Args[1] += 4;
+                        if (!renderplanes) Args[1] += 64;
+                        if (!rendersides) Args[1] += 128;
                     }
                     if (noshade) Args[2] += 1;
                     if (doubleshadow) Args[2] += 2;

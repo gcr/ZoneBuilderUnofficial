@@ -55,6 +55,7 @@ namespace CodeImp.DoomBuilder.IO
                 unflippableTypes = new List<int>();
                 startTypes = new List<int>();
                 floatableTypes = new List<int>();
+                centerHitboxTypes = new List<int>();
 
                 // Make configuration
                 Configuration config = new Configuration();

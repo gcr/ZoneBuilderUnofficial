@@ -50,6 +50,7 @@ namespace CodeImp.DoomBuilder.IO
             unflippableTypes = new List<int>();
             startTypes = new List<int>();
             floatableTypes = new List<int>();
+            centerHitboxTypes = new List<int>();
         }
 
         #endregion

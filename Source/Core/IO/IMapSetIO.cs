@@ -84,5 +84,6 @@ namespace CodeImp.DoomBuilder.IO
         List<int> UnflippableTypes { get; }
         List<int> StartTypes { get; }
         List<int> FloatableTypes { get; }
+        List<int> CenterHitboxTypes { get; }
     }
 }

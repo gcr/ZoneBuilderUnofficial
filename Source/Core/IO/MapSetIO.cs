@@ -53,6 +53,7 @@ namespace CodeImp.DoomBuilder.IO
         protected List<int> unflippableTypes;
         protected List<int> startTypes;
         protected List<int> floatableTypes;
+        protected List<int> centerHitboxTypes;
         #endregion
 
         #region ================== Properties
@@ -113,6 +114,7 @@ namespace CodeImp.DoomBuilder.IO
         public List<int> UnflippableTypes { get { return unflippableTypes; } }
         public List<int> StartTypes { get { return startTypes; } }
         public List<int> FloatableTypes { get { return floatableTypes; } }
+        public List<int> CenterHitboxTypes { get { return centerHitboxTypes; } }
         #endregion
 
         #region ================== Constructor / Disposer

@@ -349,8 +349,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					WorldVertex[] verts = new WorldVertex[6];
 
 					if(sizeless) //mxd
-					{ 
-						float hh = height / 2;
+					{
+                        float hh = height / 2;
 						verts[0] = new WorldVertex(-radius + offsetx, 0.0f, offsety - hh, sectorcolor, 0.0f, 1.0f);
 						verts[1] = new WorldVertex(-radius + offsetx, 0.0f, hh + offsety, sectorcolor, 0.0f, 0.0f);
 						verts[2] = new WorldVertex(+radius + offsetx, 0.0f, hh + offsety, sectorcolor, 1.0f, 0.0f);
@@ -358,7 +358,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						verts[4] = verts[2];
 						verts[5] = new WorldVertex(+radius + offsetx, 0.0f, offsety - hh, sectorcolor, 1.0f, 1.0f);
 					} 
-					else 
+					else if (Thing.CenterHitbox)
+                    {
+                        float hh = height / 2;
+                        verts[0] = new WorldVertex(-radius + offsetx, 0.0f, -hh, sectorcolor, 0.0f, 1.0f);
+                        verts[1] = new WorldVertex(-radius + offsetx, 0.0f, hh, sectorcolor, 0.0f, 0.0f);
+                        verts[2] = new WorldVertex(+radius + offsetx, 0.0f, hh, sectorcolor, 1.0f, 0.0f);
+                        verts[3] = verts[0];
+                        verts[4] = verts[2];
+                        verts[5] = new WorldVertex(+radius + offsetx, 0.0f, -hh, sectorcolor, 1.0f, 1.0f);
+                    }
+                    else
 					{
 						verts[0] = new WorldVertex(-radius + offsetx, 0.0f, offsety, sectorcolor, 0.0f, 1.0f);
 						verts[1] = new WorldVertex(-radius + offsetx, 0.0f, height + offsety, sectorcolor, 0.0f, 0.0f);
@@ -479,14 +489,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				boxp1 = new Vector3D(pos.x - thingradius, pos.y - thingradius, pos.z - thingradius/2);
 				boxp2 = new Vector3D(pos.x + thingradius, pos.y + thingradius, pos.z + thingradius/2);
 			} 
-			else 
+			else if (Thing.CenterHitbox)
 			{
-				boxp1 = new Vector3D(pos.x - thingradius, pos.y - thingradius, pos.z);
-				boxp2 = new Vector3D(pos.x + thingradius, pos.y + thingradius, pos.z + thingheight);
+				boxp1 = new Vector3D(pos.x - thingradius, pos.y - thingradius, pos.z - thingheight/2);
+				boxp2 = new Vector3D(pos.x + thingradius, pos.y + thingradius, pos.z + thingheight/2);
 			}
-			
-			// Done
-			changed = false;
+            else
+            {
+                boxp1 = new Vector3D(pos.x - thingradius, pos.y - thingradius, pos.z);
+                boxp2 = new Vector3D(pos.x + thingradius, pos.y + thingradius, pos.z + thingheight);
+            }
+
+            // Done
+            changed = false;
 			return true;
 		}
 		

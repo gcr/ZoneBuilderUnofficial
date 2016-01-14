@@ -53,7 +53,6 @@ namespace CodeImp.DoomBuilder.IO
                 vertexSlopeTypes = new Dictionary<int, int[]>() { };
                 translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
                 startTypes = new List<int>();
-                centerHitboxTypes = new List<int>();
 
                 // Make configuration
                 Configuration config = new Configuration();

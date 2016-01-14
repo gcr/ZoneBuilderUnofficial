@@ -130,7 +130,6 @@ namespace CodeImp.DoomBuilder.Map
         }
         public bool IsReverse { get { return General.Map.SRB2 && !Unflippable && IsFlagSet("2"); } }
         public bool Unflippable { get { return General.Map.Data.GetThingInfo(Type).IsUnflippable; } }
-        public bool CenterHitbox { get { return General.Map.FormatInterface.CenterHitboxTypes.Contains(Type); } }
         #endregion
 
         #region ================== Constructor / Disposer

@@ -62,6 +62,7 @@ namespace CodeImp.DoomBuilder.Config
         private readonly int heightoffset;
         private readonly bool isUnflippable;
         private readonly bool ignoreZ;
+        private readonly bool centerHitbox;
 
         // Disposing
         private bool isdisposed;
@@ -98,6 +99,7 @@ namespace CodeImp.DoomBuilder.Config
         public int HeightOffset { get { return heightoffset; } }
         public bool IsUnflippable { get { return isUnflippable; } }
         public bool IgnoreZ { get { return ignoreZ; } }
+        public bool CenterHitbox { get { return centerHitbox; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -132,6 +134,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.heightoffset = parent.heightoffset;
                 this.isUnflippable = parent.isUnflippable;
                 this.ignoreZ = parent.ignoreZ;
+                this.centerHitbox = parent.centerHitbox;
             }
 			// Set default properties
 			else
@@ -154,6 +157,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.heightoffset = 0;
                 this.isUnflippable = false;
                 this.ignoreZ = false;
+                this.centerHitbox = false;
             }
 			
 			// We have no destructor
@@ -212,6 +216,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", parent.heightoffset);
                 this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", parent.isUnflippable);
                 this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", parent.ignoreZ);
+                this.centerHitbox = cfg.ReadSetting("thingtypes." + name + ".centerHitbox", parent.centerHitbox);
             }
 			else
 			{
@@ -233,6 +238,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", 0);
                 this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", false);
                 this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", false);
+                this.centerHitbox = cfg.ReadSetting("thingtypes." + name + ".centerHitbox", false);
             }
 
             // Safety

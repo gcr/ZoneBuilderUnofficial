@@ -78,6 +78,7 @@ namespace CodeImp.DoomBuilder.Config
         private int heightoffset;
         private bool isUnflippable;
         private bool ignoreZ;
+        private bool centerHitbox;
 
         //mxd. GLOOME rendering settings
         private Thing.SpriteRenderMode rendermode;
@@ -125,6 +126,7 @@ namespace CodeImp.DoomBuilder.Config
         public int HeightOffset { get { return heightoffset; } }
         public bool IsUnflippable { get { return isUnflippable; } }
         public bool IgnoreZ { get { return ignoreZ; } }
+        public bool CenterHitbox { get { return centerHitbox; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -163,6 +165,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = 0;
             this.isUnflippable = false;
             this.ignoreZ = false;
+            this.centerHitbox = false;
 
             // We have no destructor
             GC.SuppressFinalize(this);
@@ -206,6 +209,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".flags8height", cat.HeightOffset);
             this.isUnflippable = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".unflippable", cat.IsUnflippable);
             this.ignoreZ = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".ignoreZ", cat.IgnoreZ);
+            this.centerHitbox = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".centerHitbox", cat.CenterHitbox);
 
             // Read the args
             for (int i = 0; i < Linedef.NUM_ARGS; i++)
@@ -261,6 +265,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = cat.HeightOffset;
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
+            this.centerHitbox = cat.CenterHitbox;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -310,6 +315,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = cat.HeightOffset;
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
+            this.centerHitbox = cat.CenterHitbox;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -356,6 +362,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = cat.HeightOffset;
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
+            this.centerHitbox = cat.CenterHitbox;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -404,6 +411,7 @@ namespace CodeImp.DoomBuilder.Config
             this.heightoffset = other.heightoffset;
             this.isUnflippable = other.isUnflippable;
             this.ignoreZ = other.ignoreZ;
+            this.centerHitbox = other.centerHitbox;
 
             //mxd. Copy GLOOME properties
             this.rendermode = other.rendermode;

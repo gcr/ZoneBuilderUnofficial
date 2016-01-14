@@ -543,7 +543,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				foreach(Sidedef side in Sector.Sector.Sidedefs) 
 				{
                     // MascaraSnake: Slope handling
-					if(side.Line.IsSlope) 
+					if(side.Line.IsRegularSlope) 
 					{
 						if(side.Line.Args[0] == 1 && side.Line.Front != null && side.Line.Front == side) 
 						{

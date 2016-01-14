@@ -671,7 +671,7 @@ namespace CodeImp.DoomBuilder.Map
 			{
 				// Carbon copy of EffectLineSlope class here...
                 // MascaraSnake: Handle slopes
-				if(side.Line.IsSlope && ((side.Line.Args[0] == 1 && side == side.Line.Front) || side.Line.Args[0] == 2) && side.Other != null)
+				if(side.Line.IsRegularSlope && ((side.Line.Args[0] == 1 && side == side.Line.Front) || side.Line.Args[0] == 2) && side.Other != null)
 				{
 					Linedef l = side.Line;
 					
@@ -752,7 +752,7 @@ namespace CodeImp.DoomBuilder.Map
 			{
 				// Carbon copy of EffectLineSlope class here...
                 // MascaraSnake: Handle slopes
-				if(side.Line.IsSlope && ((side.Line.Args[1] == 1 && side == side.Line.Front) || side.Line.Args[1] == 2) && side.Other != null) 
+				if(side.Line.IsRegularSlope && ((side.Line.Args[1] == 1 && side == side.Line.Front) || side.Line.Args[1] == 2) && side.Other != null) 
 				{
 					Linedef l = side.Line;
 

@@ -902,7 +902,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             {
                 // MascaraSnake: Slope handling
                 // ========== Plane Align (see http://zdoom.org/wiki/Plane_Align) ==========
-                if (l.IsSlope)
+                if (l.IsRegularSlope)
                 {
                     if (!General.Map.FormatInterface.HasLinedefParameters) l.SetSlopeArgs();
                     if (((l.Args[0] == 1) || (l.Args[1] == 1)) && (l.Front != null))
@@ -919,7 +919,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
                 // MascaraSnake: Slope handling
                 // ========== Plane Copy (mxd) (see http://zdoom.org/wiki/Plane_Copy) ==========
-                if (l.IsSlopeCopy)
+                if (l.IsCopySlope)
                 {
                     if (!General.Map.FormatInterface.HasLinedefParameters) l.SetSlopeCopyArgs();
                     //check the flags...
@@ -3748,12 +3748,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if(vg.GeometryType == VisualGeometryType.WALL_LOWER)
 				{
                     // MascaraSnake: Slope handling
-					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[0] == 0))
+					if(vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsRegularSlope && vg.Sidedef.Line.Args[0] == 0))
 					{
 						//check if the sector already has floor slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-							if(side == vg.Sidedef || !side.Line.IsSlope) continue;
+							if(side == vg.Sidedef || !side.Line.IsRegularSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3778,12 +3778,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				else if(vg.GeometryType == VisualGeometryType.WALL_UPPER) 
 				{
                     // MascaraSnake: Slope handling
-                    if (vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsSlope && vg.Sidedef.Line.Args[1] == 0)) 
+                    if (vg.Sidedef.Line.Action == 0 || (vg.Sidedef.Line.IsRegularSlope && vg.Sidedef.Line.Args[1] == 0)) 
 					{
 						//check if the sector already has ceiling slopes
 						foreach(Sidedef side in vg.Sidedef.Sector.Sidedefs) 
 						{
-                            if (side == vg.Sidedef || !side.Line.IsSlope) continue;
+                            if (side == vg.Sidedef || !side.Line.IsRegularSlope) continue;
 
 							int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3811,7 +3811,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					foreach(Sidedef side in vg.Sector.Sector.Sidedefs) 
 					{
                         // MascaraSnake: Slope handling
-                        if (!side.Line.IsSlope)	continue;
+                        if (!side.Line.IsRegularSlope)	continue;
 
 						int arg = (side == side.Line.Front ? 1 : 2);
 
@@ -3835,7 +3835,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					foreach(Sidedef side in vg.Sector.Sector.Sidedefs) 
 					{
                         // MascaraSnake: Slope handling
-                        if (!side.Line.IsSlope)	continue;
+                        if (!side.Line.IsRegularSlope)	continue;
 
 						int arg = (side == side.Line.Front ? 1 : 2);
 

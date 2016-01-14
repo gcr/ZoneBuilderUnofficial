@@ -43,9 +43,6 @@ namespace CodeImp.DoomBuilder.IO
         public DoomMapSetIO(WAD wad, MapManager manager) : base(wad, manager)
 		{
             threeDFloorTypes = new Dictionary<int, int[]>() { { 160, new int[3] { -1, -1, -1 } } };
-            slopeTypes = new Dictionary<int, int[]>() { { 181, new int[2] { -1, -1 } } };
-            slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
-            vertexSlopeTypes = new Dictionary<int, int[]>() { };
             translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
             startTypes = new List<int>();
         }

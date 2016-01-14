@@ -46,6 +46,8 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool isknown;
 		private readonly bool requiresactivation; //mxd
         private IDictionary<string, string> flags;
+        private readonly bool slope;
+        private readonly int slopetype;
 
         #endregion
 
@@ -63,6 +65,11 @@ namespace CodeImp.DoomBuilder.Config
 		public bool RequiresActivation { get { return requiresactivation; } } //mxd
 		public ArgumentInfo[] Args { get { return args; } }
         public IDictionary<string, string> Flags { get { return flags; } }
+        public bool Slope { get { return slope; } }
+        public int SlopeType { get { return slopetype; } }
+        public bool IsRegularSlope { get { return slope && (slopetype & 0x3) == 1; } }
+        public bool IsCopySlope { get { return slope && (slopetype & 0x3) == 2; } }
+        public bool IsVertexSlope { get { return slope && (slopetype & 0x3) == 3; } }
 
         #endregion
 
@@ -88,6 +95,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.title = this.prefix + " " + this.name;
 			this.title = this.title.Trim();
             this.flags = new Dictionary<string, string>(ac.Flags);
+            this.slope = cfg.ReadSetting(actionsetting + ".slope", false);
+            this.slopetype = cfg.ReadSetting(actionsetting + ".slopetype", 0);
             ReadLinedefSpecificFlags(cfg);
 
             // Read the args
@@ -107,6 +116,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.requiresactivation = true; //mxd. Unused, set for consistency sake.
 			this.title = title;
             this.flags = new Dictionary<string, string>();
+            this.slope = false;
+            this.slopetype = 0;
             this.args = new ArgumentInfo[Linedef.NUM_ARGS];
 			for(int i = 0; i < Linedef.NUM_ARGS; i++)
 				this.args[i] = new ArgumentInfo(i);

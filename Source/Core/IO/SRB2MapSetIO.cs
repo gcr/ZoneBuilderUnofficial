@@ -102,35 +102,6 @@ namespace CodeImp.DoomBuilder.IO
                 { 259, new int[4] { 1, 0, 2, 0} }
             };
 
-            //Dictionary contents: floor, ceiling (0 = no slope, 1 = slope front, 2 = slope back)
-            slopeTypes = new Dictionary<int, int[]>() {
-                { 700, new int[2] { 1, 0 } },
-                { 701, new int[2] { 0, 1 } },
-                { 702, new int[2] { 1, 1 } },
-                { 703, new int[2] { 1, 2 } },
-                { 710, new int[2] { 2, 0 } },
-                { 711, new int[2] { 0, 2 } },
-                { 712, new int[2] { 2, 2 } },
-                { 713, new int[2] { 2, 1 } }
-            };
-
-            //Dictionary contents: floor, ceiling (0 = no slope, 1 = slope front, 2 = slope back)
-            slopeCopyTypes = new Dictionary<int, int[]>() {
-                { 720, new int[2] { 1, 0 } },
-                { 721, new int[2] { 0, 1 } },
-                { 722, new int[2] { 1, 1 } },
-            };
-
-            //Dictionary contents:
-            //1. 0 = slope front, 1 = slope back
-            //2. 0 = slope floor, 1 = slope ceiling
-            vertexSlopeTypes = new Dictionary<int, int[]>() {
-                { 704, new int[2] { 0, 0 } },
-                { 705, new int[2] { 0, 1 } },
-                { 714, new int[2] { 1, 0 } },
-                { 715, new int[2] { 1, 1 } },
-            };
-
             translucentLineTypes = new Dictionary<int, float>() {
                 { 900, 0.9f },
                 { 901, 0.8f },

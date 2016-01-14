@@ -75,6 +75,7 @@ namespace CodeImp.DoomBuilder.Config
 		private bool obsolete; //mxd
 		private string obsoletemessage; //mxd
         private IDictionary<string, string> flags;
+        private int heightoffset;
 
 		//mxd. GLOOME rendering settings
 		private Thing.SpriteRenderMode rendermode;
@@ -119,13 +120,14 @@ namespace CodeImp.DoomBuilder.Config
 		public Thing.SpriteRenderMode RenderMode { get { return rendermode; } }
 		public bool RollSprite { get { return rollsprite; } }
 		public bool StickToPlane { get { return sticktoplane; } }
+        public int HeightOffset { get { return heightoffset; } }
 
-		#endregion
+        #endregion
 
-		#region ================== Constructor / Disposer
+        #region ================== Constructor / Disposer
 
-		// Constructor
-		internal ThingTypeInfo(int index)
+        // Constructor
+        internal ThingTypeInfo(int index)
 		{
 			// Initialize
 			this.index = index;
@@ -155,6 +157,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.xybillboard = false;
 			this.locksprite = false; //mxd
             this.flags = new Dictionary<string, string>();
+            this.heightoffset = 0;
 			
 			// We have no destructor
 			GC.SuppressFinalize(this);
@@ -195,9 +198,10 @@ namespace CodeImp.DoomBuilder.Config
 			this.classname = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".class", String.Empty); //mxd
             this.flags = new Dictionary<string,string>(cat.Flags);
             ReadThingSpecificFlags(cfg);
-			
-			// Read the args
-			for(int i = 0; i < Linedef.NUM_ARGS; i++)
+            this.heightoffset = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".flags8height", cat.HeightOffset);
+
+            // Read the args
+            for (int i = 0; i < Linedef.NUM_ARGS; i++)
 				this.args[i] = new ArgumentInfo(cfg, "thingtypes." + cat.Name + "." + key, i, enums);
 			
 			// Safety
@@ -247,6 +251,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.locksprite = false;
             this.flags = new Dictionary<string, string>(cat.Flags);
             ReadThingSpecificFlags(cfg);
+            this.heightoffset = cat.HeightOffset;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -293,6 +298,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.absolutez = cat.AbsoluteZ;
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
             this.flags = new Dictionary<string, string>(cat.Flags);
+            this.heightoffset = cat.HeightOffset;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -336,6 +342,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.absolutez = cat.AbsoluteZ;
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
             this.flags = new Dictionary<string, string>(cat.Flags);
+            this.heightoffset = cat.HeightOffset;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -381,6 +388,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.xybillboard = other.xybillboard; //mxd
 			this.spritescale = new SizeF(other.spritescale.Width, other.spritescale.Height);
             this.flags = new Dictionary<string, string>(other.flags);
+            this.heightoffset = other.heightoffset;
 
             //mxd. Copy GLOOME properties
             this.rendermode = other.rendermode;

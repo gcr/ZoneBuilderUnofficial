@@ -130,7 +130,6 @@ namespace CodeImp.DoomBuilder.Map
         }
         public bool IsReverse { get { return General.Map.SRB2 && !Unflippable && IsFlagSet("2"); } }
         public bool Unflippable { get { return General.Map.FormatInterface.UnflippableTypes.Contains(Type); } }
-        public bool IsFloatable { get { return General.Map.FormatInterface.FloatableTypes.Contains(Type); } }
         public bool CenterHitbox { get { return General.Map.FormatInterface.CenterHitboxTypes.Contains(Type); } }
         public bool IsNiGHTSPathItem { get { return General.Map.FormatInterface.AxisType == Type 
                                                 || General.Map.FormatInterface.AxisTransferType == Type

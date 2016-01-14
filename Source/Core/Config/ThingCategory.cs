@@ -59,6 +59,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool fixedrotation; //mxd
 		private readonly bool absolutez;
 		private readonly float spritescale;
+        private readonly int heightoffset;
 		
 		// Disposing
 		private bool isdisposed;
@@ -92,13 +93,14 @@ namespace CodeImp.DoomBuilder.Config
 		public bool AbsoluteZ { get { return absolutez; } }
 		public float SpriteScale { get { return spritescale; } }
 		public List<ThingTypeInfo> Things { get { return things; } }
+        public int HeightOffset { get { return heightoffset; } }
 
-		#endregion
+        #endregion
 
-		#region ================== Constructor / Disposer
-		
-		// Constructor
-		internal ThingCategory(ThingCategory parent, string name, string title)
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        internal ThingCategory(ThingCategory parent, string name, string title)
 		{
 			// Initialize
 			this.name = name;
@@ -124,6 +126,7 @@ namespace CodeImp.DoomBuilder.Config
 				this.fixedrotation = parent.fixedrotation;
 				this.absolutez = parent.absolutez;
 				this.spritescale = parent.spritescale;
+                this.heightoffset = parent.heightoffset;
 			}
 			// Set default properties
 			else
@@ -143,7 +146,8 @@ namespace CodeImp.DoomBuilder.Config
 				this.fixedrotation = false; //mxd
 				this.absolutez = false;
 				this.spritescale = 1.0f;
-			}
+                this.heightoffset = 0;
+            }
 			
 			// We have no destructor
 			GC.SuppressFinalize(this);
@@ -198,7 +202,8 @@ namespace CodeImp.DoomBuilder.Config
 				this.fixedrotation = cfg.ReadSetting("thingtypes." + name + ".fixedrotation", parent.fixedrotation);
 				this.absolutez = cfg.ReadSetting("thingtypes." + name + ".absolutez", parent.absolutez);
 				this.spritescale = cfg.ReadSetting("thingtypes." + name + ".spritescale", parent.spritescale);
-			}
+                this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", parent.heightoffset);
+            }
 			else
 			{
 				this.sprite = cfg.ReadSetting("thingtypes." + name + ".sprite", "");
@@ -216,10 +221,11 @@ namespace CodeImp.DoomBuilder.Config
 				this.fixedrotation = cfg.ReadSetting("thingtypes." + name + ".fixedrotation", false); //mxd
 				this.absolutez = cfg.ReadSetting("thingtypes." + name + ".absolutez", false);
 				this.spritescale = cfg.ReadSetting("thingtypes." + name + ".spritescale", 1.0f);
-			}
-			
-			// Safety
-			if(this.radius < 4f) this.radius = 8f;
+                this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", 0);
+            }
+
+            // Safety
+            if (this.radius < 4f) this.radius = 8f;
 			
 			// Go for all items in category
 			IDictionary dic = cfg.ReadSetting("thingtypes." + name, new Hashtable());

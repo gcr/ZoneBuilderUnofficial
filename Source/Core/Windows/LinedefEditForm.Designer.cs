@@ -29,83 +29,83 @@ namespace CodeImp.DoomBuilder.Windows
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.Label label2;
-            System.Windows.Forms.Label label3;
-            System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label11;
             System.Windows.Forms.Label label5;
+            System.Windows.Forms.Label label4;
+            System.Windows.Forms.Label label3;
+            System.Windows.Forms.Label label12;
             System.Windows.Forms.Label label8;
             System.Windows.Forms.Label label9;
             System.Windows.Forms.Label label10;
-            System.Windows.Forms.Label label11;
-            System.Windows.Forms.Label label12;
             System.Windows.Forms.Label activationlabel;
-            this.labelFrontTextureOffset = new System.Windows.Forms.Label();
-            this.labelBackTextureOffset = new System.Windows.Forms.Label();
-            this.cancel = new System.Windows.Forms.Button();
+            System.Windows.Forms.Label label2;
+            this.tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.browseaction = new System.Windows.Forms.Button();
             this.apply = new System.Windows.Forms.Button();
+            this.cancel = new System.Windows.Forms.Button();
+            this.panel = new System.Windows.Forms.Panel();
+            this.backside = new System.Windows.Forms.CheckBox();
+            this.frontside = new System.Windows.Forms.CheckBox();
+            this.frontgroup = new System.Windows.Forms.GroupBox();
+            this.labelFrontTextureOffset = new System.Windows.Forms.Label();
+            this.frontsector = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+            this.frontlow = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.frontmid = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.fronthigh = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.frontTextureOffset = new CodeImp.DoomBuilder.GZBuilder.Controls.PairedIntControl();
+            this.backgroup = new System.Windows.Forms.GroupBox();
+            this.labelBackTextureOffset = new System.Windows.Forms.Label();
+            this.backsector = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
+            this.backlow = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.backmid = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.backhigh = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
+            this.backTextureOffset = new CodeImp.DoomBuilder.GZBuilder.Controls.PairedIntControl();
+            this.flagsgroup = new System.Windows.Forms.GroupBox();
+            this.flags = new CodeImp.DoomBuilder.Controls.CheckboxArrayControl();
             this.actiongroup = new System.Windows.Forms.GroupBox();
             this.argscontrol = new CodeImp.DoomBuilder.Controls.ArgumentsControl();
             this.actionhelp = new CodeImp.DoomBuilder.Controls.ActionSpecialHelpButton();
             this.hexenpanel = new System.Windows.Forms.Panel();
             this.activation = new System.Windows.Forms.ComboBox();
             this.action = new CodeImp.DoomBuilder.Controls.ActionSelectorControl();
-            this.browseaction = new System.Windows.Forms.Button();
-            this.flagsgroup = new System.Windows.Forms.GroupBox();
-            this.flags = new CodeImp.DoomBuilder.Controls.CheckboxArrayControl();
             this.idgroup = new System.Windows.Forms.GroupBox();
             this.tagSelector = new CodeImp.DoomBuilder.GZBuilder.Controls.TagSelector();
-            this.frontside = new System.Windows.Forms.CheckBox();
-            this.frontgroup = new System.Windows.Forms.GroupBox();
-            this.frontsector = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-            this.frontlow = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.frontmid = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.fronthigh = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.frontTextureOffset = new CodeImp.DoomBuilder.GZBuilder.Controls.PairedIntControl();
-            this.backside = new System.Windows.Forms.CheckBox();
-            this.backgroup = new System.Windows.Forms.GroupBox();
-            this.backsector = new CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox();
-            this.backlow = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.backmid = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.backhigh = new CodeImp.DoomBuilder.Controls.TextureSelectorControl();
-            this.backTextureOffset = new CodeImp.DoomBuilder.GZBuilder.Controls.PairedIntControl();
-            this.panel = new System.Windows.Forms.Panel();
-            this.tooltip = new System.Windows.Forms.ToolTip(this.components);
-            label2 = new System.Windows.Forms.Label();
-            label3 = new System.Windows.Forms.Label();
-            label4 = new System.Windows.Forms.Label();
+            label11 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
+            label4 = new System.Windows.Forms.Label();
+            label3 = new System.Windows.Forms.Label();
+            label12 = new System.Windows.Forms.Label();
             label8 = new System.Windows.Forms.Label();
             label9 = new System.Windows.Forms.Label();
             label10 = new System.Windows.Forms.Label();
-            label11 = new System.Windows.Forms.Label();
-            label12 = new System.Windows.Forms.Label();
             activationlabel = new System.Windows.Forms.Label();
-            this.actiongroup.SuspendLayout();
-            this.hexenpanel.SuspendLayout();
-            this.flagsgroup.SuspendLayout();
-            this.idgroup.SuspendLayout();
+            label2 = new System.Windows.Forms.Label();
+            this.panel.SuspendLayout();
             this.frontgroup.SuspendLayout();
             this.backgroup.SuspendLayout();
-            this.panel.SuspendLayout();
+            this.flagsgroup.SuspendLayout();
+            this.actiongroup.SuspendLayout();
+            this.hexenpanel.SuspendLayout();
+            this.idgroup.SuspendLayout();
             this.SuspendLayout();
             // 
-            // label2
+            // label11
             // 
-            label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(15, 26);
-            label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(40, 13);
-            label2.TabIndex = 9;
-            label2.Text = "Action:";
+            label11.Location = new System.Drawing.Point(6, 40);
+            label11.Name = "label11";
+            label11.Size = new System.Drawing.Size(80, 14);
+            label11.TabIndex = 13;
+            label11.Text = "Sector Index:";
+            label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label3
+            // label5
             // 
-            label3.Location = new System.Drawing.Point(255, 13);
-            label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(83, 16);
-            label3.TabIndex = 3;
-            label3.Text = "Upper";
-            label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            label5.Location = new System.Drawing.Point(437, 13);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(83, 16);
+            label5.TabIndex = 5;
+            label5.Text = "Lower";
+            label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label4
             // 
@@ -116,14 +116,23 @@ namespace CodeImp.DoomBuilder.Windows
             label4.Text = "Middle";
             label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label5
+            // label3
             // 
-            label5.Location = new System.Drawing.Point(437, 13);
-            label5.Name = "label5";
-            label5.Size = new System.Drawing.Size(83, 16);
-            label5.TabIndex = 5;
-            label5.Text = "Lower";
-            label5.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            label3.Location = new System.Drawing.Point(255, 13);
+            label3.Name = "label3";
+            label3.Size = new System.Drawing.Size(83, 16);
+            label3.TabIndex = 3;
+            label3.Text = "Upper";
+            label3.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // label12
+            // 
+            label12.Location = new System.Drawing.Point(6, 40);
+            label12.Name = "label12";
+            label12.Size = new System.Drawing.Size(80, 14);
+            label12.TabIndex = 16;
+            label12.Text = "Sector Index:";
+            label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // label8
             // 
@@ -152,24 +161,6 @@ namespace CodeImp.DoomBuilder.Windows
             label10.Text = "Upper";
             label10.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label11
-            // 
-            label11.Location = new System.Drawing.Point(6, 40);
-            label11.Name = "label11";
-            label11.Size = new System.Drawing.Size(80, 14);
-            label11.TabIndex = 13;
-            label11.Text = "Sector Index:";
-            label11.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label12
-            // 
-            label12.Location = new System.Drawing.Point(6, 40);
-            label12.Name = "label12";
-            label12.Size = new System.Drawing.Size(80, 14);
-            label12.TabIndex = 16;
-            label12.Text = "Sector Index:";
-            label12.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
             // activationlabel
             // 
             activationlabel.AutoSize = true;
@@ -179,111 +170,14 @@ namespace CodeImp.DoomBuilder.Windows
             activationlabel.TabIndex = 10;
             activationlabel.Text = "Trigger:";
             // 
-            // labelFrontTextureOffset
+            // label2
             // 
-            this.labelFrontTextureOffset.Location = new System.Drawing.Point(6, 70);
-            this.labelFrontTextureOffset.Name = "labelFrontTextureOffset";
-            this.labelFrontTextureOffset.Size = new System.Drawing.Size(80, 14);
-            this.labelFrontTextureOffset.TabIndex = 42;
-            this.labelFrontTextureOffset.Text = "Texture Offset:";
-            this.labelFrontTextureOffset.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // labelBackTextureOffset
-            // 
-            this.labelBackTextureOffset.Location = new System.Drawing.Point(6, 70);
-            this.labelBackTextureOffset.Name = "labelBackTextureOffset";
-            this.labelBackTextureOffset.Size = new System.Drawing.Size(80, 14);
-            this.labelBackTextureOffset.TabIndex = 43;
-            this.labelBackTextureOffset.Text = "Texture Offset:";
-            this.labelBackTextureOffset.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // cancel
-            // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(453, 708);
-            this.cancel.Name = "cancel";
-            this.cancel.Size = new System.Drawing.Size(112, 25);
-            this.cancel.TabIndex = 2;
-            this.cancel.Text = "Cancel";
-            this.cancel.UseVisualStyleBackColor = true;
-            this.cancel.Click += new System.EventHandler(this.cancel_Click);
-            // 
-            // apply
-            // 
-            this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.apply.Location = new System.Drawing.Point(335, 708);
-            this.apply.Name = "apply";
-            this.apply.Size = new System.Drawing.Size(112, 25);
-            this.apply.TabIndex = 1;
-            this.apply.Text = "OK";
-            this.apply.UseVisualStyleBackColor = true;
-            this.apply.Click += new System.EventHandler(this.apply_Click);
-            // 
-            // actiongroup
-            // 
-            this.actiongroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.actiongroup.Controls.Add(this.argscontrol);
-            this.actiongroup.Controls.Add(this.actionhelp);
-            this.actiongroup.Controls.Add(this.hexenpanel);
-            this.actiongroup.Controls.Add(label2);
-            this.actiongroup.Controls.Add(this.action);
-            this.actiongroup.Controls.Add(this.browseaction);
-            this.actiongroup.Location = new System.Drawing.Point(6, 438);
-            this.actiongroup.Name = "actiongroup";
-            this.actiongroup.Size = new System.Drawing.Size(541, 176);
-            this.actiongroup.TabIndex = 1;
-            this.actiongroup.TabStop = false;
-            this.actiongroup.Text = " Action ";
-            // 
-            // argscontrol
-            // 
-            this.argscontrol.Location = new System.Drawing.Point(9, 52);
-            this.argscontrol.Name = "argscontrol";
-            this.argscontrol.Size = new System.Drawing.Size(526, 76);
-            this.argscontrol.TabIndex = 12;
-            this.argscontrol.Visible = false;
-            // 
-            // actionhelp
-            // 
-            this.actionhelp.Location = new System.Drawing.Point(505, 21);
-            this.actionhelp.Name = "actionhelp";
-            this.actionhelp.Size = new System.Drawing.Size(28, 25);
-            this.actionhelp.TabIndex = 11;
-            // 
-            // hexenpanel
-            // 
-            this.hexenpanel.Controls.Add(this.activation);
-            this.hexenpanel.Controls.Add(activationlabel);
-            this.hexenpanel.Location = new System.Drawing.Point(6, 134);
-            this.hexenpanel.Name = "hexenpanel";
-            this.hexenpanel.Size = new System.Drawing.Size(529, 36);
-            this.hexenpanel.TabIndex = 3;
-            this.hexenpanel.Visible = false;
-            // 
-            // activation
-            // 
-            this.activation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.activation.FormattingEnabled = true;
-            this.activation.Location = new System.Drawing.Point(56, 7);
-            this.activation.Name = "activation";
-            this.activation.Size = new System.Drawing.Size(470, 21);
-            this.activation.TabIndex = 0;
-            // 
-            // action
-            // 
-            this.action.BackColor = System.Drawing.Color.Transparent;
-            this.action.Cursor = System.Windows.Forms.Cursors.Default;
-            this.action.Empty = false;
-            this.action.GeneralizedCategories = null;
-            this.action.GeneralizedOptions = null;
-            this.action.Location = new System.Drawing.Point(62, 23);
-            this.action.Name = "action";
-            this.action.Size = new System.Drawing.Size(412, 21);
-            this.action.TabIndex = 0;
-            this.action.Value = 402;
-            this.action.ValueChanges += new System.EventHandler(this.action_ValueChanges);
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(15, 26);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(40, 13);
+            label2.TabIndex = 9;
+            label2.Text = "Action:";
             // 
             // browseaction
             // 
@@ -297,50 +191,56 @@ namespace CodeImp.DoomBuilder.Windows
             this.browseaction.UseVisualStyleBackColor = true;
             this.browseaction.Click += new System.EventHandler(this.browseaction_Click);
             // 
-            // flagsgroup
+            // apply
             // 
-            this.flagsgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.apply.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.apply.Location = new System.Drawing.Point(335, 728);
+            this.apply.Name = "apply";
+            this.apply.Size = new System.Drawing.Size(112, 25);
+            this.apply.TabIndex = 1;
+            this.apply.Text = "OK";
+            this.apply.UseVisualStyleBackColor = true;
+            this.apply.Click += new System.EventHandler(this.apply_Click);
+            // 
+            // cancel
+            // 
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancel.Location = new System.Drawing.Point(453, 728);
+            this.cancel.Name = "cancel";
+            this.cancel.Size = new System.Drawing.Size(112, 25);
+            this.cancel.TabIndex = 2;
+            this.cancel.Text = "Cancel";
+            this.cancel.UseVisualStyleBackColor = true;
+            this.cancel.Click += new System.EventHandler(this.cancel_Click);
+            // 
+            // panel
+            // 
+            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flagsgroup.Controls.Add(this.flags);
-            this.flagsgroup.Location = new System.Drawing.Point(6, 314);
-            this.flagsgroup.Name = "flagsgroup";
-            this.flagsgroup.Size = new System.Drawing.Size(541, 118);
-            this.flagsgroup.TabIndex = 0;
-            this.flagsgroup.TabStop = false;
-            this.flagsgroup.Text = " Flags";
+            this.panel.BackColor = System.Drawing.SystemColors.Window;
+            this.panel.Controls.Add(this.backside);
+            this.panel.Controls.Add(this.frontside);
+            this.panel.Controls.Add(this.frontgroup);
+            this.panel.Controls.Add(this.backgroup);
+            this.panel.Controls.Add(this.flagsgroup);
+            this.panel.Controls.Add(this.actiongroup);
+            this.panel.Controls.Add(this.idgroup);
+            this.panel.Location = new System.Drawing.Point(12, 12);
+            this.panel.Name = "panel";
+            this.panel.Size = new System.Drawing.Size(553, 706);
+            this.panel.TabIndex = 5;
             // 
-            // flags
+            // backside
             // 
-            this.flags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.flags.AutoScroll = true;
-            this.flags.Columns = 3;
-            this.flags.Location = new System.Drawing.Point(8, 17);
-            this.flags.Name = "flags";
-            this.flags.Size = new System.Drawing.Size(532, 96);
-            this.flags.TabIndex = 0;
-            this.flags.VerticalSpacing = 1;
-            this.flags.OnValueChanged += new System.EventHandler(this.flags_OnValueChanged);
-            // 
-            // idgroup
-            // 
-            this.idgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.idgroup.Controls.Add(this.tagSelector);
-            this.idgroup.Location = new System.Drawing.Point(6, 620);
-            this.idgroup.Name = "idgroup";
-            this.idgroup.Size = new System.Drawing.Size(541, 58);
-            this.idgroup.TabIndex = 2;
-            this.idgroup.TabStop = false;
-            this.idgroup.Text = " Identification ";
-            // 
-            // tagSelector
-            // 
-            this.tagSelector.Location = new System.Drawing.Point(19, 19);
-            this.tagSelector.Name = "tagSelector";
-            this.tagSelector.Size = new System.Drawing.Size(518, 34);
-            this.tagSelector.TabIndex = 0;
+            this.backside.AutoSize = true;
+            this.backside.Location = new System.Drawing.Point(17, 158);
+            this.backside.Name = "backside";
+            this.backside.Size = new System.Drawing.Size(75, 17);
+            this.backside.TabIndex = 0;
+            this.backside.Text = "Back Side";
+            this.backside.UseVisualStyleBackColor = true;
+            this.backside.CheckStateChanged += new System.EventHandler(this.backside_CheckStateChanged);
             // 
             // frontside
             // 
@@ -374,6 +274,15 @@ namespace CodeImp.DoomBuilder.Windows
             this.frontgroup.TabIndex = 1;
             this.frontgroup.TabStop = false;
             this.frontgroup.Text = "     ";
+            // 
+            // labelFrontTextureOffset
+            // 
+            this.labelFrontTextureOffset.Location = new System.Drawing.Point(6, 70);
+            this.labelFrontTextureOffset.Name = "labelFrontTextureOffset";
+            this.labelFrontTextureOffset.Size = new System.Drawing.Size(80, 14);
+            this.labelFrontTextureOffset.TabIndex = 42;
+            this.labelFrontTextureOffset.Text = "Texture Offset:";
+            this.labelFrontTextureOffset.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // frontsector
             // 
@@ -441,17 +350,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.frontTextureOffset.TabIndex = 41;
             this.frontTextureOffset.OnValuesChanged += new System.EventHandler(this.frontTextureOffset_OnValuesChanged);
             // 
-            // backside
-            // 
-            this.backside.AutoSize = true;
-            this.backside.Location = new System.Drawing.Point(17, 158);
-            this.backside.Name = "backside";
-            this.backside.Size = new System.Drawing.Size(75, 17);
-            this.backside.TabIndex = 0;
-            this.backside.Text = "Back Side";
-            this.backside.UseVisualStyleBackColor = true;
-            this.backside.CheckStateChanged += new System.EventHandler(this.backside_CheckStateChanged);
-            // 
             // backgroup
             // 
             this.backgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -473,6 +371,15 @@ namespace CodeImp.DoomBuilder.Windows
             this.backgroup.TabIndex = 1;
             this.backgroup.TabStop = false;
             this.backgroup.Text = "     ";
+            // 
+            // labelBackTextureOffset
+            // 
+            this.labelBackTextureOffset.Location = new System.Drawing.Point(6, 70);
+            this.labelBackTextureOffset.Name = "labelBackTextureOffset";
+            this.labelBackTextureOffset.Size = new System.Drawing.Size(80, 14);
+            this.labelBackTextureOffset.TabIndex = 43;
+            this.labelBackTextureOffset.Text = "Texture Offset:";
+            this.labelBackTextureOffset.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // backsector
             // 
@@ -540,22 +447,115 @@ namespace CodeImp.DoomBuilder.Windows
             this.backTextureOffset.TabIndex = 42;
             this.backTextureOffset.OnValuesChanged += new System.EventHandler(this.backTextureOffset_OnValuesChanged);
             // 
-            // panel
+            // flagsgroup
             // 
-            this.panel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.flagsgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel.BackColor = System.Drawing.SystemColors.Window;
-            this.panel.Controls.Add(this.backside);
-            this.panel.Controls.Add(this.frontside);
-            this.panel.Controls.Add(this.frontgroup);
-            this.panel.Controls.Add(this.backgroup);
-            this.panel.Controls.Add(this.flagsgroup);
-            this.panel.Controls.Add(this.actiongroup);
-            this.panel.Controls.Add(this.idgroup);
-            this.panel.Location = new System.Drawing.Point(12, 12);
-            this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(553, 686);
-            this.panel.TabIndex = 5;
+            this.flagsgroup.Controls.Add(this.flags);
+            this.flagsgroup.Location = new System.Drawing.Point(6, 314);
+            this.flagsgroup.Name = "flagsgroup";
+            this.flagsgroup.Size = new System.Drawing.Size(541, 138);
+            this.flagsgroup.TabIndex = 0;
+            this.flagsgroup.TabStop = false;
+            this.flagsgroup.Text = " Flags";
+            // 
+            // flags
+            // 
+            this.flags.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.flags.AutoScroll = true;
+            this.flags.Columns = 3;
+            this.flags.Location = new System.Drawing.Point(8, 17);
+            this.flags.Name = "flags";
+            this.flags.Size = new System.Drawing.Size(532, 116);
+            this.flags.TabIndex = 0;
+            this.flags.VerticalSpacing = 1;
+            this.flags.OnValueChanged += new System.EventHandler(this.flags_OnValueChanged);
+            // 
+            // actiongroup
+            // 
+            this.actiongroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.actiongroup.Controls.Add(this.argscontrol);
+            this.actiongroup.Controls.Add(this.actionhelp);
+            this.actiongroup.Controls.Add(this.hexenpanel);
+            this.actiongroup.Controls.Add(label2);
+            this.actiongroup.Controls.Add(this.action);
+            this.actiongroup.Controls.Add(this.browseaction);
+            this.actiongroup.Location = new System.Drawing.Point(6, 458);
+            this.actiongroup.Name = "actiongroup";
+            this.actiongroup.Size = new System.Drawing.Size(541, 176);
+            this.actiongroup.TabIndex = 1;
+            this.actiongroup.TabStop = false;
+            this.actiongroup.Text = " Action ";
+            // 
+            // argscontrol
+            // 
+            this.argscontrol.Location = new System.Drawing.Point(9, 52);
+            this.argscontrol.Name = "argscontrol";
+            this.argscontrol.Size = new System.Drawing.Size(526, 76);
+            this.argscontrol.TabIndex = 12;
+            this.argscontrol.Visible = false;
+            // 
+            // actionhelp
+            // 
+            this.actionhelp.Location = new System.Drawing.Point(505, 21);
+            this.actionhelp.Name = "actionhelp";
+            this.actionhelp.Size = new System.Drawing.Size(28, 25);
+            this.actionhelp.TabIndex = 11;
+            // 
+            // hexenpanel
+            // 
+            this.hexenpanel.Controls.Add(this.activation);
+            this.hexenpanel.Controls.Add(activationlabel);
+            this.hexenpanel.Location = new System.Drawing.Point(6, 134);
+            this.hexenpanel.Name = "hexenpanel";
+            this.hexenpanel.Size = new System.Drawing.Size(529, 36);
+            this.hexenpanel.TabIndex = 3;
+            this.hexenpanel.Visible = false;
+            // 
+            // activation
+            // 
+            this.activation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.activation.FormattingEnabled = true;
+            this.activation.Location = new System.Drawing.Point(56, 7);
+            this.activation.Name = "activation";
+            this.activation.Size = new System.Drawing.Size(470, 21);
+            this.activation.TabIndex = 0;
+            // 
+            // action
+            // 
+            this.action.BackColor = System.Drawing.Color.Transparent;
+            this.action.Cursor = System.Windows.Forms.Cursors.Default;
+            this.action.Empty = false;
+            this.action.GeneralizedCategories = null;
+            this.action.GeneralizedOptions = null;
+            this.action.Location = new System.Drawing.Point(62, 23);
+            this.action.Name = "action";
+            this.action.Size = new System.Drawing.Size(412, 21);
+            this.action.TabIndex = 0;
+            this.action.Value = 402;
+            this.action.ValueChanges += new System.EventHandler(this.action_ValueChanges);
+            // 
+            // idgroup
+            // 
+            this.idgroup.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.idgroup.Controls.Add(this.tagSelector);
+            this.idgroup.Location = new System.Drawing.Point(6, 640);
+            this.idgroup.Name = "idgroup";
+            this.idgroup.Size = new System.Drawing.Size(541, 58);
+            this.idgroup.TabIndex = 2;
+            this.idgroup.TabStop = false;
+            this.idgroup.Text = " Identification ";
+            // 
+            // tagSelector
+            // 
+            this.tagSelector.Location = new System.Drawing.Point(19, 19);
+            this.tagSelector.Name = "tagSelector";
+            this.tagSelector.Size = new System.Drawing.Size(518, 34);
+            this.tagSelector.TabIndex = 0;
             // 
             // LinedefEditForm
             // 
@@ -563,7 +563,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(577, 740);
+            this.ClientSize = new System.Drawing.Size(577, 760);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.apply);
             this.Controls.Add(this.panel);
@@ -578,16 +578,16 @@ namespace CodeImp.DoomBuilder.Windows
             this.Text = "Edit Linedef";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LinedefEditForm_FormClosing);
             this.HelpRequested += new System.Windows.Forms.HelpEventHandler(this.LinedefEditForm_HelpRequested);
+            this.panel.ResumeLayout(false);
+            this.panel.PerformLayout();
+            this.frontgroup.ResumeLayout(false);
+            this.backgroup.ResumeLayout(false);
+            this.flagsgroup.ResumeLayout(false);
             this.actiongroup.ResumeLayout(false);
             this.actiongroup.PerformLayout();
             this.hexenpanel.ResumeLayout(false);
             this.hexenpanel.PerformLayout();
-            this.flagsgroup.ResumeLayout(false);
             this.idgroup.ResumeLayout(false);
-            this.frontgroup.ResumeLayout(false);
-            this.backgroup.ResumeLayout(false);
-            this.panel.ResumeLayout(false);
-            this.panel.PerformLayout();
             this.ResumeLayout(false);
 
 		}

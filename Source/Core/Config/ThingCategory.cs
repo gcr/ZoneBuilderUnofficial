@@ -42,6 +42,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly string title;
 		private readonly bool sorted;
 		private readonly List<ThingCategory> children; //mxd 
+        private IDictionary<string, string> flags;
 
 		// Thing properties for inheritance
 		private readonly string sprite;
@@ -74,7 +75,8 @@ namespace CodeImp.DoomBuilder.Config
 		public string Sprite { get { return sprite; } }
 		public bool Sorted { get { return sorted; } }
 		public List<ThingCategory> Children { get { return children; } } //mxd
-		public int Color { get { return color; } }
+        public IDictionary<string,string> Flags { get { return flags; } }
+        public int Color { get { return color; } }
 		public float Alpha { get { return alpha; } } //mxd
 		public string RenderStyle { get { return renderstyle; } } //mxd
 		public int Arrow { get { return arrow; } }
@@ -148,12 +150,14 @@ namespace CodeImp.DoomBuilder.Config
 		}
 		
 		// Constructor
-		internal ThingCategory(Configuration cfg, ThingCategory parent, string name, IDictionary<string, EnumList> enums)
+		internal ThingCategory(Configuration cfg, ThingCategory parent, string name, IDictionary<string, EnumList> enums, IDictionary<string,string> flags)
 		{
 			// Initialize
 			this.name = name;
 			this.things = new List<ThingTypeInfo>();
 			this.children = new List<ThingCategory>();
+            this.flags = new Dictionary<string,string>(flags);
+            ReadCategorySpecificFlags(cfg);
 			
 			// Read properties
 			this.title = cfg.ReadSetting("thingtypes." + name + ".title", name);
@@ -236,13 +240,13 @@ namespace CodeImp.DoomBuilder.Config
 					else if(de.Value is string)
 					{
 						// Interpret this as the title
-						things.Add(new ThingTypeInfo(this, index, de.Value.ToString()));
+						things.Add(new ThingTypeInfo(this, index, de.Value.ToString(),cfg));
 					}
 				}
 				//mxd. This should be a child category 
 				else if(de.Value is IDictionary)
 				{
-					ThingCategory child = new ThingCategory(cfg, this, name + "." + de.Key, enums);
+					ThingCategory child = new ThingCategory(cfg, this, name + "." + de.Key, enums,flags);
 					if(child.IsValid && child.things.Count > 0)
 					{
 						if(cats.ContainsKey(child.title.ToLowerInvariant()))
@@ -267,6 +271,7 @@ namespace CodeImp.DoomBuilder.Config
 			{
 				// Clean up
 				things = null;
+                flags = null;
 
 				//mxd. Dispose children (oh so cruel!!11)
 				foreach(ThingCategory tc in children) tc.Dispose();
@@ -308,8 +313,18 @@ namespace CodeImp.DoomBuilder.Config
 		{
 			return title;
 		}
-		
-		#endregion
-	}
+
+        private void ReadCategorySpecificFlags(Configuration cfg)
+        {
+            Dictionary<string, string> newflags = new Dictionary<string, string>(flags);
+            foreach (KeyValuePair<string,string> p in flags)
+            {
+                newflags[p.Key] = cfg.ReadSetting("thingtypes." + name + ".flags" + p.Key + "text", p.Value);
+            }
+            flags = newflags;
+        }
+
+        #endregion
+    }
 }
 

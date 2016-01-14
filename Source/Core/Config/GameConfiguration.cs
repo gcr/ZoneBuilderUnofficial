@@ -504,7 +504,7 @@ namespace CodeImp.DoomBuilder.Config
 				if(de.Value is IDictionary)
 				{
 					// Make a category
-					ThingCategory thingcat = new ThingCategory(cfg, null, de.Key.ToString(), enums);
+					ThingCategory thingcat = new ThingCategory(cfg, null, de.Key.ToString(), enums, thingflags);
 
 					//mxd. Otherwise nesting problems might occure
 					if(thingcat.IsValid)

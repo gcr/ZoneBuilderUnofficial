@@ -194,7 +194,8 @@ namespace CodeImp.DoomBuilder.Controls
 
 			//mxd. Flags
 			flags.Items.Clear();
-			foreach(KeyValuePair<string, string> group in General.Map.Config.ThingFlags)
+            IDictionary<string, string> flagList = (ti == null || ti.Flags.Count == 0) ? General.Map.Config.ThingFlags : ti.Flags;
+            foreach (KeyValuePair<string, string> group in flagList)
 			{
 				if(t.Flags.ContainsKey(group.Key) && t.Flags[group.Key])
 					flags.Items.Add(new ListViewItem(group.Value) { Checked = true });

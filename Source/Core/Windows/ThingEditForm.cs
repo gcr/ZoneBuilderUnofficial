@@ -188,9 +188,12 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			// Set type
 			thingtype.SelectType(ft.Type);
-			
-			// Flags
-			foreach(CheckBox c in flags.Checkboxes)
+
+            // Flags
+            ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(ft.Type);
+            if (ti != null) flags.UpdateCheckboxes(ti.Flags);
+
+            foreach (CheckBox c in flags.Checkboxes)
 				if(ft.Flags.ContainsKey(c.Tag.ToString())) c.Checked = ft.Flags[c.Tag.ToString()];
 			
 			// Coordination
@@ -618,7 +621,9 @@ namespace CodeImp.DoomBuilder.Windows
 				t.UpdateConfiguration();
 			}
 
-			General.Map.IsChanged = true;
+            if (thinginfo != null) flags.UpdateCheckboxes(thinginfo.Flags);
+
+            General.Map.IsChanged = true;
 			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
 		}
 

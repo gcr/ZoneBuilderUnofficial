@@ -74,6 +74,7 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool locksprite; //mxd
 		private bool obsolete; //mxd
 		private string obsoletemessage; //mxd
+        private IDictionary<string, string> flags;
 
 		//mxd. GLOOME rendering settings
 		private Thing.SpriteRenderMode rendermode;
@@ -108,7 +109,8 @@ namespace CodeImp.DoomBuilder.Config
 		public bool IsNull { get { return (index == 0); } }
 		public bool IsObsolete { get { return obsolete; } } //mxd
 		public string ObsoleteMessage { get { return obsoletemessage; } } //mxd
-		public bool AbsoluteZ { get { return absolutez; } }
+        public IDictionary<string, string> Flags { get { return flags; } }
+        public bool AbsoluteZ { get { return absolutez; } }
 		public bool XYBillboard { get { return xybillboard; } } //mxd
 		public SizeF SpriteScale { get { return spritescale; } }
 		public string ClassName { get { return classname; } } //mxd. Need this to add model overrides for things defined in configs
@@ -152,6 +154,7 @@ namespace CodeImp.DoomBuilder.Config
 			this.absolutez = false;
 			this.xybillboard = false;
 			this.locksprite = false; //mxd
+            this.flags = new Dictionary<string, string>();
 			
 			// We have no destructor
 			GC.SuppressFinalize(this);
@@ -190,6 +193,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.spritescale = new SizeF(sscale, sscale);
 			this.locksprite = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".locksprite", false); //mxd
 			this.classname = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".class", String.Empty); //mxd
+            this.flags = new Dictionary<string,string>(cat.Flags);
+            ReadThingSpecificFlags(cfg);
 			
 			// Read the args
 			for(int i = 0; i < Linedef.NUM_ARGS; i++)
@@ -210,7 +215,7 @@ namespace CodeImp.DoomBuilder.Config
 		}
 
 		// Constructor
-		public ThingTypeInfo(ThingCategory cat, int index, string title)
+		public ThingTypeInfo(ThingCategory cat, int index, string title, Configuration cfg)
 		{
 			// Initialize
 			this.index = index;
@@ -240,9 +245,11 @@ namespace CodeImp.DoomBuilder.Config
 			this.absolutez = cat.AbsoluteZ;
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
 			this.locksprite = false;
+            this.flags = new Dictionary<string, string>(cat.Flags);
+            ReadThingSpecificFlags(cfg);
 
-			// Safety
-			if(this.radius < 4f) this.radius = 8f;
+            // Safety
+            if (this.radius < 4f) this.radius = 8f;
 			if(this.hangs && this.absolutez) this.hangs = false; //mxd
 			
 			// Make long name for sprite lookup
@@ -285,9 +292,10 @@ namespace CodeImp.DoomBuilder.Config
 			this.fixedrotation = cat.FixedRotation; //mxd
 			this.absolutez = cat.AbsoluteZ;
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
+            this.flags = new Dictionary<string, string>(cat.Flags);
 
-			// Safety
-			if(this.radius < 4f) this.radius = 8f;
+            // Safety
+            if (this.radius < 4f) this.radius = 8f;
 			if(this.hangs && this.absolutez) this.hangs = false; //mxd
 			
 			// Apply settings from actor
@@ -327,9 +335,10 @@ namespace CodeImp.DoomBuilder.Config
 			this.fixedrotation = cat.FixedRotation; //mxd
 			this.absolutez = cat.AbsoluteZ;
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
+            this.flags = new Dictionary<string, string>(cat.Flags);
 
-			// Safety
-			if(this.radius < 4f) this.radius = 8f;
+            // Safety
+            if (this.radius < 4f) this.radius = 8f;
 			if(this.hangs && this.absolutez) this.hangs = false; //mxd
 
 			// Apply settings from actor
@@ -371,9 +380,10 @@ namespace CodeImp.DoomBuilder.Config
 			this.absolutez = other.absolutez;
 			this.xybillboard = other.xybillboard; //mxd
 			this.spritescale = new SizeF(other.spritescale.Width, other.spritescale.Height);
+            this.flags = new Dictionary<string, string>(other.flags);
 
-			//mxd. Copy GLOOME properties
-			this.rendermode = other.rendermode;
+            //mxd. Copy GLOOME properties
+            this.rendermode = other.rendermode;
 			this.sticktoplane = other.sticktoplane;
 			this.rollsprite = other.rollsprite;
 
@@ -512,7 +522,17 @@ namespace CodeImp.DoomBuilder.Config
 		{
 			return title + " (" + index + ")";
 		}
-		
+        
+        private void ReadThingSpecificFlags(Configuration cfg)
+        {
+            Dictionary<string, string> newflags = new Dictionary<string, string>(flags);
+            string key = index.ToString(CultureInfo.InvariantCulture);
+            foreach (KeyValuePair<string,string> p in flags)
+            {
+                newflags[p.Key] = cfg.ReadSetting("thingtypes." + category.Name + "." + key + ".flags" + p.Key + "text", p.Value);
+            }
+            flags = newflags;
+        }
 		#endregion
 	}
 }

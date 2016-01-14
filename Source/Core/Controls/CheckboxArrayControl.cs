@@ -71,6 +71,16 @@ namespace CodeImp.DoomBuilder.Controls
 			return c;
 		}
 
+        public void UpdateCheckboxes(IDictionary<string,string> newflags)
+        {
+            int i = 0;
+            foreach (KeyValuePair<string,string> p in newflags)
+            {
+                checkboxes[i].Text = p.Value;
+                i++;
+            }
+        }
+
 		//mxd
 		public int GetWidth() 
 		{

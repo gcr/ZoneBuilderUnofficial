@@ -60,9 +60,11 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool absolutez;
 		private readonly float spritescale;
         private readonly int heightoffset;
-		
-		// Disposing
-		private bool isdisposed;
+        private readonly bool isUnflippable;
+        private readonly bool ignoreZ;
+
+        // Disposing
+        private bool isdisposed;
 
 		//mxd. Validity
 		private bool isinvalid;
@@ -94,7 +96,8 @@ namespace CodeImp.DoomBuilder.Config
 		public float SpriteScale { get { return spritescale; } }
 		public List<ThingTypeInfo> Things { get { return things; } }
         public int HeightOffset { get { return heightoffset; } }
-
+        public bool IsUnflippable { get { return isUnflippable; } }
+        public bool IgnoreZ { get { return ignoreZ; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -127,7 +130,9 @@ namespace CodeImp.DoomBuilder.Config
 				this.absolutez = parent.absolutez;
 				this.spritescale = parent.spritescale;
                 this.heightoffset = parent.heightoffset;
-			}
+                this.isUnflippable = parent.isUnflippable;
+                this.ignoreZ = parent.ignoreZ;
+            }
 			// Set default properties
 			else
 			{
@@ -147,6 +152,8 @@ namespace CodeImp.DoomBuilder.Config
 				this.absolutez = false;
 				this.spritescale = 1.0f;
                 this.heightoffset = 0;
+                this.isUnflippable = false;
+                this.ignoreZ = false;
             }
 			
 			// We have no destructor
@@ -203,6 +210,8 @@ namespace CodeImp.DoomBuilder.Config
 				this.absolutez = cfg.ReadSetting("thingtypes." + name + ".absolutez", parent.absolutez);
 				this.spritescale = cfg.ReadSetting("thingtypes." + name + ".spritescale", parent.spritescale);
                 this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", parent.heightoffset);
+                this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", parent.isUnflippable);
+                this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", parent.ignoreZ);
             }
 			else
 			{
@@ -222,6 +231,8 @@ namespace CodeImp.DoomBuilder.Config
 				this.absolutez = cfg.ReadSetting("thingtypes." + name + ".absolutez", false);
 				this.spritescale = cfg.ReadSetting("thingtypes." + name + ".spritescale", 1.0f);
                 this.heightoffset = cfg.ReadSetting("thingtypes." + name + ".flags8height", 0);
+                this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", false);
+                this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", false);
             }
 
             // Safety

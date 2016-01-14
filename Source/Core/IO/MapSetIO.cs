@@ -50,7 +50,6 @@ namespace CodeImp.DoomBuilder.IO
         protected Dictionary<int, int[]> slopeCopyTypes;
         protected Dictionary<int, int[]> vertexSlopeTypes;
         protected Dictionary<int, float> translucentLineTypes;
-        protected List<int> unflippableTypes;
         protected List<int> startTypes;
         protected List<int> centerHitboxTypes;
         #endregion
@@ -111,7 +110,6 @@ namespace CodeImp.DoomBuilder.IO
         public abstract int AxisType { get; }
         public abstract int AxisTransferType { get; }
         public abstract int AxisTransferLineType { get; }
-        public List<int> UnflippableTypes { get { return unflippableTypes; } }
         public List<int> StartTypes { get { return startTypes; } }
         public List<int> CenterHitboxTypes { get { return centerHitboxTypes; } }
         #endregion

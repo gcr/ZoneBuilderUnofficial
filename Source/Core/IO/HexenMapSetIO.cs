@@ -47,7 +47,6 @@ namespace CodeImp.DoomBuilder.IO
             slopeCopyTypes = new Dictionary<int, int[]>() { { 118, new int[2] { -1, -1 } } };
             vertexSlopeTypes = new Dictionary<int, int[]>() { };
             translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
-            unflippableTypes = new List<int>();
             startTypes = new List<int>();
             centerHitboxTypes = new List<int>();
         }

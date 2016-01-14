@@ -76,9 +76,11 @@ namespace CodeImp.DoomBuilder.Config
 		private string obsoletemessage; //mxd
         private IDictionary<string, string> flags;
         private int heightoffset;
+        private bool isUnflippable;
+        private bool ignoreZ;
 
-		//mxd. GLOOME rendering settings
-		private Thing.SpriteRenderMode rendermode;
+        //mxd. GLOOME rendering settings
+        private Thing.SpriteRenderMode rendermode;
 		private bool rollsprite;
 		private bool sticktoplane;
 		
@@ -121,7 +123,8 @@ namespace CodeImp.DoomBuilder.Config
 		public bool RollSprite { get { return rollsprite; } }
 		public bool StickToPlane { get { return sticktoplane; } }
         public int HeightOffset { get { return heightoffset; } }
-
+        public bool IsUnflippable { get { return isUnflippable; } }
+        public bool IgnoreZ { get { return ignoreZ; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -158,9 +161,11 @@ namespace CodeImp.DoomBuilder.Config
 			this.locksprite = false; //mxd
             this.flags = new Dictionary<string, string>();
             this.heightoffset = 0;
-			
-			// We have no destructor
-			GC.SuppressFinalize(this);
+            this.isUnflippable = false;
+            this.ignoreZ = false;
+
+            // We have no destructor
+            GC.SuppressFinalize(this);
 		}
 
 		// Constructor
@@ -199,6 +204,8 @@ namespace CodeImp.DoomBuilder.Config
             this.flags = new Dictionary<string,string>(cat.Flags);
             ReadThingSpecificFlags(cfg);
             this.heightoffset = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".flags8height", cat.HeightOffset);
+            this.isUnflippable = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".unflippable", cat.IsUnflippable);
+            this.ignoreZ = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".ignoreZ", cat.IgnoreZ);
 
             // Read the args
             for (int i = 0; i < Linedef.NUM_ARGS; i++)
@@ -252,6 +259,8 @@ namespace CodeImp.DoomBuilder.Config
             this.flags = new Dictionary<string, string>(cat.Flags);
             ReadThingSpecificFlags(cfg);
             this.heightoffset = cat.HeightOffset;
+            this.isUnflippable = cat.IsUnflippable;
+            this.ignoreZ = cat.IgnoreZ;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -299,6 +308,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
             this.flags = new Dictionary<string, string>(cat.Flags);
             this.heightoffset = cat.HeightOffset;
+            this.isUnflippable = cat.IsUnflippable;
+            this.ignoreZ = cat.IgnoreZ;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -343,6 +354,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
             this.flags = new Dictionary<string, string>(cat.Flags);
             this.heightoffset = cat.HeightOffset;
+            this.isUnflippable = cat.IsUnflippable;
+            this.ignoreZ = cat.IgnoreZ;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -389,6 +402,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.spritescale = new SizeF(other.spritescale.Width, other.spritescale.Height);
             this.flags = new Dictionary<string, string>(other.flags);
             this.heightoffset = other.heightoffset;
+            this.isUnflippable = other.isUnflippable;
+            this.ignoreZ = other.ignoreZ;
 
             //mxd. Copy GLOOME properties
             this.rendermode = other.rendermode;

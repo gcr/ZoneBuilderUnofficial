@@ -82,7 +82,6 @@ namespace CodeImp.DoomBuilder.IO
         int AxisType { get; }
         int AxisTransferType { get; }
         int AxisTransferLineType { get; }
-        List<int> UnflippableTypes { get; }
         List<int> StartTypes { get; }
         List<int> CenterHitboxTypes { get; }
     }

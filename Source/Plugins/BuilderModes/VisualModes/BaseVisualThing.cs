@@ -428,7 +428,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     pos.z = sd.Floor.sector.FloorHeight + Thing.Position.z - Thing.Height/2;
                 }
             }
-            else if (Thing.IsNiGHTSPathItem)
+            else if (info.IgnoreZ)
             {
                 //Z position is always 0.
                 if (Thing.Sector != null)
@@ -828,7 +828,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// Raise/lower thing
 		public void OnChangeTargetHeight(int amount)
 		{
-            if (Thing.IsNiGHTSPathItem) return; //NiGHTS path items have no height.
+            if (info.IgnoreZ) return;
 
 			if(General.Map.FormatInterface.HasThingHeight)
 			{

@@ -191,7 +191,8 @@ namespace CodeImp.DoomBuilder.Windows
 
             // Flags
             ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(ft.Type);
-            if (ti != null) flags.UpdateCheckboxes(ti.Flags);
+            IDictionary<string, string> newFlags = (ti == null || ti.Flags.Count == 0) ? General.Map.Config.ThingFlags : ti.Flags;
+            flags.UpdateCheckboxes(newFlags);
 
             foreach (CheckBox c in flags.Checkboxes)
 				if(ft.Flags.ContainsKey(c.Tag.ToString())) c.Checked = ft.Flags[c.Tag.ToString()];
@@ -621,7 +622,8 @@ namespace CodeImp.DoomBuilder.Windows
 				t.UpdateConfiguration();
 			}
 
-            if (thinginfo != null) flags.UpdateCheckboxes(thinginfo.Flags);
+            IDictionary<string, string> newFlags = (thinginfo == null || thinginfo.Flags.Count == 0) ? General.Map.Config.ThingFlags : thinginfo.Flags;
+            flags.UpdateCheckboxes(newFlags);
 
             General.Map.IsChanged = true;
 			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);

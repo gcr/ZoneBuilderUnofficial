@@ -173,9 +173,13 @@ namespace CodeImp.DoomBuilder.Windows
 
 			// Get first line
 			Linedef fl = General.GetByIndex(lines, 0);
-			
-			// Flags
-			foreach(CheckBox c in flags.Checkboxes)
+
+            // Flags
+            LinedefActionInfo li = General.Map.Config.GetLinedefActionInfo(fl.Action);
+            IDictionary<string, string> newFlags = (li == null || li.Flags.Count == 0) ? General.Map.Config.LinedefFlags : li.Flags;
+            flags.UpdateCheckboxes(newFlags);
+
+            foreach (CheckBox c in flags.Checkboxes)
 				if(fl.Flags.ContainsKey(c.Tag.ToString())) c.Checked = fl.Flags[c.Tag.ToString()];
 			
 			// Activations
@@ -514,8 +518,12 @@ namespace CodeImp.DoomBuilder.Windows
 				//mxd. Update what must be updated
 				argscontrol.UpdateScriptControls();
 				actionhelp.UpdateAction(showaction);
-			} 
-		}
+
+                LinedefActionInfo li = General.Map.Config.GetLinedefActionInfo(action.Value);
+                IDictionary<string, string> newFlags = (li == null || li.Flags.Count == 0) ? General.Map.Config.LinedefFlags : li.Flags;
+                flags.UpdateCheckboxes(newFlags);
+            }
+        }
 
 		// Browse Action clicked
 		private void browseaction_Click(object sender, EventArgs e)

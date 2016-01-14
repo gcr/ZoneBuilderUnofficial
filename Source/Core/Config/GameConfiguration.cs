@@ -592,7 +592,7 @@ namespace CodeImp.DoomBuilder.Config
 						ac = cats[cde.Key.ToString()];
 					else
 					{
-						ac = new LinedefActionCategory(cde.Key.ToString(), cattitle);
+						ac = new LinedefActionCategory(cde.Key.ToString(), cattitle,cfg,linedefflags);
 						cats.Add(cde.Key.ToString(), ac);
 					}
 
@@ -610,7 +610,7 @@ namespace CodeImp.DoomBuilder.Config
 							if(de.Value is IDictionary)
 							{
 								// Make the line type
-								LinedefActionInfo ai = new LinedefActionInfo(actionnumber, cfg, cde.Key.ToString(), enums);
+								LinedefActionInfo ai = new LinedefActionInfo(actionnumber, cfg, ac, enums);
 
 								// Add action to category and sorted list
 								sortedlinedefactions.Add(ai);

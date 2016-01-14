@@ -470,8 +470,9 @@ namespace CodeImp.DoomBuilder.Controls
 					flags.Items.Add(new ListViewItem(ai.Title) { Checked = true, ForeColor = SystemColors.HotTrack });
 			}
 
-			// And flags
-			foreach(KeyValuePair<string, string> group in General.Map.Config.LinedefFlags) 
+            // And flags
+            IDictionary<string, string> flagList = (act == null || act.Flags.Count == 0) ? General.Map.Config.LinedefFlags : act.Flags;
+            foreach (KeyValuePair<string, string> group in flagList) 
 			{
 				if(l.Flags.ContainsKey(group.Key) && l.Flags[group.Key])
 					flags.Items.Add(new ListViewItem(group.Value) { Checked = true });

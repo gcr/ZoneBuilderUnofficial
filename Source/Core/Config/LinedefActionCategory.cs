@@ -16,6 +16,7 @@
 
 #region ================== Namespaces
 
+using CodeImp.DoomBuilder.IO;
 using System;
 using System.Collections.Generic;
 
@@ -34,9 +35,10 @@ namespace CodeImp.DoomBuilder.Config
 		// Category properties
 		private string name;
 		private string title;
+        private IDictionary<string, string> flags;
 
-		// Actions
-		private List<LinedefActionInfo> actions;
+        // Actions
+        private List<LinedefActionInfo> actions;
 
 		// Disposing
 		private bool isdisposed;
@@ -47,7 +49,8 @@ namespace CodeImp.DoomBuilder.Config
 
 		public string Name { get { return name; } }
 		public string Title { get { return title; } }
-		public List<LinedefActionInfo> Actions { get { return actions; } }
+        public IDictionary<string, string> Flags { get { return flags; } }
+        public List<LinedefActionInfo> Actions { get { return actions; } }
 		public bool IsDisposed { get { return isdisposed; } }
 
 		#endregion
@@ -55,15 +58,17 @@ namespace CodeImp.DoomBuilder.Config
 		#region ================== Constructor / Disposer
 
 		// Constructor
-		internal LinedefActionCategory(string name, string title)
+		internal LinedefActionCategory(string name, string title, Configuration cfg, IDictionary<string, string> flags)
 		{
 			// Initialize
 			this.name = name;
 			this.title = title;
 			this.actions = new List<LinedefActionInfo>();
+            this.flags = new Dictionary<string, string>(flags);
+            ReadCategorySpecificFlags(cfg);
 
-			// We have no destructor
-			GC.SuppressFinalize(this);
+            // We have no destructor
+            GC.SuppressFinalize(this);
 		}
 
 		// Disposer
@@ -101,7 +106,17 @@ namespace CodeImp.DoomBuilder.Config
 		public override string ToString()
 		{
 			return title;
-		}
+        }
+
+        private void ReadCategorySpecificFlags(Configuration cfg)
+        {
+            Dictionary<string, string> newflags = new Dictionary<string, string>(flags);
+            foreach (KeyValuePair<string, string> p in flags)
+            {
+                newflags[p.Key] = cfg.ReadSetting("thingtypes." + name + ".flags" + p.Key + "text", p.Value);
+            }
+            flags = newflags;
+        }
 		
 		#endregion
 	}

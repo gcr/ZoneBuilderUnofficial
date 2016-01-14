@@ -45,12 +45,13 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool isgeneralized;
 		private readonly bool isknown;
 		private readonly bool requiresactivation; //mxd
-		
-		#endregion
+        private IDictionary<string, string> flags;
 
-		#region ================== Properties
+        #endregion
 
-		public int Index { get { return index; } }
+        #region ================== Properties
+
+        public int Index { get { return index; } }
 		public string Prefix { get { return prefix; } }
 		public string Category { get { return category; } }
 		public string Name { get { return name; } }
@@ -61,19 +62,20 @@ namespace CodeImp.DoomBuilder.Config
 		public bool IsNull { get { return (index == 0); } }
 		public bool RequiresActivation { get { return requiresactivation; } } //mxd
 		public ArgumentInfo[] Args { get { return args; } }
+        public IDictionary<string, string> Flags { get { return flags; } }
 
-		#endregion
+        #endregion
 
-		#region ================== Constructor / Disposer
+        #region ================== Constructor / Disposer
 
-		// Constructor
-		internal LinedefActionInfo(int index, Configuration cfg, string categoryname, IDictionary<string, EnumList> enums)
+        // Constructor
+        internal LinedefActionInfo(int index, Configuration cfg, LinedefActionCategory ac, IDictionary<string, EnumList> enums)
 		{
-			string actionsetting = "linedeftypes." + categoryname + "." + index.ToString(CultureInfo.InvariantCulture);
+			string actionsetting = "linedeftypes." + ac.Name + "." + index.ToString(CultureInfo.InvariantCulture);
 			
 			// Initialize
 			this.index = index;
-			this.category = categoryname;
+			this.category = ac.Name;
 			this.args = new ArgumentInfo[Linedef.NUM_ARGS];
 			this.isgeneralized = false;
 			this.isknown = true;
@@ -85,9 +87,11 @@ namespace CodeImp.DoomBuilder.Config
 			this.requiresactivation = cfg.ReadSetting(actionsetting + ".requiresactivation", true); //mxd
 			this.title = this.prefix + " " + this.name;
 			this.title = this.title.Trim();
+            this.flags = new Dictionary<string, string>(ac.Flags);
+            ReadLinedefSpecificFlags(cfg);
 
-			// Read the args
-			for(int i = 0; i < Linedef.NUM_ARGS; i++)
+            // Read the args
+            for (int i = 0; i < Linedef.NUM_ARGS; i++)
 				this.args[i] = new ArgumentInfo(cfg, actionsetting, i, enums);
 			
 			// We have no destructor
@@ -102,7 +106,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.isknown = isknown;
 			this.requiresactivation = true; //mxd. Unused, set for consistency sake.
 			this.title = title;
-			this.args = new ArgumentInfo[Linedef.NUM_ARGS];
+            this.flags = new Dictionary<string, string>();
+            this.args = new ArgumentInfo[Linedef.NUM_ARGS];
 			for(int i = 0; i < Linedef.NUM_ARGS; i++)
 				this.args[i] = new ArgumentInfo(i);
 		}
@@ -123,8 +128,19 @@ namespace CodeImp.DoomBuilder.Config
 			if(this.index < other.index) return -1;
 			else if(this.index > other.index) return 1;
 			else return 0;
-		}
+        }
 
-		#endregion
-	}
+        private void ReadLinedefSpecificFlags(Configuration cfg)
+        {
+            Dictionary<string, string> newflags = new Dictionary<string, string>(flags);
+            string key = index.ToString(CultureInfo.InvariantCulture);
+            foreach (KeyValuePair<string, string> p in flags)
+            {
+                newflags[p.Key] = cfg.ReadSetting("linedeftypes." + category + "." + key + ".flags" + p.Key + "text", p.Value);
+            }
+            flags = newflags;
+        }
+
+        #endregion
+    }
 }

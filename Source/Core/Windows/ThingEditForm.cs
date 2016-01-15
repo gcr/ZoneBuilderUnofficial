@@ -192,7 +192,6 @@ namespace CodeImp.DoomBuilder.Windows
             // Flags
             ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(ft.Type);
             IDictionary<string, string> newFlags = (ti == null || ti.Flags.Count == 0) ? General.Map.Config.ThingFlags : ti.Flags;
-            flags.UpdateCheckboxes(newFlags);
 
             foreach (CheckBox c in flags.Checkboxes)
 				if(ft.Flags.ContainsKey(c.Tag.ToString())) c.Checked = ft.Flags[c.Tag.ToString()];
@@ -229,12 +228,15 @@ namespace CodeImp.DoomBuilder.Windows
 			////////////////////////////////////////////////////////////////////////
 
 			thingprops = new List<ThingProperties>();
+            bool allsametype = true;
 
 			// Go for all things
 			foreach(Thing t in things)
 			{
 				//mxd. Update sector info
 				t.DetermineSector();
+
+                if (t.Type != ft.Type) allsametype = false;
 				
 				// Type does not match?
 				ThingTypeInfo info = thingtype.GetSelectedInfo(); //mxd
@@ -280,7 +282,9 @@ namespace CodeImp.DoomBuilder.Windows
 				thingprops.Add(new ThingProperties(t));
 			}
 
-			preventchanges = false;
+            if (allsametype) flags.UpdateCheckboxes(newFlags);
+
+            preventchanges = false;
 
 			//mxd. Trigger updates manually...
 			preventmapchange = true;

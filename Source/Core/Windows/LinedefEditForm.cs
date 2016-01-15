@@ -177,7 +177,6 @@ namespace CodeImp.DoomBuilder.Windows
             // Flags
             LinedefActionInfo li = General.Map.Config.GetLinedefActionInfo(fl.Action);
             IDictionary<string, string> newFlags = (li == null || li.Flags.Count == 0) ? General.Map.Config.LinedefFlags : li.Flags;
-            flags.UpdateCheckboxes(newFlags);
 
             foreach (CheckBox c in flags.Checkboxes)
 				if(fl.Flags.ContainsKey(c.Tag.ToString())) c.Checked = fl.Flags[c.Tag.ToString()];
@@ -228,15 +227,19 @@ namespace CodeImp.DoomBuilder.Windows
 				backTextureOffset.SetValues(fl.Back.OffsetX, fl.Back.OffsetY, true); //mxd
 			}
 
-			////////////////////////////////////////////////////////////////////////
-			// Now go for all lines and change the options when a setting is different
-			////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////
+            // Now go for all lines and change the options when a setting is different
+            ////////////////////////////////////////////////////////////////////////
+
+            bool allsameaction = true;
 
 			// Go for all lines
 			foreach(Linedef l in lines)
 			{
-				// Flags
-				foreach(CheckBox c in flags.Checkboxes)
+                if (l.Action != fl.Action) allsameaction = false;
+
+                // Flags
+                foreach (CheckBox c in flags.Checkboxes)
 				{
 					if(c.CheckState == CheckState.Indeterminate) continue; //mxd
 					if(l.IsFlagSet(c.Tag.ToString()) != c.Checked) 
@@ -335,9 +338,11 @@ namespace CodeImp.DoomBuilder.Windows
 				//mxd
 				linedefprops.Add(new LinedefProperties(l));
 			}
-			
-			// Refresh controls so that they show their image
-			backhigh.Refresh();
+
+            if (allsameaction) flags.UpdateCheckboxes(newFlags);
+
+            // Refresh controls so that they show their image
+            backhigh.Refresh();
 			backmid.Refresh();
 			backlow.Refresh();
 			fronthigh.Refresh();

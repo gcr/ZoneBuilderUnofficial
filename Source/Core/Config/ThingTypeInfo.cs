@@ -79,6 +79,9 @@ namespace CodeImp.DoomBuilder.Config
         private bool isUnflippable;
         private bool ignoreZ;
         private bool centerHitbox;
+        private string angletext;
+        private string flagsvaluetext;
+        private string parametertext;
 
         //mxd. GLOOME rendering settings
         private Thing.SpriteRenderMode rendermode;
@@ -127,6 +130,9 @@ namespace CodeImp.DoomBuilder.Config
         public bool IsUnflippable { get { return isUnflippable; } }
         public bool IgnoreZ { get { return ignoreZ; } }
         public bool CenterHitbox { get { return centerHitbox; } }
+        public string AngleText { get { return angletext; } }
+        public string FlagsValueText { get { return flagsvaluetext; } }
+        public string ParameterText { get { return parametertext; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -166,6 +172,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = false;
             this.ignoreZ = false;
             this.centerHitbox = false;
+            this.angletext = "Angle";
+            this.flagsvaluetext = "Flags value";
+            this.parametertext = "Parameter";
 
             // We have no destructor
             GC.SuppressFinalize(this);
@@ -210,6 +219,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".unflippable", cat.IsUnflippable);
             this.ignoreZ = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".ignoreZ", cat.IgnoreZ);
             this.centerHitbox = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".centerHitbox", cat.CenterHitbox);
+            this.angletext = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".angletext", cat.AngleText);
+            this.flagsvaluetext = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".flagsvaluetext", cat.FlagsValueText);
+            this.parametertext = cfg.ReadSetting("thingtypes." + cat.Name + "." + key + ".parametertext", cat.ParameterText);
 
             // Read the args
             for (int i = 0; i < Linedef.NUM_ARGS; i++)
@@ -266,6 +278,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
             this.centerHitbox = cat.CenterHitbox;
+            this.angletext = cat.AngleText;
+            this.flagsvaluetext = cat.FlagsValueText;
+            this.parametertext = cat.ParameterText;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -316,6 +331,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
             this.centerHitbox = cat.CenterHitbox;
+            this.angletext = cat.AngleText;
+            this.flagsvaluetext = cat.FlagsValueText;
+            this.parametertext = cat.ParameterText;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -363,6 +381,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = cat.IsUnflippable;
             this.ignoreZ = cat.IgnoreZ;
             this.centerHitbox = cat.CenterHitbox;
+            this.angletext = cat.AngleText;
+            this.flagsvaluetext = cat.FlagsValueText;
+            this.parametertext = cat.ParameterText;
 
             // Safety
             if (this.radius < 4f) this.radius = 8f;
@@ -412,6 +433,9 @@ namespace CodeImp.DoomBuilder.Config
             this.isUnflippable = other.isUnflippable;
             this.ignoreZ = other.ignoreZ;
             this.centerHitbox = other.centerHitbox;
+            this.angletext = other.angletext;
+            this.flagsvaluetext = other.flagsvaluetext;
+            this.parametertext = other.parametertext;
 
             //mxd. Copy GLOOME properties
             this.rendermode = other.rendermode;

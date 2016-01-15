@@ -282,7 +282,15 @@ namespace CodeImp.DoomBuilder.Windows
 				thingprops.Add(new ThingProperties(t));
 			}
 
-            if (allsametype) flags.UpdateCheckboxes(newFlags);
+            if (allsametype)
+            {
+                flags.UpdateCheckboxes(newFlags);
+                if (ti != null)
+                {
+                    groupBox4.Text = ti.AngleText;
+                    label3.Text = thinginfo.FlagsValueText + ":";
+                }
+            }
 
             preventchanges = false;
 
@@ -628,6 +636,8 @@ namespace CodeImp.DoomBuilder.Windows
 
             IDictionary<string, string> newFlags = (thinginfo == null || thinginfo.Flags.Count == 0) ? General.Map.Config.ThingFlags : thinginfo.Flags;
             flags.UpdateCheckboxes(newFlags);
+            groupBox4.Text = (thinginfo == null) ? "Angle" : thinginfo.AngleText;
+            label3.Text = (thinginfo == null) ? "Flags value:" : thinginfo.FlagsValueText + ":";
 
             General.Map.IsChanged = true;
 			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);

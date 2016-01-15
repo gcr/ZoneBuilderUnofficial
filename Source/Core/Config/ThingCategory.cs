@@ -63,6 +63,9 @@ namespace CodeImp.DoomBuilder.Config
         private readonly bool isUnflippable;
         private readonly bool ignoreZ;
         private readonly bool centerHitbox;
+        private readonly string angletext;
+        private readonly string flagsvaluetext;
+        private readonly string parametertext;
 
         // Disposing
         private bool isdisposed;
@@ -100,6 +103,9 @@ namespace CodeImp.DoomBuilder.Config
         public bool IsUnflippable { get { return isUnflippable; } }
         public bool IgnoreZ { get { return ignoreZ; } }
         public bool CenterHitbox { get { return centerHitbox; } }
+        public string AngleText { get { return angletext; } }
+        public string FlagsValueText { get { return flagsvaluetext; } }
+        public string ParameterText { get { return parametertext; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -135,6 +141,9 @@ namespace CodeImp.DoomBuilder.Config
                 this.isUnflippable = parent.isUnflippable;
                 this.ignoreZ = parent.ignoreZ;
                 this.centerHitbox = parent.centerHitbox;
+                this.angletext = parent.angletext;
+                this.flagsvaluetext = parent.flagsvaluetext;
+                this.parametertext = parent.parametertext;
             }
 			// Set default properties
 			else
@@ -158,6 +167,9 @@ namespace CodeImp.DoomBuilder.Config
                 this.isUnflippable = false;
                 this.ignoreZ = false;
                 this.centerHitbox = false;
+                this.angletext = "Angle";
+                this.flagsvaluetext = "Flags value";
+                this.parametertext = "Parameter";
             }
 			
 			// We have no destructor
@@ -217,6 +229,9 @@ namespace CodeImp.DoomBuilder.Config
                 this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", parent.isUnflippable);
                 this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", parent.ignoreZ);
                 this.centerHitbox = cfg.ReadSetting("thingtypes." + name + ".centerHitbox", parent.centerHitbox);
+                this.angletext = cfg.ReadSetting("thingtypes." + name + ".angletext", parent.angletext);
+                this.flagsvaluetext = cfg.ReadSetting("thingtypes." + name + ".flagsvaluetext", parent.flagsvaluetext);
+                this.parametertext = cfg.ReadSetting("thingtypes." + name + ".parametertext", parent.parametertext);
             }
 			else
 			{
@@ -239,6 +254,9 @@ namespace CodeImp.DoomBuilder.Config
                 this.isUnflippable = cfg.ReadSetting("thingtypes." + name + ".unflippable", false);
                 this.ignoreZ = cfg.ReadSetting("thingtypes." + name + ".ignoreZ", false);
                 this.centerHitbox = cfg.ReadSetting("thingtypes." + name + ".centerHitbox", false);
+                this.angletext = cfg.ReadSetting("thingtypes." + name + ".angletext", "Angle");
+                this.flagsvaluetext = cfg.ReadSetting("thingtypes." + name + ".flagsvaluetext", "Flags value");
+                this.parametertext = cfg.ReadSetting("thingtypes." + name + ".parametertext", "Parameter");
             }
 
             // Safety

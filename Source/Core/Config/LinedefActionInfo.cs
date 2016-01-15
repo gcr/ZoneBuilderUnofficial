@@ -46,8 +46,8 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool isknown;
 		private readonly bool requiresactivation; //mxd
         private IDictionary<string, string> flags;
-        private readonly bool slope;
-        private readonly int slopetype;
+        private readonly string slope;
+        private readonly int slopeargs;
         private readonly bool threedfloor;
         private readonly bool threedfloorcustom;
         private readonly int threedfloorflags;
@@ -68,11 +68,10 @@ namespace CodeImp.DoomBuilder.Config
 		public bool RequiresActivation { get { return requiresactivation; } } //mxd
 		public ArgumentInfo[] Args { get { return args; } }
         public IDictionary<string, string> Flags { get { return flags; } }
-        public bool Slope { get { return slope; } }
-        public int SlopeType { get { return slopetype; } }
-        public bool IsRegularSlope { get { return slope && (slopetype & 0x3) == 1; } }
-        public bool IsCopySlope { get { return slope && (slopetype & 0x3) == 2; } }
-        public bool IsVertexSlope { get { return slope && (slopetype & 0x3) == 3; } }
+        public bool IsRegularSlope { get { return slope == "regular"; } }
+        public bool IsCopySlope { get { return slope == "copy"; } }
+        public bool IsVertexSlope { get { return slope == "vertex"; } }
+        public int SlopeArgs { get { return slopeargs; } }
         public bool ThreeDFloor { get { return threedfloor; } }
         public bool ThreeDFloorCustom { get { return threedfloorcustom; } }
         public int ThreeDFloorFlags { get { return threedfloorflags; } }
@@ -101,8 +100,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.title = this.title.Trim();
             this.flags = new Dictionary<string, string>(ac.Flags);
             ReadLinedefSpecificFlags(cfg);
-            this.slope = cfg.ReadSetting(actionsetting + ".slope", false);
-            this.slopetype = cfg.ReadSetting(actionsetting + ".slopetype", 0);
+            this.slope = cfg.ReadSetting(actionsetting + ".slope", "");
+            this.slopeargs = cfg.ReadSetting(actionsetting + ".slopeargs", 0);
             this.threedfloor = cfg.ReadSetting(actionsetting + ".3dfloor", false);
             this.threedfloorcustom = cfg.ReadSetting(actionsetting + ".3dfloorcustom", false);
             try { this.threedfloorflags = Convert.ToInt32(cfg.ReadSetting(actionsetting + ".3dfloorflags", "0"), 16); }
@@ -136,8 +135,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.requiresactivation = true; //mxd. Unused, set for consistency sake.
 			this.title = title;
             this.flags = new Dictionary<string, string>();
-            this.slope = false;
-            this.slopetype = 0;
+            this.slope = "";
+            this.slopeargs = 0;
             this.threedfloor = false;
             this.threedfloorcustom = false;
             this.threedfloorflags = 0;

@@ -1041,51 +1041,54 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     if (l.IsVertexSlope)
                     {
                         l.SetVertexSlopeArgs();
-                        bool slopefloor = l.Args[1] == 0;
-                        List<Thing> slopevertices = new List<Thing>(3);
-                        Sector s = (l.Args[0] == 0) ? l.Front.Sector : l.Back.Sector;
-
-                        //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
-                        if (l.IsFlagSet("8192"))
+                        if (l.Args[0] >= 0 && l.Args[0] <= 3)
                         {
-                            bool foundtag = false;
-                            bool foundxoffset = false;
-                            bool foundyoffset = false;
-                            foreach (Thing t in General.Map.Map.Things)
+                            bool slopefloor = l.Args[0] == 0 || l.Args[0] == 2;
+                            List<Thing> slopevertices = new List<Thing>(3);
+                            Sector s = (l.Args[0] == 0 || l.Args[0] == 1) ? l.Front.Sector : l.Back.Sector;
+
+                            //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
+                            if (l.IsFlagSet("8192"))
                             {
-                                if (t.IsSlopeVertex)
+                                bool foundtag = false;
+                                bool foundxoffset = false;
+                                bool foundyoffset = false;
+                                foreach (Thing t in General.Map.Map.Things)
                                 {
-                                    if (!foundtag && (int)t.AngleDoom == l.Tag)
+                                    if (t.IsSlopeVertex)
                                     {
-                                        slopevertices.Add(t);
-                                        foundtag = true;
-                                    }
-                                    if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
-                                    {
-                                        slopevertices.Add(t);
-                                        foundxoffset = true;
-                                    }
-                                    if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
-                                    {
-                                        slopevertices.Add(t);
-                                        foundyoffset = true;
+                                        if (!foundtag && (int)t.AngleDoom == l.Tag)
+                                        {
+                                            slopevertices.Add(t);
+                                            foundtag = true;
+                                        }
+                                        if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
+                                        {
+                                            slopevertices.Add(t);
+                                            foundxoffset = true;
+                                        }
+                                        if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
+                                        {
+                                            slopevertices.Add(t);
+                                            foundyoffset = true;
+                                        }
                                     }
                                 }
-                            }
 
-                        }
-                        //Otherwise, just use tag.
-                        else
-                        {
-                            foreach (Thing t in General.Map.Map.Things)
-                            {
-                                if (t.IsSlopeVertex && (int)t.AngleDoom == l.Tag) slopevertices.Add(t);
                             }
-                        }
-                        if (slopevertices.Count >= 3)
-                        {
-                            SectorData sd = GetSectorData(s);
-                            sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor, blockmap, bsp);
+                            //Otherwise, just use tag.
+                            else
+                            {
+                                foreach (Thing t in General.Map.Map.Things)
+                                {
+                                    if (t.IsSlopeVertex && (int)t.AngleDoom == l.Tag) slopevertices.Add(t);
+                                }
+                            }
+                            if (slopevertices.Count >= 3)
+                            {
+                                SectorData sd = GetSectorData(s);
+                                sd.AddEffectSRB2ThingVertexSlope(slopevertices, slopefloor, blockmap, bsp);
+                            }
                         }
                     }
                 }

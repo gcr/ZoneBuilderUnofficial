@@ -839,12 +839,12 @@ namespace CodeImp.DoomBuilder.Map
         //Set slope arguments for SRB2-style slopes. See http://zdoom.org/wiki/Plane_Align.
         public void SetSlopeArgs()
         {
-            //0 = set from args, 1 = normal, 2 = copy, 3 = vertices, +4 = frontside floor, +8 = frontside ceiling, +16 = backside floor, +32 = backside ceiling
-            int slopevalue = General.Map.Config.GetLinedefActionInfo(Action).SlopeType;
-            bool frontfloor = (slopevalue & 0x4) == 0x4;
-            bool frontceiling = (slopevalue & 0x8) == 0x8;
-            bool backfloor = (slopevalue & 0x10) == 0x10;
-            bool backceiling = (slopevalue & 0x20) == 0x20;
+            //+1 = frontside floor, +2 = frontside ceiling, +4 = backside floor, +8 = backside ceiling
+            int slopeargs = General.Map.Config.GetLinedefActionInfo(Action).SlopeArgs;
+            bool frontfloor = (slopeargs & 0x1) == 0x1;
+            bool frontceiling = (slopeargs & 0x2) == 0x2;
+            bool backfloor = (slopeargs & 0x4) == 0x4;
+            bool backceiling = (slopeargs & 0x8) == 0x8;
             Args[0] = frontfloor ? 1 : (backfloor ? 2 : 0); //floor
             Args[1] = frontceiling ? 1 : (backceiling ? 2 : 0); //ceiling
             Args[2] = 0; //lineid (irrelevant for SRB2)
@@ -857,17 +857,12 @@ namespace CodeImp.DoomBuilder.Map
             foreach (KeyValuePair<int, LinedefActionInfo> type in General.Map.Config.LinedefActions)
             {
                 if (!type.Value.IsRegularSlope) continue;
-                //0 = set from args, 1 = normal, 2 = copy, 3 = vertices, +4 = frontside floor, +8 = frontside ceiling, +16 = backside floor, +32 = backside ceiling
-                int slopevalue = type.Value.SlopeType;
-                if (slopevalue == 0)
-                {
-                    Action = type.Key;
-                    return;
-                }
-                bool frontfloor = (slopevalue & 0x4) == 0x4;
-                bool frontceiling = (slopevalue & 0x8) == 0x8;
-                bool backfloor = (slopevalue & 0x10) == 0x10;
-                bool backceiling = (slopevalue & 0x20) == 0x20;
+                //+1 = frontside floor, +2 = frontside ceiling, +4 = backside floor, +8 = backside ceiling
+                int slopeargs = type.Value.SlopeArgs;
+                bool frontfloor = (slopeargs & 0x1) == 0x1;
+                bool frontceiling = (slopeargs & 0x2) == 0x2;
+                bool backfloor = (slopeargs & 0x4) == 0x4;
+                bool backceiling = (slopeargs & 0x8) == 0x8;
                 int args0 = frontfloor ? 1 : (backfloor ? 2 : 0);
                 int args1 = frontceiling ? 1 : (backceiling ? 2 : 0);
 
@@ -882,12 +877,12 @@ namespace CodeImp.DoomBuilder.Map
         //Set slope arguments for SRB2-style copy slopes. See http://zdoom.org/wiki/Plane_Copy.
         public void SetSlopeCopyArgs()
         {
-            //0 = set from args, 1 = normal, 2 = copy, 3 = vertices, +4 = frontside floor, +8 = frontside ceiling, +16 = backside floor, +32 = backside ceiling
-            int slopevalue = General.Map.Config.GetLinedefActionInfo(Action).SlopeType;
-            bool frontfloor = (slopevalue & 0x4) == 0x4;
-            bool frontceiling = (slopevalue & 0x8) == 0x8;
-            bool backfloor = (slopevalue & 0x10) == 0x10;
-            bool backceiling = (slopevalue & 0x20) == 0x20;
+            //+1 = frontside floor, +2 = frontside ceiling, +4 = backside floor, +8 = backside ceiling
+            int slopeargs = General.Map.Config.GetLinedefActionInfo(Action).SlopeArgs;
+            bool frontfloor = (slopeargs & 0x1) == 0x1;
+            bool frontceiling = (slopeargs & 0x2) == 0x2;
+            bool backfloor = (slopeargs & 0x4) == 0x4;
+            bool backceiling = (slopeargs & 0x8) == 0x8;
             if (frontfloor) Args[0] = Tag; //front floor
             if (frontceiling) Args[1] = Tag; //front ceiling
             if (backfloor) Args[2] = Tag; //back floor
@@ -896,18 +891,10 @@ namespace CodeImp.DoomBuilder.Map
         }
 
         //Set slope arguments for SRB2-style vertex slopes. These are fake arguments I invented to make their handling easier.
-        //Args[0]: 0 = slope front sector, 1 = slope back sector
-        //Args[1]: 0 = slope floor, 1 = slope ceiling
+        //Args[0]: 0 = frontside floor, 1 = frontside ceiling, 2 = backside floor, 3 = backside ceiling
         public void SetVertexSlopeArgs()
         {
-            //0 = set from args, 1 = normal, 2 = copy, 3 = vertices, +4 = frontside floor, +8 = frontside ceiling, +16 = backside floor, +32 = backside ceiling
-            int slopevalue = General.Map.Config.GetLinedefActionInfo(Action).SlopeType;
-            bool frontfloor = (slopevalue & 0x4) == 0x4;
-            bool frontceiling = (slopevalue & 0x8) == 0x8;
-            bool backfloor = (slopevalue & 0x10) == 0x10;
-            bool backceiling = (slopevalue & 0x20) == 0x20;
-            Args[0] = (frontfloor || frontceiling) ? 0 : 1;
-            Args[1] = (frontfloor || backfloor) ? 0 : 1;
+            Args[0] = General.Map.Config.GetLinedefActionInfo(Action).SlopeArgs;
         }
 
         //Set translucent line arguments for SRB2-style translucent walls. See http://zdoom.org/wiki/TranslucentLine.

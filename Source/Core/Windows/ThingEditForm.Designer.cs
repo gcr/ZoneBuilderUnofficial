@@ -333,7 +333,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.cbRandomAngle.Name = "cbRandomAngle";
             this.cbRandomAngle.Size = new System.Drawing.Size(95, 17);
             this.cbRandomAngle.TabIndex = 17;
-            this.cbRandomAngle.Text = "Random angle";
+            this.cbRandomAngle.Text = "Random value";
             this.cbRandomAngle.UseVisualStyleBackColor = true;
             this.cbRandomAngle.CheckedChanged += new System.EventHandler(this.cbRandomAngle_CheckedChanged);
             // 

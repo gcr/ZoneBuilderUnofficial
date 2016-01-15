@@ -288,7 +288,7 @@ namespace CodeImp.DoomBuilder.Windows
                 if (ti != null)
                 {
                     groupBox4.Text = ti.AngleText;
-                    label3.Text = thinginfo.FlagsValueText + ":";
+                    label3.Text = ti.FlagsValueText + ":";
                 }
             }
 

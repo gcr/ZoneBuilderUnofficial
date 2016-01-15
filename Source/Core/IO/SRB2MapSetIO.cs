@@ -38,70 +38,6 @@ namespace CodeImp.DoomBuilder.IO
         // Constructor
         public SRB2MapSetIO(WAD wad, MapManager manager) : base(wad, manager)
         {
-            //Dictionary contents: Type, flags, translucency, flags when noclimb is active
-            //Type: 1 = solid, 2 = water, 3 = intangible, +4 = render insides, +64 = don't render planes, +128 = don't render sides
-            //Flags: 1 = disable lighting effects (e.g. shadows), 2 = restrict lighting effects to insides, 4 = fog
-            //Translucency: 0 = invisible, 1 = read from front upper texture, 2 = opaque
-            threeDFloorTypes = new Dictionary<int, int[]>() {
-                { 100, new int[4] { 1, 0, 2, 0} },
-                { 101, new int[4] { 1, 1, 2, 1} },
-                { 102, new int[4] { 1, 1, 1, 1} },
-                { 103, new int[4] { 65, 1, 2, 1} },
-                { 104, new int[4] { 129, 1, 2, 0} },
-                { 105, new int[4] { 1, 1, 0, 1} },
-                { 120, new int[4] { 6, 0, 2, 2} },
-                { 121, new int[4] { 6, 0, 1, 2} },
-                { 122, new int[4] { 134, 0, 2, 2} },
-                { 123, new int[4] { 134, 0, 1, 2} },
-                { 124, new int[4] { 6, 0, 1, 2} },
-                { 125, new int[4] { 134, 0, 1, 2} },
-                { 140, new int[4] { 1, 0, 2, 1} },
-                { 141, new int[4] { 1, 0, 1, 1} },
-                { 142, new int[4] { 129, 0, 1, 1} },
-                { 143, new int[4] { 1, 0, 2, 1} },
-                { 144, new int[4] { 1, 0, 1, 1} },
-                { 145, new int[4] { 129, 0, 1, 1} },
-                { 146, new int[4] { 65, 0, 2, 1} },
-                { 150, new int[4] { 1, 0, 2, 0} },
-                { 151, new int[4] { 1, 0, 2, 0} },
-                { 152, new int[4] { 1, 0, 2, 0} },
-                { 160, new int[4] { 1, 0, 2, 0} },
-                { 170, new int[4] { 1, 0, 2, 0} },
-                { 171, new int[4] { 1, 0, 2, 0} },
-                { 172, new int[4] { 1, 0, 2, 1} },
-                { 173, new int[4] { 1, 0, 2, 1} },
-                { 174, new int[4] { 1, 0, 1, 1} },
-                { 175, new int[4] { 1, 0, 1, 1} },
-                { 176, new int[4] { 1, 0, 2, 0} },
-                { 177, new int[4] { 1, 0, 2, 0} },
-                { 178, new int[4] { 1, 0, 2, 0} },
-                { 179, new int[4] { 1, 0, 2, 0} },
-                { 180, new int[4] { 1, 0, 2, 0} },
-                { 190, new int[4] { 1, 0, 2, 0} },
-                { 191, new int[4] { 1, 1, 2, 1} },
-                { 192, new int[4] { 1, 1, 1, 1} },
-                { 193, new int[4] { 1, 1, 0, 1} },
-                { 194, new int[4] { 1, 0, 2, 1} },
-                { 195, new int[4] { 1, 0, 1, 1} },
-                { 200, new int[4] { 3, 1, 0, 1} },
-                { 201, new int[4] { 3, 0, 0, 0} },
-                { 202, new int[4] { 7, 5, 2, 5} },
-                { 220, new int[4] { 3, 0, 2, 0} },
-                { 221, new int[4] { 3, 1, 1, 0} },
-                { 222, new int[4] { 67, 1, 2, 0} },
-                { 223, new int[4] { 3, 1, 0, 1} },
-                { 250, new int[4] { 1, 0, 2, 0} },
-                { 251, new int[4] { 1, 0, 2, 0} },
-                { 252, new int[4] { 1, 0, 2, 0} },
-                { 253, new int[4] { 1, 0, 1, 0} },
-                { 254, new int[4] { 1, 0, 2, 0} },
-                { 255, new int[4] { 1, 0, 2, 0} },
-                { 256, new int[4] { 1, 0, 1, 0} },
-                { 257, new int[4] { 5, 0, 2, 0} },
-                { 258, new int[4] { 1, 1, 2, 0} },
-                { 259, new int[4] { 1, 0, 2, 0} }
-            };
-
             translucentLineTypes = new Dictionary<int, float>() {
                 { 900, 0.9f },
                 { 901, 0.8f },
@@ -123,7 +59,6 @@ namespace CodeImp.DoomBuilder.IO
         public override bool HasThingHeight { get { return true; } }
         public override bool HasLinedefParameters { get { return false; } }
         public override bool HasTranslucent3DFloors { get { return true; } }
-        public override int Custom3DFloorType { get { return 259; } }
         public override int SlopeVertexType { get { return 750; } }
         public override int MaxThingHeight { get { return 4095; } }
         public override int MinThingHeight { get { return 0; } }

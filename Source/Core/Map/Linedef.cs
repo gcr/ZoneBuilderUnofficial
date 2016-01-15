@@ -91,7 +91,8 @@ namespace CodeImp.DoomBuilder.Map
 		internal Dictionary<string, bool> Flags { get { return flags; } }
 		public int Action { get { return action; } set { BeforePropsChange(); action = value; UpdateColorPreset(); } }
 		public int Activate { get { return activate; } set { BeforePropsChange(); activate = value; UpdateColorPreset(); } }
-        public bool Is3DFloor { get { return General.Map.FormatInterface.ThreeDFloorTypes.ContainsKey(Action); } }
+        public bool Is3DFloor { get { return (!General.Map.SRB2 && Action == 160) || General.Map.Config.GetLinedefActionInfo(Action).ThreeDFloor; } }
+        public bool IsCustom3DFloor { get { return General.Map.Config.GetLinedefActionInfo(Action).ThreeDFloorCustom; } }
         public bool IsRegularSlope { get { return (!General.Map.SRB2 && Action == 181) || General.Map.Config.GetLinedefActionInfo(Action).IsRegularSlope; } }
         public bool IsCopySlope { get { return (!General.Map.SRB2 && Action == 118) || General.Map.Config.GetLinedefActionInfo(Action).IsCopySlope; } }
         public bool IsVertexSlope { get { return General.Map.Config.GetLinedefActionInfo(Action).IsVertexSlope; } }
@@ -771,61 +772,38 @@ namespace CodeImp.DoomBuilder.Map
             Args[3] = 0; //alpha
             Args[4] = 0; //hi-tag/line ID (irrelevant for SRB2)
 
-            //Handle the custom 3D floor type (259)
-            if (Action == General.Map.FormatInterface.Custom3DFloorType && Back != null)
+            int value;
+            if (IsCustom3DFloor && Back != null)
             {
                 //Read 3D floor flags from upper back texture
                 string tex = Back.HighTexture;
-                Regex r = new Regex("^[A-F0-9]*$");
-                if (r.IsMatch(tex))
-                {
-                    int value = Convert.ToInt32(tex, 16);
-                    bool exists = (value & 0x1) == 0x1; //FF_EXISTS
-                    bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4); //FF_BLOCKPLAYER/FF_BLOCKOTHERS/FF_SOLID
-                    bool rendersides = (value & 0x8) == 0x8; //FF_RENDERSIDES
-                    bool renderplanes = (value & 0x10) == 0x10; //FF_RENDERPLANES
-                    bool render = rendersides || renderplanes;
-                    bool water = (value & 0x20) == 0x20; //FF_SWIMMABLE
-                    bool noshade = (value & 0x40) == 0x40; //FF_NOSHADE
-                    bool translucent = (value & 0x1000) == 0x1000; //FF_TRANSLUCENT
-                    bool fog = (value & 0x2000) == 0x2000; //FF_FOG
-                    bool inside = ((value & 0x8000) == 0x8000) || ((value & 0x10000) == 0x10000); //FF_ALLSIDES/FF_INVERTSIDES
-                    bool doubleshadow = (value & 0x20000) == 0x20000; //FF_DOUBLESHADOW
-                    if (exists)
-                    {
-                        Args[1] = water ? 2 : (solid ? 1 : 3);
-                        if (inside) Args[1] += 4;
-                        if (!renderplanes) Args[1] += 64;
-                        if (!rendersides) Args[1] += 128;
-                    }
-                    if (noshade) Args[2] += 1;
-                    if (doubleshadow) Args[2] += 2;
-                    if (fog) Args[2] += 4;
-                    Args[3] = render ? (translucent ? ParseTranslucency(Front.HighTexture) : 255) : 0;
-                }
+                try { value = Convert.ToInt32(Back.HighTexture, 16); }
+                catch (FormatException e) { return; }
             }
-            else
+            else value = General.Map.Config.GetLinedefActionInfo(Action).Get3DFloorFlags(flags);
+
+            bool exists = (value & 0x1) == 0x1; //FF_EXISTS
+            bool solid = ((value & 0x2) == 0x2) || ((value & 0x4) == 0x4); //FF_BLOCKPLAYER/FF_BLOCKOTHERS/FF_SOLID
+            bool rendersides = (value & 0x8) == 0x8; //FF_RENDERSIDES
+            bool renderplanes = (value & 0x10) == 0x10; //FF_RENDERPLANES
+            bool render = rendersides || renderplanes;
+            bool water = (value & 0x20) == 0x20; //FF_SWIMMABLE
+            bool noshade = (value & 0x40) == 0x40; //FF_NOSHADE
+            bool translucent = (value & 0x1000) == 0x1000; //FF_TRANSLUCENT
+            bool fog = (value & 0x2000) == 0x2000; //FF_FOG
+            bool inside = ((value & 0x8000) == 0x8000) || ((value & 0x10000) == 0x10000); //FF_ALLSIDES/FF_INVERTSIDES
+            bool doubleshadow = (value & 0x20000) == 0x20000; //FF_DOUBLESHADOW
+            if (exists)
             {
-                //Read settings for preconfigured 3D floor type
-                int[] settings = General.Map.FormatInterface.ThreeDFloorTypes[Action];
-                Args[1] = settings[0];
-                Args[2] = IsFlagSet("64") ? settings[3] : settings[1]; //Flags may depend on whether the noclimb flag is set
-                switch (settings[2])
-                {
-                    case 0:
-                        Args[3] = 0;
-                        break;
-                    case 1:
-                        Args[3] = ParseTranslucency(Front.HighTexture);
-                        break;
-                    case 2:
-                        Args[3] = 255;
-                        break;
-                    default:
-                        Args[3] = 0;
-                        break;
-                }
+                Args[1] = water ? 2 : (solid ? 1 : 3);
+                if (inside) Args[1] += 4;
+                if (!renderplanes) Args[1] += 64;
+                if (!rendersides) Args[1] += 128;
             }
+            if (noshade) Args[2] += 1;
+            if (doubleshadow) Args[2] += 2;
+            if (fog) Args[2] += 4;
+            Args[3] = render ? (translucent ? ParseTranslucency(Front.HighTexture) : 255) : 0;
         }
 
         //Read translucency value from texture name (#000-#255)

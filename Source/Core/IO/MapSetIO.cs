@@ -45,7 +45,6 @@ namespace CodeImp.DoomBuilder.IO
 		//mxd
 		protected Dictionary<MapElementType, Dictionary<string, UniversalType>> uifields;
 
-        protected Dictionary<int, int[]> threeDFloorTypes;
         protected Dictionary<int, float> translucentLineTypes;
         protected List<int> startTypes;
         #endregion
@@ -94,10 +93,8 @@ namespace CodeImp.DoomBuilder.IO
 		public abstract int MaxThingAngle { get; }
 		public abstract int MinThingAngle { get; }
 		public abstract Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get; } //mxd
-        public Dictionary<int, int[]> ThreeDFloorTypes { get { return threeDFloorTypes; } }
         public Dictionary<int, float> TranslucentLineTypes { get { return translucentLineTypes; } }
         public abstract int SlopeVertexType { get; }
-        public abstract int Custom3DFloorType { get; }
         public abstract int ColormapType { get; }
         public abstract int FlatAlignmentType { get; }
         public abstract int AxisType { get; }

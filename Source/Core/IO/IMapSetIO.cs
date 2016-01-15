@@ -70,10 +70,8 @@ namespace CodeImp.DoomBuilder.IO
 		Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get; } //mxd. Element type (like "sector"), list of uifields.
 		string GetElementName(MapElementType elementtype); //mxd
 		MapElementType GetElementType(string elementname); //mxd
-        Dictionary<int, int[]> ThreeDFloorTypes { get; }
         Dictionary<int, float> TranslucentLineTypes { get; }
         int SlopeVertexType { get; }
-        int Custom3DFloorType { get; }
         int ColormapType { get; }
         int FlatAlignmentType { get; }
         int AxisType { get; }

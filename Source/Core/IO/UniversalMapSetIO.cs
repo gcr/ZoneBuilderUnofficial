@@ -47,7 +47,6 @@ namespace CodeImp.DoomBuilder.IO
 		{
 			if((manager != null) && (manager.Config != null))
 			{
-                threeDFloorTypes = new Dictionary<int, int[]>() { { 160, new int[3] { -1, -1, -1 } } };
                 translucentLineTypes = new Dictionary<int, float>() { { 208, -1.0f } };
                 startTypes = new List<int>();
 
@@ -145,7 +144,6 @@ namespace CodeImp.DoomBuilder.IO
 		public override int MinThingAngle { get { return int.MinValue; } }
 		public override Dictionary<MapElementType, Dictionary<string, UniversalType>> UIFields { get { return uifields; } } //mxd
         public override int SlopeVertexType { get { return 9500; } }
-        public override int Custom3DFloorType { get { return 160; } }
         public override int ColormapType { get { return -1; } }
         public override int FlatAlignmentType { get { return -1; } }
         public override int AxisType { get { return -1; } }

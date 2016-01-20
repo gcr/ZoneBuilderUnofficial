@@ -778,7 +778,7 @@ namespace CodeImp.DoomBuilder.Map
                 //Read 3D floor flags from upper back texture
                 string tex = Back.HighTexture;
                 try { value = Convert.ToInt32(Back.HighTexture, 16); }
-                catch (FormatException e) { return; }
+                catch (FormatException) { return; }
             }
             else value = General.Map.Config.GetLinedefActionInfo(Action).Get3DFloorFlags(flags);
 

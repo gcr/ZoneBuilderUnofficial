@@ -105,15 +105,15 @@ namespace CodeImp.DoomBuilder.Config
             this.threedfloor = cfg.ReadSetting(actionsetting + ".3dfloor", false);
             this.threedfloorcustom = cfg.ReadSetting(actionsetting + ".3dfloorcustom", false);
             try { this.threedfloorflags = Convert.ToInt32(cfg.ReadSetting(actionsetting + ".3dfloorflags", "0"), 16); }
-            catch (FormatException e) { this.threedfloorflags = 0; }
+            catch (FormatException) { this.threedfloorflags = 0; }
             this.threedfloorflagsadditions = new Dictionary<string, int>();
             foreach (KeyValuePair<string,string> p in flags)
             {
                 int value = 0;
                 try { value = Convert.ToInt32(cfg.ReadSetting(actionsetting + ".flags" + p.Key + "3dfloorflagsadd", "0"), 16); }
-                catch (FormatException e) { }
+                catch (FormatException) { }
                 try { value -= Convert.ToInt32(cfg.ReadSetting(actionsetting + ".flags" + p.Key + "3dfloorflagsremove", "0"), 16); }
-                catch (FormatException e) { }
+                catch (FormatException) { }
                 this.threedfloorflagsadditions.Add(p.Key, value);
 
             }

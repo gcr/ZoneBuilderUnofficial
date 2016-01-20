@@ -58,7 +58,7 @@ namespace CodeImp.DoomBuilder.Plugins.VisplaneExplorer
 		public override void OnMapNewEnd() { OnMapOpenEnd(); }
 		public override void OnMapOpenEnd()
 		{
-			enabled = (General.Map.DOOM || General.Map.HEXEN);
+			enabled = (General.Map.DOOM || General.Map.HEXEN || General.Map.SRB2);
 			if(enabled)
 			{
 				// Load interface controls

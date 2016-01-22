@@ -660,8 +660,11 @@ namespace CodeImp.DoomBuilder.GZBuilder.GZDoom
 						return false;
 					}
 
-					// Absolute paths are not supported...
-					if(Path.IsPathRooted(includelump))
+                    // Check invalid path chars
+                    if (!CheckInvalidPathChars(token)) return false;
+
+                    // Absolute paths are not supported...
+                    if (Path.IsPathRooted(includelump))
 					{
 						ReportError("Absolute include paths are not supported by ZDoom");
 						return false;

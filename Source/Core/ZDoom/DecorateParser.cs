@@ -168,8 +168,11 @@ namespace CodeImp.DoomBuilder.ZDoom
 								return false;
 							}
 
-							//mxd. Absolute paths are not supported...
-							if(Path.IsPathRooted(filename))
+                            //mxd. Check invalid path chars
+                            if (!CheckInvalidPathChars(filename)) return false;
+
+                            //mxd. Absolute paths are not supported...
+                                if (Path.IsPathRooted(filename))
 							{
 								ReportError("Absolute include paths are not supported by ZDoom");
 								return false;

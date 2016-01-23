@@ -298,25 +298,18 @@ namespace CodeImp.DoomBuilder.IO
 			}
 		}
 
-		private static void AddFlags(Dictionary<string, bool> elementFlags, BinaryWriter writer) 
-		{
-			List<string> flags = new List<string>();
+        private static void AddFlags(Dictionary<string, bool> flags, BinaryWriter writer)
+        {
+            writer.Write(flags.Count);
 
-			foreach(KeyValuePair<string, bool> f in elementFlags) 
-			{
-				if(!f.Value) continue;
-				flags.Add(f.Key);
-			}
+            foreach (KeyValuePair<string, bool> group in flags)
+            {
+                writer.Write(group.Key.Length);
+                writer.Write(group.Key.ToCharArray());
+                writer.Write(group.Value);
+            }
+        }
 
-			writer.Write(flags.Count);
-
-			foreach(string s in flags) 
-			{
-				writer.Write(s.Length);
-				writer.Write(s.ToCharArray());
-			}
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

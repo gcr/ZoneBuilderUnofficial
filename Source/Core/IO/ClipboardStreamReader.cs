@@ -333,10 +333,10 @@ namespace CodeImp.DoomBuilder.IO
 				//flags
 				Dictionary<string, bool> stringflags = new Dictionary<string, bool>(StringComparer.Ordinal);
 				int numFlags = reader.ReadInt32();
-				for(int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), true);
+                for (int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), reader.ReadBoolean());
 
-				//add missing flags
-				foreach(KeyValuePair<string, string> flag in General.Map.Config.ThingFlags) 
+                //add missing flags
+                foreach (KeyValuePair<string, string> flag in General.Map.Config.ThingFlags) 
 				{
 					if(stringflags.ContainsKey(flag.Key)) continue;
 					stringflags.Add(flag.Key, false);

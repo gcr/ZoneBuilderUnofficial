@@ -595,15 +595,13 @@ namespace CodeImp.DoomBuilder
 			// Remove the previous log file and start logging
 			if(File.Exists(logfile)) File.Delete(logfile);
 			General.WriteLogLine("Zone Builder v" + thisasm.GetName().Version.Major + "." + thisasm.GetName().Version.Minor + " startup"); //mxd
-			General.WriteLogLine("Application path:        " + apppath);
-			General.WriteLogLine("Temporary path:          " + temppath);
-			General.WriteLogLine("Local settings path:     " + settingspath);
-			General.WriteLogLine("Command-line arguments:  " + args.Length);
-			for(int i = 0; i < args.Length; i++)
-				General.WriteLogLine("Argument " + i + ":   \"" + args[i] + "\"");
-			
-			// Load configuration
-			General.WriteLogLine("Loading program configuration...");
+            General.WriteLogLine("Application path:        \"" + apppath + "\"");
+            General.WriteLogLine("Temporary path:          \"" + temppath + "\"");
+            General.WriteLogLine("Local settings path:     \"" + settingspath + "\"");
+            General.WriteLogLine("Command-line arguments:  \"" + string.Join(" ", args) + "\""); //mxd
+                                                          
+            // Load configuration
+            General.WriteLogLine("Loading program configuration...");
 			settings = new ProgramConfiguration();
 			string defaultsettingsfile = Path.Combine(apppath, DEFAULT_SETTINGS_FILE);
 			string usersettingsfile = nosettings ? defaultsettingsfile : Path.Combine(settingspath, SETTINGS_FILE);

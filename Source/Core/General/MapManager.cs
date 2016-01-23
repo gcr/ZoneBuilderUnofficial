@@ -471,7 +471,7 @@ namespace CodeImp.DoomBuilder
 #endif
 			
 			this.changed = false;
-			this.maploading = true; //mxd
+			this.maploading = true;
 			this.options = options;
 
 			// Create map data
@@ -513,27 +513,30 @@ namespace CodeImp.DoomBuilder
 			// Close the map file
 			mapwad.Dispose();
 
-			//mxd. Create MapSet
+			// Create MapSet
 			bool maprestored;
 			if(!CreateMapSet(newmap, filepathname, options, out maprestored)) return false;
 
-			//mxd. And switch to it
+			// And switch to it
 			ChangeMapSet(newmap);
 
-			//mxd. Translate texture names
+			// Translate texture names
 			map.TranslateTextureNames(config.UseLongTextureNames, false);
 			grid.TranslateBackgroundName(config.UseLongTextureNames);
 
-			//mxd. Sector textures may've been changed 
+			// Sector textures may've been changed 
 			data.UpdateUsedTextures();
 
-			//mxd. Update includes list and script names
-			UpdateScriptNames(true);
+            // Skybox may've been changed
+            data.SetupSkybox();
 
-			//mxd. Restore selection groups
+            // Update includes list and script names
+            UpdateScriptNames(true);
+
+			// Restore selection groups
 			options.ReadSelectionGroups();
 
-			//mxd. Center map in screen or on stored coordinates
+			// Center map in screen or on stored coordinates
 			if(General.Editing.Mode is ClassicMode) 
 			{
 				ClassicMode mode = General.Editing.Mode as ClassicMode;
@@ -547,9 +550,9 @@ namespace CodeImp.DoomBuilder
 
 			// Success
 			this.changed = maprestored;
-			this.maploading = false; //mxd
+			this.maploading = false;
 			General.WriteLogLine("Map switching done");
-			General.MainWindow.UpdateMapChangedStatus(); //mxd
+			General.MainWindow.UpdateMapChangedStatus();
 			return true;
 		}
 

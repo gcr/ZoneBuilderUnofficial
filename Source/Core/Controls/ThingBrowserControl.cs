@@ -359,9 +359,9 @@ namespace CodeImp.DoomBuilder.Controls
 							// Select this
 							if(n.TreeView != null) //mxd. Tree node may've been removed during filtering
 							{
-								n.Parent.Expand();
-								typelist.SelectedNodes.Add(n);
-								n.EnsureVisible();
+                                if (n.Parent != null) n.Parent.Expand(); // node won't have parent when the list is prefiltered
+                                typelist.SelectedNodes.Add(n);
+                                n.EnsureVisible();
 								break;
 							}
 						}

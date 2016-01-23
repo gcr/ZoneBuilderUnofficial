@@ -1021,18 +1021,18 @@ namespace CodeImp.DoomBuilder
 				
 				// Unbind static methods from actions
 				General.Actions.UnbindMethods(typeof(General));
-				
-				// Save colors
-				colors.SaveColors(settings.Config);
-				
-				// Save action controls
-				actions.SaveSettings();
-				
-				// Save game configuration settings
-				foreach(ConfigurationInfo ci in configs) ci.SaveSettings();
-				
-				// Save settings configuration
-				if(!General.NoSettings)
+
+                // Save colors
+                if (colors != null) colors.SaveColors(settings.Config);
+
+                // Save action controls
+                actions.SaveSettings();
+
+                // Save game configuration settings
+                if (configs != null) foreach (ConfigurationInfo ci in configs) ci.SaveSettings();
+
+                // Save settings configuration
+                if (!General.NoSettings)
 					settings.Save(Path.Combine(settingspath, SETTINGS_FILE));
 				
 				// Clean up

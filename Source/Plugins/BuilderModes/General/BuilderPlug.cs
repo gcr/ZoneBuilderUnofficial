@@ -138,10 +138,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public override string Name { get { return "Zone Builder"; } } //mxd
 		public static BuilderPlug Me { get { return me; } }
 
-		// It is only safe to do this dynamically because we compile and distribute both
-		// the core and this plugin together with the same revision number! In third party
-		// plugins this should just contain a fixed number.
-		public override int MinimumRevision { get { return Assembly.GetExecutingAssembly().GetName().Version.Revision; } }
+        //mxd. BuilderModes.dll revision should always match the main module revision
+        public override bool StrictRevisionMatching { get { return true; } }
+        public override int MinimumRevision { get { return Assembly.GetExecutingAssembly().GetName().Version.Revision; } }
 		
 		public MenusForm MenusForm { get { return menusform; } }
 		public CurveLinedefsForm CurveLinedefsForm { get { return curvelinedefsform ?? (curvelinedefsform = new CurveLinedefsForm()); } }

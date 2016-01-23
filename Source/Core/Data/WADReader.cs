@@ -381,8 +381,8 @@ namespace CodeImp.DoomBuilder.Data
 			while(lumpindex > -1)
 			{
 				MemoryStream filedata = new MemoryStream(file.Lumps[lumpindex].Stream.ReadAllBytes());
-				WADReader.LoadHighresTextures(filedata, "TEXTURES", ref images, null, null);
-				filedata.Dispose();
+                WADReader.LoadHighresTextures(filedata, Path.Combine(Path.GetFileName(file.Filename), "TEXTURES#" + lumpindex), ref images, null, null);
+                filedata.Dispose();
 				
 				// Find next
 				lumpindex = file.FindLumpIndex("TEXTURES", lumpindex + 1);
@@ -611,8 +611,8 @@ namespace CodeImp.DoomBuilder.Data
 			while(lumpindex > -1) 
 			{
 				MemoryStream filedata = new MemoryStream(file.Lumps[lumpindex].Stream.ReadAllBytes());
-				WADReader.LoadHighresFlats(filedata, "TEXTURES", ref images, null, null);
-				filedata.Dispose();
+                WADReader.LoadHighresFlats(filedata, Path.Combine(Path.GetFileName(file.Filename), "TEXTURES#" + lumpindex), ref images, null, null);
+                filedata.Dispose();
 
 				// Find next
 				lumpindex = file.FindLumpIndex("TEXTURES", lumpindex + 1);
@@ -676,8 +676,8 @@ namespace CodeImp.DoomBuilder.Data
 			while(lumpindex > -1)
 			{
 				MemoryStream filedata = new MemoryStream(file.Lumps[lumpindex].Stream.ReadAllBytes());
-				WADReader.LoadHighresSprites(filedata, "TEXTURES", ref images, null, null);
-				filedata.Dispose();
+                WADReader.LoadHighresSprites(filedata, Path.Combine(Path.GetFileName(file.Filename), "TEXTURES#" + lumpindex), ref images, null, null);
+                filedata.Dispose();
 				
 				// Find next
 				lumpindex = file.FindLumpIndex("TEXTURES", lumpindex + 1);

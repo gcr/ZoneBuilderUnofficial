@@ -97,11 +97,15 @@ namespace CodeImp.DoomBuilder.ZDoom
 
             if (stream.Length == 0)
             {
-                if (!string.IsNullOrEmpty(sourcename))
+                if (!string.IsNullOrEmpty(sourcename) && sourcename != sourcefilename)
+                {
                     LogWarning("Include file \"" + sourcefilename + "\" is empty");
+                }
                 else
+                {
+                    sourcename = sourcefilename; // LogWarning() needs "sourcename" property to properly log the warning...
                     LogWarning("File is empty");
-                return true;
+                }
             }
 
             datastream = stream;
@@ -525,9 +529,9 @@ namespace CodeImp.DoomBuilder.ZDoom
 		//mxd. This adds a warning to the ErrorLogger
 		protected internal void LogWarning(string message)
 		{
-			// Add a warning
-			int errline = GetCurrentLineNumber();
-			General.ErrorLogger.Add(ErrorType.Warning, GetLanguageType() + " warning in '" + sourcename
+            // Add a warning
+            int errline = (datastream != null ? GetCurrentLineNumber() : CompilerError.NO_LINE_NUMBER);
+            General.ErrorLogger.Add(ErrorType.Warning, GetLanguageType() + " warning in '" + sourcename
 								+ (errline != CompilerError.NO_LINE_NUMBER ? "', line " + (errline + 1) : "'") + ". " 
 								+ message + ".");
 		}

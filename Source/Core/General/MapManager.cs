@@ -2171,12 +2171,12 @@ namespace CodeImp.DoomBuilder
 				configinfo = General.GetConfigurationInfo(options.ConfigFile);
 				Type oldiotype = io.GetType(); //mxd
 
-				//mxd. Step 1 of hackish way to translate SP/MP thing flags to Hexen map format...
-				//TODO: add proper Doom -> Hexen thing flags translation to the configs?
-				if(oldiotype == typeof(DoomMapSetIO) && configinfo.FormatInterface == "hexenmapsetio")
-				{
-					// Translate to UDMF using Doom things flags translation table
-					foreach(Thing t in General.Map.Map.Things) t.TranslateToUDMF();
+                //mxd. Step 1 of hackish way to translate SP/MP thing flags to Hexen / UDMF formats...
+                //TODO: add proper Doom -> Hexen thing flags translation to the configs?
+                if (oldiotype == typeof(DoomMapSetIO) && configinfo.FormatInterface != "doommapsetio")
+                {
+                    // Translate to UDMF using Doom things flags translation table
+                    foreach (Thing t in General.Map.Map.Things) t.TranslateToUDMF();
 				}
 
 				config = new GameConfiguration(configinfo.Configuration); //mxd
@@ -2202,26 +2202,38 @@ namespace CodeImp.DoomBuilder
 				{
 					foreach(Linedef l in General.Map.Map.Linedefs) l.TranslateFromUDMF();
 					foreach(Thing t in General.Map.Map.Things) t.TranslateFromUDMF();
-				} 
-				else if(oldiotype != typeof(UniversalMapSetIO) && io is UniversalMapSetIO) 
-				{
-					foreach(Linedef l in General.Map.Map.Linedefs) l.TranslateToUDMF(oldiotype);
-					foreach(Thing t in General.Map.Map.Things) t.TranslateToUDMF();
-				} 
-				else if(oldiotype != typeof(DoomMapSetIO) && io is DoomMapSetIO) 
-				{ 
-					// Drop all arguments
-					foreach(Linedef l in General.Map.Map.Linedefs) 
-						for(int i = 0; i < l.Args.Length; i++) l.Args[i] = 0;
-					foreach(Thing t in General.Map.Map.Things) 
-						for(int i = 0; i < t.Args.Length; i++) t.Args[i] = 0;
 				}
-				else if(oldiotype == typeof(DoomMapSetIO) && io is HexenMapSetIO)
-				{
-					// Step 2 of hackish way to translate SP/MP thing flags to Hexen map format...
-					foreach(Thing t in General.Map.Map.Things) t.TranslateFromUDMF();
-				}
-				map.UpdateCustomLinedefColors();
+                else if (oldiotype == typeof(DoomMapSetIO))
+                {
+                    if (io is UniversalMapSetIO)
+                    {
+                        //Thing flags were already translated in Setp 1...
+                        //TODO: linedef actions will require the same handling...
+                        foreach (Linedef l in General.Map.Map.Linedefs) l.TranslateToUDMF(oldiotype);
+                    }
+                    else if (io is HexenMapSetIO)
+                    {
+                        // Step 2 of hackish way to translate SP/MP thing flags to Hexen map format...
+                        foreach (Thing t in General.Map.Map.Things) t.TranslateFromUDMF();
+                    }
+                }
+                else if (oldiotype != typeof(UniversalMapSetIO) && io is UniversalMapSetIO)
+                {
+                    foreach (Linedef l in General.Map.Map.Linedefs) l.TranslateToUDMF(oldiotype);
+                    foreach (Thing t in General.Map.Map.Things) t.TranslateToUDMF();
+                }
+
+                // Drop all arguments
+                if (oldiotype != typeof(DoomMapSetIO) && io is DoomMapSetIO)
+                {
+
+                    foreach (Linedef l in General.Map.Map.Linedefs)
+                        for (int i = 0; i < l.Args.Length; i++) l.Args[i] = 0;
+                    foreach (Thing t in General.Map.Map.Things)
+                        for (int i = 0; i < t.Args.Length; i++) t.Args[i] = 0;
+                }
+
+                map.UpdateCustomLinedefColors();
 
                 // Reload resources
                 ReloadResources();

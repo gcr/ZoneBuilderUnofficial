@@ -138,7 +138,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private bool modealreadyswitching;
 		private bool clearselection; //mxd
 		private bool pasting;
-		private PasteOptions pasteoptions;
+        private bool autodrag; //mxd
+        private PasteOptions pasteoptions;
 		
 		// Docker
 		private EditSelectionPanel panel;
@@ -383,11 +384,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Not in any modifying mode?
 			if(mode == ModifyMode.None)
 			{
-				// Check what grip the mouse is over
-				// and change cursor accordingly
-				Grip mousegrip = CheckMouseGrip();
-				switch(mousegrip)
-				{
+                // Check what grip the mouse is over
+                // and change cursor accordingly
+                Grip mousegrip = (autodrag ? Grip.Main : CheckMouseGrip()); //mxd. We only want to move when starting auto-dragging
+                switch (mousegrip)
+                {
 					case Grip.Main:
 						
 						// Find the nearest vertex within highlight range
@@ -1035,9 +1036,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public override void OnEngage()
 		{
 			base.OnEngage();
-			
-			bool autodrag = (pasting && mouseinside && BuilderPlug.Me.AutoDragOnPaste);
-			snaptonearest = General.Interface.AutoMerge; //mxd
+
+            autodrag = (pasting && mouseinside && BuilderPlug.Me.AutoDragOnPaste);
+            snaptonearest = General.Interface.AutoMerge; //mxd
 			
 			// Add toolbar buttons
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.FlipSelectionH);
@@ -1191,10 +1192,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				UpdateRectangleComponents();
 				UpdatePanel();
 				Update();
-				
-				// When pasting and mouse is in screen, drag selection immediately
-				if(autodrag) OnSelectBegin();
-			}
+
+                // When pasting and mouse is in screen, drag selection immediately
+                if (autodrag)
+                {
+                    OnSelectBegin();
+                    autodrag = false; //mxd. Don't need this any more
+                }
+            }
 			else
 			{
 				General.Interface.MessageBeep(MessageBeepType.Default);
@@ -1642,9 +1647,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			Vector2D center = offset + size * 0.5f;
 			Vector2D delta;
 
-			// Check what grip the mouse is over
-			switch(CheckMouseGrip())
-			{
+            // Check what grip the mouse is over
+            Grip mousegrip = (autodrag ? Grip.Main : CheckMouseGrip()); //mxd. We only want to move when starting auto-dragging
+            switch (mousegrip)
+            {
 				// Drag main rectangle
 				case Grip.Main:
 					
@@ -1654,8 +1660,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						int index = 0;
 						foreach(Vertex v in selectedvertices)
 						{
-							if(v == highlighted) highlightedpos = vertexpos[index];
-							index++;
+                            if (v == highlighted)
+                            {
+                                highlightedpos = vertexpos[index];
+                                break;
+                            }
+                            index++;
 						}
 					}
 					else if(highlighted is Thing)
@@ -1663,8 +1673,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						int index = 0;
 						foreach(Thing t in selectedthings)
 						{
-							if(t == highlighted) highlightedpos = thingpos[index];
-							index++;
+                            if (t == highlighted)
+                            {
+                                highlightedpos = thingpos[index];
+                                break;
+                            }
+                            index++;
 						}
 					}
 					

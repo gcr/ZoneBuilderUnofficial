@@ -202,84 +202,72 @@ namespace CodeImp.DoomBuilder.Windows
 				foreach(Vertex v in vertices) v.Fields.BeforeFieldsChange();
 			}
 		}
-		
-		#endregion
 
-		#region ================== mxd. Realtime Events
+        #endregion
 
-		private void positionx_WhenTextChanged(object sender, EventArgs e) 
-		{
-			if(preventchanges) return;
-			MakeUndo();
-			int i = 0;
+        #region ================== mxd. Realtime Events
 
-			//restore values
-			if(string.IsNullOrEmpty(positionx.Text)) 
-			{
-				// Apply position
-				foreach(Vertex v in vertices) v.Move(new Vector2D(vertexprops[i++].X, v.Position.y));
-			} 
-			else //update values
-			{ 
-				// Verify the coordinates
-				float px = positionx.GetResultFloat(vertexprops[i].X);
-				if(px < General.Map.FormatInterface.MinCoordinate) 
-				{
-					positionx.Text = General.Map.FormatInterface.MinCoordinate.ToString();
-					return;
-				} 
-				
-				if(px > General.Map.FormatInterface.MaxCoordinate) 
-				{
-					positionx.Text = General.Map.FormatInterface.MaxCoordinate.ToString();
-					return;
-				}
+        private void positionx_WhenTextChanged(object sender, EventArgs e)
+        {
+            if (preventchanges) return;
+            MakeUndo();
 
-				// Apply position
-				foreach(Vertex v in vertices) v.Move(new Vector2D(px, v.Position.y));
-			}
+            // Restore values
+            if (string.IsNullOrEmpty(positionx.Text))
+            {
+                // Apply position
+                int i = 0;
+                foreach (Vertex v in vertices) v.Move(new Vector2D(vertexprops[i++].X, v.Position.y));
+            }
+            // Update values
+            else
+            {
+                int i = 0;
+                foreach (Vertex v in vertices)
+                {
+                    // Verify the coordinates
+                    float px = positionx.GetResultFloat(vertexprops[i++].X);
 
-			General.Map.IsChanged = true;
-			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
-		}
+                    // Apply new position
+                    v.Move(new Vector2D(Math.Max(General.Map.FormatInterface.MinCoordinate, Math.Min(General.Map.FormatInterface.MaxCoordinate, px)), v.Position.y));
+                }
+            }
 
-		private void positiony_WhenTextChanged(object sender, EventArgs e) 
-		{
-			if(preventchanges) return;
-			MakeUndo();
-			int i = 0;
+            General.Map.IsChanged = true;
+            if (OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
+        }
 
-			//restore values
-			if(string.IsNullOrEmpty(positiony.Text)) 
-			{
-				// Apply position
-				foreach(Vertex v in vertices) v.Move(new Vector2D(v.Position.x, vertexprops[i++].Y));
-			} 
-			else //update values
-			{ 
-				// Verify the coordinates
-				float py = positiony.GetResultFloat(vertexprops[i].Y);
-				if(py < General.Map.FormatInterface.MinCoordinate) 
-				{
-					positiony.Text = General.Map.FormatInterface.MinCoordinate.ToString();
-					return;
-				} 
-				
-				if(py > General.Map.FormatInterface.MaxCoordinate) 
-				{
-					positiony.Text = General.Map.FormatInterface.MaxCoordinate.ToString();
-					return;
-				}
+        private void positiony_WhenTextChanged(object sender, EventArgs e)
+        {
+            if (preventchanges) return;
+            MakeUndo();
 
-				// Apply position
-				foreach(Vertex v in vertices) v.Move(new Vector2D(v.Position.x, py));
-			}
+            // Restore values
+            if (string.IsNullOrEmpty(positiony.Text))
+            {
+                // Apply position
+                int i = 0;
+                foreach (Vertex v in vertices) v.Move(new Vector2D(v.Position.x, vertexprops[i++].Y));
+            }
+            // Update values
+            else
+            {
+                int i = 0;
+                foreach (Vertex v in vertices)
+                {
+                    // Verify the coordinates
+                    float py = positiony.GetResultFloat(vertexprops[i++].Y);
 
-			General.Map.IsChanged = true;
-			if(OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
-		}
+                    // Apply new position
+                    v.Move(new Vector2D(v.Position.x, Math.Max(General.Map.FormatInterface.MinCoordinate, Math.Min(General.Map.FormatInterface.MaxCoordinate, py))));
+                }
+            }
 
-		private void zceiling_WhenTextChanged(object sender, EventArgs e) 
+            General.Map.IsChanged = true;
+            if (OnValuesChanged != null) OnValuesChanged(this, EventArgs.Empty);
+        }
+
+        private void zceiling_WhenTextChanged(object sender, EventArgs e) 
 		{
 			if(preventchanges) return;
 			MakeUndo();

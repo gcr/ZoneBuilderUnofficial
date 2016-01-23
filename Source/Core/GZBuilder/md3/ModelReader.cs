@@ -21,9 +21,9 @@ namespace CodeImp.DoomBuilder.GZBuilder.MD3
 {
 	internal static class ModelReader
 	{
-		#region ================== Variables
+        #region ================== Variables
 
-		private class MD3LoadResult
+        internal class MD3LoadResult
 		{
 			public List<string> Skins;
 			public List<Mesh> Meshes;
@@ -228,12 +228,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.MD3
 			mde.Model.Radius = Math.Max(Math.Max(Math.Abs(bbs.MinY), Math.Abs(bbs.MaxY)), Math.Max(Math.Abs(bbs.MinX), Math.Abs(bbs.MaxX))); 
 		}
 
-		#endregion
+        #endregion
 
-		#region ================== MD3
+        #region ================== MD3
 
-		private static MD3LoadResult ReadMD3Model(ref BoundingBoxSizes bbs, bool useSkins, MemoryStream s, Device device, int frame) 
-		{
+        internal static MD3LoadResult ReadMD3Model(ref BoundingBoxSizes bbs, bool useSkins, Stream s, Device device, int frame)
+        {
 			long start = s.Position;
 			MD3LoadResult result = new MD3LoadResult();
 
@@ -419,12 +419,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.MD3
 			return "";
 		}
 
-		#endregion
+        #endregion
 
-		#region ================== MD2
+        #region ================== MD2
 
-		private static MD3LoadResult ReadMD2Model(ref BoundingBoxSizes bbs, MemoryStream s, Device device, int frame, string framename) 
-		{
+        private static MD3LoadResult ReadMD2Model(ref BoundingBoxSizes bbs, Stream s, Device device, int frame, string framename)
+        {
 			long start = s.Position;
 			MD3LoadResult result = new MD3LoadResult();
 

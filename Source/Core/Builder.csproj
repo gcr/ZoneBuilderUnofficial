@@ -711,6 +711,7 @@
     <None Include="Resources\ZoneBuilder.bmp" />
     <None Include="app.manifest" />
     <None Include="Resources\ScriptSnippet.xpm" />
+	<EmbeddedResource Include="Resources\SkySphere.md3" />
     <None Include="Resources\ThingStatistics.png" />
     <None Include="Resources\Copy.png" />
     <None Include="Resources\Cut.png" />

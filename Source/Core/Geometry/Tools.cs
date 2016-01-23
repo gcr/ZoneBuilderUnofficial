@@ -551,8 +551,14 @@ namespace CodeImp.DoomBuilder.Geometry
 				newsector.Brightness = General.Settings.DefaultBrightness;
 			}
 
-			//mxd. Apply overrides?
-			if(useOverrides) 
+            //mxd. Better any height than none
+            if (newsector.CeilHeight - newsector.FloorHeight <= 0)
+            {
+                newsector.CeilHeight = newsector.FloorHeight + (General.Settings.DefaultCeilingHeight - General.Settings.DefaultFloorHeight);
+            }
+
+            //mxd. Apply overrides?
+            if (useOverrides) 
 			{
 				if(General.Map.Options.OverrideCeilingTexture) newsector.SetCeilTexture(General.Map.Options.DefaultCeilingTexture);
 				if(General.Map.Options.OverrideFloorTexture) newsector.SetFloorTexture(General.Map.Options.DefaultFloorTexture);

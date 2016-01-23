@@ -34,53 +34,46 @@ namespace CodeImp.DoomBuilder.BuilderModes
 {
 	internal sealed class VisualFloor : BaseVisualGeometrySector
 	{
-		#region ================== Constants
+        #region ================== Constants
 
-		#endregion
+        #endregion
 
-		#region ================== Variables
+        #region ================== Variables
 
-		private bool innerSide; //mxd
+        private bool innerside; //mxd
+        
+        #endregion
 
-		#endregion
+        #region ================== Properties
 
-		#region ================== Properties
+        #endregion
 
-		#endregion
+        #region ================== Constructor / Setup
 
-		#region ================== Constructor / Setup
-
-		// Constructor
-		public VisualFloor(BaseVisualMode mode, VisualSector vs) : base(mode, vs)
+        // Constructor
+        public VisualFloor(BaseVisualMode mode, VisualSector vs) : base(mode, vs)
 		{
 			//mxd
 			geometrytype = VisualGeometryType.FLOOR;
 			partname = "floor";
+            performautoselection = mode.UseSelectionFromClassicMode && vs != null && vs.Sector.Selected && (General.Map.ViewMode == ViewMode.FloorTextures || General.Map.ViewMode == ViewMode.Normal);
 
-			//mxd
-			if(mode.UseSelectionFromClassicMode && vs != null && vs.Sector.Selected 
-				&& (General.Map.ViewMode == ViewMode.FloorTextures || General.Map.ViewMode == ViewMode.Normal)) 
-			{
-				this.selected = true;
-				mode.AddSelectedObject(this);
-			}
-			
-			// We have no destructor
-			GC.SuppressFinalize(this);
+            // We have no destructor
+            GC.SuppressFinalize(this);
 		}
 
 		// This builds the geometry. Returns false when no geometry created.
 		public override bool Setup(SectorLevel level, Effect3DFloor extrafloor) 
 		{
-			return Setup(level, extrafloor, innerSide);
+			return Setup(level, extrafloor, innerside);
 		}
 
-		//mxd
-		public bool Setup(SectorLevel level, Effect3DFloor extrafloor, bool innerSide)
-		{
+        //mxd
+        public bool Setup(SectorLevel level, Effect3DFloor extrafloor, bool innerside)
+        {
 			Sector s = level.sector;
 			Vector2D texscale;
-			this.innerSide = innerSide;
+			this.innerside = innerside;
 			
 			base.Setup(level, extrafloor);
 			
@@ -171,7 +164,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// The sector triangulation created clockwise triangles that
 			// are right up for the floor. For the ceiling we must flip
 			// the triangles upside down.
-			if((extrafloor != null) && !extrafloor.VavoomType && !innerSide)
+			if((extrafloor != null) && !extrafloor.VavoomType && !innerside)
 				SwapTriangleVertices(verts);
 			
 			// Determine render pass
@@ -411,7 +404,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public override bool PickFastReject(Vector3D from, Vector3D to, Vector3D dir)
 		{
 			// Check if our ray starts at the correct side of the plane
-			if((!innerSide && level.plane.Distance(from) > 0.0f) || (innerSide && level.plane.Distance(from) < 0.0f))
+			if((!innerside && level.plane.Distance(from) > 0.0f) || (innerside && level.plane.Distance(from) < 0.0f))
 			{
 				// Calculate the intersection
 				if(level.plane.GetIntersection(from, to, ref pickrayu))

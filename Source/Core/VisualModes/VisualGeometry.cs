@@ -155,7 +155,8 @@ namespace CodeImp.DoomBuilder.VisualModes
 				triangles = vertices.Length / 3;
 
 				CalculateNormals(); //mxd
-			} 
+                PerformAutoSelection(); //mxd
+            } 
 			else 
 			{
 				vertices = null;
@@ -266,11 +267,14 @@ namespace CodeImp.DoomBuilder.VisualModes
 			return false;
 		}
 
-		#endregion
-	}
+        //mxd
+        protected abstract void PerformAutoSelection();
 
-	//mxd
-	public enum VisualGeometryType
+        #endregion
+    }
+
+    //mxd
+    public enum VisualGeometryType
 	{
 		FLOOR,
 		CEILING,

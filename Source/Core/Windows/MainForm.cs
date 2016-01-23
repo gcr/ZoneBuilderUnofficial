@@ -2045,7 +2045,7 @@ namespace CodeImp.DoomBuilder.Windows
 			dynamiclightmode.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglefx.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglefog.Visible = General.Settings.GZToolbarGZDoom && maploaded;
-            buttontogglesky.Visible = General.Settings.GZToolbarGZDoom && maploaded;
+            buttontogglesky.Visible = maploaded && (General.Settings.GZToolbarGZDoom || General.Map.SRB2);
             buttontoggleeventlines.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglevisualvertices.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			separatorgzmodes.Visible = General.Settings.GZToolbarGZDoom && maploaded;
@@ -2203,14 +2203,18 @@ namespace CodeImp.DoomBuilder.Windows
                 buttontoggleeventlines.Checked = General.Settings.GZShowEventLines;
 				buttontogglevisualvertices.Visible = General.Map.UDMF;
 				buttontogglevisualvertices.Checked = General.Settings.GZShowVisualVertices;
-			} 
-		}
+			}
 
-		#endregion
+            //The sky toggle button should also be visible for SRB2 maps.
+            if (General.Map != null && General.Map.SRB2)
+                buttontogglesky.Checked = General.Settings.GZDrawSky;
+        }
 
-		#region ================== Toolbar context menu (mxd)
+        #endregion
 
-		private void toolbarContextMenu_Opening(object sender, CancelEventArgs e)
+        #region ================== Toolbar context menu (mxd)
+
+        private void toolbarContextMenu_Opening(object sender, CancelEventArgs e)
 		{
 			if(General.Map == null)
 			{

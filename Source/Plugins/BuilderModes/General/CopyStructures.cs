@@ -34,14 +34,16 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private bool doom = true;
 		private bool hexen = true;
 		private bool udmf = true;
+        private bool srb2 = true;
 		private string description = "Unnamed field";
 
 		public bool DOOM { get { return doom; } set { doom = value; } }
 		public bool HEXEN { get { return hexen; } set { hexen = value; } }
 		public bool UDMF { get { return udmf; } set { udmf = value; } }
-		public string Description { get { return description; } set { description = value; } }
+        public bool SRB2 { get { return srb2; } set { srb2 = value; } }
+        public string Description { get { return description; } set { description = value; } }
 
-		public bool SupportsCurrentMapFormat { get { return General.Map != null && (General.Map.DOOM && doom || General.Map.HEXEN && hexen || General.Map.UDMF && udmf); } }
+		public bool SupportsCurrentMapFormat { get { return General.Map != null && (General.Map.DOOM && doom || General.Map.HEXEN && hexen || General.Map.UDMF && udmf || General.Map.SRB2 && srb2); } }
 	}
 
 	public abstract class MapElementPropertiesCopySettings
@@ -124,13 +126,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 	//mxd
 	public class VertexPropertiesCopySettings : MapElementPropertiesCopySettings
 	{
-		[FieldDescription(Description = "Vertex Floor Height", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Vertex Floor Height", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool ZFloor = true;
 		
-		[FieldDescription(Description = "Vertex Ceiling Height", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Vertex Ceiling Height", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool ZCeiling = true;
 		
-		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Fields = true;
 	}
 	
@@ -187,49 +189,49 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Ceiling Texture")]
 		public bool CeilingTexture = true;
 
-		[FieldDescription(Description = "Floor Texture Offset", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Texture Offset", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorTextureOffset = true;
 
-		[FieldDescription(Description = "Ceiling Texture Offset", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Texture Offset", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingTextureOffset = true;
 
-		[FieldDescription(Description = "Floor Texture Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Texture Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorTextureScale = true;
 
-		[FieldDescription(Description = "Ceiling Texture Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Texture Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingTextureScale = true;
 
-		[FieldDescription(Description = "Floor Texture Rotation", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Texture Rotation", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorTextureRotation = true;
 
-		[FieldDescription(Description = "Ceiling Texture Rotation", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Texture Rotation", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingTextureRotation = true;
 
-		[FieldDescription(Description = "Floor Alpha", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Alpha", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorAlpha = true;
 
-		[FieldDescription(Description = "Ceiling Alpha", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Alpha", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingAlpha = true;
 
 		[FieldDescription(Description = "Sector Brightness")]
 		public bool Brightness = true;
 
-		[FieldDescription(Description = "Floor Brightness", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Brightness", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorBrightness = true;
 
-		[FieldDescription(Description = "Ceiling Brightness", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Brightness", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingBrightness = true;
 
-		[FieldDescription(Description = "Floor Render Style", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Render Style", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorRenderStyle = true;
 
-		[FieldDescription(Description = "Ceiling Render Style", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Render Style", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingRenderStyle = true;
 		
-		[FieldDescription(Description = "Floor Slope", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Floor Slope", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FloorSlope = true;
 
-		[FieldDescription(Description = "Ceiling Slope", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Ceiling Slope", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool CeilingSlope = true;
 		
 		[FieldDescription(Description = "Tags")]
@@ -238,28 +240,28 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Effect")]
 		public bool Special = true;
 		
-		[FieldDescription(Description = "Flags", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Flags", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Flags = true;
 
-		[FieldDescription(Description = "Light Color", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Light Color", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool LightColor = true;
 
-		[FieldDescription(Description = "Fade Color", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Fade Color", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FadeColor = true;
 
-		[FieldDescription(Description = "Desaturation", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Desaturation", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Desaturation = true;
 
-		[FieldDescription(Description = "Sound Sequence", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Sound Sequence", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool SoundSequence = true;
 
-		[FieldDescription(Description = "Gravity", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Gravity", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Gravity = true;
 		
-		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Fields = true;
 
-		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Comment = true;
 	}
 
@@ -385,31 +387,31 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Texture Offset Y")]
 		public bool OffsetY = true;
 
-		[FieldDescription(Description = "Upper Texture Offset", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Upper Texture Offset", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool UpperTextureOffset = true;
 
-		[FieldDescription(Description = "Middle Texture Offset", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Middle Texture Offset", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool MiddleTextureOffset = true;
 
-		[FieldDescription(Description = "Lower Texture Offset", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Lower Texture Offset", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool LowerTextureOffset = true;
 
-		[FieldDescription(Description = "Upper Texture Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Upper Texture Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool UpperTextureScale = true;
 
-		[FieldDescription(Description = "Middle Texture Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Middle Texture Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool MiddleTextureScale = true;
 
-		[FieldDescription(Description = "Lower Texture Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Lower Texture Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool LowerTextureScale = true;
 
-		[FieldDescription(Description = "Brightness", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Brightness", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Brightness = true;
 		
-		[FieldDescription(Description = "Flags", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Flags", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Flags = true;
 		
-		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Fields = true;
 	}
 
@@ -488,10 +490,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Action")]
 		public bool Action = true;
 		
-		[FieldDescription(Description = "Action Arguments", DOOM = false)]
+		[FieldDescription(Description = "Action Arguments", DOOM = false, SRB2 = false)]
 		public bool Arguments = true;
 		
-		[FieldDescription(Description = "Activation", DOOM = false, UDMF = false)]
+		[FieldDescription(Description = "Activation", DOOM = false, UDMF = false, SRB2 = false)]
 		public bool Activation = true;
 		
 		[FieldDescription(Description = "Tags", HEXEN = false)]
@@ -500,19 +502,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Flags")]
 		public bool Flags = true;
 
-		[FieldDescription(Description = "Alpha", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Alpha", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Alpha = true;
 
-		[FieldDescription(Description = "Render Style", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Render Style", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool RenderStyle = true;
 
-		[FieldDescription(Description = "Lock Number", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Lock Number", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool LockNumber = true;
 		
-		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Fields = true;
 
-		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Comment = true;
 	}
 
@@ -621,52 +623,52 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[FieldDescription(Description = "Z Height", DOOM = false)]
 		public bool ZHeight = true;
 		
-		[FieldDescription(Description = "Pitch", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Pitch", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Pitch = true;
 		
-		[FieldDescription(Description = "Roll", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Roll", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Roll = true;
 		
-		[FieldDescription(Description = "Scale", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Scale", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Scale = true;
 		
-		[FieldDescription(Description = "Action", DOOM = false)]
+		[FieldDescription(Description = "Action", DOOM = false, SRB2 = false)]
 		public bool Action = true;
 		
-		[FieldDescription(Description = "Action Arguments", DOOM = false)]
+		[FieldDescription(Description = "Action Arguments", DOOM = false, SRB2 = false)]
 		public bool Arguments = true;
 		
-		[FieldDescription(Description = "Tag", DOOM = false)]
+		[FieldDescription(Description = "Tag", DOOM = false, SRB2 = false)]
 		public bool Tag = true;
 		
 		[FieldDescription(Description = "Flags")]
 		public bool Flags = true;
 
-		[FieldDescription(Description = "Conversation ID", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Conversation ID", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Conversation = true;
 
-		[FieldDescription(Description = "Gravity", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Gravity", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Gravity = true;
 
-		[FieldDescription(Description = "Health Multiplier", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Health Multiplier", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Health = true;
 
-		[FieldDescription(Description = "Score", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Score", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Score = true;
 
-		[FieldDescription(Description = "Alpha", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Alpha", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Alpha = true;
 
-		[FieldDescription(Description = "Fill Color", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Fill Color", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool FillColor = true;
 
-		[FieldDescription(Description = "Render Style", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Render Style", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool RenderStyle = true;
 		
-		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Custom Fields", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Fields = true;
 
-		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false)]
+		[FieldDescription(Description = "Comment", DOOM = false, HEXEN = false, SRB2 = false)]
 		public bool Comment = true;
 	}
 	

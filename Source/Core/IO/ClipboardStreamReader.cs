@@ -132,10 +132,10 @@ namespace CodeImp.DoomBuilder.IO
 				//flags
 				Dictionary<string, bool> stringflags = new Dictionary<string, bool>(StringComparer.Ordinal);
 				int numFlags = reader.ReadInt32();
-				for(int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), true);
+                for (int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), reader.ReadBoolean());
 
-				//add missing flags
-				foreach(KeyValuePair<string, string> flag in General.Map.Config.SectorFlags) 
+                //add missing flags
+                foreach (KeyValuePair<string, string> flag in General.Map.Config.SectorFlags) 
 				{
 					if(stringflags.ContainsKey(flag.Key)) continue;
 					stringflags.Add(flag.Key, false);
@@ -187,10 +187,10 @@ namespace CodeImp.DoomBuilder.IO
 				//flags
 				Dictionary<string, bool> stringflags = new Dictionary<string, bool>(StringComparer.Ordinal);
 				int numFlags = reader.ReadInt32();
-				for(int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), true);
+                for (int f = 0; f < numFlags; f++) stringflags.Add(ReadString(reader), reader.ReadBoolean());
 
-				//add missing flags
-				foreach(KeyValuePair<string, string> flag in General.Map.Config.LinedefFlags) 
+                //add missing flags
+                foreach (KeyValuePair<string, string> flag in General.Map.Config.LinedefFlags) 
 				{
 					if(stringflags.ContainsKey(flag.Key)) continue;
 					stringflags.Add(flag.Key, false);
@@ -290,11 +290,10 @@ namespace CodeImp.DoomBuilder.IO
 				//flags
 				data.Flags = new Dictionary<string, bool>(StringComparer.Ordinal);
 				int numFlags = reader.ReadInt32();
-				for(int f = 0; f < numFlags; f++)
-					data.Flags.Add(ReadString(reader), true);
+                for (int f = 0; f < numFlags; f++) data.Flags.Add(ReadString(reader), reader.ReadBoolean());
 
-				//add missing flags
-				foreach(KeyValuePair<string, string> flag in General.Map.Config.SidedefFlags) 
+                //add missing flags
+                foreach (KeyValuePair<string, string> flag in General.Map.Config.SidedefFlags) 
 				{
 					if(data.Flags.ContainsKey(flag.Key)) continue;
 					data.Flags.Add(flag.Key, false);

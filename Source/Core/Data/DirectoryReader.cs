@@ -28,7 +28,7 @@ namespace CodeImp.DoomBuilder.Data
 	{
 		#region ================== Variables
 
-		private DirectoryFilesList files;
+		private readonly DirectoryFilesList files;
 
 		#endregion
 		
@@ -358,8 +358,8 @@ namespace CodeImp.DoomBuilder.Data
 			return files.GetAllFiles(path, extension, subfolders).ToArray();
 		}
 
-		// This finds the first file that has the specific name, regardless of file extension
-		protected override string FindFirstFile(string beginswith, bool subfolders)
+        // This finds the first file that has the specific name, regardless of file extension
+        internal override string FindFirstFile(string beginswith, bool subfolders)
 		{
 			return files.GetFirstFile(beginswith, subfolders);
 		}

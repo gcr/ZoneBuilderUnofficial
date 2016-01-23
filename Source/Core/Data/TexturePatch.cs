@@ -16,6 +16,7 @@
 
 #region ================== Namespaces
 
+using System;
 using System.IO;
 using CodeImp.DoomBuilder.Rendering;
 using CodeImp.DoomBuilder.ZDoom;
@@ -64,8 +65,8 @@ namespace CodeImp.DoomBuilder.Data
 		{
 			// Initialize
 			this.lumpname = lumpname;
-			this.x = x;
-			this.y = y;
+			this.x = (Int16)x;
+			this.y = (Int16)y;
 			this.flipx = false;
 			this.flipy = false;
 			this.rotate = 0;
@@ -82,8 +83,8 @@ namespace CodeImp.DoomBuilder.Data
 		{
 			// Initialize
 			this.lumpname = patch.Name.ToUpperInvariant();
-			this.x = patch.OffsetX;
-			this.y = patch.OffsetY;
+			this.x = (Int16)patch.OffsetX;
+			this.y = (Int16)patch.OffsetY;
 			this.flipx = patch.FlipX;
 			this.flipy = patch.FlipY;
 			this.rotate = patch.Rotation;

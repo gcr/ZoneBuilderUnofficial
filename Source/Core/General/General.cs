@@ -1807,8 +1807,8 @@ namespace CodeImp.DoomBuilder
 			return e.Current;
 		}
 
-		// This returns the next power of 2
-		public static int NextPowerOf2(int v)
+        // This returns the next power of 2
+        /*public static int NextPowerOf2(int v)
 		{
 			int p = 0;
 
@@ -1817,10 +1817,24 @@ namespace CodeImp.DoomBuilder
 
 			// Return power
 			return (int)Math.Pow(2, p);
-		}
-		
-		// Convert bool to integer
-		internal static int Bool2Int(bool v)
+		}*/
+
+        //mxd. This returns the next power of 2. Taken from http://bits.stephan-brumme.com/roundUpToNextPowerOfTwo.html
+        public static int NextPowerOf2(int x)
+        {
+            x--;
+            x |= x >> 1;  // handle  2 bit numbers
+            x |= x >> 2;  // handle  4 bit numbers
+            x |= x >> 4;  // handle  8 bit numbers
+            x |= x >> 8;  // handle 16 bit numbers
+            x |= x >> 16; // handle 32 bit numbers
+            x++;
+
+            return x;
+        }
+
+        // Convert bool to integer
+        internal static int Bool2Int(bool v)
 		{
 			return v ? 1 : 0;
 		}

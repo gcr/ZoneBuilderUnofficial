@@ -77,7 +77,8 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly bool linetagindicatesectors;
 		private readonly string decorategames;
 		private string skyflatname;
-		private readonly int maxtexturenamelength;
+        private Dictionary<string, string> defaultskytextures; //mxd <map name, sky texture name>
+        private readonly int maxtexturenamelength;
 		private readonly bool longtexturenames; //mxd
 		private readonly int leftboundary;
 		private readonly int rightboundary;
@@ -194,7 +195,8 @@ namespace CodeImp.DoomBuilder.Config
 		public bool LineTagIndicatesSectors { get { return linetagindicatesectors ; } }
 		public string DecorateGames { get { return decorategames; } }
 		public string SkyFlatName { get { return skyflatname; } internal set { skyflatname = value; } } //mxd. Added setter
-		public int MaxTextureNameLength { get { return maxtexturenamelength; } }
+        public Dictionary<string, string> DefaultSkyTextures { get { return defaultskytextures; } } //mxd
+        public int MaxTextureNameLength { get { return maxtexturenamelength; } }
 		public bool UseLongTextureNames { get { return longtexturenames; } } //mxd
 		public int LeftBoundary { get { return leftboundary; } }
 		public int RightBoundary { get { return rightboundary; } }
@@ -309,9 +311,10 @@ namespace CodeImp.DoomBuilder.Config
 			this.linedefrenderstyles = new Dictionary<string, string>(StringComparer.Ordinal); //mxd
 			this.sectorrenderstyles = new Dictionary<string, string>(StringComparer.Ordinal); //mxd
 			this.thingrenderstyles = new Dictionary<string, string>(StringComparer.Ordinal); //mxd
-			
-			// Read general settings
-			configname = cfg.ReadSetting("game", "<unnamed game>");
+            this.defaultskytextures = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase); //mxd
+
+            // Read general settings
+            configname = cfg.ReadSetting("game", "<unnamed game>");
 
 			//mxd
 			int gt = (cfg.ReadSetting("basegame", (int)GameType.UNKNOWN));
@@ -426,8 +429,11 @@ namespace CodeImp.DoomBuilder.Config
 			LoadTextureSets();
 			LoadThingFilters();
 
-			// Make door flags
-			LoadMakeDoorFlags();
+            //mxd. Vanilla sky textures
+            LoadDefaultSkies();
+
+            // Make door flags
+            LoadMakeDoorFlags();
 		}
 
 		// Destructor
@@ -898,8 +904,42 @@ namespace CodeImp.DoomBuilder.Config
 			}
 		}
 
-		//mxd
-		private void LoadStringDictionary(Dictionary<string, string> target, string settingname) 
+        //mxd
+        private void LoadDefaultSkies()
+        {
+            IDictionary dic = cfg.ReadSetting("defaultskytextures", new Hashtable());
+            char[] separator = new[] { ',' };
+            foreach (DictionaryEntry de in dic)
+            {
+                string skytex = de.Key.ToString();
+                if (defaultskytextures.ContainsKey(skytex))
+                {
+                    General.ErrorLogger.Add(ErrorType.Warning, "Sky texture \"" + skytex + "\" is double-defined in the current game configuration!");
+                    continue;
+                }
+
+                string[] maps = de.Value.ToString().Split(separator, StringSplitOptions.RemoveEmptyEntries);
+                if (maps.Length == 0)
+                {
+                    General.ErrorLogger.Add(ErrorType.Warning, "Sky texture \"" + skytex + "\" has no map names defined in the current game configuration!");
+                    continue;
+                }
+
+                foreach (string map in maps)
+                {
+                    if (defaultskytextures.ContainsKey(map))
+                    {
+                        General.ErrorLogger.Add(ErrorType.Warning, "Map \"" + map + "\" is double-defined in the \"DefaultSkyTextures\" block of current game configuration!");
+                        continue;
+                    }
+
+                    defaultskytextures[map] = skytex;
+                }
+            }
+        }
+
+        //mxd
+        private void LoadStringDictionary(Dictionary<string, string> target, string settingname) 
 		{
 			IDictionary dic = cfg.ReadSetting(settingname, new Hashtable());
 			foreach(DictionaryEntry de in dic)

@@ -67,7 +67,7 @@ namespace CodeImp.DoomBuilder.Rendering
 			}
 		}
 
-		public Texture Texture1 { set { if(manager.Enabled) effect.SetTexture(texture1, value); settingschanged = true; } }
+		public BaseTexture Texture1 { set { if(manager.Enabled) effect.SetTexture(texture1, value); settingschanged = true; } }
 
 		//mxd
 		private Color4 vertexcolor;
@@ -184,7 +184,7 @@ namespace CodeImp.DoomBuilder.Rendering
 				lightPositionAndRadiusHandle = effect.GetParameter(null, "lightPosAndRadius");
 				lightColorHandle = effect.GetParameter(null, "lightColor");
 				//fog
-				camPosHandle = effect.GetParameter(null, "cameraPos");
+				camPosHandle = effect.GetParameter(null, "campos");
 
 				world = effect.GetParameter(null, "world");
 			}
@@ -285,12 +285,12 @@ namespace CodeImp.DoomBuilder.Rendering
 		// This sets up the render pipeline
 		public override void BeginPass(int index)
 		{
-			Device device = manager.D3DDevice.Device;
-
 			if(!manager.Enabled)
 			{
-				// Sampler settings
-				if(General.Settings.VisualBilinear)
+                Device device = manager.D3DDevice.Device;
+
+                // Sampler settings
+                if (General.Settings.VisualBilinear)
 				{
 					device.SetSamplerState(0, SamplerState.MagFilter, TextureFilter.Linear);
 					device.SetSamplerState(0, SamplerState.MinFilter, TextureFilter.Linear);

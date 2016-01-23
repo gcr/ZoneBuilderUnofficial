@@ -137,12 +137,12 @@ namespace CodeImp.DoomBuilder.Rendering
 		// This sets up the render pipeline
 		public override void BeginPass(int index)
 		{
-			Device device = manager.D3DDevice.Device;
-
 			if(!manager.Enabled)
 			{
-				// Sampler settings
-				if(General.Settings.ClassicBilinear)
+                Device device = manager.D3DDevice.Device;
+
+                // Sampler settings
+                if (General.Settings.ClassicBilinear)
 				{
 					device.SetSamplerState(0, SamplerState.MagFilter, TextureFilter.Linear);
 					device.SetSamplerState(0, SamplerState.MinFilter, TextureFilter.Linear);

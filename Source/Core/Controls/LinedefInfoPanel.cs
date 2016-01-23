@@ -299,7 +299,17 @@ namespace CodeImp.DoomBuilder.Controls
 
 					//mxd. Sector index
 					frontpanel.Text += ". Sector " + l.Front.Sector.Index + " ";
-				}
+
+                    //visibility
+                    frontTopUDMFOffsetLabel.Visible = false;
+                    frontTopUDMFScaleLabel.Visible = false;
+
+                    frontMidUDMFOffsetLabel.Visible = false;
+                    frontMidUDMFScaleLabel.Visible = false;
+
+                    frontBottomUDMFOffsetLabel.Visible = false;
+                    frontBottomUDMFScaleLabel.Visible = false;
+                }
 
 				//mxd. Set texture names, update panel sizes
 				UpdateTexturePanel(panelFrontTop, l.Front.HighTexture, fronthighname, labelTextureFrontTop,

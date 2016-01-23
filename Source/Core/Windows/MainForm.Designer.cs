@@ -197,7 +197,8 @@ namespace CodeImp.DoomBuilder.Windows
 			this.modelsshowfiltered = new System.Windows.Forms.ToolStripMenuItem();
 			this.modelsshowall = new System.Windows.Forms.ToolStripMenuItem();
 			this.buttontogglefog = new System.Windows.Forms.ToolStripButton();
-			this.buttontoggleeventlines = new System.Windows.Forms.ToolStripButton();
+            this.buttontogglesky = new System.Windows.Forms.ToolStripButton();
+            this.buttontoggleeventlines = new System.Windows.Forms.ToolStripButton();
 			this.buttontogglevisualvertices = new System.Windows.Forms.ToolStripButton();
 			this.separatorgzmodes = new System.Windows.Forms.ToolStripSeparator();
 			this.buttontest = new System.Windows.Forms.ToolStripSplitButton();
@@ -1262,6 +1263,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.dynamiclightmode,
             this.modelrendermode,
             this.buttontogglefog,
+            this.buttontogglesky,
             this.buttontoggleeventlines,
             this.buttontogglevisualvertices,
             this.separatorgzmodes,
@@ -1843,10 +1845,22 @@ namespace CodeImp.DoomBuilder.Windows
 			this.buttontogglefog.Tag = "builder_gztogglefog";
 			this.buttontogglefog.Text = "Toggle Fog Rendering";
 			this.buttontogglefog.Click += new System.EventHandler(this.InvokeTaggedAction);
-			// 
-			// buttontoggleeventlines
-			// 
-			this.buttontoggleeventlines.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            // 
+            // buttontogglesky
+            // 
+            this.buttontogglesky.CheckOnClick = true;
+            this.buttontogglesky.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.buttontogglesky.Image = global::CodeImp.DoomBuilder.Properties.Resources.Sky;
+            this.buttontogglesky.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.buttontogglesky.Name = "buttontogglesky";
+            this.buttontogglesky.Size = new System.Drawing.Size(23, 20);
+            this.buttontogglesky.Tag = "builder_gztogglesky";
+            this.buttontogglesky.Text = "Toggle Sky Rendering";
+            this.buttontogglesky.Click += new System.EventHandler(this.InvokeTaggedAction);
+            // 
+            // buttontoggleeventlines
+            // 
+            this.buttontoggleeventlines.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
 			this.buttontoggleeventlines.Image = global::CodeImp.DoomBuilder.Properties.Resources.InfoLine;
 			this.buttontoggleeventlines.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.buttontoggleeventlines.Name = "buttontoggleeventlines";
@@ -2647,7 +2661,8 @@ namespace CodeImp.DoomBuilder.Windows
 		private System.Windows.Forms.ToolStripSeparator seperatorgeometry;
 		private System.Windows.Forms.ToolStripButton buttontogglefx;
 		private System.Windows.Forms.ToolStripButton buttontogglefog;
-		private System.Windows.Forms.ToolStripStatusLabel warnsLabel;
+        private System.Windows.Forms.ToolStripButton buttontogglesky;
+        private System.Windows.Forms.ToolStripStatusLabel warnsLabel;
 		private System.Windows.Forms.ToolStripMenuItem itemReloadModedef;
 		private System.Windows.Forms.ToolStripMenuItem itemReloadGldefs;
 		private System.Windows.Forms.ToolStripSeparator separatorDrawModes;

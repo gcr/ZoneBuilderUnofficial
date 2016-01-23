@@ -62,8 +62,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			Vector2D vl, vr;
 
-			//mxd. lightfog flag support
-			int lightvalue;
+            //mxd. Apply sky hack?
+            UpdateSkyRenderFlag();
+
+            //mxd. lightfog flag support
+            int lightvalue;
 			bool lightabsolute;
 			GetLightValue(out lightvalue, out lightabsolute);
 
@@ -201,13 +204,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			base.SetVertices(null); //mxd
 			return false;
 		}
-		
-		#endregion
-		
-		#region ================== Methods
 
-		// Return texture name
-		public override string GetTextureName()
+        //mxd
+        internal void UpdateSkyRenderFlag()
+        {
+            renderassky = (Sidedef.LongMiddleTexture == MapSet.EmptyLongName && Sidedef.Sector != null && Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName);
+        }
+
+        #endregion
+
+        #region ================== Methods
+
+        // Return texture name
+        public override string GetTextureName()
 		{
 			return this.Sidedef.MiddleTexture;
 		}

@@ -420,8 +420,11 @@ namespace CodeImp.DoomBuilder.Windows
 			// Map opened?
 			if(General.Map != null)
 			{
-				// Show map name and filename in caption
-				this.Text = (mapchanged ? "\u25CF " : "") + General.Map.FileTitle + " (" + General.Map.Options.CurrentName + ") - " + Application.ProductName;
+                // Get nice name
+                string maptitle = (!string.IsNullOrEmpty(General.Map.Data.MapInfo.Title) ? ": " + General.Map.Data.MapInfo.Title : "");
+
+                // Show map name and filename in caption
+                this.Text = (mapchanged ? "\u25CF " : "") + General.Map.FileTitle + " (" + General.Map.Options.CurrentName + ") - " + Application.ProductName;
 			}
 			else
 			{
@@ -2039,7 +2042,8 @@ namespace CodeImp.DoomBuilder.Windows
 			dynamiclightmode.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglefx.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglefog.Visible = General.Settings.GZToolbarGZDoom && maploaded;
-			buttontoggleeventlines.Visible = General.Settings.GZToolbarGZDoom && maploaded;
+            buttontogglesky.Visible = General.Settings.GZToolbarGZDoom && maploaded;
+            buttontoggleeventlines.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			buttontogglevisualvertices.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 			separatorgzmodes.Visible = General.Settings.GZToolbarGZDoom && maploaded;
 
@@ -2192,7 +2196,8 @@ namespace CodeImp.DoomBuilder.Windows
 				}
 				
 				buttontogglefog.Checked = General.Settings.GZDrawFog;
-				buttontoggleeventlines.Checked = General.Settings.GZShowEventLines;
+                buttontogglesky.Checked = General.Settings.GZDrawSky;
+                buttontoggleeventlines.Checked = General.Settings.GZShowEventLines;
 				buttontogglevisualvertices.Visible = General.Map.UDMF;
 				buttontogglevisualvertices.Checked = General.Settings.GZShowVisualVertices;
 			} 

@@ -95,8 +95,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private readonly List<ThingCopyData> copybuffer;
 		private Type lasthighlighttype;
 
-		private static bool gzdoomRenderingEffects = true; //mxd
-
         private BSP bsp;
 
         //mxd. Moved here from Tools
@@ -161,7 +159,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		}
 
 		public object HighlightedTarget { get { return target.picked; } } //mxd
-		public static bool GZDoomRenderingEffects { get { return gzdoomRenderingEffects; } } //mxd
 		public bool UseSelectionFromClassicMode { get { return useSelectionFromClassicMode; } } //mxd
 
 		new public IRenderer3D Renderer { get { return renderer; } }
@@ -785,8 +782,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			Sector[] sectorsWithEffects = null;
             bsp.Update();
 
-			if(!gzdoomRenderingEffects) 
-			{
+            if (!General.Settings.GZDoomRenderingEffects)
+            {
 				//store all sectors with effects
 				if(sectordata != null && sectordata.Count > 0) 
 				{
@@ -828,10 +825,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				vertices.Clear();
 			}
 
-			if(!gzdoomRenderingEffects) return; //mxd
-			
-			// Find all sector who's tag is not 0 and hash them so that we can find them quicly
-			foreach(Sector s in General.Map.Map.Sectors)
+            if (!General.Settings.GZDoomRenderingEffects) return; //mxd
+
+            // Find all sector who's tag is not 0 and hash them so that we can find them quicly
+            foreach (Sector s in General.Map.Map.Sectors)
 			{
 				foreach(int tag in s.Tags)
 				{
@@ -1591,9 +1588,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			base.OnUndoEnd();
 
-			//mxd. Effects may've become invalid
-			if(gzdoomRenderingEffects && sectordata != null && sectordata.Count > 0)
-				RebuildElementData();
+            //mxd. Effects may've become invalid
+            if (General.Settings.GZDoomRenderingEffects && sectordata != null && sectordata.Count > 0)
+                RebuildElementData();
 
 			//mxd. As well as geometry...
 			foreach(KeyValuePair<Sector, VisualSector> group in visiblesectors)
@@ -3532,11 +3529,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		[BeginAction("togglegzdoomgeometryeffects")]
 		public void ToggleGZDoomRenderingEffects() 
 		{
-			gzdoomRenderingEffects = !gzdoomRenderingEffects;
-			RebuildElementData();
+            General.Settings.GZDoomRenderingEffects = !General.Settings.GZDoomRenderingEffects;
+            RebuildElementData();
 			UpdateChangedObjects();
-			General.Interface.DisplayStatus(StatusType.Info, "(G)ZDoom geometry effects are " + (gzdoomRenderingEffects ? "ENABLED" : "DISABLED"));
-		}
+            General.Interface.DisplayStatus(StatusType.Info, "(G)ZDoom geometry effects are " + (General.Settings.GZDoomRenderingEffects ? "ENABLED" : "DISABLED"));
+        }
 
 		//mxd
 		[BeginAction("thingaligntowall")]

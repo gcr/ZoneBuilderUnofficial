@@ -134,11 +134,7 @@ namespace CodeImp.DoomBuilder.Controls
 		// This ignores key combinations so that they are passed
 		// on to the other controls on the parent form
 		private readonly Dictionary<int, int> ignoredkeys;
-		
-		// States
-		private ScriptMarginType indexmargintype;
-		private ScriptIndicatorStyle indexindicatorstyle;
-		
+				
 		#endregion
 
 		#region ================== Properties
@@ -161,16 +157,6 @@ namespace CodeImp.DoomBuilder.Controls
 			get { return (ScriptEndOfLine)EOLMode; }
 			set { EOLMode = (int)value; }
 		}
-
-		/// <summary>
-		/// The type of a margin.
-		/// </summary>
-		public ScriptMarginType MarginType { get { return indexmargintype; } }
-
-		/// <summary>
-		/// The type of a margin.
-		/// </summary>
-		public ScriptIndicatorStyle IndicatorStyle { get { return indexindicatorstyle; } }
 
 		/// <summary>
 		/// Are there any redoable actions in the undo history?

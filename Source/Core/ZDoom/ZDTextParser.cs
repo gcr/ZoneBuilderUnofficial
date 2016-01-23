@@ -17,6 +17,7 @@
 #region ================== Namespaces
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.IO;
@@ -87,14 +88,23 @@ namespace CodeImp.DoomBuilder.ZDoom
 			//mxd. Clear error status?
 			if(clearerrors) ClearError();
 
-			//mxd. Integrity check
-			if(stream == null || stream.Length == 0)
-			{
-				ReportError("Unable to load '" + sourcefilename + "'");
-				return false;
-			}
-			
-			datastream = stream;
+            //mxd. Integrity checks
+            if (stream == null)
+            {
+                ReportError("Unable to load \"" + sourcefilename + "\"");
+                return false;
+            }
+
+            if (stream.Length == 0)
+            {
+                if (!string.IsNullOrEmpty(sourcename))
+                    LogWarning("Include file \"" + sourcefilename + "\" is empty");
+                else
+                    LogWarning("File is empty");
+                return true;
+            }
+
+            datastream = stream;
 			datareader = new BinaryReader(stream, Encoding.ASCII);
 			sourcename = sourcefilename;
 			datastream.Seek(0, SeekOrigin.Begin);
@@ -470,9 +480,38 @@ namespace CodeImp.DoomBuilder.ZDoom
 			if(success) value = val * sign;
 			return success;
 		}
-		
-		// This reports an error
-		protected internal void ReportError(string message)
+
+        //mxd
+        protected void SkipStructure() { SkipStructure(new HashSet<string>()); }
+        protected void SkipStructure(HashSet<string> breakat)
+        {
+            string token;
+            do
+            {
+                if (!SkipWhitespace(true)) break;
+                token = ReadToken();
+                if (string.IsNullOrEmpty(token)) break;
+                if (breakat.Contains(token))
+                {
+                    DataStream.Seek(-token.Length - 1, SeekOrigin.Current);
+                    return;
+                }
+            }
+            while (token != "{");
+            int scopelevel = 1;
+            do
+            {
+                if (!SkipWhitespace(true)) break;
+                token = ReadToken();
+                if (string.IsNullOrEmpty(token)) break;
+                if (token == "{") scopelevel++;
+                if (token == "}") scopelevel--;
+            }
+            while (scopelevel > 0);
+        }
+
+        // This reports an error
+        protected internal void ReportError(string message)
 		{
 			// Set error information
 			errordesc = message;
@@ -606,7 +645,7 @@ namespace CodeImp.DoomBuilder.ZDoom
                     case 60:
                     case 62:
                     case 124:
-                        ReportError("unsupported character \"" + c + "\" in path \"" + path + "\".");
+                        ReportError("Unsupported character \"" + c + "\" in path \"" + path + "\".");
                         return false;
 
                     default:

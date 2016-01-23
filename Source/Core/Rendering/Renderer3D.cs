@@ -43,13 +43,16 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const float FOG_RANGE = 0.9f;
 		internal const float GZDOOM_VERTICAL_VIEW_STRETCH = 1.2f;
 		internal const float GZDOOM_INVERTED_VERTICAL_VIEW_STRETCH = 1.0f / GZDOOM_VERTICAL_VIEW_STRETCH;
-		
-		#endregion
 
-		#region ================== Variables
+        private const int SHADERPASS_LIGHT = 17; //mxd
+        private const int SHADERPASS_SKYBOX = 5; //mxd
 
-		// Matrices
-		private Matrix projection;
+        #endregion
+
+        #region ================== Variables
+
+        // Matrices
+        private Matrix projection;
 		private Matrix view3d;
 		private Matrix viewproj; //mxd
 		private Matrix billboard;
@@ -92,8 +95,11 @@ namespace CodeImp.DoomBuilder.Rendering
 		//mxd. Translucent geometry to be rendered. Must be sorted by camera distance.
 		private List<VisualGeometry> translucentgeo;
 
-		//mxd. Solid things to be rendered (currently(?) there won't be any). Must be sorted by sector.
-		private Dictionary<ImageData, List<VisualThing>> solidthings;
+        //mxd. Geometry to be rendered as skybox.
+        private List<VisualGeometry> skygeo;
+
+        //mxd. Solid things to be rendered (currently(?) there won't be any). Must be sorted by sector.
+        private Dictionary<ImageData, List<VisualThing>> solidthings;
 
 		//mxd. Masked things to be rendered. Must be sorted by sector.
 		private Dictionary<ImageData, List<VisualThing>> maskedthings;
@@ -400,8 +406,9 @@ namespace CodeImp.DoomBuilder.Rendering
 			solidgeo = new Dictionary<ImageData, List<VisualGeometry>>(); //mxd
 			maskedgeo = new Dictionary<ImageData, List<VisualGeometry>>(); //mxd
 			translucentgeo = new List<VisualGeometry>(); //mxd
+            skygeo = new List<VisualGeometry>(); //mxd
 
-			solidthings = new Dictionary<ImageData, List<VisualThing>>(); //mxd
+            solidthings = new Dictionary<ImageData, List<VisualThing>>(); //mxd
 			maskedthings = new Dictionary<ImageData, List<VisualThing>>(); //mxd
 			translucentthings = new List<VisualThing>(); //mxd
 			
@@ -427,8 +434,16 @@ namespace CodeImp.DoomBuilder.Rendering
 			graphics.Device.SetRenderState(RenderState.TextureFactor, -1);
 			graphics.Shaders.World3D.Begin();
 
-			// SOLID PASS
-			world = Matrix.Identity;
+            //mxd. SKY PASS
+            if (skygeo.Count > 0)
+            {
+                world = Matrix.Identity;
+                ApplyMatrices3D();
+                RenderSky(skygeo);
+            }
+
+            // SOLID PASS
+            world = Matrix.Identity;
 			ApplyMatrices3D();
 			RenderSinglePass(solidgeo, solidthings);
 
@@ -510,8 +525,9 @@ namespace CodeImp.DoomBuilder.Rendering
 			solidgeo = null;
 			maskedgeo = null;
 			translucentgeo = null;
+            skygeo = null;
 
-			solidthings = null;
+            solidthings = null;
 			maskedthings = null;
 			translucentthings = null;
 			
@@ -951,7 +967,8 @@ namespace CodeImp.DoomBuilder.Rendering
 				// If the camera is inside a sector, compare z coordinates
 				translucentgeo.Sort(delegate(VisualGeometry vg1, VisualGeometry vg2)
 				{
-					float camdist1, camdist2;
+                    if (vg1 == vg2) return 0;
+                    float camdist1, camdist2;
 
 					if((vg1.GeometryType == VisualGeometryType.FLOOR || vg1.GeometryType == VisualGeometryType.CEILING)
 						&& General.Map.VisualCamera.Sector.Index == vg1.Sector.Sector.Index)
@@ -978,9 +995,13 @@ namespace CodeImp.DoomBuilder.Rendering
 			}
 			else
 			{
-				translucentgeo.Sort((vg1, vg2) => (int)((General.Map.VisualCamera.Position - vg2.BoundingBox[0]).GetLengthSq()
-													  - (General.Map.VisualCamera.Position - vg1.BoundingBox[0]).GetLengthSq()));
-			}
+                translucentgeo.Sort(delegate (VisualGeometry vg1, VisualGeometry vg2)
+                {
+                    if (vg1 == vg2) return 0;
+                    return (int)((General.Map.VisualCamera.Position - vg2.BoundingBox[0]).GetLengthSq()
+                               - (General.Map.VisualCamera.Position - vg1.BoundingBox[0]).GetLengthSq());
+                });
+            }
 
 			ImageData curtexture;
 			VisualSector sector = null;
@@ -1104,12 +1125,16 @@ namespace CodeImp.DoomBuilder.Rendering
 				graphics.Device.SetSamplerState(0, SamplerState.AddressW, TextureAddress.Clamp);
 				graphics.Device.SetRenderState(RenderState.CullMode, Cull.None); //mxd. Disable backside culling, because otherwise sprites with positive ScaleY and negative ScaleX will be facing away from the camera...
 
-				// Sort geometry by camera distance. First vertex of the BoundingBox is it's center
-				thingspass.Sort((vt1, vt2) => (int)((General.Map.VisualCamera.Position - vt2.BoundingBox[0]).GetLengthSq()
-												  - (General.Map.VisualCamera.Position - vt1.BoundingBox[0]).GetLengthSq()));
+                // Sort geometry by camera distance. First vertex of the BoundingBox is it's center
+                thingspass.Sort(delegate (VisualThing vt1, VisualThing vt2)
+                {
+                    if (vt1 == vt2) return 0;
+                    return (int)((General.Map.VisualCamera.Position - vt2.BoundingBox[0]).GetLengthSq()
+                               - (General.Map.VisualCamera.Position - vt1.BoundingBox[0]).GetLengthSq());
+                });
 
-				// Reset vars
-				currentpass = RenderPass.Solid;
+                // Reset vars
+                currentpass = RenderPass.Solid;
 				curtexturename = 0;
 				Color4 vertexcolor = new Color4();
 				fogfactor = -1;
@@ -1279,7 +1304,7 @@ namespace CodeImp.DoomBuilder.Rendering
 			if(geometrytolit.Count == 0) return;
 			
 			graphics.Shaders.World3D.World = Matrix.Identity;
-			graphics.Shaders.World3D.BeginPass(17);
+			graphics.Shaders.World3D.BeginPass(SHADERPASS_LIGHT);
 
 			VisualSector sector = null;
 
@@ -1565,10 +1590,61 @@ namespace CodeImp.DoomBuilder.Rendering
 			graphics.Shaders.World3D.EndPass();
 		}
 
-		//mxd. This gets color from dynamic lights based on distance to thing. 
-		//thing position must be in absolute cordinates 
-		//(thing.Position.Z value is relative to floor of the sector the thing is in)
-		private Color4 GetLitColorForThing(VisualThing t) 
+        //mxd
+        private void RenderSky(IEnumerable<VisualGeometry> geo)
+        {
+            VisualSector sector = null;
+
+            // Set render settings
+            graphics.Shaders.World3D.BeginPass(SHADERPASS_SKYBOX);
+            graphics.Shaders.World3D.Texture1 = General.Map.Data.SkyBox;
+            graphics.Shaders.World3D.World = world;
+            graphics.Shaders.World3D.CameraPosition = new Vector4(cameraposition.x, cameraposition.y, cameraposition.z, 0f);
+
+            foreach (VisualGeometry g in geo)
+            {
+                // Changing sector?
+                if (!object.ReferenceEquals(g.Sector, sector))
+                {
+                    // Update the sector if needed
+                    if (g.Sector.NeedsUpdateGeo) g.Sector.Update();
+
+                    // Only do this sector when a vertexbuffer is created
+                    //mxd. No Map means that sector was deleted recently, I suppose
+                    if (g.Sector.GeometryBuffer != null && g.Sector.Sector.Map != null)
+                    {
+                        // Change current sector
+                        sector = g.Sector;
+
+                        // Set stream source
+                        graphics.Device.SetStreamSource(0, sector.GeometryBuffer, 0, WorldVertex.Stride);
+                    }
+                    else
+                    {
+                        sector = null;
+                    }
+                }
+
+                if (sector != null)
+                {
+                    // Set the colors to use
+                    graphics.Shaders.World3D.HighlightColor = CalculateHighlightColor((g == highlighted) && showhighlight, (g.Selected && showselection));
+
+                    // Apply changes
+                    graphics.Shaders.World3D.ApplySettings();
+
+                    // Render!
+                    graphics.Device.DrawPrimitives(PrimitiveType.TriangleList, g.VertexOffset, g.Triangles);
+                }
+            }
+
+            graphics.Shaders.World3D.EndPass();
+        }
+
+        //mxd. This gets color from dynamic lights based on distance to thing. 
+        //thing position must be in absolute cordinates 
+        //(thing.Position.Z value is relative to floor of the sector the thing is in)
+        private Color4 GetLitColorForThing(VisualThing t) 
 		{
 			Color4 litColor = new Color4();
 			foreach(VisualThing lt in lightthings)
@@ -1595,7 +1671,8 @@ namespace CodeImp.DoomBuilder.Rendering
 		// This calculates the highlight/selection color
 		private Color4 CalculateHighlightColor(bool ishighlighted, bool isselected)
 		{
-			Color4 highlightcolor = isselected ? General.Colors.Selection.ToColorValue() : General.Colors.Highlight.ToColorValue();
+            if (!ishighlighted && !isselected) return new Color4(); //mxd
+            Color4 highlightcolor = isselected ? General.Colors.Selection.ToColorValue() : General.Colors.Highlight.ToColorValue();
 			highlightcolor.Alpha = ishighlighted ? highlightglowinv : highlightglow;
 			return highlightcolor;
 		}
@@ -1627,26 +1704,36 @@ namespace CodeImp.DoomBuilder.Rendering
 			// Must have a texture and vertices
 			if(g.Texture != null && g.Triangles > 0)
 			{
-				switch(g.RenderPass)
-				{
-					case RenderPass.Solid:
-						if(!solidgeo.ContainsKey(g.Texture)) solidgeo.Add(g.Texture, new List<VisualGeometry>());
-						solidgeo[g.Texture].Add(g);
-						break;
+                if (g.RenderAsSky && General.Settings.GZDrawSky)
+                {
+                    skygeo.Add(g);
+                }
+                else
+                {
+                    switch (g.RenderPass)
+                    {
+                        case RenderPass.Solid:
+                            if (!solidgeo.ContainsKey(g.Texture))
+                                solidgeo.Add(g.Texture, new List<VisualGeometry>());
+                            solidgeo[g.Texture].Add(g);
+                            break;
 
-					case RenderPass.Mask:
-						if(!maskedgeo.ContainsKey(g.Texture)) maskedgeo.Add(g.Texture, new List<VisualGeometry>());
-						maskedgeo[g.Texture].Add(g);
-						break;
+                        case RenderPass.Mask:
+                            if (!maskedgeo.ContainsKey(g.Texture))
+                                maskedgeo.Add(g.Texture, new List<VisualGeometry>());
+                            maskedgeo[g.Texture].Add(g);
+                            break;
 
-					case RenderPass.Additive: case RenderPass.Alpha:
-						translucentgeo.Add(g);
-						break;
+                        case RenderPass.Additive:
+                        case RenderPass.Alpha:
+                            translucentgeo.Add(g);
+                            break;
 
-					default:
-						throw new NotImplementedException("Geometry rendering of " + g.RenderPass + " render pass is not implemented!");
-				}
-			}
+                        default:
+                            throw new NotImplementedException("Geometry rendering of " + g.RenderPass + " render pass is not implemented!");
+                    }
+                }
+            }
 		}
 
 		// This collects a visual sector's geometry for rendering

@@ -119,43 +119,35 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else
 				texscale = new Vector2D(1.0f / 64.0f, 1.0f / 64.0f);
 
-			//mxd. Sky is always bright
-			int color;
-			if(s.FloorTexture == General.Map.Config.SkyFlatName)
-			{
-				color = -1; // That's white. With alpha. Not very impressive, eh?
-				fogfactor = 0; // No fog
-			}
-			else
-			{
-				color = PixelColor.FromInt(level.color).WithAlpha((byte)General.Clamp(level.alpha, 0, 255)).ToInt();
+            // Determine brightness
+            int color = PixelColor.FromInt(level.color).WithAlpha((byte)General.Clamp(level.alpha, 0, 255)).ToInt();
 
-				//mxd. Top extrafloor level should calculate fogdensity
-				//from the brightness of the level above it
-				int targetbrightness;
-				if(extrafloor != null && extrafloor.VavoomType && !level.disablelighting)
-				{
-					targetbrightness = 0;
-					SectorData sd = mode.GetSectorData(this.Sector.Sector);
-					for(int i = 0; i < sd.LightLevels.Count - 1; i++)
-					{
-						if(sd.LightLevels[i] == level)
-						{
-							targetbrightness = sd.LightLevels[i + 1].brightnessbelow;
-							break;
-						}
-					}
-				}
-				else
-				{
-					targetbrightness = level.brightnessbelow;
-				}
+            //mxd. Top extrafloor level should calculate fogdensity
+            //from the brightness of the level above it
+            int targetbrightness;
+            if (extrafloor != null && extrafloor.VavoomType && !level.disablelighting)
+            {
+                targetbrightness = 0;
+                SectorData sd = mode.GetSectorData(this.Sector.Sector);
+                for (int i = 0; i < sd.LightLevels.Count - 1; i++)
+                {
+                    if (sd.LightLevels[i] == level)
+                    {
+                        targetbrightness = sd.LightLevels[i + 1].brightnessbelow;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                targetbrightness = level.brightnessbelow;
+            }
 
-				fogfactor = CalculateFogDensity(targetbrightness);
-			}
+            //mxd. Determine fog density
+            fogfactor = CalculateFogDensity(targetbrightness);
 
-			// Make vertices
-			ReadOnlyCollection<Vector2D> triverts = base.Sector.Sector.Triangles.Vertices;
+            // Make vertices
+            ReadOnlyCollection<Vector2D> triverts = Sector.Sector.Triangles.Vertices;
 			WorldVertex[] verts = new WorldVertex[triverts.Count];
 			for(int i = 0; i < triverts.Count; i++)
 			{
@@ -198,18 +190,37 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				this.RenderPass = RenderPass.Solid;
 			}
-			
-			// Apply vertices
-			base.SetVertices(verts);
+            
+            //mxd. Update sky render flag
+            UpdateSkyRenderFlag();
+
+            // Apply vertices
+            base.SetVertices(verts);
 			return (verts.Length > 0);
 		}
-		
-		#endregion
-		
-		#region ================== Methods
 
-		// Return texture coordinates
-		protected override Point GetTextureOffset()
+        //mxd
+        private void UpdateSkyRenderFlag()
+        {
+            bool isrenderedassky = renderassky;
+            renderassky = (level.sector.FloorTexture == General.Map.Config.SkyFlatName || level.sector.LongFloorTexture == MapSet.EmptyLongName);
+            if (isrenderedassky != renderassky && Sector.Sides != null)
+            {
+                // Middle geometry may need updating...
+                foreach (Sidedef side in level.sector.Sidedefs)
+                {
+                    VisualSidedefParts parts = Sector.GetSidedefParts(side);
+                    if (parts.middlesingle != null) parts.middlesingle.UpdateSkyRenderFlag();
+                }
+            }
+        }
+
+        #endregion
+
+        #region ================== Methods
+
+        // Return texture coordinates
+        protected override Point GetTextureOffset()
 		{
 			return new Point { X = (int)Sector.Sector.Fields.GetValue("xpanningfloor", 0.0f), 
 							   Y = (int)Sector.Sector.Fields.GetValue("ypanningfloor", 0.0f) };

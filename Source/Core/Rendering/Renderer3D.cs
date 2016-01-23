@@ -70,7 +70,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		// Thing cage
 		private bool renderthingcages;
 		//mxd
-		private VisualVertexHandle vertexHandle;
+		private VisualVertexHandle vertexhandle;
 		private int[] lightOffsets;
 		
 		// Crosshair
@@ -81,8 +81,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		private IVisualPickable highlighted;
 		private float highlightglow;
 		private float highlightglowinv;
-		private ColorImage highlightimage;
-		private ColorImage selectionimage;
 		private bool showselection;
 		private bool showhighlight;
 		
@@ -144,8 +142,6 @@ namespace CodeImp.DoomBuilder.Rendering
 			// Initialize
 			CreateProjection();
 			CreateMatrices2D();
-			SetupHelperObjects(); //mxd
-			SetupTextures();
 			renderthingcages = true;
 			showselection = true;
 			showhighlight = true;
@@ -165,15 +161,11 @@ namespace CodeImp.DoomBuilder.Rendering
 			// Not already disposed?
 			if(!isdisposed)
 			{
-				// Clean up
-				if(selectionimage != null) selectionimage.Dispose();
-				if(highlightimage != null) highlightimage.Dispose();
-				selectionimage = null;
-				highlightimage = null;
-				vertexHandle.Dispose(); //mxd
-				
-				// Done
-				base.Dispose();
+                // Clean up
+                if (vertexhandle != null) vertexhandle.Dispose(); //mxd				
+                                                                  
+                // Done
+                base.Dispose();
 			}
 		}
 
@@ -186,11 +178,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		public override void UnloadResource()
 		{
 			crosshairverts = null;
-
-			if(selectionimage != null) selectionimage.Dispose();
-			if(highlightimage != null) highlightimage.Dispose();
-			selectionimage = null;
-			highlightimage = null;
 		}
 		
 		// This is called resets when the device is reset
@@ -198,7 +185,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		public override void ReloadResource()
 		{
 			CreateMatrices2D();
-			SetupTextures();
 		}
 
 		// This makes screen vertices for display
@@ -228,45 +214,25 @@ namespace CodeImp.DoomBuilder.Rendering
 			crosshairverts[3].u = 1.0f;
 			crosshairverts[3].v = 1.0f;
 		}
-		
-		#endregion
 
-		#region ================== Resources
+        #endregion
 
-		// This loads the textures for highlight and selection if we need them
-		private void SetupTextures()
-		{
-			if(!graphics.Shaders.Enabled)
-			{
-				highlightimage = new ColorImage(General.Colors.Highlight, 32, 32);
-				highlightimage.LoadImage();
-				highlightimage.CreateTexture();
-				
-				selectionimage = new ColorImage(General.Colors.Selection, 32, 32);
-				selectionimage.LoadImage();
-				selectionimage.CreateTexture();
-			}
-		}
+        #region ================== Resources
+        //mxd
+        internal void UpdateVertexHandle()
+        {
+            if (vertexhandle != null)
+            {
+                vertexhandle.UnloadResource();
+                vertexhandle.ReloadResource();
+            }
+        }
+        #endregion
 
-		//mxd
-		private void SetupHelperObjects() 
-		{
-			vertexHandle = new VisualVertexHandle();
-		}
+        #region ================== Presentation
 
-		//mxd
-		internal void UpdateVertexHandle()
-		{
-			vertexHandle.UnloadResource();
-			vertexHandle.ReloadResource();
-		}
-
-		#endregion
-		
-		#region ================== Presentation
-
-		// This creates the projection
-		internal void CreateProjection()
+        // This creates the projection
+        internal void CreateProjection()
 		{
 			// Calculate aspect
 			float screenheight = General.Map.Graphics.RenderTarget.ClientSize.Height * (General.Settings.GZStretchView ? GZDOOM_INVERTED_VERTICAL_VIEW_STRETCH : 1.0f); //mxd
@@ -284,10 +250,8 @@ namespace CodeImp.DoomBuilder.Rendering
 			
 			// Make the projection matrix
 			projection = Matrix.PerspectiveFovRH(fovy, aspect, PROJ_NEAR_PLANE, General.Settings.ViewDistance);
-
-			// Apply matrices
-			ApplyMatrices3D();
-		}
+            viewproj = view3d * projection; //mxd
+        }
 		
 		// This creates matrices for a camera view
 		public void PositionAndLookAt(Vector3D pos, Vector3D lookat)
@@ -388,9 +352,12 @@ namespace CodeImp.DoomBuilder.Rendering
 				// Create crosshair vertices
 				if(crosshairverts == null)
 					CreateCrosshairVerts(new Size(General.Map.Data.Crosshair3D.Width, General.Map.Data.Crosshair3D.Height));
-				
-				// Ready
-				return true;
+
+                //mxd. Crate vertex handle
+                if (vertexhandle == null) vertexhandle = new VisualVertexHandle();
+
+                // Ready
+                return true;
 			}
 			else
 			{
@@ -645,8 +612,8 @@ namespace CodeImp.DoomBuilder.Rendering
 
 				//Commence drawing!!11
 				graphics.Shaders.World3D.ApplySettings();
-				graphics.Device.SetStreamSource(0, v.CeilingVertex ? vertexHandle.Upper : vertexHandle.Lower, 0, WorldVertex.Stride);
-				graphics.Device.DrawPrimitives(PrimitiveType.LineList, 0, 8);
+                graphics.Device.SetStreamSource(0, v.CeilingVertex ? vertexhandle.Upper : vertexhandle.Lower, 0, WorldVertex.Stride);
+                graphics.Device.DrawPrimitives(PrimitiveType.LineList, 0, 8);
 			}
 
 			// Done

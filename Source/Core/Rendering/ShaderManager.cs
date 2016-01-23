@@ -32,8 +32,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		#region ================== Variables
 
 		// Settings
-		private string shadertechnique;
-		private bool useshaders;
+		private readonly string shadertechnique;
 		
 		// Shaders
 		private Display2DShader display2dshader;
@@ -46,12 +45,11 @@ namespace CodeImp.DoomBuilder.Rendering
 		// Disposing
 		private bool isdisposed;
 
-		#endregion
+        #endregion
 
-		#region ================== Properties
+        #region ================== Properties
 
-		public bool Enabled { get { return useshaders; } }
-		public string ShaderTechnique { get { return shadertechnique; } }
+        public string ShaderTechnique { get { return shadertechnique; } }
 		public Display2DShader Display2D { get { return display2dshader; } }
 		public Things2DShader Things2D { get { return things2dshader; } }
 		public World3DShader World3D { get { return world3dshader; } }
@@ -67,9 +65,10 @@ namespace CodeImp.DoomBuilder.Rendering
 		{
 			// Initialize
 			this.device = device;
-			
-			// Load
-			ReloadResource();
+            shadertechnique = "SM20"; //mxd
+
+            // Load
+            ReloadResource();
 
 			// Register as resource
 			device.RegisterResource(this);
@@ -111,11 +110,6 @@ namespace CodeImp.DoomBuilder.Rendering
 		// Load resources
 		public void ReloadResource()
 		{
-			// Check if we can use shaders
-			Capabilities caps = General.Map.Graphics.Device.Capabilities;
-			useshaders = (caps.PixelShaderVersion.Major >= 2);
-			shadertechnique = "SM20";
-
 			// Initialize effects
 			display2dshader = new Display2DShader(this);
 			things2dshader = new Things2DShader(this);

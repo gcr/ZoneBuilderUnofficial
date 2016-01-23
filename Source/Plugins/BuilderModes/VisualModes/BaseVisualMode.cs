@@ -1438,7 +1438,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			base.ResourcesReloaded();
 			RebuildElementData();
-			PickTarget();
+            UpdateChangedObjects(); //mxd
+            PickTarget();
 		}
 		
 		// This usually happens when geometry is changed by undo, redo, cut or paste actions

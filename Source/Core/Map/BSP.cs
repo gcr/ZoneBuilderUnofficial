@@ -46,7 +46,7 @@ namespace CodeImp.DoomBuilder.Map
             this.deactivate = deactivate;
             if (!deactivate)
             {
-                if (General.Map.IsChanged) BuildNodes();
+                if (General.Map.IsChanged && !General.Map.RebuildNodes(General.Map.ConfigSettings.NodebuilderSave, true)) return;
                 LoadStructures();
             }
 
@@ -76,24 +76,10 @@ namespace CodeImp.DoomBuilder.Map
         {
             if (!deactivate && General.Map.IsChanged)
             {
-                BuildNodes();
+                if (!General.Map.RebuildNodes(General.Map.ConfigSettings.NodebuilderSave, true)) return;
                 LoadStructures();
             }
         }
-
-		/// <summary>
-		/// This (re)builds the nodes for the whole map.
-		/// </summary>
-		private void BuildNodes()
-		{
-			// There is no API available to do this directly, but we export the map which will
-			// cause the DB core to build the nodes (with testing parameters)
-			General.Interface.DisplayStatus(StatusType.Busy, "Building map nodes...");
-			string tempfile = General.MakeTempFilename(General.Map.TempPath, "wad");
-            General.Map.IsChanged = true;
-			General.Map.ExportToFile(tempfile);
-			File.Delete(tempfile);
-		}
 
 		/// <summary>
 		/// This loads all nodes structures data from the lumps

@@ -147,7 +147,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.GZDoom
 
             // Find classname
             SkipWhitespace(true);
-            string lightname = StripTokenQuotes(ReadToken()).ToLowerInvariant();
+            string lightname = StripTokenQuotes(ReadToken());
 
             if (string.IsNullOrEmpty(lightname))
             {
@@ -442,7 +442,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.GZDoom
             SkipWhitespace(true);
 
             // Read object class
-            string objectclass = StripTokenQuotes(ReadToken()).ToLowerInvariant();
+            string objectclass = StripTokenQuotes(ReadToken());
 
             if (string.IsNullOrEmpty(objectclass))
             {
@@ -479,7 +479,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.GZDoom
                 else if (!foundlight && foundframe && token == "light") // Just use first light and be done with it
                 {
                     SkipWhitespace(true);
-                    token = ReadToken().ToLowerInvariant(); // Should be light name
+                    token = ReadToken(); // Should be light name
 
                     if (!string.IsNullOrEmpty(token))
                     {

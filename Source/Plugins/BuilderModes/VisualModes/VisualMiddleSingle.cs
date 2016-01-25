@@ -182,8 +182,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				//mxd. This calculates light with doom-style wall shading
 				PixelColor wallbrightness = PixelColor.FromInt(mode.CalculateBrightness(lightlevel, Sidedef));
 				PixelColor wallcolor = PixelColor.Modulate(sd.Ceiling.colorbelow, wallbrightness);
-				fogfactor = CalculateFogDensity(lightlevel);
-				poly.color = wallcolor.WithAlpha(255).ToInt();
+                fogfactor = CalculateFogFactor(lightlevel);
+                poly.color = wallcolor.WithAlpha(255).ToInt();
 
 				// Cut out pieces that overlap 3D floors in this sector
 				List<WallPolygon> polygons = new List<WallPolygon> { poly };

@@ -84,11 +84,11 @@ namespace CodeImp.DoomBuilder.ZDoom
 			// Syntax
 			whitespace = "\n \t\r\u00A0"; //mxd. non-breaking space is also space :)
 			specialtokens = ":{}+-\n;,";
-			
-			// Initialize
-			actors = new Dictionary<string, ActorStructure>(StringComparer.Ordinal);
-			archivedactors = new Dictionary<string, ActorStructure>(StringComparer.Ordinal);
-			parsedlumps = new HashSet<string>(StringComparer.OrdinalIgnoreCase); //mxd
+
+            // Initialize
+            actors = new Dictionary<string, ActorStructure>(StringComparer.OrdinalIgnoreCase);
+            archivedactors = new Dictionary<string, ActorStructure>(StringComparer.OrdinalIgnoreCase);
+            parsedlumps = new HashSet<string>(StringComparer.OrdinalIgnoreCase); //mxd
 		}
 		
 		// Disposer
@@ -124,7 +124,8 @@ namespace CodeImp.DoomBuilder.ZDoom
 				if(!string.IsNullOrEmpty(objdeclaration))
 				{
 					objdeclaration = objdeclaration.ToLowerInvariant();
-					switch(objdeclaration)
+                    if (objdeclaration == "$gzdb_skip") break;
+                    switch (objdeclaration)
 					{
 						case "actor":
 						{
@@ -225,8 +226,6 @@ namespace CodeImp.DoomBuilder.ZDoom
 								if(string.IsNullOrEmpty(t) || t == ";") break;
 							}
 							break;
-
-						case "$gzdb_skip": break;
 
 						default:
 						{

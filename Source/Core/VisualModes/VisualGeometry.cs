@@ -198,40 +198,44 @@ namespace CodeImp.DoomBuilder.VisualModes
 			boundingBox = BoundingBoxTools.CalculateBoundingPlane(bbs);
 		}
 
-		//mxd. Calculate fogdistance
-		//TODO: this doesn't match any GZDoom light mode...
-		//GZDoom: gl_renderstate.h, SetFog();
-		//GZDoom: gl_lightlevel.cpp gl_SetFog();
-		protected float CalculateFogDensity(int brightness)
-		{
-			float density;
-			if(Sector.Sector.UsesOutsideFog && General.Map.Data.MapInfo.OutsideFogDensity > 0)
-			{
-				density = General.Map.Data.MapInfo.OutsideFogDensity;
-			}
-			else if(!Sector.Sector.UsesOutsideFog && General.Map.Data.MapInfo.FogDensity > 0)
-			{
-				density = General.Map.Data.MapInfo.FogDensity;
-			}
-			else if(brightness < 248)
-			{
-				density = General.Clamp(255 - brightness, 30, 255);
-			}
-			else
-			{
-				density = 0f;
-			}
+        //mxd. Calculate fogdistance
+        //TODO: this doesn't match any GZDoom light mode...
+        //GZDoom: gl_renderstate.h, SetFog();
+        //GZDoom: gl_lightlevel.cpp gl_SetFog();
+        protected float CalculateFogFactor(int brightness) { return CalculateFogFactor(Sector.Sector.FogMode, brightness); }
+        public static float CalculateFogFactor(SectorFogMode mode, int brightness)
+        {
+            float density;
+            switch (mode)
+            {
+                case SectorFogMode.OUTSIDEFOGDENSITY:
+                    density = General.Map.Data.MapInfo.OutsideFogDensity;
+                    break;
 
-			if(Sector.Sector.HasFogColor)
-			{
-				density *= 4;
-			}
+                case SectorFogMode.FOGDENSITY:
+                    density = General.Map.Data.MapInfo.FogDensity;
+                    break;
 
-			return density * FOG_DENSITY_SCALER;
-		}
+                case SectorFogMode.FADE:
+                    density = General.Clamp(255 - brightness, 30, 255) * 4;
+                    break;
 
-		//mxd. Used to get proper sector from 3d-floors
-		public virtual Sector GetControlSector() 
+                case SectorFogMode.CLASSIC:
+                    density = General.Clamp(255 - brightness, 30, 255);
+                    break;
+
+                case SectorFogMode.NONE:
+                    density = 0f;
+                    break;
+
+                default: throw new NotImplementedException("Unknown SectorFogMode!");
+            }
+
+            return density * FOG_DENSITY_SCALER;
+        }
+
+        //mxd. Used to get proper sector from 3d-floors
+        public virtual Sector GetControlSector() 
 		{
 			return sector.Sector;
 		}

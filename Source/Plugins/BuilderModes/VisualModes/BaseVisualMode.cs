@@ -1377,7 +1377,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					renderer.DrawThingCages = ((BuilderPlug.Me.ShowVisualThings & 2) != 0);
 					
 					// Render all visible things
-					foreach(VisualThing t in visiblethings)
+					foreach(VisualThing t in visiblethings.Values)
 						renderer.AddThingGeometry(t);
 				}
 

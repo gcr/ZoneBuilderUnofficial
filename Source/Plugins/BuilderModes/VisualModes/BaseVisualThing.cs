@@ -226,21 +226,24 @@ namespace CodeImp.DoomBuilder.BuilderModes
 							// Level is glowing
 							if(level.affectedbyglow && level.type == SectorLevelType.Floor)
 							{
-								// Get glow brightness
-								SectorData glowdata = (level.sector != Thing.Sector ? mode.GetSectorData(level.sector) : sd);
-								float planez = level.plane.GetZ(thingpos);
+                                // Extrafloor glow doesn't affect thing brightness
+                                if (level.sector == Thing.Sector)
+                                {
+                                    float planez = level.plane.GetZ(thingpos);
 
-								int glowbrightness = glowdata.FloorGlow.Brightness / 2;
-								SectorLevel nexthigher = sd.GetLevelAbove(new Vector3D(thingpos, planez));
+                                    // Get glow brightness
+                                    int glowbrightness = sd.FloorGlow.Brightness / 2;
+                                    SectorLevel nexthigher = sd.GetLevelAbove(new Vector3D(thingpos, planez));
 
-								// Interpolate thing brightness between glow and regular ones
-								if(nexthigher != null)
-								{
-									float higherz = nexthigher.plane.GetZ(thingpos);
-									float delta = General.Clamp(1.0f - (thingpos.z - planez) / (higherz - planez), 0f, 1f);
-									brightness = (int)((glowbrightness + level.sector.Brightness / 2) * delta + nexthigher.sector.Brightness * (1.0f - delta));
-								}
-							}
+                                    // Interpolate thing brightness between glow and regular ones
+                                    if (nexthigher != null)
+                                    {
+                                        float higherz = nexthigher.plane.GetZ(thingpos);
+                                        float delta = General.Clamp(1.0f - (thingpos.z - planez) / (higherz - planez), 0f, 1f);
+                                        brightness = (int)((glowbrightness + level.sector.Brightness / 2) * delta + nexthigher.sector.Brightness * (1.0f - delta));
+                                    }
+                                }
+                            }
 							// Level below this one is glowing. Only possible for floor glow(?)
 							else if(level.type == SectorLevelType.Glow)
 							{
@@ -260,32 +263,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 							PixelColor areacolor = PixelColor.Modulate(level.colorbelow, areabrightness);
 							sectorcolor = areacolor.WithAlpha(alpha).ToInt();
 
-							//mxd. Calculate fogfactor
-							float density;
-							if(Thing.Sector.UsesOutsideFog && General.Map.Data.MapInfo.OutsideFogDensity > 0)
-							{
-								density = General.Map.Data.MapInfo.OutsideFogDensity;
-							}
-							else if(!Thing.Sector.UsesOutsideFog && General.Map.Data.MapInfo.FogDensity > 0)
-							{
-								density = General.Map.Data.MapInfo.FogDensity;
-							}
-							else if(brightness < 248)
-							{
-								density = General.Clamp(255 - brightness, 30, 255);
-							}
-							else
-							{
-								density = 0f;
-							}
-
-							if(level.sector.HasFogColor)
-							{
-								density *= 4;
-							}
-
-							fogfactor = density * VisualGeometry.FOG_DENSITY_SCALER;
-						}
+                            //mxd. Calculate fogfactor
+                            fogfactor = VisualGeometry.CalculateFogFactor(level.sector.FogMode, brightness);
+                        }
 					}
 					//TECH: even Bright Thing frames are affected by custom fade...
 					else
@@ -293,29 +273,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						Vector3D thingpos = new Vector3D(Thing.Position.x, Thing.Position.y, Thing.Position.z + sd.Floor.plane.GetZ(Thing.Position));
 						SectorLevel level = sd.GetLevelAboveOrAt(thingpos);
 
-						if(level != null && level.sector.HasFogColor)
-						{
-							//mxd. Calculate fogfactor
-							float density;
-							if(Thing.Sector.UsesOutsideFog && General.Map.Data.MapInfo.OutsideFogDensity > 0)
-							{
-								density = General.Map.Data.MapInfo.OutsideFogDensity;
-							}
-							else if(!Thing.Sector.UsesOutsideFog && General.Map.Data.MapInfo.FogDensity > 0)
-							{
-								density = General.Map.Data.MapInfo.FogDensity;
-							}
-							else if(level.brightnessbelow < 248)
-							{
-								density = General.Clamp(255 - level.brightnessbelow, 30, 255);
-							}
-							else
-							{
-								density = 0f;
-							}
-
-							fogfactor = density * VisualGeometry.FOG_DENSITY_SCALER * 4;
-						}
+                        if (level != null && level.sector.FogMode > SectorFogMode.CLASSIC)
+                        {
+                            //mxd. Calculate fogfactor
+                            fogfactor = VisualGeometry.CalculateFogFactor(level.sector.FogMode, level.brightnessbelow);
+                        }
 					}
 				}
 				

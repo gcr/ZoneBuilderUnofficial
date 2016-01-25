@@ -768,9 +768,9 @@ namespace CodeImp.DoomBuilder.Rendering
 						// Determine the shader pass we want to use for this object
 						int wantedshaderpass = (((g == highlighted) && showhighlight) || (g.Selected && showselection)) ? highshaderpass : shaderpass;
 
-						//mxd. Render fog?
-						if(General.Settings.GZDrawFog && !fullbrightness && sector.Sector.Brightness < 248)
-							wantedshaderpass += 8;
+                        //mxd. Render fog?
+                        if (General.Settings.GZDrawFog && !fullbrightness && sector.Sector.FogMode != SectorFogMode.NONE)
+                            wantedshaderpass += 8;
 
 						// Switch shader pass?
 						if(currentshaderpass != wantedshaderpass)
@@ -846,9 +846,9 @@ namespace CodeImp.DoomBuilder.Rendering
 							// Determine the shader pass we want to use for this object
 							int wantedshaderpass = (((t == highlighted) && showhighlight) || (t.Selected && showselection)) ? highshaderpass : shaderpass;
 
-							//mxd. If fog is enagled, switch to shader, which calculates it
-							if(General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && (t.Thing.Sector.HasFogColor || t.Thing.Sector.Brightness < 248))
-								wantedshaderpass += 8;
+                            //mxd. If fog is enagled, switch to shader, which calculates it
+                            if (General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && t.Thing.Sector.FogMode != SectorFogMode.NONE)
+                                wantedshaderpass += 8;
 
 							//mxd. Create the matrix for positioning 
 							world = CreateThingPositionMatrix(t);
@@ -1046,9 +1046,9 @@ namespace CodeImp.DoomBuilder.Rendering
 					// Determine the shader pass we want to use for this object
 					int wantedshaderpass = (((g == highlighted) && showhighlight) || (g.Selected && showselection)) ? highshaderpass : shaderpass;
 
-					//mxd. Render fog?
-					if(General.Settings.GZDrawFog && !fullbrightness && sector.Sector.Brightness < 248)
-						wantedshaderpass += 8;
+                    //mxd. Render fog?
+                    if (General.Settings.GZDrawFog && !fullbrightness && sector.Sector.FogMode != SectorFogMode.NONE)
+                        wantedshaderpass += 8;
 
 					// Switch shader pass?
 					if(currentshaderpass != wantedshaderpass)
@@ -1155,9 +1155,9 @@ namespace CodeImp.DoomBuilder.Rendering
 						// Determine the shader pass we want to use for this object
 						int wantedshaderpass = (((t == highlighted) && showhighlight) || (t.Selected && showselection)) ? highshaderpass : shaderpass;
 
-						//mxd. if fog is enagled, switch to shader, which calculates it
-						if(General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && (t.Thing.Sector.HasFogColor || t.Thing.Sector.Brightness < 248))
-							wantedshaderpass += 8;
+                        //mxd. if fog is enagled, switch to shader, which calculates it
+                        if (General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && t.Thing.Sector.FogMode != SectorFogMode.NONE)
+                            wantedshaderpass += 8;
 
 						//mxd. Create the matrix for positioning 
 						world = CreateThingPositionMatrix(t);
@@ -1408,9 +1408,9 @@ namespace CodeImp.DoomBuilder.Rendering
 					// Determine the shader pass we want to use for this object
 					int wantedshaderpass = ((((t == highlighted) && showhighlight) || (t.Selected && showselection)) ? highshaderpass : shaderpass);
 
-					//mxd. if fog is enagled, switch to shader, which calculates it
-					if(General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && (t.Thing.Sector.HasFogColor || t.Thing.Sector.Brightness < 248))
-						wantedshaderpass += 8;
+                    //mxd. if fog is enagled, switch to shader, which calculates it
+                    if (General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && t.Thing.Sector.FogMode != SectorFogMode.NONE)
+                        wantedshaderpass += 8;
 
 					// Switch shader pass?
 					if(currentshaderpass != wantedshaderpass) 
@@ -1509,9 +1509,9 @@ namespace CodeImp.DoomBuilder.Rendering
 				// Determine the shader pass we want to use for this object
 				int wantedshaderpass = ((((t == highlighted) && showhighlight) || (t.Selected && showselection)) ? highshaderpass : shaderpass);
 
-				//mxd. if fog is enagled, switch to shader, which calculates it
-				if(General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && (t.Thing.Sector.HasFogColor || t.Thing.Sector.Brightness < 248))
-					wantedshaderpass += 8;
+                //mxd. if fog is enagled, switch to shader, which calculates it
+                if (General.Settings.GZDrawFog && !fullbrightness && t.Thing.Sector != null && t.Thing.Sector.FogMode != SectorFogMode.NONE)
+                    wantedshaderpass += 8;
 
 				// Switch shader pass?
 				if(currentshaderpass != wantedshaderpass)

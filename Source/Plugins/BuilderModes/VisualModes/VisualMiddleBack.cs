@@ -209,10 +209,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 byte alpha = (byte)extrafloor.Alpha;
                 if (extrafloor.DontRenderSides) alpha = 0;
                 int wallcolor = PixelColor.Modulate(levelcolor, wallbrightness).WithAlpha(alpha).ToInt();
-				fogfactor = CalculateFogDensity(lightlevel);
+                fogfactor = CalculateFogFactor(lightlevel);
 
-				// Cut off the part above the 3D floor and below the 3D ceiling
-				CropPoly(ref poly, bottom, false);
+                // Cut off the part above the 3D floor and below the 3D ceiling
+                CropPoly(ref poly, bottom, false);
 				CropPoly(ref poly, top, false);
 
 				// Cut out pieces that overlap 3D floors in this sector

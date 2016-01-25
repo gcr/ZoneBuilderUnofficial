@@ -29,7 +29,16 @@ using SlimDX;
 
 namespace CodeImp.DoomBuilder.Map
 {
-	public sealed class Sector : SelectableElement
+    public enum SectorFogMode //mxd
+    {
+        NONE,              // no fog
+        CLASSIC,           // black fog when sector brightness < 243
+        FOGDENSITY,        // sector uses "fogdensity" MAPINFO property
+        OUTSIDEFOGDENSITY, // sector uses "outsidefogdensity" MAPINFO property
+        FADE               // sector uses UDMF "fade" sector property
+    }
+
+    public sealed class Sector : SelectableElement
 	{
 		#region ================== Constants
 
@@ -76,13 +85,12 @@ namespace CodeImp.DoomBuilder.Map
 		private ReadOnlyCollection<LabelPositionInfo> labels;
 		private readonly SurfaceEntryCollection surfaceentries;
 
-		//mxd. Rendering
-		private Color4 fogColor;
-		private bool hasFogColor;
-		private bool useOutsideFog;
+        //mxd. Rendering
+        private Color4 fogcolor;
+        private SectorFogMode fogmode;
 
-		//mxd. Slopes
-		private Vector3D floorslope;
+        //mxd. Slopes
+        private Vector3D floorslope;
 		private float flooroffset;
 		private Vector3D ceilslope;
 		private float ceiloffset;
@@ -117,13 +125,12 @@ namespace CodeImp.DoomBuilder.Map
 		public FlatVertex[] FlatVertices { get { return flatvertices; } }
 		public ReadOnlyCollection<LabelPositionInfo> Labels { get { return labels; } }
 
-		//mxd. Rednering
-		public Color4 FogColor { get { return fogColor; } }
-		public bool HasFogColor { get { return hasFogColor; } }
-		public bool UsesOutsideFog { get { return useOutsideFog; } }
+        //mxd. Rednering
+        public Color4 FogColor { get { return fogcolor; } }
+        public SectorFogMode FogMode { get { return fogmode; } }
 
-		//mxd. Slopes
-		public Vector3D FloorSlope { get { return floorslope; } set { BeforePropsChange(); floorslope = value; updateneeded = true; } }
+        //mxd. Slopes
+        public Vector3D FloorSlope { get { return floorslope; } set { BeforePropsChange(); floorslope = value; updateneeded = true; } }
 		public float FloorSlopeOffset { get { return flooroffset; } set { BeforePropsChange(); flooroffset = value; updateneeded = true; } }
 		public Vector3D CeilSlope { get { return ceilslope; } set { BeforePropsChange(); ceilslope = value; updateneeded = true; } }
 		public float CeilSlopeOffset { get { return ceiloffset; } set { BeforePropsChange(); ceiloffset = value; updateneeded = true; } }
@@ -473,11 +480,10 @@ namespace CodeImp.DoomBuilder.Map
 			this.Fields.Clear();
 			if(isvirtual) this.Fields.Add(MapSet.VirtualSectorField, MapSet.VirtualSectorValue);
 			this.Flags.Clear();
-			hasFogColor = false;
-			useOutsideFog = false;
+            this.fogmode = SectorFogMode.NONE;
 
-			// Reset Slopes
-			floorslope = new Vector3D();
+            // Reset Slopes
+            floorslope = new Vector3D();
 			flooroffset = 0;
 			ceilslope = new Vector3D();
 			ceiloffset = 0;
@@ -881,20 +887,29 @@ namespace CodeImp.DoomBuilder.Map
 		//mxd
 		public void UpdateFogColor() 
 		{
-			// Sector uses outisde fog when it's ceiling is sky or Sector_Outside effect (87) is set
-			useOutsideFog = (General.Map.Data.MapInfo.HasOutsideFogColor && (ceiltexname == General.Map.Config.SkyFlatName || (effect == 87 && General.Map.Config.SectorEffects.ContainsKey(effect))));
-
-			if(General.Map.UDMF && Fields.ContainsKey("fadecolor"))
-				fogColor = new Color4((int)Fields["fadecolor"].Value);
-			else if(useOutsideFog)
-				fogColor = General.Map.Data.MapInfo.OutsideFogColor;
-			else if(General.Map.Data.MapInfo.HasFadeColor)
-				fogColor = General.Map.Data.MapInfo.FadeColor;
-			else
-				fogColor = new Color4();
-
-			hasFogColor = fogColor.Red > 0 || fogColor.Green > 0 || fogColor.Blue > 0;
-		}
+            if (General.Map.UDMF && Fields.ContainsKey("fadecolor"))
+            {
+                fogcolor = new Color4((int)Fields["fadecolor"].Value);
+                fogmode = SectorFogMode.FADE;
+            }
+            // Sector uses outisde fog when it's ceiling is sky or Sector_Outside effect (87) is set
+            else if (General.Map.Data.MapInfo.HasOutsideFogColor &&
+                (ceiltexname == General.Map.Config.SkyFlatName || (effect == 87 && General.Map.Config.SectorEffects.ContainsKey(effect))))
+            {
+                fogcolor = General.Map.Data.MapInfo.OutsideFogColor;
+                fogmode = SectorFogMode.OUTSIDEFOGDENSITY;
+            }
+            else if (General.Map.Data.MapInfo.HasFadeColor)
+            {
+                fogcolor = General.Map.Data.MapInfo.FadeColor;
+                fogmode = SectorFogMode.FOGDENSITY;
+            }
+            else
+            {
+                fogcolor = new Color4();
+                fogmode = (brightness < 248 ? SectorFogMode.CLASSIC : SectorFogMode.NONE);
+            }
+        }
 		
 		#endregion
 	}

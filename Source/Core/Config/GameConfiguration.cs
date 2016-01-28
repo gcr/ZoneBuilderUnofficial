@@ -60,7 +60,9 @@ namespace CodeImp.DoomBuilder.Config
 		private readonly string impassableflag;
 		private readonly string upperunpeggedflag;
 		private readonly string lowerunpeggedflag;
-		private readonly bool mixtexturesflats;
+        private readonly string repeatmidtextureflag;
+        private readonly string pegmidtextureflag;
+        private readonly bool mixtexturesflats;
 		private readonly bool generalizedactions;
 		private readonly bool generalizedeffects;
 		private readonly int start3dmodethingtype;
@@ -178,7 +180,9 @@ namespace CodeImp.DoomBuilder.Config
 		public string ImpassableFlag { get { return impassableflag; } }
 		public string UpperUnpeggedFlag { get { return upperunpeggedflag; } }
 		public string LowerUnpeggedFlag { get { return lowerunpeggedflag; } }
-		public bool MixTexturesFlats { get { return mixtexturesflats; } }
+        public string RepeatMidtextureFlag { get { return repeatmidtextureflag; } }
+        public string PegMidtextureFlag { get { return pegmidtextureflag; } }
+        public bool MixTexturesFlats { get { return mixtexturesflats; } }
 		public bool GeneralizedActions { get { return generalizedactions; } }
 		public bool GeneralizedEffects { get { return generalizedeffects; } }
 		public int Start3DModeThingType { get { return start3dmodethingtype; } }
@@ -377,9 +381,13 @@ namespace CodeImp.DoomBuilder.Config
 			if(obj is int) upperunpeggedflag = ((int)obj).ToString(CultureInfo.InvariantCulture); else upperunpeggedflag = obj.ToString();
 			obj = cfg.ReadSettingObject("lowerunpeggedflag", 0);
 			if(obj is int) lowerunpeggedflag = ((int)obj).ToString(CultureInfo.InvariantCulture); else lowerunpeggedflag = obj.ToString();
+            obj = cfg.ReadSettingObject("repeatmidtextureflag", 0);
+            if (obj is int) repeatmidtextureflag = ((int)obj).ToString(CultureInfo.InvariantCulture); else repeatmidtextureflag = obj.ToString();
+            obj = cfg.ReadSettingObject("pegmidtextureflag", 0);
+            if (obj is int) pegmidtextureflag = ((int)obj).ToString(CultureInfo.InvariantCulture); else pegmidtextureflag = obj.ToString();
 
-			// Get texture and flat sources
-			textureranges = cfg.ReadSetting("textures", new Hashtable());
+            // Get texture and flat sources
+            textureranges = cfg.ReadSetting("textures", new Hashtable());
 			flatranges = cfg.ReadSetting("flats", new Hashtable());
 			patchranges = cfg.ReadSetting("patches", new Hashtable());
 			spriteranges = cfg.ReadSetting("sprites", new Hashtable());

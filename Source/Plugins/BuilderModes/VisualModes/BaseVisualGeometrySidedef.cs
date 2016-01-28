@@ -92,6 +92,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
         #region ================== Methods
 
+        protected virtual bool IsLowerUnpegged()
+        {
+            return Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag);
+        }
+
         //mxd
         override protected void PerformAutoSelection()
         {
@@ -703,7 +708,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						}
 						else if(this is VisualMiddleDouble)
 						{
-							if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+							if(IsLowerUnpegged())
 								offsety = (options.Bounds.Y - Sidedef.GetHighHeight() - Sidedef.GetLowHeight()) * scaley - Sidedef.OffsetY;
 							else
 								offsety = options.Bounds.Y * scaley - Sidedef.OffsetY;
@@ -738,7 +743,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd. Oh so special cases...
 		private float GetLowerOffsetY(float scaley) 
 		{
-			if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+			if(IsLowerUnpegged())
 				return ((-Sidedef.OffsetY - Sidedef.GetMiddleHeight() - Sidedef.GetHighHeight()) * scaley) % Texture.Height;
 			return (-Sidedef.OffsetY * scaley) % Texture.Height;
 		}

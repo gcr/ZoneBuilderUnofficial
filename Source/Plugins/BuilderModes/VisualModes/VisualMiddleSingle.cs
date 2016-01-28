@@ -132,7 +132,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// height is 0 then the TexturePlane doesn't work!
 			TexturePlane tp = new TexturePlane();
 			float floorbias = (Sidedef.Sector.CeilHeight == Sidedef.Sector.FloorHeight) ? 1.0f : 0.0f;
-			if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+			if(IsLowerUnpegged())
 			{
 				// When lower unpegged is set, the middle texture is bound to the bottom
 				tp.tlt.y = tsz.y - (Sidedef.Sector.CeilHeight - Sidedef.Sector.FloorHeight);
@@ -214,6 +214,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
         #endregion
 
         #region ================== Methods
+
+        protected override bool IsLowerUnpegged()
+        {
+            bool lowerunpeggedflag = Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag);
+            bool pegmidtextureflag = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.PegMidtextureFlag);
+            return lowerunpeggedflag ^ pegmidtextureflag;
+        }
 
         // Return texture name
         public override string GetTextureName()

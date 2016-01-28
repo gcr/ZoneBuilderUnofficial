@@ -144,7 +144,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			float zoffset = Sidedef.Sector.CeilHeight - Sidedef.Other.Sector.CeilHeight; //mxd
 
 			// When lower unpegged is set, the middle texture is bound to the bottom
-			if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag)) 
+			if(IsLowerUnpegged())
 				tp.tlt.y = tsz.y - (geotop - geobottom);
 			
 			if(zoffset > 0) tp.tlt.y -= zoffset; //mxd
@@ -192,7 +192,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			CropPoly(ref poly, osd.Floor.plane, true);
 
             // Determine if we should repeat the middle texture
-            bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet("1024");
+            bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag);
             repeatmidtex = srb2repeat || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
 			if(!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096)) 
 			{
@@ -202,7 +202,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 int repetitions = srb2repeat ? (Sidedef.OffsetX / 4096) + 1 : 1;
 
 				// Determine top portion height
-				if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+				if(IsLowerUnpegged())
 					textop = geobottom + tof.y + repetitions * Math.Abs(tsz.y);
 				else
 					textop = geotop + tof.y;
@@ -254,13 +254,20 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			base.SetVertices(null); //mxd
 			return false;
 		}
-		
-		#endregion
 
-		#region ================== Methods
+        #endregion
 
-		// This performs a fast test in object picking
-		public override bool PickFastReject(Vector3D from, Vector3D to, Vector3D dir)
+        #region ================== Methods
+
+        protected override bool IsLowerUnpegged()
+        {
+            bool lowerunpeggedflag = Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag);
+            bool pegmidtextureflag = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.PegMidtextureFlag);
+            return lowerunpeggedflag ^ pegmidtextureflag;
+        }
+
+        // This performs a fast test in object picking
+        public override bool PickFastReject(Vector3D from, Vector3D to, Vector3D dir)
 		{
 			if(!repeatmidtex)
 			{
@@ -289,7 +296,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			if(repeatmidtex)
 			{
-				if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+				if(IsLowerUnpegged())
 					zoffset = Sidedef.Sector.FloorHeight;
 				else
 					zoffset = Sidedef.Sector.CeilHeight;

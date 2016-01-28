@@ -131,7 +131,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// height is 0 then the TexturePlane doesn't work!
 			TexturePlane tp = new TexturePlane();
 			float floorbias = (Sidedef.Other.Sector.FloorHeight == Sidedef.Sector.FloorHeight) ? 1.0f : 0.0f;
-			if(Sidedef.Line.IsFlagSet(General.Map.Config.LowerUnpeggedFlag))
+			if(IsLowerUnpegged())
 			{
 				if(Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName && Sidedef.Other.Sector.CeilTexture == General.Map.Config.SkyFlatName) 
 				{

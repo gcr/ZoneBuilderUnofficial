@@ -53,8 +53,9 @@ namespace CodeImp.DoomBuilder.Data
 		protected string shortname; //mxd. Name in uppercase and clamped to DataManager.CLASIC_IMAGE_NAME_LENGTH
 		protected string virtualname; //mxd. Path of this name is used in TextureBrowserForm
 		protected string displayname; //mxd. Name to display in TextureBrowserForm
-		protected bool isFlat; //mxd. if false, it's a texture
-		protected bool istranslucent; //mxd
+		protected bool isFlat; //mxd. If false, it's a texture
+        protected bool istranslucent; //mxd. If true, has pixels with alpha > 0 && < 255 
+        protected bool ismasked; //mxd. If true, has pixels with zero alpha
 		protected bool hasLongName; //mxd. Texture name is longer than DataManager.CLASIC_IMAGE_NAME_LENGTH
 		protected bool hasPatchWithSameName; //mxd
 		protected int level; //mxd. Folder depth of this item
@@ -97,7 +98,8 @@ namespace CodeImp.DoomBuilder.Data
 		public string DisplayName { get { return displayname; } } //mxd
 		public bool IsFlat { get { return isFlat; } } //mxd
 		public bool IsTranslucent { get { return istranslucent; } } //mxd
-		public bool HasPatchWithSameName { get { return hasPatchWithSameName; } } //mxd
+        public bool IsMasked { get { return ismasked; } } //mxd
+        public bool HasPatchWithSameName { get { return hasPatchWithSameName; } } //mxd
 		internal bool HasLongName { get { return hasLongName; } } //mxd
 		public bool UseColorCorrection { get { return usecolorcorrection; } set { usecolorcorrection = value; } }
 		public Texture Texture { get { lock(this) { return texture; } } }
@@ -364,7 +366,8 @@ namespace CodeImp.DoomBuilder.Data
 
 								// Also check alpha
 								if(cp->a > 0 && cp->a < 255) istranslucent = true;
-							}
+                                else if (cp->a == 0) ismasked = true;
+                            }
 
 							// Update glow data
 							int br = (int)(r / numpixels);
@@ -395,9 +398,9 @@ namespace CodeImp.DoomBuilder.Data
 							bitmap.UnlockBits(bmpdata);
 						}
 					}
-					//mxd. Check if the texture is translucent
-					else
-					{
+                    //mxd. Check if the texture is translucent
+                    else if (!loadfailed)
+                    {
 						BitmapData bmpdata = null;
 						try { bmpdata = bitmap.LockBits(new Rectangle(0, 0, bitmap.Size.Width, bitmap.Size.Height), ImageLockMode.ReadWrite, PixelFormat.Format32bppArgb); }
 						catch(Exception e) { General.ErrorLogger.Add(ErrorType.Error, "Cannot lock image '" + this.filepathname + "' for translucency check. " + e.GetType().Name + ": " + e.Message); }
@@ -409,13 +412,10 @@ namespace CodeImp.DoomBuilder.Data
 
 							for(PixelColor* cp = pixels + numpixels - 1; cp >= pixels; cp--)
 							{
-								// Check alpha
-								if(cp->a > 0 && cp->a < 255)
-								{
-									istranslucent = true;
-									break;
-								}
-							}
+                                // Check alpha
+                                if (cp->a > 0 && cp->a < 255) istranslucent = true;
+                                else if (cp->a == 0) ismasked = true;
+                            }
 
 							// Release the data
 							bitmap.UnlockBits(bmpdata);

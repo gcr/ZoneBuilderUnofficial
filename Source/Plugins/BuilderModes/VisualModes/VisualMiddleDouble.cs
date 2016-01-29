@@ -283,9 +283,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd. Alpha based picking
 		public override bool PickAccurate(Vector3D from, Vector3D to, Vector3D dir, ref float u_ray) 
 		{
-			if(!Texture.IsImageLoaded) return base.PickAccurate(from, to, dir, ref u_ray);
+            if (!Texture.IsImageLoaded || (!Texture.IsTranslucent && !Texture.IsMasked)) return base.PickAccurate(from, to, dir, ref u_ray);
 
-			float u;
+            float u;
 			new Line2D(from, to).GetIntersection(Sidedef.Line.Line, out u);
 			if(Sidedef != Sidedef.Line.Front) u = 1.0f - u;
 
@@ -309,12 +309,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				oy = (int)Math.Ceiling(((pickintersect.z - zoffset) * UniFields.GetFloat(Sidedef.Fields, "scaley_mid", 1.0f) / Texture.Scale.y) % Texture.Height);
 			}
 
-			// Make sure offsets are inside of texture dimensions...
-			while(ox < 0) ox += Texture.Width;
-			while(oy < 0) oy += Texture.Height;
+            // Make sure offsets are inside of texture dimensions...
+            if (ox < 0) ox += Texture.Width;
+            if (oy < 0) oy += Texture.Height;
 
-			// Check pixel alpha
-			if(Texture.GetBitmap().GetPixel(General.Clamp(ox, 0, Texture.Width - 1), General.Clamp(Texture.Height - oy, 0, Texture.Height - 1)).A > 0)
+            // Check pixel alpha
+            if (Texture.GetBitmap().GetPixel(General.Clamp(ox, 0, Texture.Width - 1), General.Clamp(Texture.Height - oy, 0, Texture.Height - 1)).A > 0)
 			{
 				return base.PickAccurate(from, to, dir, ref u_ray);
 			}

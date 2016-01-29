@@ -708,9 +708,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			
 			return sectordata[s];
 		}
-		
-		// This requests a things's extra data
-		internal ThingData GetThingData(Thing t)
+
+        //mxd. This requests a sector's extra data or null if given sector doesn't have it
+        internal SectorData GetSectorDataEx(Sector s)
+        {
+            return (sectordata.ContainsKey(s) ? sectordata[s] : null);
+        }
+
+        // This requests a things's extra data
+        internal ThingData GetThingData(Thing t)
 		{
 			// Make fresh sector data when it doesn't exist yet
 			if(!thingdata.ContainsKey(t))
@@ -2251,7 +2257,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else 
 			{
 				// Get next higher floor or ceiling from surrounding unselected sectors
-				foreach(Sector s in BuilderModesTools.GetSectorsAround(ceilings.Keys))
+				foreach(Sector s in BuilderModesTools.GetSectorsAround(this, ceilings.Keys))
 				{
 					if(s.FloorHeight < targetCeilingHeight && s.FloorHeight > maxSelectedHeight)
 						targetCeilingHeight = s.FloorHeight;
@@ -2284,7 +2290,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else 
 			{
 				// Get next higher floor or ceiling from surrounding unselected sectors
-				foreach(Sector s in BuilderModesTools.GetSectorsAround(floors.Keys))
+				foreach(Sector s in BuilderModesTools.GetSectorsAround(this, floors.Keys))
 				{
 					if(s.FloorHeight > maxSelectedHeight && s.FloorHeight < targetFloorHeight && s.FloorHeight <= minSelectedCeilingHeight)
 						targetFloorHeight = s.FloorHeight;
@@ -2451,7 +2457,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else 
 			{
 				// Get next lower ceiling or floor from surrounding unselected sectors
-				foreach(Sector s in BuilderModesTools.GetSectorsAround(floors.Keys))
+				foreach(Sector s in BuilderModesTools.GetSectorsAround(this, floors.Keys))
 				{
 					if(s.CeilHeight > targetFloorHeight && s.CeilHeight < minSelectedHeight)
 						targetFloorHeight = s.CeilHeight;
@@ -2484,7 +2490,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else 
 			{
 				// Get next lower ceiling or floor from surrounding unselected sectors
-				foreach(Sector s in BuilderModesTools.GetSectorsAround(ceilings.Keys))
+				foreach(Sector s in BuilderModesTools.GetSectorsAround(this, ceilings.Keys))
 				{
 					if(s.CeilHeight > targetCeilingHeight && s.CeilHeight < minSelectedHeight && s.CeilHeight >= maxSelectedFloorHeight)
 						targetCeilingHeight = s.CeilHeight;

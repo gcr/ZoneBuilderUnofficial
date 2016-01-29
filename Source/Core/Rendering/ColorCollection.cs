@@ -197,8 +197,8 @@ namespace CodeImp.DoomBuilder.Rendering
 			if(colors[THINGCOLOR17].ToInt() == 0) colors[THINGCOLOR17] = PixelColor.FromColor(Color.DarkOrange);
 			if(colors[THINGCOLOR18].ToInt() == 0) colors[THINGCOLOR18] = PixelColor.FromColor(Color.DarkKhaki);
 			if(colors[THINGCOLOR19].ToInt() == 0) colors[THINGCOLOR19] = PixelColor.FromColor(Color.Goldenrod);
-            if (colors[SCRIPTFOLDFORE].ToInt() == 0) colors[SCRIPTFOLDFORE] = PixelColor.FromColor(SystemColors.ControlLightLight);
-            if (colors[SCRIPTFOLDBACK].ToInt() == 0) colors[SCRIPTFOLDBACK] = PixelColor.FromColor(SystemColors.ControlDark);
+            if (colors[SCRIPTFOLDFORE].ToInt() == 0) colors[SCRIPTFOLDFORE] = PixelColor.FromColor(SystemColors.ControlDark);
+            if (colors[SCRIPTFOLDBACK].ToInt() == 0) colors[SCRIPTFOLDBACK] = PixelColor.FromColor(SystemColors.ControlLightLight);
 
             // Create assist colors
             CreateAssistColors();

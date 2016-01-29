@@ -309,6 +309,10 @@ namespace CodeImp.DoomBuilder.Controls
                 }
             }
 
+            //mxd. Reset document slyle
+            scriptedit.ClearDocumentStyle();
+            scriptedit.StyleResetDefault();
+
             // Check if specified lexer exists and set the lexer to use
             string lexername = "lexer" + (int)scriptconfig.Lexer;
             if (!lexercfg.SettingExists(lexername)) throw new InvalidOperationException("Unknown lexer " + scriptconfig.Lexer + " specified in script configuration!");
@@ -512,7 +516,6 @@ namespace CodeImp.DoomBuilder.Controls
             }
 
             // Rearrange the layout
-            scriptedit.ClearDocumentStyle();
             this.PerformLayout();
         }
 

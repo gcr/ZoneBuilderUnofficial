@@ -38,8 +38,8 @@ namespace CodeImp.DoomBuilder.Windows
 		private bool allowapplycontrol;
 		private bool disregardshift;
 		private bool disregardcontrol;
-		private List<ListViewItem> actionListItems; //mxd
-		private List<int> actionListItemsGroupIndices; //mxd
+		private readonly List<ListViewItem> actionListItems; //mxd
+		private readonly List<int> actionListItemsGroupIndices; //mxd
 
 		private bool reloadresources;
 		
@@ -70,11 +70,6 @@ namespace CodeImp.DoomBuilder.Windows
 			vertexScale3D.Value = General.Clamp((int)(General.Settings.GZVertexScale3D * 10), vertexScale3D.Minimum, vertexScale3D.Maximum); //mxd
 			viewdistance.Value = General.Clamp((int)(General.Settings.ViewDistance / 200.0f), viewdistance.Minimum, viewdistance.Maximum);
 			invertyaxis.Checked = General.Settings.InvertYAxis;
-			scriptfontbold.Checked = General.Settings.ScriptFontBold;
-			scriptontop.Checked = General.Settings.ScriptOnTop;
-			scripttabwidth.Text = General.Settings.ScriptTabWidth.ToString();
-			scriptautoindent.Checked = General.Settings.ScriptAutoIndent;
-			snippetsallmanstyle.Checked = General.Settings.SnippetsAllmanStyle; //mxd
 			previewsize.Value = General.Clamp(General.Settings.PreviewImageSize, previewsize.Minimum, previewsize.Maximum);
 			autoscrollspeed.Value = General.Clamp(General.Settings.AutoScrollSpeed, autoscrollspeed.Minimum, autoscrollspeed.Maximum);
 			zoomfactor.Value = General.Clamp(General.Settings.ZoomFactor, zoomfactor.Minimum, zoomfactor.Maximum);
@@ -91,6 +86,7 @@ namespace CodeImp.DoomBuilder.Windows
 			toolbar_geometry.Checked = General.Settings.ToolbarGeometry;
 			toolbar_testing.Checked = General.Settings.ToolbarTesting;
 			showtexturesizes.Checked = General.Settings.ShowTextureSizes;
+
 			//mxd
 			locatetexturegroup.Checked = General.Settings.LocateTextureGroup;
 			cbStoreEditTab.Checked = General.Settings.StoreSelectedEditTab;
@@ -114,10 +110,22 @@ namespace CodeImp.DoomBuilder.Windows
             screenshotsfolderpath.Text = General.Settings.ScreenshotsPath;
 			if(Directory.Exists(General.Settings.ScreenshotsPath))
 				browseScreenshotsFolderDialog.SelectedPath = General.Settings.ScreenshotsPath;
-			
-			// Fill fonts list
-			scriptfontname.BeginUpdate();
-			foreach(FontFamily ff in FontFamily.Families)
+
+            //mxd. Script editor
+            scriptfontbold.Checked = General.Settings.ScriptFontBold;
+            scriptontop.Checked = General.Settings.ScriptOnTop;
+            scriptusetabs.Checked = General.Settings.ScriptUseTabs;
+            scripttabwidth.Text = General.Settings.ScriptTabWidth.ToString();
+            scriptautoindent.Checked = General.Settings.ScriptAutoIndent;
+            scriptallmanstyle.Checked = General.Settings.ScriptAllmanStyle; //mxd
+            scriptautoclosebrackets.Checked = General.Settings.ScriptAutoCloseBrackets; //mxd
+            scriptshowfolding.Checked = General.Settings.ScriptShowFolding; //mxd
+            scriptshowlinenumbers.Checked = General.Settings.ScriptShowLineNumbers; //mxd
+            scriptautoshowautocompletion.Checked = General.Settings.ScriptAutoShowAutocompletion; //mxd
+
+            // Fill script fonts list
+            scriptfontname.BeginUpdate();
+            foreach (FontFamily ff in FontFamily.Families)
 				scriptfontname.Items.Add(ff.Name);
 			scriptfontname.EndUpdate();
 			
@@ -180,6 +188,7 @@ namespace CodeImp.DoomBuilder.Windows
 			colorInfo.Color = General.Colors.InfoLine;
 			color3dFloors.Color = General.Colors.ThreeDFloor;
 
+            // Script editor colors
             colorscriptbackground.Color = General.Colors.ScriptBackground;
 			colorlinenumbers.Color = General.Colors.LineNumbers;
 			colorplaintext.Color = General.Colors.PlainText;
@@ -187,7 +196,18 @@ namespace CodeImp.DoomBuilder.Windows
 			colorkeywords.Color = General.Colors.Keywords;
 			colorliterals.Color = General.Colors.Literals;
 			colorconstants.Color = General.Colors.Constants;
-			blackbrowsers.Checked = General.Settings.BlackBrowsers;
+            colorstrings.Color = General.Colors.Strings; //mxd
+            colorincludes.Color = General.Colors.Includes; //mxd
+            colorselectionfore.Color = General.Colors.ScriptSelectionForeColor; //mxd
+            colorselectionback.Color = General.Colors.ScriptSelectionBackColor; //mxd
+            colorindicator.Color = General.Colors.ScriptIndicator; //mxd
+            colorbrace.Color = General.Colors.ScriptBraceHighlight; //mxd
+            colorbracebad.Color = General.Colors.ScriptBadBraceHighlight; //mxd
+            colorwhitespace.Color = General.Colors.ScriptWhitespace; //mxd
+            colorfoldfore.Color = General.Colors.ScriptFoldForeColor; //mxd
+            colorfoldback.Color = General.Colors.ScriptFoldBackColor; //mxd
+
+            blackbrowsers.Checked = General.Settings.BlackBrowsers;
 			capitalizetexturenames.Checked = General.Settings.CapitalizeTextureNames; //mxd
 			classicbilinear.Checked = General.Settings.ClassicBilinear;
 			visualbilinear.Checked = General.Settings.VisualBilinear;
@@ -204,13 +224,11 @@ namespace CodeImp.DoomBuilder.Windows
 
             // Paste options
             pasteoptions.Setup(General.Settings.PasteOptions.Copy());
-			UpdateScriptFontPreview(); //mxd
 
 			// Allow plugins to add tabs
 			this.SuspendLayout();
-			controller = new PreferencesController(this);
-			controller.AllowAddTab = true;
-			General.Plugins.OnShowPreferences(controller);
+            controller = new PreferencesController(this) { AllowAddTab = true };
+            General.Plugins.OnShowPreferences(controller);
 			controller.AllowAddTab = false;
 			this.ResumeLayout(true);
 			
@@ -250,12 +268,6 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZVertexScale3D = vertexScale3D.Value * 0.1f; //mxd
 			General.Settings.ViewDistance = viewdistance.Value * 200.0f;
 			General.Settings.InvertYAxis = invertyaxis.Checked;
-			General.Settings.ScriptFontBold = scriptfontbold.Checked;
-			General.Settings.ScriptFontName = scriptfontname.Text;
-			General.Settings.ScriptOnTop = scriptontop.Checked;
-			General.Settings.ScriptTabWidth = scripttabwidth.GetResult(General.Settings.ScriptTabWidth);
-			General.Settings.ScriptAutoIndent = scriptautoindent.Checked;
-			General.Settings.SnippetsAllmanStyle = snippetsallmanstyle.Checked; //mxd
 			General.Settings.PreviewImageSize = previewsize.Value;
 			General.Settings.AutoScrollSpeed = autoscrollspeed.Value;
 			General.Settings.ZoomFactor = zoomfactor.Value;
@@ -279,9 +291,22 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.MaxRecentFiles = recentFiles.Value; //mxd
             General.Settings.MaxBackups = maxBackups.Value;
             General.Settings.ScreenshotsPath = screenshotsfolderpath.Text.Trim(); //mxd
-			
-			// Script font size
-			int fontsize;
+
+            // Script settings
+            General.Settings.ScriptFontBold = scriptfontbold.Checked;
+            General.Settings.ScriptFontName = scriptfontname.Text;
+            General.Settings.ScriptOnTop = scriptontop.Checked;
+            General.Settings.ScriptUseTabs = scriptusetabs.Checked;
+            General.Settings.ScriptTabWidth = scripttabwidth.GetResult(General.Settings.ScriptTabWidth);
+            General.Settings.ScriptAutoIndent = scriptautoindent.Checked;
+            General.Settings.ScriptAllmanStyle = scriptallmanstyle.Checked; //mxd
+            General.Settings.ScriptAutoCloseBrackets = scriptautoclosebrackets.Checked; //mxd
+            General.Settings.ScriptShowFolding = scriptshowfolding.Checked; //mxd
+            General.Settings.ScriptShowLineNumbers = scriptshowlinenumbers.Checked; //mxd
+            General.Settings.ScriptAutoShowAutocompletion = scriptautoshowautocompletion.Checked; //mxd
+
+            // Script font size
+            int fontsize;
 			if(!int.TryParse(scriptfontsize.Text, out fontsize)) fontsize = 10;
 			General.Settings.ScriptFontSize = fontsize;
 			
@@ -300,15 +325,28 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Colors.Indication = colorindication.Color;
 			General.Colors.Grid = colorgrid.Color;
 			General.Colors.Grid64 = colorgrid64.Color;
-			General.Colors.ScriptBackground = colorscriptbackground.Color;
+
+            // Script editor colors
+            General.Colors.ScriptBackground = colorscriptbackground.Color;
 			General.Colors.LineNumbers = colorlinenumbers.Color;
 			General.Colors.PlainText = colorplaintext.Color;
 			General.Colors.Comments = colorcomments.Color;
 			General.Colors.Keywords = colorkeywords.Color;
 			General.Colors.Literals = colorliterals.Color;
 			General.Colors.Constants = colorconstants.Color;
-			//mxd
-			General.Colors.ModelWireframe = colorMD3.Color;
+            General.Colors.Strings = colorstrings.Color; //mxd
+            General.Colors.Includes = colorincludes.Color; //mxd
+            General.Colors.ScriptSelectionForeColor = colorselectionfore.Color; //mxd
+            General.Colors.ScriptSelectionBackColor = colorselectionback.Color; //mxd
+            General.Colors.ScriptIndicator = colorindicator.Color; //mxd
+            General.Colors.ScriptBraceHighlight = colorbrace.Color; //mxd
+            General.Colors.ScriptBadBraceHighlight = colorbracebad.Color; //mxd
+            General.Colors.ScriptWhitespace = colorwhitespace.Color; //mxd
+            General.Colors.ScriptFoldForeColor = colorfoldfore.Color; //mxd
+            General.Colors.ScriptFoldBackColor = colorfoldback.Color; //mxd
+
+            //mxd
+            General.Colors.ModelWireframe = colorMD3.Color;
 			General.Colors.InfoLine = colorInfo.Color;
 			General.Colors.ThreeDFloor = color3dFloors.Color;
 
@@ -396,8 +434,8 @@ namespace CodeImp.DoomBuilder.Windows
 			}
 			
 			colorsgroup1.Visible = (tabs.SelectedTab == tabcolors);
-			colorsgroup3.Visible = (tabs.SelectedTab == tabcolors);
-		}
+            previewgroup.Visible = (tabs.SelectedTab == tabscripteditor);
+        }
 
 		#endregion
 
@@ -469,89 +507,6 @@ namespace CodeImp.DoomBuilder.Windows
             labelBackups.Text = maxBackups.Value.ToString();
         }
 
-        // This updates the script font preview label
-        private void UpdateScriptFontPreview()
-		{
-			if((scriptfontname.SelectedIndex > -1) &&
-			   (scriptfontsize.SelectedIndex > -1))
-			{
-				FontFamily ff = new FontFamily(scriptfontname.Text);
-				FontStyle style = FontStyle.Regular;
-				if(scriptfontbold.Checked)
-				{
-					// Prefer bold over regular
-					if(ff.IsStyleAvailable(FontStyle.Bold))
-						style = FontStyle.Bold;
-					else if(ff.IsStyleAvailable(FontStyle.Regular))
-						style = FontStyle.Regular;
-					else if(ff.IsStyleAvailable(FontStyle.Italic))
-						style = FontStyle.Italic;
-					else if(ff.IsStyleAvailable(FontStyle.Underline))
-						style = FontStyle.Underline;
-					else if(ff.IsStyleAvailable(FontStyle.Strikeout))
-						style = FontStyle.Strikeout;
-				}
-				else
-				{
-					// Prefer regular over bold
-					if(ff.IsStyleAvailable(FontStyle.Regular))
-						style = FontStyle.Regular;
-					else if(ff.IsStyleAvailable(FontStyle.Bold))
-						style = FontStyle.Bold;
-					else if(ff.IsStyleAvailable(FontStyle.Italic))
-						style = FontStyle.Italic;
-					else if(ff.IsStyleAvailable(FontStyle.Underline))
-						style = FontStyle.Underline;
-					else if(ff.IsStyleAvailable(FontStyle.Strikeout))
-						style = FontStyle.Strikeout;
-				}
-				int fontsize;
-				if(!int.TryParse(scriptfontsize.Text, out fontsize)) fontsize = 8;
-				if(ff.IsStyleAvailable(style))
-					fontpreview.Font = new Font(scriptfontname.Text, fontsize, style); //mxd
-
-				//mxd. Update preview colors
-				fontpreview.BackColor = colorscriptbackground.Color.ToColor();
-				fontpreview.ForeColor = colorplaintext.Color.ToColor();
-
-				//1
-				fontpreview.Select(0, 1);
-				fontpreview.SelectionColor = colorlinenumbers.Color.ToColor();
-
-				//2
-				fontpreview.Select(25, 1);
-				fontpreview.SelectionColor = colorlinenumbers.Color.ToColor();
-
-				//script
-				fontpreview.Select(27, 6);
-				fontpreview.SelectionColor = colorkeywords.Color.ToColor();
-
-				//0
-				fontpreview.Select(34, 1);
-				fontpreview.SelectionColor = colorliterals.Color.ToColor();
-
-				//void
-				fontpreview.Select(37, 4);
-				fontpreview.SelectionColor = colorkeywords.Color.ToColor();
-
-				//a comment
-				fontpreview.Select(45, 11);
-				fontpreview.SelectionColor = colorcomments.Color.ToColor();
-
-				//3
-				fontpreview.Select(57, 1);
-				fontpreview.SelectionColor = colorlinenumbers.Color.ToColor();
-
-				//CONSTANT_VALUE
-				fontpreview.Select(65, 14);
-				fontpreview.SelectionColor = colorconstants.Color.ToColor();
-
-				//4
-				fontpreview.Select(81, 1);
-				fontpreview.SelectionColor = colorlinenumbers.Color.ToColor();
-			}
-		}
-
 		#endregion
 		
 		#region ================== Controls Panel
@@ -574,8 +529,8 @@ namespace CodeImp.DoomBuilder.Windows
 						// Don't count the selected action
 						if(item != listactions.SelectedItems[0])
 						{
-							Actions.Action a = General.Actions[item.Name];
-							int akey = (int)item.SubItems[1].Tag;
+                            Action a = General.Actions[item.Name];
+                            int akey = (int)item.SubItems[1].Tag;
 
 							// Check if the key combination matches
 							if((thiskey & a.ShortcutMask) == (akey & a.ShortcutMask))
@@ -600,10 +555,10 @@ namespace CodeImp.DoomBuilder.Windows
 				keyusedlist.Visible = true;
 			}
 		}
-		
-		// This fills the list of available controls for the specified action
-		private void FillControlsList(Actions.Action a)
-		{
+
+        // This fills the list of available controls for the specified action
+        private void FillControlsList(Action a)
+        {
 			actioncontrol.Items.Clear();
 			
 			// Fill combobox with special controls
@@ -837,14 +792,14 @@ namespace CodeImp.DoomBuilder.Windows
 				
 				// Deselect anything from the combobox
 				actioncontrol.SelectedIndex = -1;
-				
-				// Apply the key combination
-				listactions.SelectedItems[0].SubItems[1].Text = Actions.Action.GetShortcutKeyDesc(key);
-				listactions.SelectedItems[0].SubItems[1].Tag = key;
-				actionkey.Text = Actions.Action.GetShortcutKeyDesc(key);
-				
-				// Show actions with same key
-				UpdateKeyUsedActions();
+
+                // Apply the key combination
+                listactions.SelectedItems[0].SubItems[1].Text = Action.GetShortcutKeyDesc(key);
+                listactions.SelectedItems[0].SubItems[1].Tag = key;
+                actionkey.Text = Action.GetShortcutKeyDesc(key);
+
+                // Show actions with same key
+                UpdateKeyUsedActions();
 				
 				// Done
 				allowapplycontrol = true;
@@ -869,9 +824,9 @@ namespace CodeImp.DoomBuilder.Windows
 				// Get the key control
 				KeyControl key = (KeyControl)actioncontrol.SelectedItem;
 
-				// Apply the key combination
-				listactions.SelectedItems[0].SubItems[1].Text = Actions.Action.GetShortcutKeyDesc(key.key);
-				listactions.SelectedItems[0].SubItems[1].Tag = key.key;
+                // Apply the key combination
+                listactions.SelectedItems[0].SubItems[1].Text = Action.GetShortcutKeyDesc(key.key);
+                listactions.SelectedItems[0].SubItems[1].Tag = key.key;
 				
 				// Show actions with same key
 				UpdateKeyUsedActions();
@@ -1001,35 +956,141 @@ namespace CodeImp.DoomBuilder.Windows
 			labelDynLightIntensity.Text = ((float)tbDynLightIntensity.Value / 10).ToString();
 		}
 
-		//mxd
-		private void scriptfontbold_CheckedChanged(object sender, EventArgs e) 
-		{
-			UpdateScriptFontPreview();
-		}
+        #endregion
+
+        #region ================== Script Editor Panel (mxd)
+
+        private void scriptfontbold_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.FontBold = scriptfontbold.Checked;
+        }
 
 		//mxd
 		private void scriptfontsize_SelectedIndexChanged(object sender, EventArgs e) 
 		{
-			UpdateScriptFontPreview();
-		}
+            if (allowapplycontrol)
+            {
+                int fontsize;
+                if (int.TryParse(scriptfontsize.Text, out fontsize))
+                    scriptedit.FontSize = fontsize;
+            }
+        }
+        
+        private void scripttabwidth_WhenTextChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol)
+            {
+                int tabwidth;
+                if (int.TryParse(scripttabwidth.Text, out tabwidth))
+                    scriptedit.TabWidth = tabwidth;
+            }
+        }
 
-		//mxd
-		private void scriptfontname_SelectedIndexChanged(object sender, EventArgs e) 
-		{
-			UpdateScriptFontPreview();
-		}
+        private void scriptfontname_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.FontName = scriptfontname.Text;
+        }
 
-		//mxd
-		private void scriptcolor_ColorChanged(object sender, EventArgs e) 
-		{
-			UpdateScriptFontPreview();
-		}
+        private void scriptshowlinenumbers_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.ShowLineNumbers = scriptshowlinenumbers.Checked;
+        }
 
-		#endregion
+        private void scriptshowfolding_CheckedChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.ShowFolding = scriptshowfolding.Checked;
+        }
 
-		#region ================== Screenshots Stuff (mxd)
+        private void colorscriptbackground_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.ScriptBackground = colorscriptbackground.Color.ToColor();
+        }
 
-		private void resetscreenshotsdir_Click(object sender, EventArgs e) 
+        private void colorlinenumbers_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.LineNumbers = colorlinenumbers.Color.ToColor();
+        }
+
+        private void colorplaintext_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.PlainText = colorplaintext.Color.ToColor();
+        }
+
+        private void colorcomments_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Comments = colorcomments.Color.ToColor();
+        }
+
+        private void colorkeywords_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Keywords = colorkeywords.Color.ToColor();
+        }
+
+        private void colorstrings_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Strings = colorstrings.Color.ToColor();
+        }
+
+        private void colorliterals_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Literals = colorliterals.Color.ToColor();
+        }
+
+        private void colorconstants_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Constants = colorconstants.Color.ToColor();
+        }
+
+        private void colorincludes_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.Includes = colorincludes.Color.ToColor();
+        }
+
+        private void colorselectionfore_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.SelectionForeColor = colorselectionfore.Color.ToColor();
+        }
+
+        private void colorselectionback_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.SelectionBackColor = colorselectionback.Color.ToColor();
+        }
+
+        private void colorindicator_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.ScriptIndicator = colorindicator.Color.ToColor();
+        }
+
+        private void colorbrace_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.BraceHighlight = colorbrace.Color.ToColor();
+        }
+
+        private void colorbracebad_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.BadBraceHighlight = colorbracebad.Color.ToColor();
+        }
+
+        private void colorwhitespace_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.WhitespaceColor = colorwhitespace.Color.ToColor();
+        }
+
+        private void colorfoldfore_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.FoldForeColor = colorfoldfore.Color.ToColor();
+        }
+
+        private void colorfoldback_ColorChanged(object sender, EventArgs e)
+        {
+            if (allowapplycontrol) scriptedit.FoldBackColor = colorfoldback.Color.ToColor();
+        }
+
+        #endregion
+
+        #region ================== Screenshots Stuff (mxd)
+
+        private void resetscreenshotsdir_Click(object sender, EventArgs e) 
 		{
 			screenshotsfolderpath.Text = General.DefaultScreenshotsPath;
 			browseScreenshotsFolderDialog.SelectedPath = General.DefaultScreenshotsPath;

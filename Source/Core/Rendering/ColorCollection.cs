@@ -37,7 +37,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const float DARK_ADDITION = -0.2f;
 
 		// Palette size
-		private const int NUM_COLORS = 57;
+		private const int NUM_COLORS = 59;
 		public const int NUM_THING_COLORS = 20;
 		public const int THING_COLORS_OFFSET = 20;
 
@@ -99,6 +99,8 @@ namespace CodeImp.DoomBuilder.Rendering
         public const int SCRIPTSELECTIONBACK = 54;
         public const int STRINGS = 55;
         public const int INCLUDES = 56;
+        public const int SCRIPTFOLDFORE = 57;
+        public const int SCRIPTFOLDBACK = 58;
         #endregion
 
         #region ================== Variables
@@ -138,25 +140,29 @@ namespace CodeImp.DoomBuilder.Rendering
 		public PixelColor Selection3D { get { return colors[SELECTION3D]; } internal set { colors[SELECTION3D] = value; } }
 		
 		public PixelColor ScriptBackground { get { return colors[SCRIPTBACKGROUND]; } internal set { colors[SCRIPTBACKGROUND] = value; } }
-        public PixelColor ScriptIndicator { get { return colors[SCRIPTINDICATOR]; } internal set { colors[SCRIPTINDICATOR] = value; } }
-        public PixelColor ScriptBraceHighlight { get { return colors[SCRIPTBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBRACEHIGHLIGHT] = value; } }
-        public PixelColor ScriptBadBraceHighlight { get { return colors[SCRIPTBADBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBADBRACEHIGHLIGHT] = value; } }
-        public PixelColor ScriptWhitespace { get { return colors[SCRIPTWHITESPACE]; } internal set { colors[SCRIPTWHITESPACE] = value; } }
-        public PixelColor ScriptSelectionForeColor { get { return colors[SCRIPTSELECTIONFORE]; } internal set { colors[SCRIPTSELECTIONFORE] = value; } }
-        public PixelColor ScriptSelectionBackColor { get { return colors[SCRIPTSELECTIONBACK]; } internal set { colors[SCRIPTSELECTIONBACK] = value; } }
+        public PixelColor ScriptIndicator { get { return colors[SCRIPTINDICATOR]; } internal set { colors[SCRIPTINDICATOR] = value; } } //mxd
+        public PixelColor ScriptBraceHighlight { get { return colors[SCRIPTBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBRACEHIGHLIGHT] = value; } } //mxd
+        public PixelColor ScriptBadBraceHighlight { get { return colors[SCRIPTBADBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBADBRACEHIGHLIGHT] = value; } } //mxd
+        public PixelColor ScriptWhitespace { get { return colors[SCRIPTWHITESPACE]; } internal set { colors[SCRIPTWHITESPACE] = value; } } //mxd
+        public PixelColor ScriptSelectionForeColor { get { return colors[SCRIPTSELECTIONFORE]; } internal set { colors[SCRIPTSELECTIONFORE] = value; } } //mxd
+        public PixelColor ScriptSelectionBackColor { get { return colors[SCRIPTSELECTIONBACK]; } internal set { colors[SCRIPTSELECTIONBACK] = value; } } //mxd
         public PixelColor LineNumbers { get { return colors[LINENUMBERS]; } internal set { colors[LINENUMBERS] = value; } }
-		public PixelColor PlainText { get { return colors[PLAINTEXT]; } internal set { colors[PLAINTEXT] = value; } }
+        public PixelColor PlainText { get { return colors[PLAINTEXT]; } internal set { colors[PLAINTEXT] = value; } }
 		public PixelColor Comments { get { return colors[COMMENTS]; } internal set { colors[COMMENTS] = value; } }
 		public PixelColor Keywords { get { return colors[KEYWORDS]; } internal set { colors[KEYWORDS] = value; } }
 		public PixelColor Literals { get { return colors[LITERALS]; } internal set { colors[LITERALS] = value; } }
 		public PixelColor Constants { get { return colors[CONSTANTS]; } internal set { colors[CONSTANTS] = value; } }
-		
-		#endregion
+        public PixelColor Strings { get { return colors[STRINGS]; } internal set { colors[STRINGS] = value; } } //mxd
+        public PixelColor Includes { get { return colors[INCLUDES]; } internal set { colors[INCLUDES] = value; } } //mxd
+        public PixelColor ScriptFoldForeColor { get { return colors[SCRIPTFOLDFORE]; } internal set { colors[SCRIPTFOLDFORE] = value; } } //mxd
+        public PixelColor ScriptFoldBackColor { get { return colors[SCRIPTFOLDBACK]; } internal set { colors[SCRIPTFOLDBACK] = value; } } //mxd
 
-		#region ================== Constructor / Disposer
+        #endregion
 
-		// Constructor for settings from configuration
-		internal ColorCollection(Configuration cfg)
+        #region ================== Constructor / Disposer
+
+        // Constructor for settings from configuration
+        internal ColorCollection(Configuration cfg)
 		{
 			// Initialize
 			colors = new PixelColor[NUM_COLORS];
@@ -191,9 +197,11 @@ namespace CodeImp.DoomBuilder.Rendering
 			if(colors[THINGCOLOR17].ToInt() == 0) colors[THINGCOLOR17] = PixelColor.FromColor(Color.DarkOrange);
 			if(colors[THINGCOLOR18].ToInt() == 0) colors[THINGCOLOR18] = PixelColor.FromColor(Color.DarkKhaki);
 			if(colors[THINGCOLOR19].ToInt() == 0) colors[THINGCOLOR19] = PixelColor.FromColor(Color.Goldenrod);
-			
-			// Create assist colors
-			CreateAssistColors();
+            if (colors[SCRIPTFOLDFORE].ToInt() == 0) colors[SCRIPTFOLDFORE] = PixelColor.FromColor(SystemColors.ControlLightLight);
+            if (colors[SCRIPTFOLDBACK].ToInt() == 0) colors[SCRIPTFOLDBACK] = PixelColor.FromColor(SystemColors.ControlDark);
+
+            // Create assist colors
+            CreateAssistColors();
 			
 			// Create color correction table
 			CreateCorrectionTable();

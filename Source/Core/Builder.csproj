@@ -121,7 +121,7 @@
     </Compile>
     <Compile Include="Controls\ArgumentBox.Designer.cs">
       <DependentUpon>ArgumentBox.cs</DependentUpon>
-	</Compile>
+    </Compile>
     <Compile Include="Controls\ScriptDocumentTab.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -493,8 +493,8 @@
     <Compile Include="Plugins\Plugin.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-	<Compile Include="Properties\Resources.Designer.cs">
-	  <AutoGen>True</AutoGen>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
@@ -529,7 +529,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="JetBrains.Profiler.Core.Api, Version=1.3.1661.20096, Culture=neutral, PublicKeyToken=1010a0d8d6380325" Condition=" '$(Configuration)|$(Platform)' == 'Debug + Profiler|x86' Or '$(Configuration)|$(Platform)' == 'Release + Profiler|x86' " />
-	<Reference Include="ScintillaNET.3.5, Version=3.5.6.0, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="ScintillaNET.3.5, Version=3.5.6.0, Culture=neutral, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
     <Reference Include="SharpCompress.3.5, Version=0.11.2.0, Culture=neutral, processorArchitecture=x86">
@@ -577,7 +577,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
-	  <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -706,7 +706,10 @@
     <EmbeddedResource Include="Controls\ScriptEditorControl.resx">
       <DependentUpon>ScriptEditorControl.cs</DependentUpon>
     </EmbeddedResource>
-	<EmbeddedResource Include="Resources\SkySphere.md3" />
+    <EmbeddedResource Include="Controls\ScriptEditorPreviewControl.resx">
+      <DependentUpon>ScriptEditorPreviewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SkySphere.md3" />
     <None Include="Resources\ThingStatistics.png" />
     <None Include="Resources\Copy.png" />
     <None Include="Resources\Cut.png" />
@@ -773,11 +776,17 @@
     <Compile Include="Controls\PasteOptionsControl.Designer.cs">
       <DependentUpon>PasteOptionsControl.cs</DependentUpon>
     </Compile>
-	<Compile Include="Controls\ScriptEditorControl.cs">
+    <Compile Include="Controls\ScriptEditorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\ScriptEditorControl.designer.cs">
       <DependentUpon>ScriptEditorControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ScriptEditorPreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ScriptEditorPreviewControl.Designer.cs">
+      <DependentUpon>ScriptEditorPreviewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\SectorSlopeControl.cs">
       <SubType>UserControl</SubType>
@@ -1141,7 +1150,7 @@
     <None Include="Resources\ModelDisabled.png" />
     <None Include="Resources\ModelFiltered.png" />
     <Content Include="Resources\Model_selected.png" />
-	<None Include="Resources\TextWhitespace.png" />
+    <None Include="Resources\TextWhitespace.png" />
     <None Include="Resources\TextIndent.png" />
     <None Include="Resources\TextUnindent.png" />
     <None Include="Resources\ScriptSnippet.png" />

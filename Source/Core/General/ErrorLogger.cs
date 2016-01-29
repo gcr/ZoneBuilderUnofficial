@@ -30,16 +30,17 @@ namespace CodeImp.DoomBuilder
 
 		#region ================== Variables
 		
-		private List<ErrorItem> errors;
+		private readonly List<ErrorItem> errors;
 		private volatile bool changed;
 		private volatile bool erroradded;
 		private volatile bool warningadded;
-		
-		#endregion
+        private object threadlock = new object(); //mxd
 
-		#region ================== Properties
-		
-		public bool HasErrors { get { return (errors.Count > 0); } }
+        #endregion
+
+        #region ================== Properties
+
+        public bool HasErrors { get { return (errors.Count > 0); } }
 		public int ErrorsCount { get { return errors.Count; } } //mxd
 		public bool HasChanged { get { return changed; } set { changed = value; } }
 		public bool IsErrorAdded { get { return erroradded; } set { erroradded = value; } }
@@ -62,8 +63,8 @@ namespace CodeImp.DoomBuilder
 		// This clears the errors
 		public void Clear()
 		{
-			lock(this)
-			{
+            lock (threadlock)
+            {
 				changed = false;
 				erroradded = false;
 				warningadded = false;
@@ -78,9 +79,9 @@ namespace CodeImp.DoomBuilder
 		public void Add(ErrorType type, string message)
 		{
 			string prefix = "";
-			
-			lock(this)
-			{
+
+            lock (threadlock)
+            {
 				//mxd. Don't add duplicate messages
 				if(errors.Count == 0 || message != errors[errors.Count - 1].message || type != errors[errors.Count - 1].type)
 				{
@@ -115,17 +116,28 @@ namespace CodeImp.DoomBuilder
 				}
 			}
 		}
-		
-		// This returns the list of errors
-		internal List<ErrorItem> GetErrors()
+
+        // This returns the list of errors
+        /*internal List<ErrorItem> GetErrors()
 		{
 			lock(this)
 			{
 				List<ErrorItem> copylist = new List<ErrorItem>(errors);
 				return copylist;
 			}
-		}
-		
-		#endregion
-	}
+		}*/
+
+        //mxd. This returns the list of errors starting at given index
+        internal IEnumerable<ErrorItem> GetErrors(int startindex)
+        {
+            if (startindex >= errors.Count) return new List<ErrorItem>();
+
+            ErrorItem[] result = new ErrorItem[errors.Count - startindex];
+            errors.CopyTo(startindex, result, 0, result.Length);
+
+            return result;
+        }
+
+        #endregion
+    }
 }

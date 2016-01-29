@@ -166,10 +166,10 @@ namespace CodeImp.DoomBuilder.GZBuilder.GZDoom
 					case "function":
 					{
 						SkipWhitespace(true);
-						int startpos = (int)stream.Position;
 						string funcname = ReadToken(); //read return type
 						SkipWhitespace(true);
-						funcname += " " + ReadToken(); //read function name
+                        int startpos = (int)stream.Position;
+                        funcname += " " + ReadToken(); //read function name
 
 						// Try to parse argument names
 						List<KeyValuePair<string, string>> args = ParseArgs();

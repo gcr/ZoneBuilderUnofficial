@@ -61,15 +61,15 @@ namespace CodeImp.DoomBuilder.Controls
 			if(config.Extensions.Length > 0) ext = "." + config.Extensions[0];
 			SetTitle("Untitled" + ext);
 			editor.ClearUndoRedo();
-			navigator.Enabled = (config.ScriptType != ScriptType.UNKNOWN); //mxd
-		}
-		
-		#endregion
-		
-		#region ================== Methods
-		
-		// This compiles the script file
-		public override void Compile()
+            editor.FunctionBar.Enabled = (config.ScriptType != ScriptType.UNKNOWN); //mxd
+        }
+
+        #endregion
+
+            #region ================== Methods
+
+            // This compiles the script file
+        public override void Compile()
 		{
 			//mxd. ACS requires special handling...
 			if(config.ScriptType == ScriptType.ACS)
@@ -287,11 +287,11 @@ namespace CodeImp.DoomBuilder.Controls
 				General.ShowErrorMessage("Unable to open file \"" + filepathname + "\" for writing. Make sure the path exists and that the file is not in use by another application.", MessageBoxButtons.OK);
 				return false;
 			}
-			
-			// Done
-			editor.IsChanged = false;
-			UpdateTitle(); //mxd
-			return true;
+
+            // Done
+            editor.SetSavePoint(); //mxd
+            UpdateTitle(); //mxd
+            return true;
 		}
 		
 		// This saves the document to a new file
@@ -317,10 +317,11 @@ namespace CodeImp.DoomBuilder.Controls
 		{
 			try
 			{
-				// Read the file
-				editor.SetText(File.ReadAllBytes(filepathname));
-			}
-			catch(Exception e)
+                // Read the file
+                editor.Text = File.ReadAllText(filepathname); //mxd
+            }
+
+            catch (Exception e)
 			{
 				// Failed
 				General.ErrorLogger.Add(ErrorType.Error, "Cannot open file '" + filepathname + "' for reading. Make sure the path exists and that the file is not in use by another application.");
@@ -332,7 +333,6 @@ namespace CodeImp.DoomBuilder.Controls
 			// Setup
 			this.filepathname = filepathname;
 			editor.ClearUndoRedo();
-			editor.IsChanged = false; //mxd. Not changed yet
 			SetTitle(Path.GetFileName(filepathname));
 			UpdateNavigator(); //mxd
 

@@ -156,10 +156,12 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 
 		private static string GetExceptionDescription(Exception ex) 
 		{
-			//add to error logger
-			General.ErrorLogger.Add(ErrorType.Error, "**** " + ex.Source + ": " + ex.Message + " ****");
+            // Add to error logger
+            General.WriteLogLine("***********************************************************");
+            General.ErrorLogger.Add(ErrorType.Error, ex.Source + ": " + ex.Message);
+            General.WriteLogLine("***********************************************************");
 
-			string message = "********EXCEPTION DETAILS********"
+            string message = "********EXCEPTION DETAILS********"
 							 + Environment.NewLine + ex.Source + ": " + ex.Message + Environment.NewLine + ex.StackTrace;
 
 			if(File.Exists(General.LogFile)) 

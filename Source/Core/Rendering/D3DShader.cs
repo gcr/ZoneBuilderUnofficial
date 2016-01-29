@@ -109,24 +109,37 @@ namespace CodeImp.DoomBuilder.Rendering
 			}
 			catch(Exception)
 			{
-				// Compiling failed, try with debug information
-				try
-				{
+                string debugerrors = string.Empty; //mxd
+
+                // Compiling failed, try with debug information
+                try
+                {
                     //mxd. Rewind before use!
                     fxdata.Seek(0, SeekOrigin.Begin);
 
                     // Compile effect
-                    fx = Effect.FromStream(General.Map.Graphics.Device, fxdata, null, null, null, ShaderFlags.Debug, null, out errors);
-					if(!string.IsNullOrEmpty(errors))
-					{
-						throw new Exception("Errors in effect file " + fxfile + ": " + errors);
-					}
+                    fx = Effect.FromStream(General.Map.Graphics.Device, fxdata, null, null, null, ShaderFlags.Debug, null, out debugerrors);
+                    if (!string.IsNullOrEmpty(debugerrors))
+                    {
+                        throw new Exception("Errors in effect file " + fxfile + ": " + debugerrors);
+                    }
 				}
 				catch(Exception e)
-				{
-					// No debug information, just crash
-					throw new Exception(e.GetType().Name + " while loading effect " + fxfile + ": " + e.Message + "\nInitial message: " + errors);
-				}
+                {                   
+                    //mxd. Try to get something. Anything!
+                    string message;
+                    if (!string.IsNullOrEmpty(debugerrors))
+                        message = e.Message + "\nInitial message (debug mode): \"" + debugerrors + "\"";
+                    else if (!string.IsNullOrEmpty(errors))
+                        message = e.Message + "\nInitial message: \"" + errors + "\"";
+                    else
+                        message = e.ToString();
+
+                    if (string.IsNullOrEmpty(message)) message = "No initial message...";
+
+                    // No debug information, just crash
+                    throw new Exception(e.GetType().Name + " while loading effect " + fxfile + ": " + message);
+                }
 			}
 			
 			fxdata.Dispose();

@@ -17,9 +17,9 @@
 #region ================== Namespaces
 
 using System.Collections.Generic;
-using CodeImp.DoomBuilder.Config;
 using System.IO;
 using CodeImp.DoomBuilder.Compilers;
+using CodeImp.DoomBuilder.Config;
 
 #endregion
 
@@ -72,13 +72,12 @@ namespace CodeImp.DoomBuilder.Controls
 			MemoryStream stream = General.Map.GetLumpData(this.lumpname);
 			if(stream != null)
 			{
-				editor.SetText(stream.ToArray());
-				editor.ClearUndoRedo();
-				UpdateNavigator(); //mxd
+                editor.SetText(stream.ToArray()); //mxd
+                editor.ClearUndoRedo();
+                UpdateNavigator(); //mxd
 			}
 
 			// Set title
-			IsChanged = false; //mxd. Not changed yet
 			SetTitle(ismapheader ? General.Map.Options.CurrentName : this.lumpname.ToUpper());
 		}
 		
@@ -116,9 +115,9 @@ namespace CodeImp.DoomBuilder.Controls
 			// Store the lump data
 			MemoryStream stream = new MemoryStream(editor.GetText());
 			General.Map.SetLumpData(lumpname, stream);
-			editor.IsChanged = false;
-			UpdateTitle(); //mxd
-			return true;
+            editor.SetSavePoint(); //mxd
+            UpdateTitle(); //mxd
+            return true;
 		}
 
 		// This checks if a script error applies to this script

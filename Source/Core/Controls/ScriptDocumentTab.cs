@@ -20,13 +20,13 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Windows;
 using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Compilers;
 using CodeImp.DoomBuilder.GZBuilder.Data;
 using CodeImp.DoomBuilder.GZBuilder.GZDoom;
+using ScintillaNET;
 
 #endregion
 
@@ -34,11 +34,10 @@ namespace CodeImp.DoomBuilder.Controls
 {
 	internal abstract class ScriptDocumentTab : TabPage
 	{
-		#region ================== Constants
+        #region ================== Constants
 
-		private const int NAVIGATOR_BORDER_TOP = 8; //mxd
-		private const int EDITOR_BORDER_TOP = 33;
-		private const int EDITOR_BORDER_BOTTOM = 4;
+        private const int EDITOR_BORDER_TOP = 4;
+        private const int EDITOR_BORDER_BOTTOM = 4;
 		private const int EDITOR_BORDER_LEFT = 4;
 		private const int EDITOR_BORDER_RIGHT = 4;
 		
@@ -48,7 +47,6 @@ namespace CodeImp.DoomBuilder.Controls
 		
 		// The script edit control
 		protected readonly ScriptEditorControl editor;
-		protected readonly ComboBox navigator; //mxd
 		private bool preventchanges; //mxd
 		private string title; //mxd
 
@@ -68,11 +66,15 @@ namespace CodeImp.DoomBuilder.Controls
 		public virtual bool IsReconfigurable { get { return true; } }
 		public virtual string Filename { get { return null; } }
 		public ScriptEditorPanel Panel { get { return panel; } }
-		public new string Text { get { return title; } } //mxd
-		public bool IsChanged { get { return editor.IsChanged; } internal set { editor.IsChanged = value; } } //mxd. Added setter
-		public int SelectionStart { get { return editor.SelectionStart; } set { editor.SelectionStart = value; } }
+        internal Scintilla Scintilla { get { return editor.Scintilla; } } //mxd
+        public string Title { get { return title; } } //mxd
+        public bool IsChanged { get { return editor.IsChanged; } }
+        public int SelectionStart { get { return editor.SelectionStart; } set { editor.SelectionStart = value; } }
 		public int SelectionEnd { get { return editor.SelectionEnd; } set { editor.SelectionEnd = value; } }
-		public ScriptConfiguration Config { get { return config; } }
+        public bool ShowWhitespace { get { return editor.ShowWhitespace; } set { editor.ShowWhitespace = value; } } //mxd
+        public bool WrapLongLines { get { return editor.WrapLongLines; } set { editor.WrapLongLines = value; } } //mxd
+        public string SelectedText { get { return editor.SelectedText; } } //mxd
+        public ScriptConfiguration Config { get { return config; } }
 		
 		#endregion
 		
@@ -90,19 +92,6 @@ namespace CodeImp.DoomBuilder.Controls
 			// Keep panel
 			this.panel = panel;
 
-			//mxd
-			navigator = new ComboBox();
-			navigator.Location = new Point(EDITOR_BORDER_LEFT, NAVIGATOR_BORDER_TOP);
-			navigator.Width = this.ClientSize.Width - EDITOR_BORDER_LEFT - EDITOR_BORDER_RIGHT;
-			navigator.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-			navigator.DropDownStyle = ComboBoxStyle.DropDownList;
-			navigator.Name = "navigator";
-			navigator.TabStop = true;
-			navigator.TabIndex = 0;
-			navigator.DropDown += navigator_DropDown;
-			navigator.SelectedIndexChanged += navigator_SelectedIndexChanged;
-			this.Controls.Add(navigator);
-			
 			// Make the script control
 			editor = new ScriptEditorControl();
 			editor.Location = new Point(EDITOR_BORDER_LEFT, EDITOR_BORDER_TOP);
@@ -121,10 +110,14 @@ namespace CodeImp.DoomBuilder.Controls
 			editor.OnFindNext += panel.FindNext;
 			editor.OnFindPrevious += panel.FindPrevious; //mxd
 			editor.OnTextChanged += editor_TextChanged; //mxd
-		}
-		
-		// Disposer
-		protected override void Dispose(bool disposing)
+
+            //mxd. Bind functionbar events
+            editor.FunctionBar.DropDown += functionbar_DropDown;
+            editor.FunctionBar.SelectedIndexChanged += functionbar_SelectedIndexChanged;
+        }
+
+        // Disposer
+        protected override void Dispose(bool disposing)
 		{
 			// Remove events
 			editor.OnExplicitSaveTab -= panel.ExplicitSaveCurrentTab;
@@ -263,134 +256,28 @@ namespace CodeImp.DoomBuilder.Controls
 		// Find next result
 		public bool FindNext(FindReplaceOptions options, bool useselectionstart)
 		{
-			byte[] data = editor.GetText();
-			string text = Encoding.GetEncoding(config.CodePage).GetString(data);
-			StringComparison mode = options.CaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-			int startpos = (useselectionstart ? Math.Min(editor.SelectionStart, editor.SelectionEnd) : Math.Max(editor.SelectionStart, editor.SelectionEnd)); //mxd
-			bool wrapped = false;
-			
-			while(true)
-			{
-				int result = text.IndexOf(options.FindText, startpos, mode);
-				if(result > -1)
-				{
-					// Check to see if it is the whole word
-					if(options.WholeWord)
-					{
-						// Veryfy that we have found a whole word
-						string foundword = editor.GetWordAt(result + 1);
-						if(foundword.Length != options.FindText.Length)
-						{
-							startpos = result + 1;
-							result = -1;
-						}
-					}
-					
-					// Still ok?
-					if(result > -1)
-					{
-						// Select the result
-						editor.SelectionStart = result;
-						editor.SelectionEnd = result + options.FindText.Length;
-						editor.EnsureLineVisible(editor.LineFromPosition(editor.SelectionEnd));
-						return true;
-					}
-				}
-				else
-				{
-					// If we haven't tried from the start, try from the start now
-					if((startpos > 0) && !wrapped)
-					{
-						startpos = 0;
-						wrapped = true;
-					}
-					else
-					{
-						// Can't find it
-						return false;
-					}
-				}
-			}
+            return editor.FindNext(options, useselectionstart);
 		}
 
 		// Find previous result (mxd)
 		public bool FindPrevious(FindReplaceOptions options) 
 		{
-			bool wrapped = false;
-			byte[] data = editor.GetText();
-			string text = Encoding.GetEncoding(config.CodePage).GetString(data);
-			StringComparison mode = options.CaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-			int endpos = Math.Min(editor.SelectionStart, editor.SelectionEnd) - 1;
-			if(endpos < 0)
-			{
-				endpos = text.Length - 1;
-				wrapped = true;
-			}
-
-			while(true) 
-			{
-				int result = text.LastIndexOf(options.FindText, endpos, mode);
-				if(result > -1) 
-				{
-					// Check to see if it is the whole word
-					if(options.WholeWord) 
-					{
-						// Veryfy that we have found a whole word
-						string foundword = editor.GetWordAt(result + 1);
-						if(foundword.Length != options.FindText.Length) 
-						{
-							endpos = result - 1;
-							result = -1;
-						}
-					}
-
-					// Still ok?
-					if(result > -1) 
-					{
-						// Select the result
-						editor.SelectionStart = result;
-						editor.SelectionEnd = result + options.FindText.Length;
-						editor.EnsureLineVisible(editor.LineFromPosition(editor.SelectionEnd));
-						return true;
-					}
-				} 
-				else 
-				{
-					// If we haven't tried from the end, try from the end now
-					if(!wrapped) 
-					{
-						endpos = Math.Max(0, text.Length - 2);
-						wrapped = true;
-					} 
-					else 
-					{
-						// Can't find it
-						return false;
-					}
-				}
-			}
-		}
+            return editor.FindPrevious(options);
+        }
 		
 		// This replaces the selection with the given text
 		public void ReplaceSelection(string replacement)
 		{
 			editor.ReplaceSelection(replacement);
 		}
-		
-		// This returns the selected text
-		public string GetSelectedText()
-		{
-			byte[] data = editor.GetText();
-			string text = Encoding.GetEncoding(config.CodePage).GetString(data);
-			if(editor.SelectionStart < editor.SelectionEnd)
-				return text.Substring(editor.SelectionStart, editor.SelectionEnd - editor.SelectionStart);
-			return "";
-		}
 
 		//mxd
-		protected void UpdateNavigator() 
+		protected void UpdateNavigator()
 		{
-			switch(config.ScriptType)
+            // Store currently selected item name
+            string prevtext = editor.FunctionBar.Text;
+
+            switch (config.ScriptType)
 			{
 				case ScriptType.ACS:
 					UpdateNavigatorAcs(new MemoryStream(editor.GetText()));
@@ -405,17 +292,33 @@ namespace CodeImp.DoomBuilder.Controls
 					break;
 
 				default: // Unsupported script type. Just clear the items
-					navigator.Items.Clear();
-					break;
+                    editor.FunctionBar.Items.Clear();
+                    break;
 			}
 
-			// Put some text in the navigator (but don't actually trigger selection event)
-			navigator.Enabled = (navigator.Items.Count > 0);
-			if(navigator.Items.Count > 0)
-			{
+            // Put some text in the navigator (but don't actually trigger selection event)
+            editor.FunctionBar.Enabled = (editor.FunctionBar.Items.Count > 0);
+            if (editor.FunctionBar.Items.Count > 0)
+            {
 				preventchanges = true;
-				navigator.Text = navigator.Items[0].ToString();
-				preventchanges = false;
+
+                // Put the text back if we still have the corresponding item
+                if (!string.IsNullOrEmpty(prevtext))
+                {
+                    foreach (var item in editor.FunctionBar.Items)
+                    {
+                        if (item.ToString() == prevtext)
+                        {
+                            editor.FunctionBar.Text = item.ToString();
+                            break;
+                        }
+                    }
+                }
+
+                // No dice. Use the first item
+                if (string.IsNullOrEmpty(editor.FunctionBar.Text))
+                    editor.FunctionBar.Text = editor.FunctionBar.Items[0].ToString();
+                preventchanges = false;
 			}
 		}
 
@@ -423,13 +326,13 @@ namespace CodeImp.DoomBuilder.Controls
 		private void UpdateNavigatorDecorate(MemoryStream stream) 
 		{
 			if(stream == null) return;
-			navigator.Items.Clear();
+            editor.FunctionBar.Items.Clear();
 
-			DecorateParserSE parser = new DecorateParserSE();
+            DecorateParserSE parser = new DecorateParserSE();
 			if(parser.Parse(stream, "DECORATE", false))
 			{
-				navigator.Items.AddRange(parser.Actors.ToArray());
-			}
+                editor.FunctionBar.Items.AddRange(parser.Actors.ToArray());
+            }
 
 			if(parser.HasError)
 			{
@@ -441,13 +344,13 @@ namespace CodeImp.DoomBuilder.Controls
 		private void UpdateNavigatorModeldef(MemoryStream stream) 
 		{
 			if(stream == null) return;
-			navigator.Items.Clear();
+            editor.FunctionBar.Items.Clear();
 
-			ModeldefParserSE parser = new ModeldefParserSE();
+            ModeldefParserSE parser = new ModeldefParserSE();
 			if(parser.Parse(stream, "MODELDEF", false))
 			{
-				navigator.Items.AddRange(parser.Models.ToArray());
-			}
+                editor.FunctionBar.Items.AddRange(parser.Models.ToArray());
+            }
 
 			if(parser.HasError)
 			{
@@ -459,15 +362,15 @@ namespace CodeImp.DoomBuilder.Controls
 		private void UpdateNavigatorAcs(MemoryStream stream) 
 		{
 			if(stream == null) return;
-			navigator.Items.Clear();
+            editor.FunctionBar.Items.Clear();
 
-			AcsParserSE parser = new AcsParserSE { AddArgumentsToScriptNames = true, IsMapScriptsLump = this is ScriptLumpDocumentTab };
+            AcsParserSE parser = new AcsParserSE { AddArgumentsToScriptNames = true, IsMapScriptsLump = this is ScriptLumpDocumentTab };
 			if(parser.Parse(stream, "SCRIPTS", false))
 			{
-				navigator.Items.AddRange(parser.NamedScripts.ToArray());
-				navigator.Items.AddRange(parser.NumberedScripts.ToArray());
-				navigator.Items.AddRange(parser.Functions.ToArray());
-			}
+                editor.FunctionBar.Items.AddRange(parser.NamedScripts.ToArray());
+                editor.FunctionBar.Items.AddRange(parser.NumberedScripts.ToArray());
+                editor.FunctionBar.Items.AddRange(parser.Functions.ToArray());
+            }
 
 			if(parser.HasError)
 			{
@@ -493,18 +396,25 @@ namespace CodeImp.DoomBuilder.Controls
 			return ScriptType.UNKNOWN;
 		}
 
-		//mxd
-		internal void InsertSnippet(string[] lines) 
-		{
-			editor.InsertSnippet(lines);
-		}
+        //mxd
+        internal void InsertSnippet(string name)
+        {
+            string[] lines = config.GetSnippet(name);
+            if (lines != null) editor.InsertSnippet(lines);
+        }
 
-		#endregion
-		
-		#region ================== Events
-		
-		// Mouse released
-		protected override void OnMouseUp(MouseEventArgs e)
+        //mxd
+        internal void IndentSelection(bool indent)
+        {
+            editor.IndentSelection(indent);
+        }
+
+        #endregion
+
+        #region ================== Events
+
+        // Mouse released
+        protected override void OnMouseUp(MouseEventArgs e)
 		{
 			base.OnMouseUp(e);
 
@@ -523,13 +433,13 @@ namespace CodeImp.DoomBuilder.Controls
 			editor.GrabFocus();
 		}
 
-		//mxd
-		private void navigator_SelectedIndexChanged(object sender, EventArgs e) 
-		{
-			if(!preventchanges && navigator.SelectedItem is ScriptItem) 
-			{
-				ScriptItem si = navigator.SelectedItem as ScriptItem;
-				editor.EnsureLineVisible(editor.LineFromPosition(si.CursorPosition));
+        //mxd
+        private void functionbar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!preventchanges && editor.FunctionBar.SelectedItem is ScriptItem)
+            {
+                ScriptItem si = editor.FunctionBar.SelectedItem as ScriptItem;
+                editor.EnsureLineVisible(editor.LineFromPosition(si.CursorPosition));
 				editor.SelectionStart = si.CursorPosition;
 				editor.SelectionEnd = si.CursorPosition;
 				
@@ -539,9 +449,9 @@ namespace CodeImp.DoomBuilder.Controls
 			}
 		}
 
-		//mxd
-		private void navigator_DropDown(object sender, EventArgs e) 
-		{
+        //mxd
+        private void functionbar_DropDown(object sender, EventArgs e)
+        {
 			if(!preventchanges && editor.IsChanged) UpdateNavigator();
 		}
 

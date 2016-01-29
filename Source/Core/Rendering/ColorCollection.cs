@@ -20,7 +20,6 @@ using System;
 using System.Globalization;
 using System.Drawing;
 using SlimDX;
-
 using Configuration = CodeImp.DoomBuilder.IO.Configuration;
 
 #endregion
@@ -38,7 +37,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const float DARK_ADDITION = -0.2f;
 
 		// Palette size
-		private const int NUM_COLORS = 49;
+		private const int NUM_COLORS = 57;
 		public const int NUM_THING_COLORS = 20;
 		public const int THING_COLORS_OFFSET = 20;
 
@@ -92,14 +91,22 @@ namespace CodeImp.DoomBuilder.Rendering
         public const int NIGHTSCOLORMARE6 = 46;
         public const int NIGHTSCOLORMARE7 = 47;
         public const int NIGHTSCOLORMARE8 = 48;
+        public const int SCRIPTINDICATOR = 49; //mxd. Additional Script Editor colors
+        public const int SCRIPTBRACEHIGHLIGHT = 50;
+        public const int SCRIPTBADBRACEHIGHLIGHT = 51;
+        public const int SCRIPTWHITESPACE = 52;
+        public const int SCRIPTSELECTIONFORE = 53;
+        public const int SCRIPTSELECTIONBACK = 54;
+        public const int STRINGS = 55;
+        public const int INCLUDES = 56;
         #endregion
 
         #region ================== Variables
 
         // Colors
-        private PixelColor[] colors;
-		private PixelColor[] brightcolors;
-		private PixelColor[] darkcolors;
+        private readonly PixelColor[] colors;
+		private readonly PixelColor[] brightcolors;
+		private readonly PixelColor[] darkcolors;
 		
 		// Color-correction table
 		private byte[] correctiontable;
@@ -131,7 +138,13 @@ namespace CodeImp.DoomBuilder.Rendering
 		public PixelColor Selection3D { get { return colors[SELECTION3D]; } internal set { colors[SELECTION3D] = value; } }
 		
 		public PixelColor ScriptBackground { get { return colors[SCRIPTBACKGROUND]; } internal set { colors[SCRIPTBACKGROUND] = value; } }
-		public PixelColor LineNumbers { get { return colors[LINENUMBERS]; } internal set { colors[LINENUMBERS] = value; } }
+        public PixelColor ScriptIndicator { get { return colors[SCRIPTINDICATOR]; } internal set { colors[SCRIPTINDICATOR] = value; } }
+        public PixelColor ScriptBraceHighlight { get { return colors[SCRIPTBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBRACEHIGHLIGHT] = value; } }
+        public PixelColor ScriptBadBraceHighlight { get { return colors[SCRIPTBADBRACEHIGHLIGHT]; } internal set { colors[SCRIPTBADBRACEHIGHLIGHT] = value; } }
+        public PixelColor ScriptWhitespace { get { return colors[SCRIPTWHITESPACE]; } internal set { colors[SCRIPTWHITESPACE] = value; } }
+        public PixelColor ScriptSelectionForeColor { get { return colors[SCRIPTSELECTIONFORE]; } internal set { colors[SCRIPTSELECTIONFORE] = value; } }
+        public PixelColor ScriptSelectionBackColor { get { return colors[SCRIPTSELECTIONBACK]; } internal set { colors[SCRIPTSELECTIONBACK] = value; } }
+        public PixelColor LineNumbers { get { return colors[LINENUMBERS]; } internal set { colors[LINENUMBERS] = value; } }
 		public PixelColor PlainText { get { return colors[PLAINTEXT]; } internal set { colors[PLAINTEXT] = value; } }
 		public PixelColor Comments { get { return colors[COMMENTS]; } internal set { colors[COMMENTS] = value; } }
 		public PixelColor Keywords { get { return colors[KEYWORDS]; } internal set { colors[KEYWORDS] = value; } }
@@ -153,9 +166,9 @@ namespace CodeImp.DoomBuilder.Rendering
 			// Read all colors from config
 			for(int i = 0; i < NUM_COLORS; i++)
 			{
-				// Read color
-				colors[i] = PixelColor.FromInt(cfg.ReadSetting("colors.color" + i.ToString(CultureInfo.InvariantCulture), -16711872)); //mxd. changed default color from transparent to light-green
-			}
+                // Read color
+                colors[i] = PixelColor.FromInt(cfg.ReadSetting("colors.color" + i.ToString(CultureInfo.InvariantCulture), 0));
+            }
 
 			// Set new colors
 			if(colors[THINGCOLOR00].ToInt() == 0) colors[THINGCOLOR00] = PixelColor.FromColor(Color.DimGray);

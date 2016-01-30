@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.Config;
@@ -32,6 +33,7 @@ using CodeImp.DoomBuilder.Geometry;
 using CodeImp.DoomBuilder.IO;
 using CodeImp.DoomBuilder.Map;
 using CodeImp.DoomBuilder.Rendering;
+using CodeImp.DoomBuilder.SRB2;
 using CodeImp.DoomBuilder.Windows;
 using CodeImp.DoomBuilder.ZDoom;
 using SlimDX;
@@ -2092,43 +2094,81 @@ namespace CodeImp.DoomBuilder.Data
         //mxd. This loads (Z)MAPINFO
         private void LoadMapInfo(out Dictionary<int, string> spawnnums, out Dictionary<int, string> doomednums)
         {
-            MapinfoParser parser = new MapinfoParser { OnInclude = ParseFromLocation };
-
-            // Parse mapinfo 
-            foreach (DataReader dr in containers)
+            if (General.Map.SRB2)
             {
-                currentreader = dr;
+                SOCParser parser = new SOCParser { OnInclude = ParseFromLocation };
 
-                Dictionary<string, Stream> streams = dr.GetMapinfoData();
-                foreach (KeyValuePair<string, Stream> group in streams)
+                // Parse mapinfo 
+                foreach (DataReader dr in containers)
                 {
-                    // Parse the data
-                    parser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), General.Map.Options.LevelName, false);
+                    currentreader = dr;
 
-                    //MAPINFO lumps are interdependable. Can't carry on...
-                    if (parser.HasError)
+                    Dictionary<string, Stream> streams1 = dr.GetObjctcfgData();
+                    Dictionary<string, Stream> streams2 = dr.GetMaincfgData();
+                    Dictionary<string, Stream> streams3 = dr.GetSOCData();
+                    Dictionary<string, Stream> streams = streams1.Concat(streams2).Concat(streams3).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                    foreach (KeyValuePair<string, Stream> group in streams)
                     {
-                        parser.LogError();
-                        break;
+                        // Parse the data
+                        parser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), General.Map.Options.LevelName, false);
+
+                        //MAPINFO lumps are interdependable. Can't carry on...
+                        if (parser.HasError)
+                        {
+                            parser.LogError();
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (!parser.HasError)
-            {
-                // Store parsed data
-                spawnnums = parser.SpawnNums;
-                doomednums = parser.DoomEdNums;
-                mapinfo = parser.MapInfo;
+                if (!parser.HasError)
+                    mapinfo = parser.MapInfo;
+                else
+                    mapinfo = new MapInfo();
+
+                spawnnums = new Dictionary<int, string>();
+                doomednums = new Dictionary<int, string>();
             }
             else
             {
-                // No nulls allowed!
-                spawnnums = new Dictionary<int, string>();
-                doomednums = new Dictionary<int, string>();
-                mapinfo = new MapInfo();
-            }
+                MapinfoParser parser = new MapinfoParser { OnInclude = ParseFromLocation };
 
+                // Parse mapinfo 
+                foreach (DataReader dr in containers)
+                {
+                    currentreader = dr;
+
+                    Dictionary<string, Stream> streams = dr.GetMapinfoData();
+                    foreach (KeyValuePair<string, Stream> group in streams)
+                    {
+                        // Parse the data
+                        parser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), General.Map.Options.LevelName, false);
+
+                        //MAPINFO lumps are interdependable. Can't carry on...
+                        if (parser.HasError)
+                        {
+                            parser.LogError();
+                            break;
+                        }
+                    }
+                }
+
+                if (!parser.HasError)
+                {
+                    // Store parsed data
+                    spawnnums = parser.SpawnNums;
+                    doomednums = parser.DoomEdNums;
+                    mapinfo = parser.MapInfo;
+                }
+                else
+                {
+                    // No nulls allowed!
+                    spawnnums = new Dictionary<int, string>();
+                    doomednums = new Dictionary<int, string>();
+                    mapinfo = new MapInfo();
+                }
+            }
             currentreader = null;
         }
 

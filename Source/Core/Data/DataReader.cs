@@ -161,8 +161,17 @@ namespace CodeImp.DoomBuilder.Data
 		//mxd. When implemented, this returns the MAPINFO lump
 		public abstract Dictionary<string, Stream> GetMapinfoData(); // { return new Dictionary<string, Stream>(); }
 
-		//mxd. When implemented, this returns the GLDEFS lump
-		public abstract Dictionary<string, Stream> GetGldefsData(GameType gametype); // { return new Dictionary<string, Stream>(); }
+        //mxd. When implemented, this returns the MAINCFG lump
+        public virtual Dictionary<string, Stream> GetMaincfgData() { return new Dictionary<string, Stream>(); }
+                                                                     
+        //mxd. When implemented, this returns the OBJCTCFG lump
+        public virtual Dictionary<string, Stream> GetObjctcfgData() { return new Dictionary<string, Stream>(); }
+
+        //mxd. When implemented, this returns the SOC_ lumps
+        public virtual Dictionary<string, Stream> GetSOCData() { return new Dictionary<string, Stream>(); }
+
+        //mxd. When implemented, this returns the GLDEFS lump
+        public abstract Dictionary<string, Stream> GetGldefsData(GameType gametype); // { return new Dictionary<string, Stream>(); }
 
 		//mxd. When implemented, this returns the REVERBS lump
 		public abstract Dictionary<string, Stream> GetReverbsData(); // { return new Dictionary<string, Stream>(); }

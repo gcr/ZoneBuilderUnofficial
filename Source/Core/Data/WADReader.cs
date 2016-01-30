@@ -835,8 +835,53 @@ namespace CodeImp.DoomBuilder.Data
 			return streams;
 		}
 
-		//mxd
-		public override Dictionary<string, Stream> GetGldefsData(GameType gameType) 
+        public override Dictionary<string, Stream> GetMaincfgData()
+        {
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+            string src = "MAINCFG";
+
+            //should be only one entry per wad
+            int lumpindex = file.FindLumpIndex(src);
+
+            if (lumpindex != -1) streams.Add(src, file.Lumps[lumpindex].Stream);
+            return streams;
+        }
+
+        public override Dictionary<string, Stream> GetObjctcfgData()
+        {
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+            string src = "OBJCTCFG";
+
+            //should be only one entry per wad
+            int lumpindex = file.FindLumpIndex(src);
+
+            if (lumpindex != -1) streams.Add(src, file.Lumps[lumpindex].Stream);
+            return streams;
+        }
+
+        public override Dictionary<string, Stream> GetSOCData()
+        {
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+            string prefix = "SOC_";
+
+            foreach (Lump lump in file.Lumps)
+            {
+                if (lump.Name.StartsWith(prefix))
+                {
+                    streams.Add(lump.Name, lump.Stream);
+                }
+            }
+            return streams;
+        }
+
+        //mxd
+        public override Dictionary<string, Stream> GetGldefsData(GameType gameType) 
 		{
 			if(issuspended) throw new Exception("Data reader is suspended");
 

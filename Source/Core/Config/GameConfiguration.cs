@@ -92,9 +92,13 @@ namespace CodeImp.DoomBuilder.Config
 		
 		// Skills
 		private readonly List<SkillInfo> skills;
+        //Skins
+        private readonly List<String> skins;
+        //Gametypes
+        private readonly List<SkillInfo> gametypes;
 
-		// Map lumps
-		private readonly Dictionary<string, MapLumpInfo> maplumps;
+        // Map lumps
+        private readonly Dictionary<string, MapLumpInfo> maplumps;
 
 		//mxd. Map format
 		private readonly bool doommapformat;
@@ -212,9 +216,14 @@ namespace CodeImp.DoomBuilder.Config
 
 		// Skills
 		public List<SkillInfo> Skills { get { return skills; } }
-		
-		// Map lumps
-		public Dictionary<string, MapLumpInfo> MapLumps { get { return maplumps; } }
+        // Gametypes (hijack SkillInfo class for this)
+        public List<SkillInfo> Gametypes { get { return gametypes; } }
+        //Skins
+        public List<String> Skins { get { return skins; } }
+
+
+        // Map lumps
+        public Dictionary<string, MapLumpInfo> MapLumps { get { return maplumps; } }
 
 		//mxd. Map format
 		public bool UDMF { get { return universalmapformat; } }
@@ -303,6 +312,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.geneffectoptions = new List<GeneralizedOption>();
 			this.enums = new Dictionary<string, EnumList>(StringComparer.Ordinal);
 			this.skills = new List<SkillInfo>();
+            this.skins = new List<String>();
+            this.gametypes = new List<SkillInfo>();
 			this.texturesets = new List<DefinedTextureSet>();
 			this.makedoorargs = new int[Linedef.NUM_ARGS];
 			this.maplumps = new Dictionary<string, MapLumpInfo>(StringComparer.Ordinal);
@@ -399,6 +410,10 @@ namespace CodeImp.DoomBuilder.Config
 			
 			// Skills
 			LoadSkills();
+            //Skins
+            LoadSkins();
+            //Gametypes
+            LoadGametypes();
 
 			// Enums
 			LoadEnums();
@@ -869,9 +884,39 @@ namespace CodeImp.DoomBuilder.Config
 				}
 			}
 		}
-		
-		// Texture Sets
-		private void LoadTextureSets() 
+
+        // Skins
+        private void LoadSkins()
+        {
+            // Get skins
+            IDictionary dic = cfg.ReadSetting("skins", new Hashtable());
+            foreach (DictionaryEntry de in dic)
+            {
+                skins.Add(de.Key.ToString());
+            }
+        }
+
+        // Gametypes
+        private void LoadGametypes()
+        {
+            // Get gametypes
+            IDictionary dic = cfg.ReadSetting("gametypes", new Hashtable());
+            foreach (DictionaryEntry de in dic)
+            {
+                int num;
+                if (int.TryParse(de.Key.ToString(), out num))
+                {
+                    gametypes.Add(new SkillInfo(num, de.Value.ToString()));
+                }
+                else
+                {
+                    General.ErrorLogger.Add(ErrorType.Warning, "Structure 'gametypes' contains invalid gametype numbers in game configuration '" + this.Name + "'");
+                }
+            }
+        }
+
+        // Texture Sets
+        private void LoadTextureSets() 
 		{
 			// Get sets
 			IDictionary dic = cfg.ReadSetting("texturesets", new Hashtable());

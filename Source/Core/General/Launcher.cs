@@ -96,7 +96,7 @@ namespace CodeImp.DoomBuilder
 		// This takes the unconverted parameters (with placeholders) and converts it
 		// to parameters with full paths, names and numbers where placeholders were put.
 		// The tempfile must be the full path and filename to the PWAD file to test.
-		public string ConvertParameters(string parameters, int skill, bool shortpaths)
+		public string ConvertParameters(string parameters, int skill, string skin, int gametype, bool shortpaths)
 		{
 			string outp = parameters;
 			DataLocation iwadloc;
@@ -211,9 +211,10 @@ namespace CodeImp.DoomBuilder
 			outp = outp.Replace("%nM", "%NM");
 			outp = outp.Replace("%Nm", "%NM");
 			outp = outp.Replace("%nm", "%NM");
-			
-			// Replace placeholders with actual values
-			outp = outp.Replace("%F", f);
+            outp = outp.Replace("%c", "%C");
+
+            // Replace placeholders with actual values
+            outp = outp.Replace("%F", f);
 			outp = outp.Replace("%WP", p_wp);
 			outp = outp.Replace("%WF", p_wf);
 			outp = outp.Replace("%L1", p_l1);
@@ -223,9 +224,12 @@ namespace CodeImp.DoomBuilder
 			outp = outp.Replace("%AP", p_ap);
 			outp = outp.Replace("%S", skill.ToString());
 			outp = outp.Replace("%NM", p_nm);
-			
-			// Return result
-			return outp;
+            outp = outp.Replace("%C", skin.ToLowerInvariant());
+            if (gametype != -1)
+                outp = outp + " -server -gametype " + gametype.ToString();
+
+            // Return result
+            return outp;
 		}
 
 		//mxd
@@ -310,7 +314,7 @@ namespace CodeImp.DoomBuilder
 				if(General.Map.Errors.Count == 0)
 				{
 					// Make arguments
-					string args = ConvertParameters(General.Map.ConfigSettings.TestParameters, skill, General.Map.ConfigSettings.TestShortPaths);
+					string args = ConvertParameters(General.Map.ConfigSettings.TestParameters, skill, General.Map.ConfigSettings.TestSkin, General.Map.ConfigSettings.TestGametype, General.Map.ConfigSettings.TestShortPaths);
 
 					// Setup process info
 					ProcessStartInfo processinfo = new ProcessStartInfo();

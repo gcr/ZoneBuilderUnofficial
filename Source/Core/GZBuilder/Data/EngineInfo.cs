@@ -14,6 +14,8 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 		public string TestParameters;
 		public bool CustomParameters;
 		public int TestSkill;
+        public string TestSkin;
+        public int TestGametype;
 		public bool TestShortPaths;
 		private Bitmap icon;
 		public Bitmap TestProgramIcon { get { return icon; } }
@@ -30,6 +32,8 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			TestParameters = other.TestParameters;
 			CustomParameters = other.CustomParameters;
 			TestSkill = other.TestSkill;
+            TestSkin = other.TestSkin;
+            TestGametype = other.TestGametype;
 			TestShortPaths = other.TestShortPaths;
 			icon = other.icon;
 		}

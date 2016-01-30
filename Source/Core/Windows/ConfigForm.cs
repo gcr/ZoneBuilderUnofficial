@@ -42,8 +42,8 @@ namespace CodeImp.DoomBuilder.Windows
 		//mxd. "Copy/Paste" stuff
 		private ConfigurationInfo configinfocopy;
 
-		// Properties
-		public bool ReloadResources { get { return reloadresources; } }
+        // Properties
+        public bool ReloadResources { get { return reloadresources; } }
 
 		// Constructor
 		public ConfigForm()
@@ -72,6 +72,8 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			// No skill
 			skill.Value = 0;
+            skin.Text = "Sonic";
+            gametype.Value = -1;
 			
 			// Nodebuilders are allowed to be empty
 			nodebuildersave.Items.Add(new NodebuilderInfo());
@@ -166,21 +168,37 @@ namespace CodeImp.DoomBuilder.Windows
 						break;
 					}
 				}
-				
-				// Fill skills list
-				skill.ClearInfo();
+
+                label8.Visible = !gameconfig.SRB2;
+                skill.Visible = !gameconfig.SRB2;
+                label12.Visible = gameconfig.SRB2;
+                skin.Visible = gameconfig.SRB2;
+                label14.Visible = gameconfig.SRB2;
+                gametype.Visible = gameconfig.SRB2;
+
+                // Fill skills list
+                skill.ClearInfo();
 				skill.AddInfo(gameconfig.Skills.ToArray());
 
-				//mxd. Fill engines list
-				cbEngineSelector.Items.Clear();
+                // Fill skins list
+                skin.Items.Clear();
+                foreach (string s in gameconfig.Skins)
+                    skin.Items.Add(s);
+
+                // Fill gametypes list
+                gametype.ClearInfo();
+                gametype.AddInfo(gameconfig.Gametypes.ToArray());
+
+                //mxd. Fill engines list
+                cbEngineSelector.Items.Clear();
 				foreach(EngineInfo info in configinfo.TestEngines)
 					cbEngineSelector.Items.Add(info.TestProgramName);
 
 				cbEngineSelector.SelectedIndex = configinfo.CurrentEngineIndex;
 				btnRemoveEngine.Enabled = configinfo.TestEngines.Count > 1;
-				
-				// Fill texture sets list
-				listtextures.Items.Clear();
+
+                // Fill texture sets list
+                listtextures.Items.Clear();
 				foreach(DefinedTextureSet ts in configinfo.TextureSets)
 				{
 					ListViewItem item = listtextures.Items.Add(ts.Name);
@@ -241,7 +259,11 @@ namespace CodeImp.DoomBuilder.Windows
 				shortpaths.Checked = false;
 				skill.Value = 0;
 				skill.ClearInfo();
-				customparameters.Checked = false;
+                skin.Text = "Sonic";
+                skin.Items.Clear();
+                gametype.Value = -1;
+                gametype.ClearInfo();
+                customparameters.Checked = false;
 				tabs.Enabled = false;
 				listtextures.Items.Clear();
 			}
@@ -352,7 +374,7 @@ namespace CodeImp.DoomBuilder.Windows
 			if(General.Map != null)
 			{
 				// Make converted parameters
-				testresult.Text = General.Map.Launcher.ConvertParameters(testparameters.Text, skill.Value, shortpaths.Checked);
+				testresult.Text = General.Map.Launcher.ConvertParameters(testparameters.Text, skill.Value, skin.Text, gametype.Value, shortpaths.Checked);
 			}
 		}
 
@@ -493,8 +515,34 @@ namespace CodeImp.DoomBuilder.Windows
 			CreateParametersExample();
 		}
 
-		// Make new texture set
-		private void addtextureset_Click(object sender, EventArgs e)
+        // Skin changes
+        private void skin_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Leave when no configuration selected
+            if (configinfo == null) return;
+
+            // Apply to selected configuration
+            configinfo.TestSkin = skin.Text;
+            configinfo.Changed = true; //mxd
+
+            CreateParametersExample();
+        }
+
+        // Gametype changes
+        private void gametype_ValueChanges(object sender, EventArgs e)
+        {
+            // Leave when no configuration selected
+            if (configinfo == null) return;
+
+            // Apply to selected configuration
+            configinfo.TestGametype = gametype.Value;
+            configinfo.Changed = true; //mxd
+
+            CreateParametersExample();
+        }
+
+        // Make new texture set
+        private void addtextureset_Click(object sender, EventArgs e)
 		{
 			DefinedTextureSet s = new DefinedTextureSet("New Texture Set");
 			TextureSetForm form = new TextureSetForm();
@@ -702,6 +750,8 @@ namespace CodeImp.DoomBuilder.Windows
 			
 			EngineInfo newInfo = new EngineInfo();
 			newInfo.TestSkill = (int)Math.Ceiling(gameconfig.Skills.Count / 2f); //set Medium skill level
+            newInfo.TestSkin = "Sonic";
+            newInfo.TestGametype = -1; //Single player
 			configinfo.TestEngines.Add(newInfo);
 			configinfo.Changed = true;
 			
@@ -775,6 +825,10 @@ namespace CodeImp.DoomBuilder.Windows
 			int skilllevel = configinfo.TestSkill;
 			skill.Value = skilllevel - 1; //mxd. WHY???
 			skill.Value = skilllevel;
+            skin.Text = configinfo.TestSkin;
+            int gametypevalue = configinfo.TestGametype;
+            gametype.Value = gametypevalue - 1;
+            gametype.Value = gametypevalue;
 			customparameters.Checked = configinfo.CustomParameters;
 		}
 

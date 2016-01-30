@@ -91,7 +91,9 @@ namespace CodeImp.DoomBuilder.Config
 		public string TestParameters { get { return testEngines[currentEngineIndex].TestParameters; } internal set { testEngines[currentEngineIndex].TestParameters = value; } }
 		public bool TestShortPaths { get { return testEngines[currentEngineIndex].TestShortPaths; } internal set { testEngines[currentEngineIndex].TestShortPaths = value; } }
 		public int TestSkill { get { return testEngines[currentEngineIndex].TestSkill; } internal set { testEngines[currentEngineIndex].TestSkill = value; } }
-		public bool CustomParameters { get { return testEngines[currentEngineIndex].CustomParameters; } internal set { testEngines[currentEngineIndex].CustomParameters = value; } }
+        public string TestSkin { get { return testEngines[currentEngineIndex].TestSkin; } internal set { testEngines[currentEngineIndex].TestSkin = value; } }
+        public int TestGametype { get { return testEngines[currentEngineIndex].TestGametype; } internal set { testEngines[currentEngineIndex].TestGametype = value; } }
+        public bool CustomParameters { get { return testEngines[currentEngineIndex].CustomParameters; } internal set { testEngines[currentEngineIndex].CustomParameters = value; } }
 		public List<EngineInfo> TestEngines { get { return testEngines; } internal set { testEngines = value; } }
 		public int CurrentEngineIndex { get { return currentEngineIndex; } internal set { currentEngineIndex = value; } }
 		public LinedefColorPreset[] LinedefColorPresets { get { return linedefColorPresets; } internal set { linedefColorPresets = value; } }
@@ -141,7 +143,9 @@ namespace CodeImp.DoomBuilder.Config
 				info.TestShortPaths = General.Settings.ReadSetting("configurations." + settingskey + ".testshortpaths", false);
 				info.CustomParameters = General.Settings.ReadSetting("configurations." + settingskey + ".customparameters", false);
 				info.TestSkill = General.Settings.ReadSetting("configurations." + settingskey + ".testskill", 3);
-				testEngines.Add(info);
+                info.TestSkin = General.Settings.ReadSetting("configurations." + settingskey + ".testskin", "Sonic");
+                info.TestGametype = General.Settings.ReadSetting("configurations." + settingskey + ".testgametype", -1);
+                testEngines.Add(info);
 				currentEngineIndex = 0;
 			} 
 			else 
@@ -157,7 +161,9 @@ namespace CodeImp.DoomBuilder.Config
 					info.TestShortPaths = General.Settings.ReadSetting(path + ".testshortpaths", false);
 					info.CustomParameters = General.Settings.ReadSetting(path + ".customparameters", false);
 					info.TestSkill = General.Settings.ReadSetting(path + ".testskill", 3);
-					testEngines.Add(info);
+                    info.TestSkin = General.Settings.ReadSetting(path + ".testskin", "Sonic");
+                    info.TestGametype = General.Settings.ReadSetting(path + ".testgametype", -1);
+                    testEngines.Add(info);
 				}
 
 				if(currentEngineIndex >= testEngines.Count)	currentEngineIndex = 0;
@@ -318,9 +324,11 @@ namespace CodeImp.DoomBuilder.Config
 				rlinfo.Add("testshortpaths", testEngines[i].TestShortPaths);
 				rlinfo.Add("customparameters", testEngines[i].CustomParameters);
 				rlinfo.Add("testskill", testEngines[i].TestSkill);
+                rlinfo.Add("testskin", testEngines[i].TestSkin);
+                rlinfo.Add("testgametype", testEngines[i].TestGametype);
 
-				// Add structure
-				resinfo.Add("engine" + i.ToString(CultureInfo.InvariantCulture), rlinfo);
+                // Add structure
+                resinfo.Add("engine" + i.ToString(CultureInfo.InvariantCulture), rlinfo);
 			}
 
 			// Write to config

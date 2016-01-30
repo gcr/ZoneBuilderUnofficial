@@ -354,7 +354,7 @@ namespace CodeImp.DoomBuilder.Config
 				autoClearSideTextures = cfg.ReadSetting("autoclearsidetextures", true);
 				storeSelectedEditTab = cfg.ReadSetting("storeselectededittab", true);
                 maxbackups = cfg.ReadSetting("maxbackups", 3);
-                checkforupdates = cfg.ReadSetting("checkforupdates", false); //mxd
+                checkforupdates = false; //No update checking for Zone Builder
 				rendercomments = cfg.ReadSetting("rendercomments", true); //mxd
 				rendergrid = cfg.ReadSetting("rendergrid", true); //mxd
                 rendernightspath = cfg.ReadSetting("rendernightspath", true);
@@ -463,7 +463,7 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("autoclearsidetextures", autoClearSideTextures);
 			cfg.WriteSetting("storeselectededittab", storeSelectedEditTab);
             cfg.WriteSetting("maxbackups", maxbackups);
-            cfg.WriteSetting("checkforupdates", checkforupdates); //mxd
+            //cfg.WriteSetting("checkforupdates", checkforupdates); //mxd
 			cfg.WriteSetting("rendercomments", rendercomments); //mxd
 			cfg.WriteSetting("rendergrid", rendergrid); //mxd
             cfg.WriteSetting("rendernightspath", rendernightspath); //mxd

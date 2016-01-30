@@ -211,7 +211,6 @@ namespace CodeImp.DoomBuilder
 			outp = outp.Replace("%nM", "%NM");
 			outp = outp.Replace("%Nm", "%NM");
 			outp = outp.Replace("%nm", "%NM");
-            outp = outp.Replace("%c", "%C");
 
             // Replace placeholders with actual values
             outp = outp.Replace("%F", f);
@@ -224,7 +223,7 @@ namespace CodeImp.DoomBuilder
 			outp = outp.Replace("%AP", p_ap);
 			outp = outp.Replace("%S", skill.ToString());
 			outp = outp.Replace("%NM", p_nm);
-            outp = outp.Replace("%C", skin.ToLowerInvariant());
+            outp = outp + " +skin " + skin.ToLowerInvariant();
             if (gametype != -1)
                 outp = outp + " -server -gametype " + gametype.ToString();
 

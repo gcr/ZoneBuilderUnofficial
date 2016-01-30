@@ -158,7 +158,7 @@ namespace CodeImp.DoomBuilder.SRB2
                 return ConvertToExtendedMapNum(n);
             else
             {
-                if (number.Length != 2 || number[0] < 'A' || number[0] > 'Z' || number[1] < '0' || number[1] > '9')
+                if (number.Length != 2 || number[0] < 'A' || number[0] > 'Z' || !((number[1] >= '0' && number[1] <= '9') || (number[1] >= 'A' && number[1] <= 'Z')))
                 {
                     ReportError("Invalid level number");
                     return null;

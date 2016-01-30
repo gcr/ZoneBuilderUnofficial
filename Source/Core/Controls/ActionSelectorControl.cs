@@ -35,6 +35,7 @@ namespace CodeImp.DoomBuilder.Controls
 		private List<GeneralizedCategory> generalizedcategories;
 		private List<GeneralizedOption> generalizedoptions; //mxd
 		private bool controlpressed;
+        private readonly bool grayout;
 		
 		// Constants
 		private const string NUMBER_SEPERATOR = "\t";
@@ -46,11 +47,12 @@ namespace CodeImp.DoomBuilder.Controls
 		public List<GeneralizedOption> GeneralizedOptions { get { return generalizedoptions; } set { generalizedoptions = value; } } //mxd
 		
 		// Constructor
-		public ActionSelectorControl()
+		public ActionSelectorControl(bool grayout = true)
 		{
 			// Initialize
 			InitializeComponent();
 			number.MouseWheel += number_OnMouseWheel; //mxd
+            this.grayout = grayout;
 		}
 
 		// This returns the numeric value
@@ -137,7 +139,7 @@ namespace CodeImp.DoomBuilder.Controls
 					displayname = item.Title.Trim();
 
 					// Determine colors to use
-					if(item.Index == 0)
+					if(grayout && item.Index == 0)
 					{
 						// Grayed
 						displaybrush = new SolidBrush(SystemColors.GrayText);

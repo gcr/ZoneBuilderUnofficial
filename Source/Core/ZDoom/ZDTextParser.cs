@@ -49,11 +49,11 @@ namespace CodeImp.DoomBuilder.ZDoom
 		protected Stream datastream;
 		protected BinaryReader datareader;
 		protected string sourcename;
-		
-		// Error report
-		private int errorline;
-		private string errordesc;
-		private string errorsource;
+
+        // Error report
+        protected int errorline;
+        protected string errordesc;
+        protected string errorsource;
 		private long prevstreamposition; //mxd. Text stream position storted before performing ReadToken.
 		
 		#endregion
@@ -518,7 +518,7 @@ namespace CodeImp.DoomBuilder.ZDoom
         }
 
         // This reports an error
-        protected internal void ReportError(string message)
+        protected internal virtual void ReportError(string message)
 		{
 			// Set error information
 			errordesc = message;

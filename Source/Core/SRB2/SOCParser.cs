@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using CodeImp.DoomBuilder.Compilers;
 using CodeImp.DoomBuilder.ZDoom;
 using CodeImp.DoomBuilder.GZBuilder.Data;
 
@@ -27,6 +28,7 @@ namespace CodeImp.DoomBuilder.SRB2
         private string mapname;
         private readonly HashSet<string> parsedlumps;
         private StreamReader streamreader;
+        private int linenumber;
 
         #endregion
 
@@ -65,10 +67,12 @@ namespace CodeImp.DoomBuilder.SRB2
 
             // Keep local data
             streamreader = new StreamReader(stream, Encoding.ASCII);
+            linenumber = -1;
 
             while (!streamreader.EndOfStream)
             {
                 string line = streamreader.ReadLine();
+                linenumber++;
                 if (String.IsNullOrEmpty(line) || line.StartsWith("\n") || line.StartsWith("#")) continue;
                 string[] tokens = line.Split(new char[] { ' ' });
                 switch (tokens[0].ToUpperInvariant())
@@ -76,7 +80,7 @@ namespace CodeImp.DoomBuilder.SRB2
                     case "LEVEL":
                         if (tokens.Length < 2 || String.IsNullOrEmpty(tokens[1]))
                         {
-                            ReportError("Level block is missing a level number.");
+                            ReportError("Level block is missing a level number");
                             break;
                         }
                         if (GetMapName(tokens[1].ToUpperInvariant()) != mapname) break;
@@ -102,12 +106,13 @@ namespace CodeImp.DoomBuilder.SRB2
             while (!streamreader.EndOfStream)
             {
                 string line = streamreader.ReadLine();
+                linenumber++;
                 if (String.IsNullOrEmpty(line) || line.StartsWith("\n")) break;
                 if (line.StartsWith("#")) continue;
                 string[] tokens = line.Split(new char[] { '=' });
                 if (tokens.Length != 2)
                 {
-                    ReportError("Invalid line.");
+                    ReportError("Invalid line");
                     return false;
                 }
                 tokens[0] = tokens[0].Trim().ToUpperInvariant();
@@ -121,7 +126,7 @@ namespace CodeImp.DoomBuilder.SRB2
                     case "ACT":
                         if (!int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out act) || act < 0 || act >= 20)
                         {
-                            ReportError("Invalid act number.");
+                            ReportError("Invalid act number");
                             return false;
                         }
                         break;
@@ -134,7 +139,7 @@ namespace CodeImp.DoomBuilder.SRB2
                         int skyn;
                         if (!int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out skyn))
                         {
-                            ReportError("Invalid sky number.");
+                            ReportError("Invalid sky number");
                             return false;
                         }
                         mapinfo.Sky1 = "SKY" + skyn;
@@ -146,23 +151,30 @@ namespace CodeImp.DoomBuilder.SRB2
             return true;
         }
 
-        private static string GetMapName(string number)
+        private string GetMapName(string number)
         {
             int n;
             if (int.TryParse(number, NumberStyles.Integer, CultureInfo.InvariantCulture, out n))
                 return ConvertToExtendedMapNum(n);
             else
             {
-                if (number.Length != 2 || number[0] < 'A' || number[0] > 'Z' || number[1] < '0' || number[1] > '9') return null;
+                if (number.Length != 2 || number[0] < 'A' || number[0] > 'Z' || number[1] < '0' || number[1] > '9')
+                {
+                    ReportError("Invalid level number");
+                    return null;
+                }
                 return "MAP" + number;
             }
 
         }
 
-        private static string ConvertToExtendedMapNum(int n)
+        private string ConvertToExtendedMapNum(int n)
         {
             if (n <= 0 || n > 1035)
+            {
+                ReportError("Invalid level number");
                 return null;
+            }
             if (n < 10)
                 return "MAP0" + n;
             if (n < 100)
@@ -179,6 +191,15 @@ namespace CodeImp.DoomBuilder.SRB2
         #endregion
 
         #region ================== Methods
+
+        // This reports an error
+        protected internal override void ReportError(string message)
+        {
+            // Set error information
+            errordesc = message;
+            errorline = (streamreader != null ? linenumber : CompilerError.NO_LINE_NUMBER); //mxd
+            errorsource = sourcename;
+        }
 
         protected override string GetLanguageType()
         {

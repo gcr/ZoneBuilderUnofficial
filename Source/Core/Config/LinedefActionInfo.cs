@@ -180,7 +180,7 @@ namespace CodeImp.DoomBuilder.Config
             int value = threedfloorflags;
             foreach (KeyValuePair<string,int> p in threedfloorflagsadditions)
             {
-                if (setflags[p.Key]) value += p.Value;
+                if (setflags.ContainsKey(p.Key) && setflags[p.Key]) value += p.Value;
             }
             return value;
         }

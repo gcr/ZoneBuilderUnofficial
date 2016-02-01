@@ -96,6 +96,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private Type lasthighlighttype;
 
         private BSP bsp;
+        private bool useblockmap;
 
         //mxd. Moved here from Tools
         private struct SidedefAlignJob
@@ -166,6 +167,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public bool IsSingleSelection { get { return singleselection; } }
 		public bool SelectionChanged { get { return selectionchanged; } set { selectionchanged |= value; } }
         public BSP BSP { get { return bsp; } }
+        public bool UseBlockmap { get { return useblockmap; } }
 
         #endregion
 
@@ -185,9 +187,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			selectioninfoupdatetimer.Tick += SelectioninfoupdatetimerOnTick;
 
             bsp = new BSP(BuilderPlug.Me.DontUseNodes);
-			
-			// We have no destructor
-			GC.SuppressFinalize(this);
+            useblockmap = bsp.IsDeactivated;
+            if (useblockmap && bsp.ErrorMessage != "")
+                MessageBox.Show("Could not load the map's nodes: " + bsp.ErrorMessage + " Defaulting to blockmap.", "Error loading nodes!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            // We have no destructor
+            GC.SuppressFinalize(this);
 		}
 
 		// Disposer
@@ -527,7 +532,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			}
 
 			//mxd. Update event lines (still better than updating them on every frame redraw)
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, useblockmap));
 		}
 
 		//mxd
@@ -756,7 +761,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			//mxd
 			Sector[] sectorsWithEffects = null;
-            bsp.Update();
+            bsp.Build();
+            useblockmap = bsp.IsDeactivated;
 
             if (!General.Settings.GZDoomRenderingEffects)
             {
@@ -781,8 +787,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			sectordata = new Dictionary<Sector, SectorData>(General.Map.Map.Sectors.Count);
 			thingdata = new Dictionary<Thing, ThingData>(General.Map.Map.Things.Count);
 
-			//mxd. rebuild all sectors with effects
-			if(sectorsWithEffects != null) 
+            if (bsp.IsDeactivated && bsp.ErrorMessage != "")
+                MessageBox.Show("Could not load the map's nodes: " + bsp.ErrorMessage + " Defaulting to blockmap.", "Error loading nodes!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+
+            //mxd. rebuild all sectors with effects
+            if (sectorsWithEffects != null) 
 			{
 				for(int i = 0; i < sectorsWithEffects.Length; i++) 
 				{
@@ -1207,7 +1217,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			RebuildElementData();
 
 			//mxd. Update event lines
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, useblockmap));
 		}
 
 		// When returning to another mode
@@ -3340,7 +3350,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Map.ThingsFilter.Update();
 
 			// Update event lines
-			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, BuilderPlug.Me.DontUseNodes));
+			renderer.SetEventLines(LinksCollector.GetThingLinks(General.Map.ThingsFilter.VisibleThings, blockmap, bsp, useblockmap));
 		}
 
 		//mxd. We'll just use currently selected objects 

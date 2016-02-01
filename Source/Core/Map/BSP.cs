@@ -28,6 +28,7 @@ namespace CodeImp.DoomBuilder.Map
 		private Subsector[] ssectors;
         private bool deactivate;
         private bool isdisposed;
+        private string errormessage;
         #endregion
 
         #region ================== Properties
@@ -36,6 +37,8 @@ namespace CodeImp.DoomBuilder.Map
 		public Node[] Nodes { get { return nodes; } }
 		public Vector2D[] Vertices { get { return verts; } }
 		public Subsector[] Subsectors { get { return ssectors; } }
+        public bool IsDeactivated { get { return deactivate; } }
+        public string ErrorMessage { get { return errormessage; } }
 		#endregion
 
 		#region ================== Constructor / Destructor
@@ -44,12 +47,8 @@ namespace CodeImp.DoomBuilder.Map
 		public BSP(bool deactivate)
         {
             this.deactivate = deactivate;
-            if (!deactivate)
-            {
-                if (General.Map.IsChanged && !General.Map.RebuildNodes(General.Map.ConfigSettings.NodebuilderSave, true)) return;
-                LoadStructures();
-            }
-
+            this.errormessage = "";
+            if (!deactivate && !General.Map.IsChanged) LoadStructures();
         }
 
         // Disposer
@@ -72,11 +71,11 @@ namespace CodeImp.DoomBuilder.Map
 
         #region ================== Methods
 
-        public void Update()
+        public void Build()
         {
             if (!deactivate && General.Map.IsChanged)
             {
-                if (!General.Map.RebuildNodes(General.Map.ConfigSettings.NodebuilderSave, true)) return;
+                if (!General.Map.RebuildNodes(General.Map.ConfigSettings.NodebuilderTest, true)) return;
                 LoadStructures();
             }
         }
@@ -86,16 +85,21 @@ namespace CodeImp.DoomBuilder.Map
 		/// </summary>
 		private bool LoadStructures()
 		{
+            errormessage = "";
 			// Load the nodes structure
 			MemoryStream nodesstream = General.Map.GetLumpData("NODES");
-			int numnodes = (int)nodesstream.Length / 28;
+            if (nodesstream == null)
+            {
+                deactivate = true;
+                return false;
+            }
+            int numnodes = (int)nodesstream.Length / 28;
 
 			//mxd. Boilerplate!
 			if(numnodes < 1)
 			{
-				// Cancel mode
-				MessageBox.Show("The map has only one subsector. Please add more sectors, then try running this mode again.", "THY NODETH ARETH BROKH!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				General.Editing.CancelMode();
+                errormessage = "The map has only one subsector.";
+                deactivate = true;
 				return false;
 			}
 
@@ -140,10 +144,9 @@ namespace CodeImp.DoomBuilder.Map
 			//mxd. Boilerplate!
 			if(numsegs < 1) 
 			{
-				// Cancel mode
-				MessageBox.Show("The map has empty SEGS lump. Please rebuild the nodes, then try running this mode again.", "THY SEGS HATH SINNETH!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				General.Editing.CancelMode();
-				return false;
+				errormessage = "The map has an empty SEGS lump.";
+                deactivate = true;
+                return false;
 			}
 
 			segs = new Seg[numsegs];
@@ -168,10 +171,9 @@ namespace CodeImp.DoomBuilder.Map
 			//mxd. Boilerplate!
 			if(numverts < 1) 
 			{
-				// Cancel mode
-				MessageBox.Show("The map has empty VERTEXES lump. Please rebuild the nodes, then try running this mode again.", "THY VERTEXES ARETH FOUL!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				General.Editing.CancelMode();
-				return false;
+                errormessage = "The map has an empty VERTEXES lump.";
+                deactivate = true;
+                return false;
 			}
 
 			verts = new Vector2D[numverts];
@@ -192,10 +194,9 @@ namespace CodeImp.DoomBuilder.Map
 			//mxd. Boilerplate!
 			if(numssec < 1) 
 			{
-				// Cancel mode
-				MessageBox.Show("The map has empty SSECTORS lump. Please rebuild the nodes, then try running this mode again.", "THY SSECTORS ARETH HERETYSH!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				General.Editing.CancelMode();
-				return false;
+                errormessage = "The map has an empty SSECTORS lump.";
+                deactivate = true;
+                return false;
 			}
 
 			ssectors = new Subsector[numssec];

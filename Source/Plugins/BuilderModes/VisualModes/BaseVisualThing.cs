@@ -102,7 +102,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public bool Setup()
 		{
             // Find the sector in which the thing resides
-            if (BuilderPlug.Me.DontUseNodes)
+            if (mode.UseBlockmap)
                 Thing.DetermineSector(mode.BlockMap);
             else
                 Thing.DetermineSector(mode.BSP);

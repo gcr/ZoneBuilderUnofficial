@@ -24,15 +24,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
         private BSP bsp;
 		
 		// Constructor
-		public EffectSRB2ThingVertexSlope(SectorData data, List<Thing> sourcethings, bool floor, VisualBlockMap bmap, BSP bsptree) : base(data)
+		public EffectSRB2ThingVertexSlope(SectorData data, List<Thing> sourcethings, bool floor, VisualBlockMap blockmap, BSP bsp) : base(data)
 		{
 			things = sourcethings;
 			slopefloor = floor;
-            blockmap = bmap;
-            bsp = bsptree;
-			
-			// New effect added: This sector needs an update!
-			if(data.Mode.VisualSectorExists(data.Sector))
+            this.blockmap = blockmap;
+            this.bsp = bsp;
+
+            // New effect added: This sector needs an update!
+            if (data.Mode.VisualSectorExists(data.Sector))
 			{
 				BaseVisualSector vs = (BaseVisualSector)data.Mode.GetVisualSector(data.Sector);
 				vs.UpdateSectorGeometry(true);
@@ -50,7 +50,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 ThingData td = data.Mode.GetThingData(t);
                 td.AddUpdateSector(data.Sector, true);
                 Vector3D position = t.Position;
-                if (BuilderPlug.Me.DontUseNodes)
+                if (data.Mode.UseBlockmap)
                     t.DetermineSector(blockmap);
                 else
                     t.DetermineSector(bsp);

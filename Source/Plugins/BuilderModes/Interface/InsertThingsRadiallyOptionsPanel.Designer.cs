@@ -37,6 +37,7 @@
             this.snaptogrid = new CodeImp.DoomBuilder.Controls.ToolStripCheckBox();
             this.typelabel = new System.Windows.Forms.ToolStripLabel();
             this.type = new CodeImp.DoomBuilder.Controls.ToolStripNumericUpDown();
+            this.browse = new System.Windows.Forms.ToolStripButton();
             this.parameterlabel = new System.Windows.Forms.ToolStripLabel();
             this.parameter = new CodeImp.DoomBuilder.Controls.ToolStripNumericUpDown();
             this.toolStrip1.SuspendLayout();
@@ -53,11 +54,12 @@
             this.snaptogrid,
             this.typelabel,
             this.type,
+            this.browse,
             this.parameterlabel,
             this.parameter});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(560, 26);
+            this.toolStrip1.Size = new System.Drawing.Size(573, 26);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -158,13 +160,22 @@
             0,
             0});
             this.type.Name = "type";
-            this.type.Size = new System.Drawing.Size(53, 23);
+            this.type.Size = new System.Drawing.Size(47, 23);
             this.type.Text = "1";
             this.type.Value = new decimal(new int[] {
             1,
             0,
             0,
             0});
+            // 
+            // browse
+            // 
+            this.browse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.browse.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.List;
+            this.browse.Name = "browse";
+            this.browse.Size = new System.Drawing.Size(23, 23);
+            this.browse.Text = "browse";
+            this.browse.Click += new System.EventHandler(this.browse_Click);
             // 
             // parameterlabel
             // 
@@ -199,7 +210,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.toolStrip1);
             this.Name = "InsertThingsRadiallyOptionsPanel";
-            this.Size = new System.Drawing.Size(560, 60);
+            this.Size = new System.Drawing.Size(573, 60);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -220,5 +231,6 @@
         private System.Windows.Forms.ToolStripLabel typelabel;
         private System.Windows.Forms.ToolStripLabel parameterlabel;
         private Controls.ToolStripNumericUpDown parameter;
+        private System.Windows.Forms.ToolStripButton browse;
     }
 }

@@ -38,6 +38,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             General.Interface.AddButton(snaptogrid);
             General.Interface.AddButton(typelabel);
             General.Interface.AddButton(type);
+            General.Interface.AddButton(browse);
             General.Interface.AddButton(parameterlabel);
             General.Interface.AddButton(parameter);
             General.Interface.AddButton(reset);
@@ -48,6 +49,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.RemoveButton(reset);
             General.Interface.RemoveButton(parameter);
             General.Interface.RemoveButton(parameterlabel);
+            General.Interface.RemoveButton(browse);
             General.Interface.RemoveButton(type);
             General.Interface.RemoveButton(typelabel);
             General.Interface.RemoveButton(snaptogrid);
@@ -71,6 +73,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
             radius.Value = 32;
 			blockEvents = false;
             number.Value = 4;
+        }
+
+        private void browse_Click(object sender, EventArgs e)
+        {
+            type.Value = General.Interface.BrowseThingType(BuilderPlug.Me.MenusForm, (int)type.Value);
         }
     }
 }

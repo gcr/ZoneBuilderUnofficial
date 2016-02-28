@@ -83,6 +83,8 @@ namespace CodeImp.DoomBuilder.Controls
 			AddThingCategories(General.Map.Data.ThingCategories, typelist.Nodes); //mxd
 			doupdatenode = true;
 			doupdatetextbox = true;
+            parametercaption.Visible = General.Map.SRB2;
+            parameterid.Visible = General.Map.SRB2;
 		}
 
 		//mxd. This recursively creates thing category tree nodes. Returns true when a thing in this category is obsolete
@@ -201,7 +203,10 @@ namespace CodeImp.DoomBuilder.Controls
 
         public int GetFullType(int original)
         {
-            return GetResult(original % 4096) + parameterid.GetResult(original / 4096) * 4096;
+            if (General.Map.SRB2)
+                return GetResult(original % 4096) + parameterid.GetResult(original / 4096) * 4096;
+            else
+                return GetResult(original);
         }
 
 		//mxd

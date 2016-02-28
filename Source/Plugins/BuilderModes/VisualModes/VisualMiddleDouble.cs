@@ -131,41 +131,135 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(General.Map.Config.ScaledTextureOffsets && !base.Texture.WorldPanning)
 				tof = tof * base.Texture.Scale;
 
-			// Determine texture coordinates plane as they would be in normal circumstances.
-			// We can then use this plane to find any texture coordinate we need.
-			// The logic here is the same as in the original VisualMiddleSingle (except that
-			// the values are stored in a TexturePlane)
-			// NOTE: I use a small bias for the floor height, because if the difference in
-			// height is 0 then the TexturePlane doesn't work!
-			TexturePlane tp = new TexturePlane();
-			float floorbias = (Sidedef.Sector.CeilHeight == Sidedef.Sector.FloorHeight) ? 1.0f : 0.0f;
-			float geotop = Math.Min(Sidedef.Sector.CeilHeight, Sidedef.Other.Sector.CeilHeight);
-			float geobottom = Math.Max(Sidedef.Sector.FloorHeight, Sidedef.Other.Sector.FloorHeight);
-			float zoffset = Sidedef.Sector.CeilHeight - Sidedef.Other.Sector.CeilHeight; //mxd
+            // Determine texture coordinates plane as they would be in normal circumstances.
+            // We can then use this plane to find any texture coordinate we need.
+            // The logic here is the same as in the original VisualMiddleSingle (except that
+            // the values are stored in a TexturePlane)
+            // NOTE: I use a small bias for the floor height, because if the difference in
+            // height is 0 then the TexturePlane doesn't work!
+            Vector3D vlt, vlb, vrt, vrb;
+            Vector2D tlt, tlb, trt, trb;
+            float floorbias = (Sidedef.Sector.CeilHeight == Sidedef.Sector.FloorHeight) ? 1.0f : 0.0f;
+            float geotop = Math.Min(Sidedef.Sector.CeilHeight, Sidedef.Other.Sector.CeilHeight);
+            float geobottom = Math.Max(Sidedef.Sector.FloorHeight, Sidedef.Other.Sector.FloorHeight);
+            float geoplanetop = Math.Min(sd.Ceiling.plane.GetZ(vl), osd.Ceiling.plane.GetZ(vl));
+			float geoplanebottom = Math.Max(sd.Floor.plane.GetZ(vl), osd.Floor.plane.GetZ(vl));
+            float textop = geoplanetop;
+            float texbottom = geoplanebottom;
+            float repetitions = 1;
 
-			// When lower unpegged is set, the middle texture is bound to the bottom
-			if(IsLowerUnpegged())
-				tp.tlt.y = tsz.y - (geotop - geobottom);
-			
-			if(zoffset > 0) tp.tlt.y -= zoffset; //mxd
-			tp.trb.x = tp.tlt.x + Sidedef.Line.Length;
-			tp.trb.y = tp.tlt.y + (Sidedef.Sector.CeilHeight - (Sidedef.Sector.FloorHeight + floorbias));
+            // Determine if we should repeat the middle texture
+            bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag);
+            repeatmidtex = srb2repeat || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
+            if (!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096))
+            {
+                float top = Sidedef.Line.IsFlagSet("128") ? geotop : geoplanetop;
+                float bottom = Sidedef.Line.IsFlagSet("128") ? geobottom : geoplanebottom;
+                // First determine the visible portion of the texture
+                //Due to the condition of the if-block, Sidedef.OffsetX >= 4096 automatically holds if srb2repeat does, so we don't have to handle negative offsets here.
+                repetitions = srb2repeat ? (Sidedef.OffsetX / 4096) + 1 : 1;
 
-			// Apply texture offset
-			tp.tlt += tof;
-			tp.trb += tof;
+                // Determine top portion height
+                if (IsLowerUnpegged())
+                    textop = bottom + tof.y + repetitions * Math.Abs(tsz.y);
+                else
+                    textop = top + tof.y;
 
-			// Transform pixel coordinates to texture coordinates
-			tp.tlt /= tsz;
-			tp.trb /= tsz;
+                // Calculate bottom portion height
+                texbottom = textop - repetitions * Math.Abs(tsz.y);
+            }
+            else
+            {
+                repetitions = (geotop - geobottom) / Math.Abs(tsz.y);
+                if ((geotop - geobottom) % Math.Abs(tsz.y) != 0)
+                    repetitions++; // tile an extra time to fill the gap
+            }
 
-			// Left top and right bottom of the geometry that
-			tp.vlt = new Vector3D(vl.x, vl.y, Sidedef.Sector.CeilHeight);
-			tp.vrb = new Vector3D(vr.x, vr.y, Sidedef.Sector.FloorHeight + floorbias);
+            float h = Math.Min(textop, geoplanetop);
+            float l = Math.Max(texbottom, geoplanebottom);
+            float texturevpeg;
 
-			// Make the right-top coordinates
-			tp.trt = new Vector2D(tp.trb.x, tp.tlt.y);
-			tp.vrt = new Vector3D(tp.vrb.x, tp.vrb.y, tp.vlt.z);
+            // When lower unpegged is set, the middle texture is bound to the bottom
+            if (IsLowerUnpegged())
+                texturevpeg = repetitions * Math.Abs(tsz.y) - h + texbottom;
+            else
+                texturevpeg = textop - h;
+
+            tlt.x = tlb.x = 0;
+            trt.x = trb.x = Sidedef.Line.Length;
+            tlt.y = trt.y = texturevpeg;
+            tlb.y = trb.y = texturevpeg + h - (l + floorbias);
+
+            float rh = h;
+            float rl = l;
+
+            // Correct to account for slopes
+            if (General.Map.SRB2)
+            {
+                float midtextureslant;
+
+                if (Sidedef.Line.IsFlagSet("128"))
+                    midtextureslant = 0;
+                else if (IsLowerUnpegged())
+                    midtextureslant = osd.Floor.plane.GetZ(vl) < sd.Floor.plane.GetZ(vl)
+                              ? sd.Floor.plane.GetZ(vr) - sd.Floor.plane.GetZ(vl)
+                              : osd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vl);
+                else
+                    midtextureslant = sd.Ceiling.plane.GetZ(vl) < osd.Ceiling.plane.GetZ(vl)
+                              ? sd.Ceiling.plane.GetZ(vr) - sd.Ceiling.plane.GetZ(vl)
+                              : osd.Ceiling.plane.GetZ(vr) - osd.Ceiling.plane.GetZ(vl);
+
+                float newtextop = textop + midtextureslant;
+                float newtexbottom = texbottom + midtextureslant;
+
+                float highcut = geotop + (sd.Ceiling.plane.GetZ(vl) < osd.Ceiling.plane.GetZ(vl)
+                              ? sd.Ceiling.plane.GetZ(vr) - sd.Ceiling.plane.GetZ(vl)
+                              : osd.Ceiling.plane.GetZ(vr) - osd.Ceiling.plane.GetZ(vl));
+                float lowcut = geobottom + (osd.Floor.plane.GetZ(vl) < sd.Floor.plane.GetZ(vl)
+                              ? sd.Floor.plane.GetZ(vr) - sd.Floor.plane.GetZ(vl)
+                              : osd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vl));
+
+                // Texture stuff
+                rh = Math.Min(highcut, newtextop);
+                rl = Math.Max(newtexbottom, lowcut);
+
+                float newtexturevpeg;
+
+                // When lower unpegged is set, the middle texture is bound to the bottom
+                if (IsLowerUnpegged())
+                    newtexturevpeg = repetitions * Math.Abs(tsz.y) - rh + newtexbottom;
+                else
+                    newtexturevpeg = newtextop - rh;
+
+                trt.y = newtexturevpeg;
+                trb.y = newtexturevpeg + rh - (rl + floorbias);
+            }
+
+            // Apply texture offset
+            tlt += tof;
+            tlb += tof;
+            trb += tof;
+            trt += tof;
+
+            // Transform pixel coordinates to texture coordinates
+            tlt /= tsz;
+            tlb /= tsz;
+            trb /= tsz;
+            trt /= tsz;
+
+            // Geometry coordinates
+            vlt = new Vector3D(vl.x, vl.y, h);
+            vlb = new Vector3D(vl.x, vl.y, l);
+            vrb = new Vector3D(vr.x, vr.y, rl);
+            vrt = new Vector3D(vr.x, vr.y, rh);
+
+            TexturePlane tp = new TexturePlane();
+            tp.tlt = IsLowerUnpegged() ? tlb : tlt;
+            tp.trb = trb;
+            tp.trt = trt;
+            tp.vlt = IsLowerUnpegged() ? vlb : vlt;
+            tp.vrb = vrb;
+            tp.vrt = vrt;
 
 			// Keep top and bottom planes for intersection testing
 			top = sd.Ceiling.plane;
@@ -191,31 +285,37 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			CropPoly(ref poly, osd.Ceiling.plane, true);
 			CropPoly(ref poly, osd.Floor.plane, true);
 
-            // Determine if we should repeat the middle texture
-            bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag);
-            repeatmidtex = srb2repeat || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
+            //Repeat middle texture
 			if(!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096)) 
 			{
-				// First determine the visible portion of the texture
-				float textop;
-                //Due to the condition of the if-block, Sidedef.OffsetX >= 4096 automatically holds if srb2repeat does, so we don't have to handle negative offsets here.
-                int repetitions = srb2repeat ? (Sidedef.OffsetX / 4096) + 1 : 1;
+                // Create crop planes (we also need these for intersection testing)
+                if (!Sidedef.Line.IsFlagSet("128"))
+                {
+                    if (IsLowerUnpegged())
+                    {
+                        bottomclipplane = sd.Floor.plane.GetZ(vl) > osd.Floor.plane.GetZ(vl) ? sd.Floor.plane : osd.Floor.plane;
+                        topclipplane = bottomclipplane.GetInverted();
+                        Vector3D up = new Vector3D(0f, 0f, textop - texbottom);
+                        float offset = Vector3D.DotProduct(up, topclipplane.Normal);
+                        topclipplane.Offset -= offset;
+                    }
+                    else
+                    {
+                        topclipplane = sd.Ceiling.plane.GetZ(vl) < osd.Ceiling.plane.GetZ(vl) ? sd.Ceiling.plane : osd.Ceiling.plane;
+                        bottomclipplane = topclipplane.GetInverted();
+                        Vector3D down = new Vector3D(0f, 0f, texbottom - textop);
+                        float offset = Vector3D.DotProduct(down, bottomclipplane.Normal);
+                        bottomclipplane.Offset -= offset;
+                    }
+                }
+                else
+                {
+                    topclipplane = new Plane(new Vector3D(0, 0, -1), textop);
+                    bottomclipplane = new Plane(new Vector3D(0, 0, 1), -texbottom);
+                }
 
-				// Determine top portion height
-				if(IsLowerUnpegged())
-					textop = geobottom + tof.y + repetitions * Math.Abs(tsz.y);
-				else
-					textop = geotop + tof.y;
-
-				// Calculate bottom portion height
-				float texbottom = textop - repetitions * Math.Abs(tsz.y);
-
-				// Create crop planes (we also need these for intersection testing)
-				topclipplane = new Plane(new Vector3D(0, 0, -1), textop);
-				bottomclipplane = new Plane(new Vector3D(0, 0, 1), -texbottom);
-
-				// Crop polygon by these heights
-				CropPoly(ref poly, topclipplane, true);
+                // Crop polygon by these heights
+                CropPoly(ref poly, topclipplane, true);
 				CropPoly(ref poly, bottomclipplane, true);
 			}
 

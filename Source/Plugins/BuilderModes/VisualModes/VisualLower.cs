@@ -129,42 +129,89 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// the values are stored in a TexturePlane)
 			// NOTE: I use a small bias for the floor height, because if the difference in
 			// height is 0 then the TexturePlane doesn't work!
-			TexturePlane tp = new TexturePlane();
+            Vector3D vlt, vlb, vrt, vrb;
+            Vector2D tlt, tlb, trt, trb;
 			float floorbias = (Sidedef.Other.Sector.FloorHeight == Sidedef.Sector.FloorHeight) ? 1.0f : 0.0f;
-			if(IsLowerUnpegged())
+            float planefloorbias = (Math.Abs(osd.Floor.plane.GetZ(vr) - sd.Floor.plane.GetZ(vr)) < 0.5f) ? 1.0f : 0.0f;
+            float texturevpeg = 0;
+            if (IsLowerUnpegged())
 			{
-				if(Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName && Sidedef.Other.Sector.CeilTexture == General.Map.Config.SkyFlatName) 
+                if (General.Map.SRB2 && Sidedef.Line.IsFlagSet("32"))
+                {
+                    texturevpeg = sd.Ceiling.plane.GetZ(vl) - osd.Floor.plane.GetZ(vl);
+                }
+                else if(Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName && Sidedef.Other.Sector.CeilTexture == General.Map.Config.SkyFlatName) 
 				{
-					// mxd. Replicate Doom texture offset glitch when front and back sector's ceilings are sky
-					tp.tlt.y = (float)Sidedef.Other.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
+                    // mxd. Replicate Doom texture offset glitch when front and back sector's ceilings are sky
+                    texturevpeg = (float)Sidedef.Other.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
 				} 
 				else 
 				{
-					// When lower unpegged is set, the lower texture is bound to the bottom
-					tp.tlt.y = (float) Sidedef.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
+                    // When lower unpegged is set, the lower texture is bound to the bottom
+                    texturevpeg = (float) Sidedef.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
 				}
 			}
-			tp.trb.x = tp.tlt.x + Sidedef.Line.Length;
-			tp.trb.y = tp.tlt.y + (Sidedef.Other.Sector.FloorHeight - (Sidedef.Sector.FloorHeight + floorbias));
-			
-			// Apply texture offset
-			tp.tlt += tof;
-			tp.trb += tof;
+            tlt.x = tlb.x = 0;
+            trt.x = trb.x = Sidedef.Line.Length;
+            tlt.y = trt.y = texturevpeg;
+            tlb.y = trb.y = texturevpeg + (Sidedef.Other.Sector.FloorHeight - (Sidedef.Sector.FloorHeight + floorbias));
+
+            if (General.Map.SRB2)
+            {
+                // Adjust texture y value for sloped walls
+                if (!Sidedef.Line.IsFlagSet("32"))
+                {
+                    // Unskewed
+                    tlb.y -= sd.Floor.plane.GetZ(vl) - Sidedef.Sector.FloorHeight;
+                    trb.y -= sd.Floor.plane.GetZ(vr) - Sidedef.Sector.FloorHeight;
+                    tlt.y -= osd.Floor.plane.GetZ(vl) - Sidedef.Other.Sector.FloorHeight;
+                    trt.y -= osd.Floor.plane.GetZ(vr) - Sidedef.Other.Sector.FloorHeight;
+                }
+                else if (IsLowerUnpegged())
+                {
+                    // Skewed by bottom
+                    tlb.y = texturevpeg + osd.Floor.plane.GetZ(vl) - sd.Floor.plane.GetZ(vr);
+                    trt.y = tlt.y - (osd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vl));
+                    trb.y = trt.y - (sd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vr));
+                }
+                else
+                {
+                    // Skewed by top
+                    tlb.y = texturevpeg + osd.Floor.plane.GetZ(vl) - sd.Floor.plane.GetZ(vl);
+                    trb.y = texturevpeg + osd.Floor.plane.GetZ(vr) - sd.Floor.plane.GetZ(vr);
+                }
+            }
+
+            if (Math.Abs(trb.y - trt.y) < 0.5f) trb.y = trt.y - 1.0f;
+
+            // Apply texture offset
+            tlt += tof;
+            tlb += tof;
+			trb += tof;
+            trt += tof;
 			
 			// Transform pixel coordinates to texture coordinates
-			tp.tlt /= tsz;
-			tp.trb /= tsz;
+			tlt /= tsz;
+            tlb /= tsz;
+			trb /= tsz;
+            trt /= tsz;
 			
-			// Left top and right bottom of the geometry that
-			tp.vlt = new Vector3D(vl.x, vl.y, Sidedef.Other.Sector.FloorHeight);
-			tp.vrb = new Vector3D(vr.x, vr.y, Sidedef.Sector.FloorHeight + floorbias);
-			
-			// Make the right-top coordinates
-			tp.trt = new Vector2D(tp.trb.x, tp.tlt.y);
-			tp.vrt = new Vector3D(tp.vrb.x, tp.vrb.y, tp.vlt.z);
-			
-			// Create initial polygon, which is just a quad between floor and ceiling
-			WallPolygon poly = new WallPolygon();
+			// Geometry coordinates
+			vlt = new Vector3D(vl.x, vl.y, osd.Floor.plane.GetZ(vl));
+            vlb = new Vector3D(vl.x, vl.y, sd.Floor.plane.GetZ(vl));
+			vrb = new Vector3D(vr.x, vr.y, sd.Floor.plane.GetZ(vr) + planefloorbias);
+			vrt = new Vector3D(vr.x, vr.y, osd.Floor.plane.GetZ(vr));
+
+            TexturePlane tp = new TexturePlane();
+            tp.tlt = IsLowerUnpegged() ? tlb : tlt;
+            tp.trb = trb;
+            tp.trt = trt;
+            tp.vlt = IsLowerUnpegged() ? vlb: vlt;
+            tp.vrb = vrb;
+            tp.vrt = vrt;
+
+            // Create initial polygon, which is just a quad between floor and ceiling
+            WallPolygon poly = new WallPolygon();
 			poly.Add(new Vector3D(vl.x, vl.y, sd.Floor.plane.GetZ(vl)));
 			poly.Add(new Vector3D(vl.x, vl.y, sd.Ceiling.plane.GetZ(vl)));
 			poly.Add(new Vector3D(vr.x, vr.y, sd.Ceiling.plane.GetZ(vr)));

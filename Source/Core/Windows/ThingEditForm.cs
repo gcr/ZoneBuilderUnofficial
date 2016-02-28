@@ -389,14 +389,14 @@ namespace CodeImp.DoomBuilder.Windows
 			}
 
 			// Verify the type
-			if(((thingtype.GetResult(0) < General.Map.FormatInterface.MinThingType) || (thingtype.GetResult(0) > General.Map.FormatInterface.MaxThingType)))
+			if(((thingtype.GetFullType(0) < General.Map.FormatInterface.MinThingType) || (thingtype.GetFullType(0) > General.Map.FormatInterface.MaxThingType)))
 			{
 				General.ShowWarningMessage("Thing type must be between " + General.Map.FormatInterface.MinThingType + " and " + General.Map.FormatInterface.MaxThingType + ".", MessageBoxButtons.OK);
 				return;
 			}
 
-			// Verify the action
-			if(General.Map.FormatInterface.HasThingAction && ((action.Value < General.Map.FormatInterface.MinAction) || (action.Value > General.Map.FormatInterface.MaxAction)))
+            // Verify the action
+            if (General.Map.FormatInterface.HasThingAction && ((action.Value < General.Map.FormatInterface.MinAction) || (action.Value > General.Map.FormatInterface.MaxAction)))
 			{
 				General.ShowWarningMessage("Thing action must be between " + General.Map.FormatInterface.MinAction + " and " + General.Map.FormatInterface.MaxAction + ".", MessageBoxButtons.OK);
 				return;

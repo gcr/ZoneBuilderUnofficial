@@ -573,7 +573,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		private static float GetAlignedThingZ(BaseVisualMode mode, Thing t, float targtthingheight)
 		{
-			ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.Type);
+			ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 			if(info != null)
 			{
 				if(info.AbsoluteZ && t.IsFlipped) return t.Position.z; // Not sure what to do here...

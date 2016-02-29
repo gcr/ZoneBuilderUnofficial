@@ -568,11 +568,11 @@ namespace CodeImp.DoomBuilder.Rendering
 			if(t.Selected) return General.Colors.Selection;
 			
 			//mxd. If thing is light, set it's color to light color:
-			if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Type) != -1)
+			if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.SRB2Type) != -1)
 			{
-				if(t.Type == 1502) //vavoom light
+				if(t.SRB2Type == 1502) //vavoom light
 					return new PixelColor(255, 255, 255, 255);
-				if(t.Type == 1503) //vavoom colored light
+				if(t.SRB2Type == 1503) //vavoom colored light
 					return new PixelColor(255, (byte)t.Args[1], (byte)t.Args[2], (byte)t.Args[3]);
 				return new PixelColor(255, (byte)t.Args[0], (byte)t.Args[1], (byte)t.Args[2]);
 			}
@@ -1161,8 +1161,8 @@ namespace CodeImp.DoomBuilder.Rendering
 					//collect models
 					if(t.IsModel) 
 					{
-						if(!modelsByType.ContainsKey(t.Type)) modelsByType.Add(t.Type, new List<Thing>());
-						modelsByType[t.Type].Add(t);
+						if(!modelsByType.ContainsKey(t.SRB2Type)) modelsByType.Add(t.SRB2Type, new List<Thing>());
+						modelsByType[t.SRB2Type].Add(t);
 					}
 					
 					// Create vertices
@@ -1172,8 +1172,8 @@ namespace CodeImp.DoomBuilder.Rendering
 						buffercount++;
 
 						//mxd
-						if(!thingsByType.ContainsKey(t.Type)) thingsByType.Add(t.Type, new List<Thing>());
-						thingsByType[t.Type].Add(t);
+						if(!thingsByType.ContainsKey(t.SRB2Type)) thingsByType.Add(t.SRB2Type, new List<Thing>());
+						thingsByType[t.SRB2Type].Add(t);
 					}
 					
 					totalcount++;
@@ -1396,7 +1396,7 @@ namespace CodeImp.DoomBuilder.Rendering
 							Matrix modelscale = Matrix.Scaling(sx, sx, sy);
 							Matrix rotation = Matrix.RotationY(-t.RollRad) * Matrix.RotationX(-t.PitchRad) * Matrix.RotationZ(t.Angle);
 							Matrix position = Matrix.Translation(screenpos.x, screenpos.y, 0.0f);
-							Matrix world = General.Map.Data.ModeldefEntries[t.Type].Transform * modelscale * rotation * viewscale * position;
+							Matrix world = General.Map.Data.ModeldefEntries[t.SRB2Type].Transform * modelscale * rotation * viewscale * position;
 
 							graphics.Shaders.Things2D.SetTransformSettings(world);
 							graphics.Shaders.Things2D.ApplySettings();
@@ -1439,12 +1439,12 @@ namespace CodeImp.DoomBuilder.Rendering
 
             foreach (Thing t in things)
             {
-                int type = t.Type % 4096;
+                int type = t.SRB2Type;
                 if (type == General.Map.FormatInterface.AxisType) axes.Add(t);
                 if (type == General.Map.FormatInterface.AxisTransferLineType) axistransferlines.Add(t);
             }
             //Sort by axis number and mare number.
-            axistransferlines.Sort((x, y) => (x.GetFlagsValue() | (x.Type / 4096)<<16).CompareTo((y.GetFlagsValue() | (y.Type / 4096) << 16)));
+            axistransferlines.Sort((x, y) => (x.GetFlagsValue() | (x.Parameter)<<16).CompareTo((y.GetFlagsValue() | (y.Parameter) << 16)));
 
             //Render axis transfer lines.
             int i = 0;
@@ -1456,7 +1456,7 @@ namespace CodeImp.DoomBuilder.Rendering
 
                 if (iNext < size && axistransferlines[iNext].GetFlagsValue() == axistransferlines[i].GetFlagsValue() + 1)
                 {
-                    int mare = axistransferlines[i].Type / 4096;
+                    int mare = axistransferlines[i].Parameter;
                     RenderLine((Vector2D)axistransferlines[i].Position, (Vector2D)axistransferlines[iNext].Position, 1f, General.Colors.GetNiGHTSColor(mare), true);
                     /* Start looking for partners for the one beyond iNext. */
                     i = iNext + 1;
@@ -1470,7 +1470,7 @@ namespace CodeImp.DoomBuilder.Rendering
             //Render axes.
             foreach (Thing axis in axes)
             {
-                int mare = axis.Type / 4096;
+                int mare = axis.Parameter;
                 RenderCircle((Vector2D)axis.Position, (float)(axis.AngleDoom & 0x3FFF), 1f, General.Colors.GetNiGHTSColor(mare), true);
             }
         }

@@ -693,7 +693,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		
 		public ThingProperties(Thing t) : base(t.Fields, MapElementType.THING)
 		{
-			type = t.Type;
+			type = t.FullType;
 			angle = t.Angle;
 			zheight = t.Position.z;
 			pitch = t.Pitch;
@@ -715,7 +715,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		//mxd. Applies selected settings
 		public void Apply(Thing t, ThingPropertiesCopySettings settings)
 		{
-			if(settings.Type) t.Type = type;
+			if(settings.Type) t.FullType = type;
 			if(settings.Angle) t.Rotate(angle);
 			if(settings.ZHeight) t.Move(t.Position.x, t.Position.y, zheight);
 			if(settings.Pitch) t.SetPitch(pitch);
@@ -915,7 +915,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public static bool PropertiesMatch(ThingPropertiesCopySettings flags, Thing source, Thing target) 
 		{
 			// Built-in properties
-			if(flags.Type && source.Type != target.Type) return false;
+			if(flags.Type && source.FullType != target.FullType) return false;
 			if(flags.Angle && source.AngleDoom != target.AngleDoom) return false;
 			if(flags.Action && source.Action != target.Action) return false;
 			if(flags.Arguments) 

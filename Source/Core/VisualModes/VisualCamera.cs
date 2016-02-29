@@ -105,7 +105,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 			// Find a 3D Mode thing
 			foreach(Thing t in General.Map.Map.Things)
 			{
-				if(t.Type == General.Map.Config.Start3DModeThingType)
+				if(t.SRB2Type == General.Map.Config.Start3DModeThingType)
 				{
 					modething = t;
 					break; //mxd
@@ -147,7 +147,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 			// Find a 3D Mode thing
 			foreach(Thing t in General.Map.Map.Things)
 			{
-				if(t.Type == General.Map.Config.Start3DModeThingType)
+				if(t.SRB2Type == General.Map.Config.Start3DModeThingType)
 				{
 					modething = t;
 					break; //mxd

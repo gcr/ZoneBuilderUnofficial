@@ -29,8 +29,8 @@ namespace CodeImp.DoomBuilder.TagExplorer
 			index = t.Index;
 			action = t.Action;
 			tag = t.Tag;
-			polyobjnumber = ((t.Type > 9299 && t.Type < 9304) ? t.AngleDoom : int.MinValue);
-			ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.Type);
+			polyobjnumber = ((t.SRB2Type > 9299 && t.SRB2Type < 9304) ? t.AngleDoom : int.MinValue);
+			ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 			defaultName = (tti != null ? tti.Title : "Thing");
 		}
 

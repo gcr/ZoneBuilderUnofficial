@@ -2050,7 +2050,7 @@ namespace CodeImp.DoomBuilder.Geometry
 		// Checks if there's a wall at appropriate height to align thing to
 		private static bool CanAlignThingTo(Thing t, Sector front, Sector back) 
 		{
-			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 			int absz = GetThingAbsoluteZ(t, ti);
 			int height = ti.Height == 0 ? 1 : (int)ti.Height;
 			Rectangle thing =  new Rectangle(0, t.IsFlipped ? absz - height : absz, 1, height);
@@ -2073,7 +2073,7 @@ namespace CodeImp.DoomBuilder.Geometry
 		// Checks if there's a wall at appropriate height to align thing to
 		private static bool CanAlignThingTo(Thing t, Sector sector) 
 		{
-			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 			int absz = GetThingAbsoluteZ(t, ti);
 			Rectangle thing = new Rectangle(0, absz, 1, ti.Height == 0 ? 1 : (int)ti.Height);
 
@@ -2101,7 +2101,7 @@ namespace CodeImp.DoomBuilder.Geometry
 			//keep thing height constant
 			if(initialSector != t.Sector && General.Map.FormatInterface.HasThingHeight) 
 			{
-				ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+				ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 				if(ti.AbsoluteZ) return;
 
 				if(t.IsFlipped && initialSector.CeilHeight != t.Sector.CeilHeight) 
@@ -2136,7 +2136,7 @@ namespace CodeImp.DoomBuilder.Geometry
             const int linealpha = 128;
             foreach (Thing t in General.Map.Map.Things)
 			{
-				int lightid = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Type);
+				int lightid = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.SRB2Type);
 				if(lightid == -1) continue;
 
 				// TODO: this basically duplicates VisualThing.UpdateLight()...
@@ -2150,7 +2150,7 @@ namespace CodeImp.DoomBuilder.Geometry
 					if(lightid < GZBuilder.GZGeneral.GZ_LIGHT_TYPES[0]) n = 0;
 					else if(lightid < GZBuilder.GZGeneral.GZ_LIGHT_TYPES[1]) n = 10;
 					else n = 20;
-					DynamicLightType lightType = (DynamicLightType)(t.Type - 9800 - n);
+					DynamicLightType lightType = (DynamicLightType)(t.SRB2Type - 9800 - n);
 
 					if(lightType == DynamicLightType.SECTOR)
 					{
@@ -2175,7 +2175,7 @@ namespace CodeImp.DoomBuilder.Geometry
 
 				// Determine light color
 				PixelColor color;
-				switch(t.Type)
+				switch(t.SRB2Type)
 				{
 					case 1502: // Vavoom light
 						color = new PixelColor(linealpha, 255, 255, 255);

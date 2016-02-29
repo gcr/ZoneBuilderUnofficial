@@ -187,10 +187,10 @@ namespace CodeImp.DoomBuilder.Windows
 			Thing ft = General.GetByIndex(things, 0);
 			
 			// Set type
-			thingtype.SelectType(ft.Type);
-
+			thingtype.SelectType(ft.SRB2Type, ft.Parameter);
+            
             // Flags
-            ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(ft.Type);
+            ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(ft.SRB2Type);
             IDictionary<string, string> newFlags = (ti == null || ti.Flags.Count == 0) ? General.Map.Config.ThingFlags : ti.Flags;
 
             foreach (CheckBox c in flags.Checkboxes)
@@ -236,12 +236,12 @@ namespace CodeImp.DoomBuilder.Windows
 				//mxd. Update sector info
 				t.DetermineSector();
 
-                if (t.Type != ft.Type) allsametype = false;
+                if (t.SRB2Type != ft.SRB2Type) allsametype = false;
 				
 				// Type does not match?
 				ThingTypeInfo info = thingtype.GetSelectedInfo(); //mxd
 
-				if(info != null && info.Index != t.Type)
+				if(info != null && info.Index != t.SRB2Type)
 					thingtype.ClearSelectedType();
 				
 				// Flags
@@ -628,7 +628,7 @@ namespace CodeImp.DoomBuilder.Windows
 			foreach(Thing t in things) 
 			{
 				//Set type
-				t.Type = thingtype.GetResult(t.Type);
+				t.FullType = thingtype.GetFullType(t.FullType);
 
 				// Update settings
 				t.UpdateConfiguration();

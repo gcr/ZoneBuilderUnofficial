@@ -49,7 +49,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.actiongroup = new System.Windows.Forms.GroupBox();
             this.argscontrol = new CodeImp.DoomBuilder.Controls.ArgumentsControl();
             this.actionhelp = new CodeImp.DoomBuilder.Controls.ActionSpecialHelpButton();
-            this.action = new CodeImp.DoomBuilder.Controls.ActionSelectorControl();
+            this.action = new CodeImp.DoomBuilder.Controls.ActionSelectorControl(true);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.cbRandomAngle = new System.Windows.Forms.CheckBox();
             this.anglecontrol = new CodeImp.DoomBuilder.GZBuilder.Controls.AngleControl();

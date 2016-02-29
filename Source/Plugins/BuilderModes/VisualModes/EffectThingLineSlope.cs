@@ -46,7 +46,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			
 			if(ld != null)
 			{
-				if(t.Type == 9500)
+				if(t.SRB2Type == 9500)
 				{
 					// Slope the floor from the linedef to thing
 					t.DetermineSector(data.Mode.BlockMap);
@@ -75,7 +75,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						}
 					}
 				}
-				else if(t.Type == 9501)
+				else if(t.SRB2Type == 9501)
 				{
 					// Slope the ceiling from the linedef to thing
 					t.DetermineSector(data.Mode.BlockMap);

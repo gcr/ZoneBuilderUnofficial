@@ -834,7 +834,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			index = 0;
 			foreach(Thing t in selectedthings)
 			{
-				if(!fixedrotationthingtypes.Contains(t.Type)) //mxd. Polyobject Anchors, I hate you!
+				if(!fixedrotationthingtypes.Contains(t.SRB2Type)) //mxd. Polyobject Anchors, I hate you!
 					t.Rotate(Angle2D.Normalized(newthingangle[index]));
 				index++;
 			}
@@ -1126,10 +1126,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					if((t.Position.y + t.Size) > right.y) right.y = t.Position.y + t.Size;
 
 					
-					if(!fixedrotationthingtypes.Contains(t.Type)) //mxd
+					if(!fixedrotationthingtypes.Contains(t.SRB2Type)) //mxd
 					{
-						ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.Type);
-						if(tti != null && tti.FixedRotation) fixedrotationthingtypes.Add(t.Type);
+						ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.SRB2Type);
+						if(tti != null && tti.FixedRotation) fixedrotationthingtypes.Add(t.SRB2Type);
 					}
 
 					// Keep original coordinates

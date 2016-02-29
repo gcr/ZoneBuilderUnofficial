@@ -422,7 +422,7 @@ namespace CodeImp.DoomBuilder.SoundPropagationMode
 			foreach(Thing thing in General.Map.Map.Things)
 			{
 				// SoundEnvironment thing, see http://zdoom.org/wiki/Classes:SoundEnvironment
-				if(thing.Type != SOUND_ENVIROMNEMT_THING_TYPE) continue;
+				if(thing.SRB2Type != SOUND_ENVIROMNEMT_THING_TYPE) continue;
 				if(thing.Sector == null) thing.DetermineSector();
 				if(thing.Sector != null && sectors.Contains(thing.Sector)) things.Add(thing);
 			}

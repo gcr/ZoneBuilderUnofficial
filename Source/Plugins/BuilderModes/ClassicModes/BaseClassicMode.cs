@@ -213,7 +213,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			foreach(Thing t in things)
 			{
 				//mxd. Do some path reconnecting shenanigans...
-				ThingTypeInfo info = General.Map.Data.GetThingInfo(t.Type);
+				ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
 				string targetclass = string.Empty;
 				int targetarg = -1;
 
@@ -246,7 +246,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					{
 						if(other.Index == t.Index)
 							continue;
-						info = General.Map.Data.GetThingInfo(other.Type);
+						info = General.Map.Data.GetThingInfo(other.SRB2Type);
 						if(info.ClassName.ToLowerInvariant() == targetclass && other.Args[targetarg] == t.Tag)
 						{
 							other.Move(other.Position); //hacky way to call BeforePropsChange()...
@@ -300,7 +300,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			List<Thing> things = new List<Thing>(General.Map.Map.Things);
 			foreach(Thing t in things)
 			{
-				if(t.Type == General.Map.Config.Start3DModeThingType)
+				if(t.SRB2Type == General.Map.Config.Start3DModeThingType)
 				{
 					if(thingfound == null)
 					{
@@ -323,7 +323,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				Thing t = General.Map.Map.CreateThing();
 				if(t != null)
 				{
-					t.Type = General.Map.Config.Start3DModeThingType;
+					t.SRB2Type = General.Map.Config.Start3DModeThingType;
 					t.Move(mousemappos);
 					t.UpdateConfiguration();
 					General.Map.ThingsFilter.Update();

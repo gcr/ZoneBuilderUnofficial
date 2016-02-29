@@ -448,7 +448,7 @@ namespace CodeImp.DoomBuilder.IO
 				writer.Write((Int16)t.Position.y);
 				writer.Write((Int16)t.Position.z);
 				writer.Write((Int16)t.AngleDoom);
-				writer.Write((UInt16)t.Type);
+				writer.Write((UInt16)t.FullType);
 				writer.Write((UInt16)flags);
 				writer.Write((Byte)t.Action);
 				writer.Write((Byte)t.Args[0]);

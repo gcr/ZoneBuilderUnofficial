@@ -847,7 +847,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                             {
                                 if ((Vector2D)t.Position == v.Position)
                                 {
-                                    switch (t.Type)
+                                    switch (t.SRB2Type)
                                     {
                                         case 1504: slopefloorthings.Add(t); break;
                                         case 1505: slopeceilingthings.Add(t); break;
@@ -1148,7 +1148,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 // Find interesting things (such as sector slopes)
                 foreach (Thing t in General.Map.Map.Things)
                 {
-                    switch (t.Type)
+                    switch (t.SRB2Type)
                     {
                         // ========== Copy slope ==========
                         case 9511:
@@ -3570,7 +3570,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 						if(excludedLines.Count == thingsCount) 
 						{
-							ThingTypeInfo tti = General.Map.Data.GetThingInfo(t.Type);
+							ThingTypeInfo tti = General.Map.Data.GetThingInfo(t.SRB2Type);
 							General.ErrorLogger.Add(ErrorType.Warning, "Unable to align Thing ¹" + t.Index + " (" + tti.Title + ") to any linedef in a map!");
 							aligned = true;
 						}
@@ -3614,10 +3614,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			//set position and angles
 			Thing t = visualThings[0].Thing;
-			if((t.Type == 9072 || t.Type == 9073) && t.Args[3] > 0) //AimingCamera or MovingCamera with target?
+			if((t.SRB2Type == 9072 || t.SRB2Type == 9073) && t.Args[3] > 0) //AimingCamera or MovingCamera with target?
 			{ 
 				//position
-				if(t.Type == 9072 && (t.Args[0] > 0 || t.Args[1] > 0)) //positon MovingCamera at targeted interpolation point
+				if(t.SRB2Type == 9072 && (t.Args[0] > 0 || t.Args[1] > 0)) //positon MovingCamera at targeted interpolation point
 				{ 
 					int ipTag = t.Args[0] + (t.Args[1] << 8);
 					Thing ip = null;
@@ -3625,7 +3625,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					//find interpolation point
 					foreach(Thing tgt in General.Map.Map.Things) 
 					{
-						if(tgt.Tag == ipTag && tgt.Type == 9070) 
+						if(tgt.Tag == ipTag && tgt.SRB2Type == 9070) 
 						{
 							ip = tgt;
 							break;
@@ -3697,7 +3697,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					General.Map.VisualCamera.AngleZ = pitch ? -delta.GetAngleZ() : Angle2D.PI;
 				}
 			} 
-			else if((t.Type == 9025 || t.Type == 9073 || t.Type == 9070) && t.Args[0] != 0) //InterpolationPoint, SecurityCamera or AimingCamera with pitch?
+			else if((t.SRB2Type == 9025 || t.SRB2Type == 9073 || t.SRB2Type == 9070) && t.Args[0] != 0) //InterpolationPoint, SecurityCamera or AimingCamera with pitch?
 			{ 
 				General.Map.VisualCamera.Position = visualThings[0].CenterV3D; //position at camera
 				General.Map.VisualCamera.AngleXY = t.Angle - Angle2D.PI;

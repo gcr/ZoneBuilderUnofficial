@@ -95,7 +95,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						if(replace) t.Tag = replacetag;
 
 						// Add to list
-						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 						objs.Add(new FindReplaceObject(t, "Thing " + t.Index + " (" + ti.Title + ")"));
 					}
 				}

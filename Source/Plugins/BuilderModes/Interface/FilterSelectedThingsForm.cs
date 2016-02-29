@@ -42,15 +42,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 			foreach(Thing t in selection) 
 			{
-				if(!thingcounts.ContainsKey(t.Type)) 
+				if(!thingcounts.ContainsKey(t.SRB2Type)) 
 				{
-					thingcounts.Add(t.Type, 1);
-					ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
-					thingtitles.Add(t.Type, ti.Title);
+					thingcounts.Add(t.SRB2Type, 1);
+					ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
+					thingtitles.Add(t.SRB2Type, ti.Title);
 				} 
 				else 
 				{
-					thingcounts[t.Type]++;
+					thingcounts[t.SRB2Type]++;
 				}
 			}
 
@@ -82,7 +82,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
 				foreach(Thing t in selection) 
 				{
-					if(!selectedtypes.Contains(t.Type)) t.Selected = false;
+					if(!selectedtypes.Contains(t.SRB2Type)) t.Selected = false;
 				}
 
 				//update display

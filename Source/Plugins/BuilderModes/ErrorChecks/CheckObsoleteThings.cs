@@ -38,7 +38,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Go for all things
 			foreach(Thing t in General.Map.Map.Things) 
 			{
-				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.Type);
+				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 				if(info != null && info.IsObsolete)
 				{
 					SubmitResult(new ResultObsoleteThing(t, info.ObsoleteMessage));

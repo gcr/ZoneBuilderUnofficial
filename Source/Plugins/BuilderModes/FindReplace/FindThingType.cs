@@ -95,17 +95,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				foreach(Thing t in list)
 				{
 					// Match?
-					if(t.Type == findtype)
+					if(t.SRB2Type == findtype)
 					{
 						// Replace
 						if(replace)
 						{
-							t.Type = replacetype;
+							t.SRB2Type = replacetype;
 							t.UpdateConfiguration();
 						}
 						
 						// Add to list
-						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 						objs.Add(new FindReplaceObject(t, "Thing " + t.Index + " (" + ti.Title + ")"));
 					}
 				}

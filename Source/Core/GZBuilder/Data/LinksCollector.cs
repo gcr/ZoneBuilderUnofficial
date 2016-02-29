@@ -85,7 +85,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			// Process oh so special things
 			foreach(Thing t in things)
 			{
-				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.Type);
+				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 				if(info == null) continue;
 				switch(info.ClassName.ToLowerInvariant())
 				{
@@ -124,7 +124,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 			// We may need all of these actors...
 			foreach(Thing t in General.Map.ThingsFilter.VisibleThings)
 			{
-				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.Type);
+				ThingTypeInfo info = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 				if(info == null) continue;
 				switch(info.ClassName.ToLowerInvariant())
 				{

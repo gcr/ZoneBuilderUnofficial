@@ -73,7 +73,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.mode = mode;
 
 			// Find thing information
-			info = General.Map.Data.GetThingInfo(Thing.Type);
+			info = General.Map.Data.GetThingInfo(Thing.SRB2Type);
 
 			//mxd. When true, the thing can be moved below floor/above ceiling
 			nointeraction = (info.Actor != null && info.Actor.GetFlagValue("nointeraction", false));
@@ -363,7 +363,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			
 			// Determine position
 			Vector3D pos = Thing.Position;
-			if(Thing.Type == 9501)
+			if(Thing.SRB2Type == 9501)
 			{
 				if(Thing.Sector != null) //mxd
 				{ 
@@ -372,7 +372,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					pos.z = sd.Ceiling.sector.CeilHeight + Thing.Position.z;
 				}
 			}
-			else if(Thing.Type == 9500)
+			else if(Thing.SRB2Type == 9500)
 			{
 				if(Thing.Sector != null) //mxd
 				{ 
@@ -400,7 +400,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 }
                 else pos.z = 0;
             }
-            else if (General.Map.SRB2 && Thing.Type == 1705)
+            else if (General.Map.SRB2 && Thing.SRB2Type == 1705)
             {
                 //Use the flags value instead of the Z position for the Z position. SRB2 is really stupid sometimes.
                 pos.z = Thing.GetFlagsValue();
@@ -515,7 +515,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public void Rebuild()
 		{
 			// Find thing information
-			info = General.Map.Data.GetThingInfo(Thing.Type);
+			info = General.Map.Data.GetThingInfo(Thing.SRB2Type);
 
 			//mxd. When true, the thing can be moved below floor/above ceiling
 			nointeraction = (info.Actor != null && info.Actor.GetFlagValue("nointeraction", false));
@@ -797,7 +797,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				if((General.Map.UndoRedo.NextUndo == null) || (General.Map.UndoRedo.NextUndo.TicketID != undoticket))
 					undoticket = mode.CreateUndo("Change thing height");
 
-                if (General.Map.SRB2 && Thing.Type == 1705)
+                if (General.Map.SRB2 && Thing.SRB2Type == 1705)
                 {
                     int newZ = General.Clamp(Thing.GetFlagsValue() + amount,0,0xFFFF);
                     Thing.SetFlagsValue(newZ);

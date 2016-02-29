@@ -47,15 +47,15 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 
             foreach(Thing t in General.Map.Map.Things) 
 			{
-                if(thingcounts.ContainsKey(t.Type)) 
+                if(thingcounts.ContainsKey(t.SRB2Type)) 
 				{
-                    thingcounts[t.Type]++;
+                    thingcounts[t.SRB2Type]++;
                 } 
 				else 
 				{
-                    thingcounts.Add(t.Type, 1);
-                    thingtitles.Add(t.Type, "Unknown thing");
-                    thingclasses.Add(t.Type, "-");
+                    thingcounts.Add(t.SRB2Type, 1);
+                    thingtitles.Add(t.SRB2Type, "Unknown thing");
+                    thingclasses.Add(t.SRB2Type, "-");
                 }
             }
 
@@ -81,7 +81,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 		{
             List<Thing> list = new List<Thing>();
             foreach(Thing t in General.Map.Map.Things)
-                if(t.Type == type) list.Add(t);
+                if(t.SRB2Type == type) list.Add(t);
 
             return list;
         }

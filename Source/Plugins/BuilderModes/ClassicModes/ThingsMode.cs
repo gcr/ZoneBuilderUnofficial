@@ -255,7 +255,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				//mxd. Check if we can use thing arguments
 				else if(t.Action == 0)
 				{
-					ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(t.Type);
+					ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 					if(ti != null)
 					{
 						clearassociations = false;
@@ -607,7 +607,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 								t.CopyPropertiesTo(clone);
 
 								// If the cloned item is an interpolation point or patrol point, then insert the point in the path
-								ThingTypeInfo info = General.Map.Data.GetThingInfo(t.Type);
+								ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
 								int nextpointtagargnum = -1;
 
 								// Thing type can be changed in MAPINFO DoomEdNums block...
@@ -1084,7 +1084,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						excludedLines.Add(l);
 						if(excludedLines.Count == thingsCount) 
 						{
-							ThingTypeInfo tti = General.Map.Data.GetThingInfo(t.Type);
+							ThingTypeInfo tti = General.Map.Data.GetThingInfo(t.SRB2Type);
 							General.ErrorLogger.Add(ErrorType.Warning, "Unable to align Thing ¹" + t.Index + " (" + tti.Title + ") to any linedef in a map!");
 							aligned = true;
 						}
@@ -1140,7 +1140,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{ 
 				foreach(Thing t in selected) 
 				{
-					ThingTypeInfo info = General.Map.Data.GetThingInfo(t.Type);
+					ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
 					if(info == null || info.Category == null || info.Category.Arrow == 0)
 						continue;
 					t.Rotate(Vector2D.GetAngle(mousemappos, t.Position) + Angle2D.PI);
@@ -1150,7 +1150,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{ 
 				foreach(Thing t in selected) 
 				{
-					ThingTypeInfo info = General.Map.Data.GetThingInfo(t.Type);
+					ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
 					if(info == null || info.Category == null || info.Category.Arrow == 0)
 						continue;
 					t.Rotate(Vector2D.GetAngle(mousemappos, t.Position));

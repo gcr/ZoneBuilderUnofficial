@@ -421,7 +421,7 @@ namespace CodeImp.DoomBuilder.IO
 				writer.Write((Int16)t.Position.x);
 				writer.Write((Int16)t.Position.y);
 				writer.Write((Int16)t.AngleDoom);
-				writer.Write((UInt16)t.Type);
+				writer.Write((UInt16)t.FullType);
 				writer.Write((UInt16)t.GetFlagsValue());
 			}
 			

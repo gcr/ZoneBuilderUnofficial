@@ -69,7 +69,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// This must return the string that is displayed in the listbox
 		public override string ToString()
 		{
-			return "Thing " + thing.Index + " (" + General.Map.Data.GetThingInfo(thing.Type).Title + ") is stuck in linedef " + line.Index + " at " + thing.Position.x + ", " + thing.Position.y;
+			return "Thing " + thing.Index + " (" + General.Map.Data.GetThingInfo(thing.SRB2Type).Title + ") is stuck in linedef " + line.Index + " at " + thing.Position.x + ", " + thing.Position.y;
 		}
 
 		// Rendering

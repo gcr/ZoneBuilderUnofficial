@@ -73,7 +73,7 @@ namespace CodeImp.DoomBuilder.Controls
 			flagsPanel.Left = spritepanel.Left + spritepanel.Width + spritepanel.Margin.Right + flagsPanel.Margin.Left; //mxd
 			
 			// Lookup thing info
-			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+			ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 
 			// Get thing action information
 			LinedefActionInfo act;
@@ -100,13 +100,20 @@ namespace CodeImp.DoomBuilder.Controls
 
 			// Thing info
 			infopanel.Text = " Thing " + t.Index + " ";
-			type.Text = t.Type + " - " + ti.Title;
+			type.Text = t.SRB2Type + " - " + ti.Title;
 			if(ti.IsObsolete) type.Text += " - OBSOLETE"; //mxd
 			action.Text = actioninfo;
-			bool displayclassname = !string.IsNullOrEmpty(ti.ClassName) && !ti.ClassName.StartsWith("$"); //mxd
+            labelclass.Visible = !General.Map.SRB2;
+            classname.Visible = !General.Map.SRB2;
+            labelparameter.Enabled = General.Map.SRB2;
+            parameter.Enabled = General.Map.SRB2;
+            labelparameter.Visible = General.Map.SRB2;
+            parameter.Visible = General.Map.SRB2;
+            bool displayclassname = !General.Map.SRB2 && !string.IsNullOrEmpty(ti.ClassName) && !ti.ClassName.StartsWith("$"); //mxd
 			labelclass.Enabled = displayclassname; //mxd
 			classname.Enabled = displayclassname; //mxd
 			classname.Text = (displayclassname ? ti.ClassName : "--"); //mxd
+            parameter.Text = t.Parameter.ToString(CultureInfo.InvariantCulture);
 			position.Text = t.Position.x.ToString(CultureInfo.InvariantCulture) + ", " + t.Position.y.ToString(CultureInfo.InvariantCulture) + ", " + zinfo;
 			tag.Text = t.Tag + (General.Map.Options.TagLabels.ContainsKey(t.Tag) ? " - " + General.Map.Options.TagLabels[t.Tag] : string.Empty);
 			angle.Text = t.AngleDoom + "\u00B0";

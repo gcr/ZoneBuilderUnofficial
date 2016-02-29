@@ -68,7 +68,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				Thing t = General.Map.Map.GetThingByIndex(index);
 				if(t != null)
 				{
-					ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+					ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 					objs.Add(new FindReplaceObject(t, "Thing " + index + " (" + ti.Title + ")"));
 				}
 			}

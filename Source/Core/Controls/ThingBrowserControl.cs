@@ -157,6 +157,12 @@ namespace CodeImp.DoomBuilder.Controls
 			typeid_TextChanged(this, EventArgs.Empty);
 		}
 
+        public void SelectType(int type, int parameter)
+        {
+            parameterid.Text = parameter.ToString();
+            SelectType(type);
+        }
+
 		// Return selected type info
 		public ThingTypeInfo GetSelectedInfo()
 		{
@@ -172,6 +178,7 @@ namespace CodeImp.DoomBuilder.Controls
 			typelist.SelectedNodes.Clear(); //mxd
 			validnodes.Clear(); //mxd
 			typeid.Text = "";
+            parameterid.Text = "";
 
 			// Collapse nodes
 			foreach(TreeNode n in nodes)
@@ -191,6 +198,11 @@ namespace CodeImp.DoomBuilder.Controls
 			
 			return typeid.GetResult(original);
 		}
+
+        public int GetFullType(int original)
+        {
+            return GetResult(original % 4096) + parameterid.GetResult(original / 4096) * 4096;
+        }
 
 		//mxd
 		public void FocusTextbox()
@@ -400,7 +412,14 @@ namespace CodeImp.DoomBuilder.Controls
 			if(OnTypeChanged != null) OnTypeChanged(thinginfo);
 		}
 
-		private void updatetimer_Tick(object sender, EventArgs e) 
+        //Parameter changed
+        private void parameterid_TextChanged(object sender, EventArgs e)
+        {
+            // Raise event
+            if (OnTypeChanged != null) OnTypeChanged(thinginfo);
+        }
+
+        private void updatetimer_Tick(object sender, EventArgs e) 
 		{
 			updatetimer.Stop();
 			UpdateThingSprite();

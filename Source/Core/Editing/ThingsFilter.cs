@@ -361,10 +361,10 @@ namespace CodeImp.DoomBuilder.Editing
 				bool qualifies = true;
 
 				// Get thing info
-				ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.Type);
+				ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);
 				
 				// Check against simple properties
-				qualifies &= (thingtype == -1) || (t.Type == thingtype);
+				qualifies &= (thingtype == -1) || (t.SRB2Type == thingtype);
 				qualifies &= (thingangle == -1) || (Angle2D.RealToDoom(t.Angle) == thingangle);
 				qualifies &= (thingzheight == int.MinValue) || ((int)(t.Position.z) == thingzheight);
 				qualifies &= (thingaction == -1) || (t.Action == thingaction);

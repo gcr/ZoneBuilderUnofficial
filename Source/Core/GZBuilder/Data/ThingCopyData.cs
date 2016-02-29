@@ -20,7 +20,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 		
 		public ThingCopyData(Thing t) 
 		{
-			type = t.Type;
+			type = t.FullType;
 			angledoom = t.AngleDoom;
 			pos = t.Position;
 			flags = new Dictionary<string, bool>(t.Flags);
@@ -32,7 +32,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Data
 
 		public void ApplyTo(Thing t) 
 		{
-			t.Type = type;
+			t.FullType = type;
 			t.Rotate(angledoom);
 			t.Move(pos);
 

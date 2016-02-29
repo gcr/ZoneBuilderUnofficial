@@ -623,12 +623,12 @@ namespace CodeImp.DoomBuilder.Config
 		// This applies default settings to a thing
 		public void ApplyDefaultThingSettings(Thing t)
 		{
-			t.Type = defaultthingtype;
+			t.FullType = defaultthingtype;
 			t.Rotate(defaultthingangle);
 			foreach(string f in defaultthingflags) t.SetFlag(f, true);
 
 			//mxd. Set default arguments
-			ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.Type);
+			ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 			if(tti != null) 
 			{
 				t.Args[0] = (int)tti.Args[0].DefaultValue;

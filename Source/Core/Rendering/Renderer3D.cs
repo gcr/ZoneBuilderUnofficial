@@ -855,7 +855,7 @@ namespace CodeImp.DoomBuilder.Rendering
 
 							//mxd. If current thing is light - set it's color to light color
 							Color4 litcolor;
-							if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Thing.Type) != -1 && !fullbrightness) 
+							if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Thing.SRB2Type) != -1 && !fullbrightness) 
 							{
 								wantedshaderpass += 4; // Render using one of passes, which uses World3D.VertexColor
 								litcolor = t.LightColor;
@@ -1164,7 +1164,7 @@ namespace CodeImp.DoomBuilder.Rendering
 
 						//mxd. If current thing is light - set it's color to light color
 						Color4 litcolor;
-						if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Thing.Type) != -1 && !fullbrightness)
+						if(Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, t.Thing.SRB2Type) != -1 && !fullbrightness)
 						{
 							wantedshaderpass += 4; // Render using one of passes, which uses World3D.VertexColor
 							litcolor = t.LightColor;
@@ -1430,7 +1430,7 @@ namespace CodeImp.DoomBuilder.Rendering
 					Matrix modelscale = Matrix.Scaling(sx, sx, sy);
 					Matrix modelrotation = Matrix.RotationY(-t.Thing.RollRad) * Matrix.RotationX(-t.Thing.PitchRad) * Matrix.RotationZ(t.Thing.Angle);
 
-					world = General.Map.Data.ModeldefEntries[t.Thing.Type].Transform * modelscale * modelrotation * t.Position;
+					world = General.Map.Data.ModeldefEntries[t.Thing.SRB2Type].Transform * modelscale * modelrotation * t.Position;
 					ApplyMatrices3D();
 
 					//mxd. set variables for fog rendering
@@ -1531,7 +1531,7 @@ namespace CodeImp.DoomBuilder.Rendering
 				Matrix modelscale = Matrix.Scaling(sx, sx, sy);
 				Matrix modelrotation = Matrix.RotationY(-t.Thing.RollRad) * Matrix.RotationX(-t.Thing.PitchRad) * Matrix.RotationZ(t.Thing.Angle);
 
-				world = General.Map.Data.ModeldefEntries[t.Thing.Type].Transform * modelscale * modelrotation * t.Position;
+				world = General.Map.Data.ModeldefEntries[t.Thing.SRB2Type].Transform * modelscale * modelrotation * t.Position;
 				ApplyMatrices3D();
 
 				//mxd. set variables for fog rendering
@@ -1543,7 +1543,7 @@ namespace CodeImp.DoomBuilder.Rendering
 					graphics.Shaders.World3D.CameraPosition = new Vector4(cameraposition.x, cameraposition.y, cameraposition.z, fogfactor);
 				}
 
-				GZModel model = General.Map.Data.ModeldefEntries[t.Thing.Type].Model;
+				GZModel model = General.Map.Data.ModeldefEntries[t.Thing.SRB2Type].Model;
 				for(int i = 0; i < model.Meshes.Count; i++)
 				{
 					graphics.Shaders.World3D.Texture1 = model.Textures[i];
@@ -1617,7 +1617,7 @@ namespace CodeImp.DoomBuilder.Rendering
 			foreach(VisualThing lt in lightthings)
 			{
 				// Don't light self
-				if(General.Map.Data.GldefsEntries.ContainsKey(t.Thing.Type) && General.Map.Data.GldefsEntries[t.Thing.Type].DontLightSelf && t.Thing.Index == lt.Thing.Index)
+				if(General.Map.Data.GldefsEntries.ContainsKey(t.Thing.SRB2Type) && General.Map.Data.GldefsEntries[t.Thing.SRB2Type].DontLightSelf && t.Thing.Index == lt.Thing.Index)
 					continue;
 
 				float distSquared = Vector3.DistanceSquared(lt.Center, t.PositionV3);
@@ -1728,7 +1728,7 @@ namespace CodeImp.DoomBuilder.Rendering
 				{
 					case RenderPass.Mask:
 					case RenderPass.Solid:
-						ModelData mde = General.Map.Data.ModeldefEntries[t.Thing.Type];
+						ModelData mde = General.Map.Data.ModeldefEntries[t.Thing.SRB2Type];
 						if(!maskedmodelthings.ContainsKey(mde)) maskedmodelthings.Add(mde, new List<VisualThing>());
 						maskedmodelthings[mde].Add(t);
 						break;

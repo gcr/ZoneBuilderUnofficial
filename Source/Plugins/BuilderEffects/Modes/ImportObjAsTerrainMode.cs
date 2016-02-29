@@ -238,7 +238,7 @@ namespace CodeImp.DoomBuilder.BuilderEffects
 				{
 					Thing t = map.CreateThing();
 					General.Settings.ApplyDefaultThingSettings(t);
-					t.Type = VERTEX_HEIGHT_THING_TYPE;
+					t.SRB2Type = VERTEX_HEIGHT_THING_TYPE;
 					t.Move(pos);
 					t.Selected = true;
 				}

@@ -259,7 +259,7 @@ namespace CodeImp.DoomBuilder.TagExplorer
 									foreach(TreeNode node in nodes)
 									{
 										NodeInfo nodeInfo = node.Tag as NodeInfo;
-										ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(General.Map.Map.GetThingByIndex(nodeInfo.Index).Type);
+										ThingTypeInfo tti = General.Map.Data.GetThingInfoEx(General.Map.Map.GetThingByIndex(nodeInfo.Index).SRB2Type);
 
 										if(tti != null)
 										{

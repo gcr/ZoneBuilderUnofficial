@@ -716,7 +716,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				//mxd. Thing action on this thing?
 				else if(t.Action == 0)
 				{
-					ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(t.Type);
+					ThingTypeInfo ti = General.Map.Data.GetThingInfoEx(t.SRB2Type);
 					if(ti != null)
 					{
 						if(  ((ti.Args[0].Type == (int)asso.Type) && (asso.Tags.Contains(t.Args[0]))) ||

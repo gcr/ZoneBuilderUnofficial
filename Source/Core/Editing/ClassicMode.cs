@@ -667,7 +667,7 @@ namespace CodeImp.DoomBuilder.Editing
 				
 				foreach(Thing t in General.Map.Map.Things) 
 				{
-					if(t.Type == 1) 
+					if(t.SRB2Type == 1) 
 					{
 						//store thing and position
 						if(start == null) 

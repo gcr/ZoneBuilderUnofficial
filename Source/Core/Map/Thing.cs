@@ -96,8 +96,10 @@ namespace CodeImp.DoomBuilder.Map
 		#region ================== Properties
 
 		public MapSet Map { get { return map; } }
-		public int Type { get { return type; } set { BeforePropsChange(); type = value; } } //mxd
-		public Vector3D Position { get { return pos; } }
+		public int FullType { get { return type; } set { BeforePropsChange(); type = value; } } //mxd
+        public int SRB2Type { get { if (General.Map.SRB2) return type % 4096; else return type; } set { BeforePropsChange(); if (General.Map.SRB2) type = (type / 4096) * 4096 + value; else type = value; } }
+        public int Parameter { get { if (General.Map.SRB2) return type / 4096; else return 0; } set { BeforePropsChange(); if (General.Map.SRB2) type = value * 4096 + (type % 4096); } }
+        public Vector3D Position { get { return pos; } }
 		public float ScaleX { get { return scaleX; } } //mxd. This is UDMF property, not actual scale!
 		public float ScaleY { get { return scaleY; } } //mxd. This is UDMF property, not actual scale!
 		public int Pitch { get { return pitch; } } //mxd
@@ -119,17 +121,17 @@ namespace CodeImp.DoomBuilder.Map
 		public bool IsModel { get { return ismodel; } } //mxd
 		public bool IsDirectional { get { return directional; } } //mxd
 		public bool Highlighted { get { return highlighted; } set { highlighted = value; } } //mxd
-        public bool IsSlopeVertex { get { return General.Map.FormatInterface.SlopeVertexType == this.Type; } }
+        public bool IsSlopeVertex { get { return General.Map.FormatInterface.SlopeVertexType == this.SRB2Type; } }
         public bool IsFlipped
         {
             get
             {
-                ThingTypeInfo ti = General.Map.Data.GetThingInfo(Type);
+                ThingTypeInfo ti = General.Map.Data.GetThingInfo(SRB2Type);
                 return ti.Hangs ^ IsReverse;
             }
         }
         public bool IsReverse { get { return General.Map.SRB2 && !Unflippable && IsFlagSet("2"); } }
-        public bool Unflippable { get { return General.Map.Data.GetThingInfo(Type).IsUnflippable; } }
+        public bool Unflippable { get { return General.Map.Data.GetThingInfo(SRB2Type).IsUnflippable; } }
         #endregion
 
         #region ================== Constructor / Disposer
@@ -404,7 +406,7 @@ namespace CodeImp.DoomBuilder.Map
 			// Change position
 			this.pos = newpos;
 			
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 
@@ -417,7 +419,7 @@ namespace CodeImp.DoomBuilder.Map
 			// Change position
 			this.pos = new Vector3D(newpos.x, newpos.y, pos.z);
 			
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 
@@ -430,7 +432,7 @@ namespace CodeImp.DoomBuilder.Map
 			// Change position
 			this.pos = new Vector3D(x, y, zoffset);
 			
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 		
@@ -443,7 +445,7 @@ namespace CodeImp.DoomBuilder.Map
 			this.anglerad = newangle;
 			this.angledoom = Angle2D.RealToDoom(newangle);
 			
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 		
@@ -456,7 +458,7 @@ namespace CodeImp.DoomBuilder.Map
 			anglerad = Angle2D.DoomToReal(newangle);
 			angledoom = newangle;
 			
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 
@@ -466,9 +468,9 @@ namespace CodeImp.DoomBuilder.Map
 			BeforePropsChange();
 
 			pitch = General.ClampAngle(newpitch);
-			pitchrad = ((ismodel && General.Map.Data.ModeldefEntries[type].InheritActorPitch) ? Angle2D.DegToRad(pitch) : 0);
+			pitchrad = ((ismodel && General.Map.Data.ModeldefEntries[SRB2Type].InheritActorPitch) ? Angle2D.DegToRad(pitch) : 0);
 
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 
@@ -478,9 +480,9 @@ namespace CodeImp.DoomBuilder.Map
 			BeforePropsChange();
 
 			roll = General.ClampAngle(newroll);
-			rollrad = ( (rollsprite || (ismodel && General.Map.Data.ModeldefEntries[type].InheritActorRoll)) ? Angle2D.DegToRad(roll) : 0);
+			rollrad = ( (rollsprite || (ismodel && General.Map.Data.ModeldefEntries[SRB2Type].InheritActorRoll)) ? Angle2D.DegToRad(roll) : 0);
 
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 
@@ -492,7 +494,7 @@ namespace CodeImp.DoomBuilder.Map
 			scaleX = scalex;
 			scaleY = scaley;
 
-			if(type != General.Map.Config.Start3DModeThingType)
+			if(SRB2Type != General.Map.Config.Start3DModeThingType)
 				General.Map.IsChanged = true;
 		}
 		
@@ -523,7 +525,7 @@ namespace CodeImp.DoomBuilder.Map
 		public void UpdateConfiguration()
 		{
 			// Lookup settings
-			ThingTypeInfo ti = General.Map.Data.GetThingInfo(type);
+			ThingTypeInfo ti = General.Map.Data.GetThingInfo(SRB2Type);
 			
 			// Apply size
 			size = ti.Radius;
@@ -567,14 +569,14 @@ namespace CodeImp.DoomBuilder.Map
 				return;
 			}
 
-			ismodel = General.Map.Data.ModeldefEntries.ContainsKey(type);
-			if(ismodel && General.Map.Data.ModeldefEntries[type].LoadState == ModelLoadState.None)
-				ismodel = General.Map.Data.ProcessModel(type);
+			ismodel = General.Map.Data.ModeldefEntries.ContainsKey(SRB2Type);
+			if(ismodel && General.Map.Data.ModeldefEntries[SRB2Type].LoadState == ModelLoadState.None)
+				ismodel = General.Map.Data.ProcessModel(SRB2Type);
 
 			if(ismodel) 
 			{
-				rollrad = (General.Map.Data.ModeldefEntries[type].InheritActorRoll ? Angle2D.DegToRad(roll) : 0);
-				pitchrad = (General.Map.Data.ModeldefEntries[type].InheritActorPitch ? Angle2D.DegToRad(pitch) : 0);
+				rollrad = (General.Map.Data.ModeldefEntries[SRB2Type].InheritActorRoll ? Angle2D.DegToRad(roll) : 0);
+				pitchrad = (General.Map.Data.ModeldefEntries[SRB2Type].InheritActorPitch ? Angle2D.DegToRad(pitch) : 0);
 			}
 			else if(rollsprite)
 			{

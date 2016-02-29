@@ -503,7 +503,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 		protected void CheckLightState() 
 		{
 			//mxd. Check if thing is light
-			int light_id = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, thing.Type);
+			int light_id = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, thing.SRB2Type);
 			if(light_id != -1) 
 			{
 				isGldefsLight = false;
@@ -512,7 +512,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 				UpdateBoundingBox(lightRadius, lightRadius * 2);
 			}
 			//check if we have light from GLDEFS
-			else if(General.Map.Data.GldefsEntries.ContainsKey(thing.Type)) 
+			else if(General.Map.Data.GldefsEntries.ContainsKey(thing.SRB2Type)) 
 			{
 				isGldefsLight = true;
 				UpdateGldefsLight();
@@ -535,7 +535,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 		//mxd. Used in ColorPicker to update light 
 		public void UpdateLight() 
 		{
-			int light_id = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, thing.Type);
+			int light_id = Array.IndexOf(GZBuilder.GZGeneral.GZ_LIGHTS, thing.SRB2Type);
 			if(light_id != -1) 
 			{
 				UpdateLight(light_id);
@@ -570,7 +570,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 					lightRenderStyle = DynamicLightRenderStyle.NEGATIVE;
                     lightColor = new Color4((float)lightRenderStyle / 100.0f, thing.Args[0] / scaled_intensity / 3, thing.Args[1] / scaled_intensity / 3, thing.Args[2] / scaled_intensity / 3);
                 }
-				lightType = (DynamicLightType)(thing.Type - 9800 - n);
+				lightType = (DynamicLightType)(thing.SRB2Type - 9800 - n);
 
 				if(lightType == DynamicLightType.SECTOR) 
 				{
@@ -587,7 +587,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 			else //it's one of vavoom lights
 			{ 
 				lightRenderStyle = DynamicLightRenderStyle.VAVOOM;
-				lightType = (DynamicLightType)thing.Type;
+				lightType = (DynamicLightType)thing.SRB2Type;
 				if(lightType == DynamicLightType.VAVOOM_COLORED)
                     lightColor = new Color4((float)lightRenderStyle / 100.0f, thing.Args[1] / scaled_intensity / 2, thing.Args[2] / scaled_intensity / 2, thing.Args[3] / scaled_intensity / 2);
                 else
@@ -601,7 +601,7 @@ namespace CodeImp.DoomBuilder.VisualModes
 		//mxd
 		private void UpdateGldefsLight() 
 		{
-			DynamicLightData light = General.Map.Data.GldefsEntries[thing.Type];
+			DynamicLightData light = General.Map.Data.GldefsEntries[thing.SRB2Type];
 			float intensity_mod = General.Settings.GZDynamicLightIntensity;
 			float scale_mod = General.Settings.GZDynamicLightRadius;
 

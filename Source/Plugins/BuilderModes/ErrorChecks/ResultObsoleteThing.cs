@@ -54,7 +54,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// This must return the string that is displayed in the listbox
 		public override string ToString() 
 		{
-			return "Thing " + thing.Index + " (" + General.Map.Data.GetThingInfo(thing.Type).Title + ") at " + thing.Position.x + ", " + thing.Position.y + " is obsolete.";
+			return "Thing " + thing.Index + " (" + General.Map.Data.GetThingInfo(thing.SRB2Type).Title + ") at " + thing.Position.x + ", " + thing.Position.y + " is obsolete.";
 		}
 
 		// Rendering

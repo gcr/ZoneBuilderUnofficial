@@ -340,7 +340,7 @@ namespace CodeImp.DoomBuilder.IO
 				if(t.Roll != 0) coll.Add("roll", t.Roll); //mxd
 				if(t.ScaleX != 0 && t.ScaleX != 1.0f) coll.Add("scalex", t.ScaleX); //mxd
 				if(t.ScaleY != 0 && t.ScaleY != 1.0f) coll.Add("scaley", t.ScaleY); //mxd
-				coll.Add("type", t.Type);
+				coll.Add("type", t.FullType);
 				if(t.Action != 0) coll.Add("special", t.Action);
 				if(t.Args[0] != 0) coll.Add("arg0", t.Args[0]);
 				if(t.Args[1] != 0) coll.Add("arg1", t.Args[1]);

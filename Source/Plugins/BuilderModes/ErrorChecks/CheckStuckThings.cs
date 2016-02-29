@@ -68,7 +68,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// Go for all the things
 			foreach(Thing t in General.Map.Map.Things)
 			{
-				ThingTypeInfo info = General.Map.Data.GetThingInfo(t.Type);
+				ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
 				bool stuck = false;
 
 				// Check this thing for getting stuck?
@@ -128,7 +128,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 								if(processedthingpairs.ContainsKey(t.Index) && processedthingpairs[t.Index].Contains(ot.Index)) continue;
 
 								// Only check of items that can block
-								if(General.Map.Data.GetThingInfo(ot.Type).Blocking == ThingTypeInfo.THING_BLOCKING_NONE) continue;
+								if(General.Map.Data.GetThingInfo(ot.SRB2Type).Blocking == ThingTypeInfo.THING_BLOCKING_NONE) continue;
 
 								// need to compare the flags
 								if(FlagsOverlap(t, ot) && ThingsOverlap(t, ot))
@@ -196,8 +196,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		{
 			Vector3D p1 = t1.Position;
 			Vector3D p2 = t2.Position;
-			ThingTypeInfo t1info = General.Map.Data.GetThingInfo(t1.Type);
-			ThingTypeInfo t2info = General.Map.Data.GetThingInfo(t2.Type);
+			ThingTypeInfo t1info = General.Map.Data.GetThingInfo(t1.SRB2Type);
+			ThingTypeInfo t2info = General.Map.Data.GetThingInfo(t2.SRB2Type);
 	
 			// simple bounding box collision detection
 			if(		p1.x + t1.Size - ALLOWED_STUCK_DISTANCE < p2.x - t2.Size + ALLOWED_STUCK_DISTANCE ||

@@ -515,7 +515,7 @@ namespace CodeImp.DoomBuilder.SoundPropagationMode
 			if(t != null) 
 			{
 				General.Settings.ApplyDefaultThingSettings(t);
-				t.Type = BuilderPlug.SOUND_ENVIROMNEMT_THING_TYPE;
+				t.SRB2Type = BuilderPlug.SOUND_ENVIROMNEMT_THING_TYPE;
 				t.Move(pos);
 				t.UpdateConfiguration();
 

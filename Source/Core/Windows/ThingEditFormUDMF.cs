@@ -174,7 +174,7 @@ namespace CodeImp.DoomBuilder.Windows
 			Thing ft = General.GetByIndex(things, 0);
 
 			// Set type
-			thingtype.SelectType(ft.Type);
+			thingtype.SelectType(ft.FullType);
 
 			// Flags
 			foreach(CheckBox c in flags.Checkboxes) 
@@ -233,7 +233,7 @@ namespace CodeImp.DoomBuilder.Windows
 
 				// Type does not match?
 				ThingTypeInfo info = thingtype.GetSelectedInfo(); //mxd
-				if(info != null && info.Index != t.Type) thingtype.ClearSelectedType();
+				if(info != null && info.Index != t.FullType) thingtype.ClearSelectedType();
 
 				// Flags
 				foreach(CheckBox c in flags.Checkboxes) 
@@ -685,7 +685,7 @@ namespace CodeImp.DoomBuilder.Windows
 			foreach(Thing t in things) 
 			{
 				//Set type
-				t.Type = thingtype.GetResult(t.Type);
+				t.FullType = thingtype.GetResult(t.FullType);
 
 				// Update settings
 				t.UpdateConfiguration();

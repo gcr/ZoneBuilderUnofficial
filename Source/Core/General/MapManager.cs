@@ -654,7 +654,7 @@ namespace CodeImp.DoomBuilder
             // Remove all flags from all 3D Start things
             foreach (Thing t in outputset.Things)
             {
-                if (t.Type == config.Start3DModeThingType)
+                if (t.SRB2Type == config.Start3DModeThingType)
                 {
                     // We're not using SetFlag here, this doesn't have to be undone.
                     // Please note that this is totally exceptional!

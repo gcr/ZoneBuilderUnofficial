@@ -132,6 +132,8 @@ namespace CodeImp.DoomBuilder.Config
         private bool rendernightspath;
 		private bool dynamicgridsize;
 		private int ignoredremoterevision;
+        private bool drawscreenshotinfo;
+        private bool compressscreenshots;
 		
 		// These are not stored in the configuration, only used at runtime
 		private int defaultbrightness;
@@ -235,9 +237,11 @@ namespace CodeImp.DoomBuilder.Config
         public bool RenderNiGHTSPath { get { return rendernightspath; } internal set { rendernightspath = value; } }
         public bool DynamicGridSize { get { return dynamicgridsize; } internal set { dynamicgridsize = value; } } //mxd
 		internal int IgnoredRemoteRevision { get { return ignoredremoterevision; } set { ignoredremoterevision = value; } } //mxd
+        public bool DrawScreenshotInfo { get { return drawscreenshotinfo; } set { drawscreenshotinfo = value; } }
+        public bool CompressScreenshots { get { return compressscreenshots; } set { compressscreenshots = value; } }
 
-		//mxd. Left here for compatibility reasons...
-		public string DefaultTexture { get { return General.Map != null ? General.Map.Options.DefaultWallTexture : "-"; } set { if(General.Map != null) General.Map.Options.DefaultWallTexture = value; } }
+        //mxd. Left here for compatibility reasons...
+        public string DefaultTexture { get { return General.Map != null ? General.Map.Options.DefaultWallTexture : "-"; } set { if(General.Map != null) General.Map.Options.DefaultWallTexture = value; } }
 		public string DefaultFloorTexture { get { return General.Map != null ? General.Map.Options.DefaultFloorTexture : "-"; } set { if(General.Map != null) General.Map.Options.DefaultFloorTexture = value; } }
 		public string DefaultCeilingTexture { get { return General.Map != null ? General.Map.Options.DefaultCeilingTexture : "-"; } set { if(General.Map != null) General.Map.Options.DefaultCeilingTexture = value; } }
 		public int DefaultBrightness { get { return defaultbrightness; } set { defaultbrightness = value; } }
@@ -360,9 +364,11 @@ namespace CodeImp.DoomBuilder.Config
                 rendernightspath = cfg.ReadSetting("rendernightspath", true);
                 dynamicgridsize = cfg.ReadSetting("dynamicgridsize", true); //mxd
 				ignoredremoterevision = cfg.ReadSetting("ignoredremoterevision", 0); //mxd
+                drawscreenshotinfo = cfg.ReadSetting("drawscreenshotinfo", true);
+                compressscreenshots = cfg.ReadSetting("compressscreenshots", true);
 
-				//mxd. Sector defaults
-				defaultceilheight = cfg.ReadSetting("defaultceilheight", 128);
+                //mxd. Sector defaults
+                defaultceilheight = cfg.ReadSetting("defaultceilheight", 128);
 				defaultfloorheight = cfg.ReadSetting("defaultfloorheight", 0);
 				defaultbrightness = cfg.ReadSetting("defaultbrightness", 192);
 				
@@ -469,9 +475,11 @@ namespace CodeImp.DoomBuilder.Config
             cfg.WriteSetting("rendernightspath", rendernightspath); //mxd
             cfg.WriteSetting("dynamicgridsize", dynamicgridsize); //mxd
 			cfg.WriteSetting("ignoredremoterevision", ignoredremoterevision); //mxd
+            cfg.WriteSetting("drawscreenshotinfo", drawscreenshotinfo);
+            cfg.WriteSetting("compressscreenshots", compressscreenshots);
 
-			//mxd. Sector defaults
-			cfg.WriteSetting("defaultceilheight", defaultceilheight);
+            //mxd. Sector defaults
+            cfg.WriteSetting("defaultceilheight", defaultceilheight);
 			cfg.WriteSetting("defaultfloorheight", defaultfloorheight);
 			cfg.WriteSetting("defaultbrightness", defaultbrightness);
 			

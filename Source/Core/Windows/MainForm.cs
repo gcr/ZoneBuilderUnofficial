@@ -3242,7 +3242,8 @@ namespace CodeImp.DoomBuilder.Windows
 			//create path
 			string date = DateTime.Now.ToString("yyyy.MM.dd HH-mm-ss.fff");
 			string revision = (General.DebugBuild ? "DEVBUILD" : "R" + General.ThisAssembly.GetName().Version.MinorRevision);
-			string path = Path.Combine(folder, name + date + " [" + revision + "].jpg");
+            bool usejpg = General.Settings.CompressScreenshots;
+            string path = Path.Combine(folder, name + date + " [" + revision + "]" + (usejpg ? ".jpg" : ".png"));
 
 			//save image
 			using(Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) 
@@ -3254,73 +3255,83 @@ namespace CodeImp.DoomBuilder.Windows
 					//draw the cursor
 					if(!cursorLocation.IsEmpty) g.DrawImage(Resources.Cursor, cursorLocation);
 
-					//gather some info
-					string info;
-					if(displayextrainfo && General.Editing.Mode != null) 
-					{
-						info = General.Map.FileTitle + " | " + General.Map.Options.CurrentName + " | ";
+                    if (General.Settings.DrawScreenshotInfo)
+                    {
+                        //gather some info
+                        string info;
+                        if (displayextrainfo && General.Editing.Mode != null)
+                        {
+                            info = General.Map.FileTitle + " | " + General.Map.Options.CurrentName + " | ";
 
-						//get map coordinates
-						if(General.Editing.Mode is ClassicMode) 
-						{
-							Vector2D pos = ((ClassicMode) General.Editing.Mode).MouseMapPos;
+                            //get map coordinates
+                            if (General.Editing.Mode is ClassicMode)
+                            {
+                                Vector2D pos = ((ClassicMode)General.Editing.Mode).MouseMapPos;
 
-							//mouse inside the view?
-							if(pos.IsFinite()) 
-							{
-								info += "X:" + Math.Round(pos.x) + " Y:" + Math.Round(pos.y);
-							} 
-							else 
-							{
-								info += "X:" + Math.Round(General.Map.Renderer2D.TranslateX) + " Y:" + Math.Round(General.Map.Renderer2D.TranslateY);
-							}
-						} 
-						else 
-						{ //should be visual mode
-							info += "X:" + Math.Round(General.Map.VisualCamera.Position.x) + " Y:" + Math.Round(General.Map.VisualCamera.Position.y) + " Z:" + Math.Round(General.Map.VisualCamera.Position.z);
-						}
+                                //mouse inside the view?
+                                if (pos.IsFinite())
+                                {
+                                    info += "X:" + Math.Round(pos.x) + " Y:" + Math.Round(pos.y);
+                                }
+                                else
+                                {
+                                    info += "X:" + Math.Round(General.Map.Renderer2D.TranslateX) + " Y:" + Math.Round(General.Map.Renderer2D.TranslateY);
+                                }
+                            }
+                            else
+                            { //should be visual mode
+                                info += "X:" + Math.Round(General.Map.VisualCamera.Position.x) + " Y:" + Math.Round(General.Map.VisualCamera.Position.y) + " Z:" + Math.Round(General.Map.VisualCamera.Position.z);
+                            }
 
-						//add the revision number
-						info += " | " + revision;
-					} 
-					else 
-					{
-						//just use the revision number
-						info = revision;
-					}
+                            //add the revision number
+                            info += " | " + revision;
+                        }
+                        else
+                        {
+                            //just use the revision number
+                            info = revision;
+                        }
 
-					//draw info
-					Font font = new Font("Tahoma", 10);
-					SizeF rect = g.MeasureString(info, font);
-					float px = bounds.Width - rect.Width - 4;
-					float py = 4;
+                        //draw info
+                        Font font = new Font("Tahoma", 10);
+                        SizeF rect = g.MeasureString(info, font);
+                        float px = bounds.Width - rect.Width - 4;
+                        float py = 4;
 
-					g.FillRectangle(Brushes.Black, px, py, rect.Width, rect.Height + 3);
-					using(SolidBrush brush = new SolidBrush(Color.White))
-					{
-						g.DrawString(info, font, brush, px + 2, py + 2);
-					}
+                        g.FillRectangle(Brushes.Black, px, py, rect.Width, rect.Height + 3);
+                        using (SolidBrush brush = new SolidBrush(Color.White))
+                        {
+                            g.DrawString(info, font, brush, px + 2, py + 2);
+                        }
+                    }
 				}
 
 				try 
 				{
-					ImageCodecInfo jpegCodec = null;
-					ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
-					foreach(ImageCodecInfo codec in codecs) 
-					{
-						if(codec.FormatID == ImageFormat.Jpeg.Guid) 
-						{
-							jpegCodec = codec;
-							break;
-						}
-					}
+                    if (usejpg)
+                    {
+                        ImageCodecInfo jpegCodec = null;
+                        ImageCodecInfo[] codecs = ImageCodecInfo.GetImageDecoders();
+                        foreach (ImageCodecInfo codec in codecs)
+                        {
+                            if (codec.FormatID == ImageFormat.Jpeg.Guid)
+                            {
+                                jpegCodec = codec;
+                                break;
+                            }
+                        }
 
-					EncoderParameter qualityParam = new EncoderParameter(Encoder.Quality, 90L);
-					EncoderParameters encoderParams = new EncoderParameters(1);
-					encoderParams.Param[0] = qualityParam;
+                        EncoderParameter qualityParam = new EncoderParameter(Encoder.Quality, 90L);
+                        EncoderParameters encoderParams = new EncoderParameters(1);
+                        encoderParams.Param[0] = qualityParam;
 
-					bitmap.Save(path, jpegCodec, encoderParams);
-					DisplayStatus(StatusType.Info, "Screenshot saved to '" + path + "'");
+                        bitmap.Save(path, jpegCodec, encoderParams);
+                    }
+                    else
+                    {
+                        bitmap.Save(path, ImageFormat.Png);
+                    }
+                    DisplayStatus(StatusType.Info, "Screenshot saved to '" + path + "'");
 				} 
 				catch(ExternalException e) 
 				{

@@ -313,6 +313,16 @@ namespace CodeImp.DoomBuilder.BuilderModes.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap InsertThingsRadiallyMode {
+            get {
+                object obj = ResourceManager.GetObject("InsertThingsRadiallyMode", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Join {
             get {
                 object obj = ResourceManager.GetObject("Join", resourceCulture);

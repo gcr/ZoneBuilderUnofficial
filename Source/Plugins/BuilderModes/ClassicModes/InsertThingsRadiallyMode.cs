@@ -33,7 +33,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 {
 	[EditMode(DisplayName = "Insert Things Radially Mode",
 			  SwitchAction = "insertthingsradiallymode",
-			  ButtonImage = "ThingsMode.png",	
+			  ButtonImage = "InsertThingsRadiallyMode.png",	
 			  ButtonOrder = int.MinValue + 6,
 			  ButtonGroup = "000_drawing",
 			  AllowCopyPaste = false,

@@ -85,7 +85,9 @@ namespace CodeImp.DoomBuilder.Controls
 			doupdatetextbox = true;
             parametercaption.Visible = General.Map.SRB2;
             parameterid.Visible = General.Map.SRB2;
-		}
+            fulltypecaption.Visible = General.Map.SRB2;
+            fulltypelabel.Visible = General.Map.SRB2;
+        }
 
 		//mxd. This recursively creates thing category tree nodes. Returns true when a thing in this category is obsolete
 		private bool AddThingCategories(ICollection<ThingCategory> categories, TreeNodeCollection collection)
@@ -181,6 +183,7 @@ namespace CodeImp.DoomBuilder.Controls
 			validnodes.Clear(); //mxd
 			typeid.Text = "";
             parameterid.Text = "";
+            fulltypelabel.Text = "0";
 
 			// Collapse nodes
 			foreach(TreeNode n in nodes)
@@ -413,6 +416,8 @@ namespace CodeImp.DoomBuilder.Controls
 			// Update icon (mxd)
 			UpdateThingSprite();
 
+            fulltypelabel.Text = GetFullType(0).ToString();
+
 			// Raise event
 			if(OnTypeChanged != null) OnTypeChanged(thinginfo);
 		}
@@ -420,6 +425,8 @@ namespace CodeImp.DoomBuilder.Controls
         //Parameter changed
         private void parameterid_TextChanged(object sender, EventArgs e)
         {
+            fulltypelabel.Text = GetFullType(0).ToString();
+
             // Raise event
             if (OnTypeChanged != null) OnTypeChanged(thinginfo);
         }

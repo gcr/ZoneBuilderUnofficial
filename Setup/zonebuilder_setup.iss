@@ -3,11 +3,11 @@
 
 [Setup]
 AppName=Zone Builder
-AppVerName=Zone Builder 2.1
+AppVerName=Zone Builder 2.2
 AppPublisher=MascaraSnake
 AppPublisherURL=http://mb.srb2.org/member.php?u=3131
-;AppSupportURL=http://forum.zdoom.org/viewtopic.php?f=3&t=32392
-;AppUpdatesURL=http://devbuilds.drdteam.org/doombuilder2-gzdb/
+AppSupportURL=http://mb.srb2.org/showthread.php?t=41033
+AppUpdatesURL=http://mb.srb2.org/showthread.php?t=41033
 DefaultDirName={pf}\Zone Builder
 DefaultGroupName=Zone Builder
 AllowNoIcons=true

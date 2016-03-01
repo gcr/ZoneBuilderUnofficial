@@ -33,6 +33,7 @@ namespace CodeImp.DoomBuilder.Controls
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label label1;
             this.labelaction = new System.Windows.Forms.Label();
+            this.labelfulltype = new System.Windows.Forms.Label();
             this.infopanel = new System.Windows.Forms.GroupBox();
             this.anglecontrol = new CodeImp.DoomBuilder.GZBuilder.Controls.AngleControl();
             this.classname = new System.Windows.Forms.Label();
@@ -53,6 +54,7 @@ namespace CodeImp.DoomBuilder.Controls
             this.tag = new System.Windows.Forms.Label();
             this.position = new System.Windows.Forms.Label();
             this.action = new System.Windows.Forms.Label();
+            this.fulltype = new System.Windows.Forms.Label();
             this.type = new System.Windows.Forms.Label();
             this.spritepanel = new System.Windows.Forms.GroupBox();
             this.spritename = new System.Windows.Forms.Label();
@@ -116,6 +118,15 @@ namespace CodeImp.DoomBuilder.Controls
             this.labelaction.TabIndex = 2;
             this.labelaction.Text = "Action:";
             // 
+            // labelfulltype
+            // 
+            this.labelfulltype.AutoSize = true;
+            this.labelfulltype.Location = new System.Drawing.Point(8, 49);
+            this.labelfulltype.Name = "labelfulltype";
+            this.labelfulltype.Size = new System.Drawing.Size(49, 13);
+            this.labelfulltype.TabIndex = 2;
+            this.labelfulltype.Text = "Full type:";
+            // 
             // infopanel
             // 
             this.infopanel.Controls.Add(this.anglecontrol);
@@ -138,9 +149,11 @@ namespace CodeImp.DoomBuilder.Controls
             this.infopanel.Controls.Add(this.tag);
             this.infopanel.Controls.Add(this.position);
             this.infopanel.Controls.Add(this.action);
+            this.infopanel.Controls.Add(this.fulltype);
             this.infopanel.Controls.Add(label4);
             this.infopanel.Controls.Add(label3);
             this.infopanel.Controls.Add(this.labelaction);
+            this.infopanel.Controls.Add(this.labelfulltype);
             this.infopanel.Controls.Add(this.type);
             this.infopanel.Controls.Add(label1);
             this.infopanel.Location = new System.Drawing.Point(0, 0);
@@ -331,6 +344,15 @@ namespace CodeImp.DoomBuilder.Controls
             this.action.TabIndex = 5;
             this.action.Text = "0 - Spawn a Blue Poopie and Ammo";
             // 
+            // fulltype
+            // 
+            this.fulltype.AutoEllipsis = true;
+            this.fulltype.Location = new System.Drawing.Point(62, 49);
+            this.fulltype.Name = "fulltype";
+            this.fulltype.Size = new System.Drawing.Size(210, 14);
+            this.fulltype.TabIndex = 5;
+            this.fulltype.Text = "0";
+            // 
             // type
             // 
             this.type.AutoSize = true;
@@ -442,6 +464,7 @@ namespace CodeImp.DoomBuilder.Controls
 		private System.Windows.Forms.Label tag;
 		private System.Windows.Forms.Label position;
 		private System.Windows.Forms.Label action;
+        private System.Windows.Forms.Label fulltype;
 		private System.Windows.Forms.Label type;
 		private System.Windows.Forms.Label arg5;
 		private System.Windows.Forms.Label arglbl5;
@@ -457,6 +480,7 @@ namespace CodeImp.DoomBuilder.Controls
 		private System.Windows.Forms.GroupBox flagsPanel;
 		private System.Windows.Forms.ListView flags;
 		private System.Windows.Forms.Label labelaction;
+        private System.Windows.Forms.Label labelfulltype;
 		private CodeImp.DoomBuilder.GZBuilder.Controls.AngleControl anglecontrol;
 		private ConfigurablePictureBox spritetex;
 		private System.Windows.Forms.Label classname;

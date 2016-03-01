@@ -65,11 +65,13 @@ namespace CodeImp.DoomBuilder.Controls
 			infopanel.Width = (hasArgs ? hexenformatwidth : doomformatwidth);
 
 			//mxd
-			action.Visible = General.Map.FormatInterface.HasThingAction;
-			labelaction.Visible = General.Map.FormatInterface.HasThingAction;
+			action.Visible = !General.Map.SRB2 && General.Map.FormatInterface.HasThingAction;
+			labelaction.Visible = !General.Map.SRB2 && General.Map.FormatInterface.HasThingAction;
+            fulltype.Visible = General.Map.SRB2 && !General.Map.FormatInterface.HasThingAction;
+            labelfulltype.Visible = General.Map.SRB2 && !General.Map.FormatInterface.HasThingAction;
 
-			// Move panel
-			spritepanel.Left = infopanel.Left + infopanel.Width + infopanel.Margin.Right + spritepanel.Margin.Left;
+            // Move panel
+            spritepanel.Left = infopanel.Left + infopanel.Width + infopanel.Margin.Right + spritepanel.Margin.Left;
 			flagsPanel.Left = spritepanel.Left + spritepanel.Width + spritepanel.Margin.Right + flagsPanel.Margin.Left; //mxd
 			
 			// Lookup thing info
@@ -114,6 +116,7 @@ namespace CodeImp.DoomBuilder.Controls
 			classname.Enabled = displayclassname; //mxd
 			classname.Text = (displayclassname ? ti.ClassName : "--"); //mxd
             parameter.Text = t.Parameter.ToString(CultureInfo.InvariantCulture);
+            fulltype.Text = t.FullType.ToString(CultureInfo.InvariantCulture);
 			position.Text = t.Position.x.ToString(CultureInfo.InvariantCulture) + ", " + t.Position.y.ToString(CultureInfo.InvariantCulture) + ", " + zinfo;
 			tag.Text = t.Tag + (General.Map.Options.TagLabels.ContainsKey(t.Tag) ? " - " + General.Map.Options.TagLabels[t.Tag] : string.Empty);
 			angle.Text = t.AngleDoom + "\u00B0";

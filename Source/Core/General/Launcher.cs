@@ -25,6 +25,7 @@ using System.Windows.Forms;
 using CodeImp.DoomBuilder.Windows;
 using CodeImp.DoomBuilder.IO;
 using CodeImp.DoomBuilder.Editing;
+using System.Security.Cryptography;
 
 #endregion
 
@@ -128,7 +129,9 @@ namespace CodeImp.DoomBuilder
 			locations.AddRange(General.Map.ConfigSettings.Resources);
 			locations.AddRange(General.Map.Options.Resources);
 			if(!string.IsNullOrEmpty(maplocation.location)) locations.Add(maplocation); //mxd. maplocation.location will be empty when a newly created map was not saved yet.
-			
+
+            FileInfo fi = new FileInfo(f);
+
 			// Go for all data locations
 			foreach(DataLocation dl in locations)
 			{
@@ -138,8 +141,14 @@ namespace CodeImp.DoomBuilder
 					// Location not included?
 					if(!dl.notfortesting)
 					{
-						// Add to string of files
-						if(shortpaths)
+                        if (FilesAreEqual(fi, new FileInfo(dl.location)))
+                        {
+                            outp = outp.Replace("%f", "%F");
+                            outp = outp.Replace("\"%F\"", "");
+                        }
+
+                        // Add to string of files
+                        if (shortpaths)
 						{
 							p_ap += General.GetShortFilePath(dl.location) + " ";
 							p_apq += "\"" + General.GetShortFilePath(dl.location) + "\" ";
@@ -351,8 +360,22 @@ namespace CodeImp.DoomBuilder
 			}
 		}
 
-		//mxd
-		private void TestingFinished() 
+        //Check if two files are equal using MD5 hash. I can't believe I need this...
+        static bool FilesAreEqual(FileInfo first, FileInfo second)
+        {
+            byte[] firstHash = MD5.Create().ComputeHash(first.OpenRead());
+            byte[] secondHash = MD5.Create().ComputeHash(second.OpenRead());
+
+            for (int i = 0; i < firstHash.Length; i++)
+            {
+                if (firstHash[i] != secondHash[i])
+                    return false;
+            }
+            return true;
+        }
+
+        //mxd
+        private void TestingFinished() 
 		{
 			//Done
 			TimeSpan deltatime = TimeSpan.FromTicks(process.ExitTime.Ticks - process.StartTime.Ticks);

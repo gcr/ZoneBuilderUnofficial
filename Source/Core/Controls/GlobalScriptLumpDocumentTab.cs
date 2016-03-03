@@ -132,6 +132,9 @@ namespace CodeImp.DoomBuilder.Controls
 
             editor.SetSavePoint(); //mxd
             UpdateTitle(); //mxd
+
+            panel.Reload = true;
+
             return true;
 		}
 

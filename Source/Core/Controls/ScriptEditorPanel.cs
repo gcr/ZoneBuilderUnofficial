@@ -55,12 +55,15 @@ namespace CodeImp.DoomBuilder.Controls
         private ScriptStatusInfo status;
         private int statusflashcount;
         private bool statusflashicon;
+        private bool reload;
 
         #endregion
 
         #region ================== Properties
 
         public ScriptDocumentTab ActiveTab { get { return (tabs.SelectedTab as ScriptDocumentTab); } }
+
+        public bool Reload { get { return reload; } set { reload = value; } }
 
         #endregion
 
@@ -75,6 +78,7 @@ namespace CodeImp.DoomBuilder.Controls
         // This initializes the control
         public void Initialize()
         {
+            reload = false;
             // Make list of script configs
             scriptconfigs = new List<ScriptConfiguration>(General.ScriptConfigs.Values);
             scriptconfigs.Add(new ScriptConfiguration());
@@ -467,6 +471,12 @@ namespace CodeImp.DoomBuilder.Controls
                 }
             }
 
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
+            }
+
             return true;
         }
 
@@ -526,6 +536,12 @@ namespace CodeImp.DoomBuilder.Controls
             foreach (ScriptDocumentTab t in tabs.TabPages)
             {
                 if (!t.ExplicitSave) t.Save();
+            }
+
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
             }
 
             UpdateToolbar(false);
@@ -865,6 +881,11 @@ namespace CodeImp.DoomBuilder.Controls
             // Save the current script
             ScriptDocumentTab t = (tabs.SelectedTab as ScriptDocumentTab);
             SaveScript(t);
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
+            }
             UpdateToolbar(true);
         }
 
@@ -879,6 +900,12 @@ namespace CodeImp.DoomBuilder.Controls
                 {
                     if (!SaveScript(t)) break;
                 }
+            }
+
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
             }
 
             UpdateToolbar(true);
@@ -921,6 +948,11 @@ namespace CodeImp.DoomBuilder.Controls
         {
             ScriptDocumentTab t = (tabs.SelectedTab as ScriptDocumentTab);
             CloseScript(t, false);
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
+            }
             UpdateToolbar(true);
         }
 
@@ -950,6 +982,12 @@ namespace CodeImp.DoomBuilder.Controls
             {
                 // We can only compile when the script is saved
                 if (!SaveScript(t)) return;
+            }
+
+            if (Reload)
+            {
+                General.Map.ReloadResources();
+                Reload = false;
             }
 
             // Compile now

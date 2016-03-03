@@ -87,6 +87,7 @@
     <Compile Include="Compilers\AccCompiler.cs" />
     <Compile Include="Compilers\NodesCompiler.cs" />
     <Compile Include="Config\ArgumentInfo.cs" />
+    <Compile Include="Config\ScriptLumpInfo.cs" />
     <Compile Include="Config\MapLumpInfo.cs" />
     <Compile Include="Config\ScriptConfiguration.cs" />
     <Compile Include="Config\DefinedTextureSet.cs" />
@@ -132,6 +133,9 @@
       <DependentUpon>ScriptEditorPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ScriptFileDocumentTab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GlobalScriptLumpDocumentTab.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ScriptLumpDocumentTab.cs">

@@ -26,6 +26,7 @@ using CodeImp.DoomBuilder.Compilers;
 using CodeImp.DoomBuilder.Config;
 using CodeImp.DoomBuilder.Windows;
 using ScintillaNET;
+using CodeImp.DoomBuilder.IO;
 
 #endregion
 
@@ -134,6 +135,40 @@ namespace CodeImp.DoomBuilder.Controls
                     tabs.TabPages.Add(t);
                 }
             }
+            if (General.Map.FilePathName != "")
+            {
+                WAD file = new WAD(General.Map.FilePathName);
+                List<Lump> lumps = file.Lumps;
+                file.Dispose();
+
+                //Load the global script lumps
+                foreach (ScriptLumpInfo scriptlumpinfo in General.Map.Config.ScriptLumps.Values)
+                {
+                    if (scriptlumpinfo.Script != null)
+                    {
+                        if (scriptlumpinfo.IsPrefix)
+                        {
+                            foreach (Lump l in lumps)
+                            {
+                                if (l.Name.ToUpperInvariant().StartsWith(scriptlumpinfo.Name.ToUpperInvariant()))
+                                {
+                                    GlobalScriptLumpDocumentTab t = new GlobalScriptLumpDocumentTab(this, l.Name, scriptlumpinfo.Script, General.Map.FilePathName);
+                                    t.OnTextChanged += tabpage_OnTextChanged;
+                                    t.Scintilla.UpdateUI += scintilla_OnUpdateUI;
+                                    tabs.TabPages.Add(t);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            GlobalScriptLumpDocumentTab t = new GlobalScriptLumpDocumentTab(this, scriptlumpinfo.Name, scriptlumpinfo.Script, General.Map.FilePathName);
+                            t.OnTextChanged += tabpage_OnTextChanged;
+                            t.Scintilla.UpdateUI += scintilla_OnUpdateUI;
+                            tabs.TabPages.Add(t);
+                        }
+                    }
+                }
+            }
 
             // Load the files that were previously opened for this map
             foreach (String filename in General.Map.Options.ScriptFiles)
@@ -147,7 +182,8 @@ namespace CodeImp.DoomBuilder.Controls
             }
 
             //mxd. Select "Scripts" tab, because that's what user will want 99% of time
-            int scriptsindex = GetTabPageIndex("SCRIPTS");
+            //MascaraSnake: For SRB2, select "MAINCFG" tab
+            int scriptsindex = General.Map.SRB2 ? GetTabPageIndex("MAINCFG") : GetTabPageIndex("SCRIPTS");
             tabs.SelectedIndex = (scriptsindex == -1 ? 0 : scriptsindex);
 
             //mxd. Apply quick search settings

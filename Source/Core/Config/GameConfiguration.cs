@@ -99,9 +99,11 @@ namespace CodeImp.DoomBuilder.Config
 
         // Map lumps
         private readonly Dictionary<string, MapLumpInfo> maplumps;
+        //Global script lumps
+        private readonly Dictionary<string, ScriptLumpInfo> scriptlumps;
 
-		//mxd. Map format
-		private readonly bool doommapformat;
+        //mxd. Map format
+        private readonly bool doommapformat;
 		private readonly bool hexenmapformat;
 		private readonly bool universalmapformat;
         private readonly bool srb2mapformat;
@@ -224,9 +226,11 @@ namespace CodeImp.DoomBuilder.Config
 
         // Map lumps
         public Dictionary<string, MapLumpInfo> MapLumps { get { return maplumps; } }
+        //Global script lumps
+        public Dictionary<string, ScriptLumpInfo> ScriptLumps { get { return scriptlumps; } }
 
-		//mxd. Map format
-		public bool UDMF { get { return universalmapformat; } }
+        //mxd. Map format
+        public bool UDMF { get { return universalmapformat; } }
 		public bool HEXEN { get { return hexenmapformat; } }
 		public bool DOOM { get { return doommapformat; } }
         public bool SRB2 { get { return srb2mapformat; } }
@@ -317,7 +321,8 @@ namespace CodeImp.DoomBuilder.Config
 			this.texturesets = new List<DefinedTextureSet>();
 			this.makedoorargs = new int[Linedef.NUM_ARGS];
 			this.maplumps = new Dictionary<string, MapLumpInfo>(StringComparer.Ordinal);
-			this.thingflagstranslation = new List<FlagTranslation>();
+            this.scriptlumps = new Dictionary<string, ScriptLumpInfo>(StringComparer.Ordinal);
+            this.thingflagstranslation = new List<FlagTranslation>();
 			this.linedefflagstranslation = new List<FlagTranslation>();
 			this.thingfilters = new List<ThingsFilter>();
 			this.thingflagscompare = new Dictionary<string, ThingFlagsCompareGroup>(); //mxd
@@ -407,6 +412,8 @@ namespace CodeImp.DoomBuilder.Config
 			
 			// Map lumps
 			LoadMapLumps();
+            //Global script lumps
+            LoadScriptLumps();
 			
 			// Skills
 			LoadSkills();
@@ -484,9 +491,22 @@ namespace CodeImp.DoomBuilder.Config
 				maplumps.Add(de.Key.ToString(), lumpinfo);
 			}
 		}
-		
-		// This loads the enumerations
-		private void LoadEnums() 
+
+        // This loads the script lumps
+        private void LoadScriptLumps()
+        {
+            // Get script lumps list
+            IDictionary dic = cfg.ReadSetting("scriptlumpnames", new Hashtable());
+            foreach (DictionaryEntry de in dic)
+            {
+                // Make script lumps
+                ScriptLumpInfo lumpinfo = new ScriptLumpInfo(de.Key.ToString(), cfg);
+                scriptlumps.Add(de.Key.ToString(), lumpinfo);
+            }
+        }
+
+        // This loads the enumerations
+        private void LoadEnums() 
 		{
 			// Get enums list
 			IDictionary dic = cfg.ReadSetting("enums", new Hashtable());

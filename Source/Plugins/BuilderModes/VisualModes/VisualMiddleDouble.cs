@@ -185,8 +185,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
             else
                 texturevpeg = textop - h;
 
-            tlt.x = tlb.x = 0;
-            trt.x = trb.x = Sidedef.Line.Length;
+            tlt.x = tlb.x = tof.x;
+            trt.x = trb.x = tof.x + Sidedef.Line.Length;
             tlt.y = trt.y = texturevpeg;
             tlb.y = trb.y = texturevpeg + h - (l + floorbias);
 
@@ -234,12 +234,6 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 trt.y = newtexturevpeg;
                 trb.y = newtexturevpeg + rh - (rl + floorbias);
             }
-
-            // Apply texture offset
-            tlt += tof;
-            tlb += tof;
-            trb += tof;
-            trt += tof;
 
             // Transform pixel coordinates to texture coordinates
             tlt /= tsz;
@@ -294,18 +288,22 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     if (IsLowerUnpegged())
                     {
                         bottomclipplane = sd.Floor.plane.GetZ(vl) > osd.Floor.plane.GetZ(vl) ? sd.Floor.plane : osd.Floor.plane;
+                        Vector3D up = new Vector3D(0f, 0f, texbottom - bottomclipplane.GetZ(vl));
+                        bottomclipplane.Offset -= Vector3D.DotProduct(up, bottomclipplane.Normal);
+                        
                         topclipplane = bottomclipplane.GetInverted();
-                        Vector3D up = new Vector3D(0f, 0f, textop - texbottom);
-                        float offset = Vector3D.DotProduct(up, topclipplane.Normal);
-                        topclipplane.Offset -= offset;
+                        Vector3D up2 = new Vector3D(0f, 0f, textop - texbottom);
+                        topclipplane.Offset -= Vector3D.DotProduct(up2, topclipplane.Normal);
                     }
                     else
                     {
                         topclipplane = sd.Ceiling.plane.GetZ(vl) < osd.Ceiling.plane.GetZ(vl) ? sd.Ceiling.plane : osd.Ceiling.plane;
+                        Vector3D up = new Vector3D(0f, 0f, textop - topclipplane.GetZ(vl));
+                        topclipplane.Offset -= Vector3D.DotProduct(up, topclipplane.Normal);
+
                         bottomclipplane = topclipplane.GetInverted();
                         Vector3D down = new Vector3D(0f, 0f, texbottom - textop);
-                        float offset = Vector3D.DotProduct(down, bottomclipplane.Normal);
-                        bottomclipplane.Offset -= offset;
+                        bottomclipplane.Offset -= Vector3D.DotProduct(down, bottomclipplane.Normal);
                     }
                 }
                 else

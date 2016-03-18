@@ -371,7 +371,7 @@ namespace CodeImp.DoomBuilder.Data
             Dictionary<int, string> spawnnums, doomednums;
             LoadMapInfo(out spawnnums, out doomednums);
 
-			int thingcount = LoadDecorateThings(spawnnums, doomednums);
+			int thingcount = General.Map.SRB2 ? LoadCustomObjects() : LoadDecorateThings(spawnnums, doomednums);
 			int spritecount = LoadThingSprites();
 			LoadInternalSprites();
 			LoadInternalTextures(); //mxd
@@ -526,7 +526,7 @@ namespace CodeImp.DoomBuilder.Data
 			previews = null;
 			
 			// Dispose decorate
-			decorate.Dispose();
+			if (decorate != null) decorate.Dispose();
 			
 			// Dispose resources
 			foreach(KeyValuePair<long, ImageData> i in textures) i.Value.Dispose();
@@ -1718,6 +1718,55 @@ namespace CodeImp.DoomBuilder.Data
 			return counter;
 		}
 
+        public int LoadCustomObjects()
+        {
+            SOCObjectParser parser = new SOCObjectParser { OnInclude = ParseFromLocation };
+
+            // Parse lumps 
+            foreach (DataReader dr in containers)
+            {
+                currentreader = dr;
+
+                Dictionary<string, Stream> streams1 = dr.GetObjctcfgData();
+                Dictionary<string, Stream> streams2 = dr.GetMaincfgData();
+                Dictionary<string, Stream> streams3 = dr.GetSOCData();
+                Dictionary<string, Stream> streams = streams1.Concat(streams2).Concat(streams3).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+                foreach (KeyValuePair<string, Stream> group in streams)
+                {
+                    // Parse the data
+                    parser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), false);
+                }
+            }
+
+            currentreader = null;
+
+            if (!parser.HasError && parser.Objects.Count > 0)
+            {
+                ThingCategory cat = new ThingCategory(null, "customthings", "Custom Things");
+                foreach (KeyValuePair<string,SRB2Object> o in parser.Objects)
+                {
+                    ThingTypeInfo t = new ThingTypeInfo(cat, o.Value);
+                    cat.AddThing(t);
+                    // Check if we can find this thing in our existing collection
+                    if (thingtypes.ContainsKey(o.Value.mapThingNum))
+                    {
+                        // Update the thing
+                        thingtypes[o.Value.mapThingNum].Category.RemoveThing(thingtypes[o.Value.mapThingNum]);
+                        thingtypes[o.Value.mapThingNum] = t;
+                    }
+                    else
+                    {
+                        // Add new thing
+                        thingtypes.Add(t.Index, t);
+                    }
+                }
+                thingcategories.Add(cat);
+
+            }
+            return parser.Objects.Count;
+        }
+
 		//mxd
 		private static ThingCategory GetThingCategory(ThingCategory parent, List<ThingCategory> categories, string[] catnames) 
 		{
@@ -2096,7 +2145,7 @@ namespace CodeImp.DoomBuilder.Data
         {
             if (General.Map.SRB2)
             {
-                SOCParser parser = new SOCParser { OnInclude = ParseFromLocation };
+                LevelHeaderParser parser = new LevelHeaderParser { OnInclude = ParseFromLocation };
 
                 // Parse mapinfo 
                 foreach (DataReader dr in containers)

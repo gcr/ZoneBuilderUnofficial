@@ -22,6 +22,7 @@ using System.Globalization;
 using CodeImp.DoomBuilder.GZBuilder.Data;
 using CodeImp.DoomBuilder.IO;
 using CodeImp.DoomBuilder.Data;
+using CodeImp.DoomBuilder.SRB2;
 using CodeImp.DoomBuilder.ZDoom;
 using CodeImp.DoomBuilder.Map;
 using System.Drawing;
@@ -396,8 +397,55 @@ namespace CodeImp.DoomBuilder.Config
 			GC.SuppressFinalize(this);
 		}
 
-		// Constructor
-		internal ThingTypeInfo(int index, ThingTypeInfo other) 
+        // Constructor
+        internal ThingTypeInfo(ThingCategory cat, SRB2Object o)
+        {
+            // Initialize
+            this.index = o.mapThingNum;
+            this.category = cat;
+            this.title = o.name;
+            this.actor = null;
+            this.classname = string.Empty; //mxd
+            this.isknown = true;
+            this.bright = false; //mxd
+            this.args = new ArgumentInfo[Linedef.NUM_ARGS];
+            for (int i = 0; i < Linedef.NUM_ARGS; i++) this.args[i] = new ArgumentInfo(i);
+
+            // Read properties
+            this.sprite = cat.Sprite;
+            this.color = cat.Color;
+            this.alpha = cat.Alpha; //mxd
+            this.alphabyte = (byte)(this.alpha * 255); //mxd
+            this.renderstyle = cat.RenderStyle; //mxd
+            this.arrow = (cat.Arrow != 0);
+            this.radius = o.radius;
+            this.height = o.height;
+            this.hangs = (cat.Hangs != 0);
+            this.blocking = cat.Blocking;
+            this.errorcheck = cat.ErrorCheck;
+            this.fixedsize = cat.FixedSize;
+            this.fixedrotation = cat.FixedRotation; //mxd
+            this.absolutez = cat.AbsoluteZ;
+            this.spritescale = new SizeF(cat.SpriteScale, cat.SpriteScale);
+            this.flags = new Dictionary<string, string>(cat.Flags);
+            this.heightoffset = cat.HeightOffset;
+            this.isUnflippable = cat.IsUnflippable;
+            this.ignoreZ = cat.IgnoreZ;
+            this.centerHitbox = cat.CenterHitbox;
+            this.angletext = cat.AngleText;
+            this.flagsvaluetext = cat.FlagsValueText;
+            this.parametertext = cat.ParameterText;
+
+            // Safety
+            if (this.radius < 4f) this.radius = 8f;
+            if (this.hangs && this.absolutez) this.hangs = false; //mxd
+
+            // We have no destructor
+            GC.SuppressFinalize(this);
+        }
+
+        // Constructor
+        internal ThingTypeInfo(int index, ThingTypeInfo other) 
 		{
 			// Initialize
 			this.index = index;

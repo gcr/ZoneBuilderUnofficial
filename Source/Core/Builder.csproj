@@ -186,7 +186,9 @@
     <Compile Include="Map\Node.cs" />
     <Compile Include="Map\Seg.cs" />
     <Compile Include="Map\Subsector.cs" />
-    <Compile Include="SRB2\SOCParser.cs" />
+    <Compile Include="SRB2\SRB2Object.cs" />
+    <Compile Include="SRB2\SOCObjectParser.cs" />
+    <Compile Include="SRB2\LevelHeaderParser.cs" />
     <Compile Include="VisualModes\VisualBlockMap.cs" />
     <Compile Include="VisualModes\VisualMode.cs" />
     <Compile Include="General\Clock.cs" />

@@ -144,6 +144,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.angletext = parent.angletext;
                 this.flagsvaluetext = parent.flagsvaluetext;
                 this.parametertext = parent.parametertext;
+                this.flags = parent.flags;
             }
 			// Set default properties
 			else
@@ -170,6 +171,7 @@ namespace CodeImp.DoomBuilder.Config
                 this.angletext = "Angle";
                 this.flagsvaluetext = "Flags value";
                 this.parametertext = "Parameter";
+                this.flags = new Dictionary<string, string>();
             }
 			
 			// We have no destructor

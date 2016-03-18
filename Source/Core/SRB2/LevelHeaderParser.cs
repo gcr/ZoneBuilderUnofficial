@@ -13,11 +13,11 @@ using CodeImp.DoomBuilder.GZBuilder.Data;
 
 namespace CodeImp.DoomBuilder.SRB2
 {
-    internal sealed class SOCParser : ZDTextParser
+    internal sealed class LevelHeaderParser : ZDTextParser
     {
         #region ================== Delegates
 
-        public delegate void IncludeDelegate(SOCParser parser, string includefile, bool clearerror);
+        public delegate void IncludeDelegate(LevelHeaderParser parser, string includefile, bool clearerror);
         public IncludeDelegate OnInclude;
 
         #endregion
@@ -40,7 +40,7 @@ namespace CodeImp.DoomBuilder.SRB2
 
         #region ================== Constructor
 
-        public SOCParser()
+        public LevelHeaderParser()
         {
             // Syntax
             whitespace = "\n \t\r\u00A0";
@@ -71,9 +71,9 @@ namespace CodeImp.DoomBuilder.SRB2
 
             while (!streamreader.EndOfStream)
             {
-                string line = streamreader.ReadLine();
+                string line = RemoveComments(streamreader.ReadLine());
                 linenumber++;
-                if (String.IsNullOrEmpty(line) || line.StartsWith("\n") || line.StartsWith("#")) continue;
+                if (String.IsNullOrEmpty(line) || line.StartsWith("\n")) continue;
                 string[] tokens = line.Split(new char[] { ' ' });
                 switch (tokens[0].ToUpperInvariant())
                 {
@@ -109,6 +109,7 @@ namespace CodeImp.DoomBuilder.SRB2
                 linenumber++;
                 if (String.IsNullOrEmpty(line) || line.StartsWith("\n")) break;
                 if (line.StartsWith("#")) continue;
+                line = RemoveComments(line);
                 string[] tokens = line.Split(new char[] { '=' });
                 if (tokens.Length != 2)
                 {
@@ -204,6 +205,12 @@ namespace CodeImp.DoomBuilder.SRB2
         protected override string GetLanguageType()
         {
             return "SOC";
+        }
+
+        private string RemoveComments(string line)
+        {
+            string[] tokens = line.Split(new char[] { '#' });
+            return tokens[0];
         }
 
         #endregion

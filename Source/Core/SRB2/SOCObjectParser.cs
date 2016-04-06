@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using CodeImp.DoomBuilder.Compilers;
+using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.ZDoom;
 using CodeImp.DoomBuilder.GZBuilder.Data;
 
@@ -137,6 +138,7 @@ namespace CodeImp.DoomBuilder.SRB2
         private bool ParseObject(string name)
         {
             if (name == null) return false;
+            string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
             string[] states = new string[8];
             int mapThingNum = -1;
             int radius = 0;
@@ -146,6 +148,11 @@ namespace CodeImp.DoomBuilder.SRB2
                 string line = streamreader.ReadLine();
                 linenumber++;
                 if (String.IsNullOrEmpty(line) || line.StartsWith("\n")) break;
+                if (line.StartsWith("#$Sprite "))
+                {
+                    sprite = line.Substring(9);
+                    continue;
+                }
                 if (line.StartsWith("#")) continue;
                 line = RemoveComments(line);
                 string[] tokens = line.Split(new char[] { '=' });
@@ -210,7 +217,7 @@ namespace CodeImp.DoomBuilder.SRB2
             }
             if (mapThingNum > 0)
             {
-                SRB2Object o = new SRB2Object(name, states, mapThingNum, radius, height);
+                SRB2Object o = new SRB2Object(name, sprite, states, mapThingNum, radius, height);
                 if (objects.ContainsKey(name))
                     objects[name] = o;
                 else

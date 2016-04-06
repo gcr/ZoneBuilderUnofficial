@@ -412,7 +412,7 @@ namespace CodeImp.DoomBuilder.Config
             for (int i = 0; i < Linedef.NUM_ARGS; i++) this.args[i] = new ArgumentInfo(i);
 
             // Read properties
-            this.sprite = cat.Sprite;
+            this.sprite = o.sprite;
             this.color = cat.Color;
             this.alpha = cat.Alpha; //mxd
             this.alphabyte = (byte)(this.alpha * 255); //mxd

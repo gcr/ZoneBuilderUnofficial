@@ -21,9 +21,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
         public InsertThingsRadiallyOptionsPanel() 
 		{
 			InitializeComponent();
-		}
+            radius.Value = General.Map.Grid.GridSize;
+        }
 
-		public void Register() 
+        public void Register() 
 		{
             number.ValueChanged += ValueChanged;
             radius.ValueChanged += ValueChanged;
@@ -70,9 +71,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
             parameter.Value = 0;
             type.Value = 1;
             snaptogrid.Checked = false;
-            radius.Value = 32;
+            radius.Value = General.Map.Grid.GridSize;
 			blockEvents = false;
-            number.Value = 4;
+            number.Value = 8;
         }
 
         private void browse_Click(object sender, EventArgs e)

@@ -86,9 +86,9 @@
             0});
             this.number.Name = "number";
             this.number.Size = new System.Drawing.Size(56, 20);
-            this.number.Text = "4";
+            this.number.Text = "8";
             this.number.Value = new decimal(new int[] {
-            4,
+            8,
             0,
             0,
             0});
@@ -116,9 +116,9 @@
             0});
             this.radius.Name = "radius";
             this.radius.Size = new System.Drawing.Size(56, 20);
-            this.radius.Text = "32";
+            this.radius.Text = "64";
             this.radius.Value = new decimal(new int[] {
-            32,
+            64,
             0,
             0,
             0});

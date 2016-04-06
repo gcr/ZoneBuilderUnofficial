@@ -306,5 +306,53 @@ namespace CodeImp.DoomBuilder.BuilderModes
         }
 
         #endregion
+
+        #region ================== Actions
+
+        [BeginAction("increasenumber")]
+        protected void IncreaseNumber()
+        {
+            if (number < panel.MaxNumber)
+            {
+                number++;
+                panel.Number = number;
+                Update();
+            }
+        }
+
+        [BeginAction("decreasenumber")]
+        protected void DecreaseNumber()
+        {
+            if (number > panel.MinNumber)
+            {
+                number--;
+                panel.Number = number;
+                Update();
+            }
+        }
+
+        [BeginAction("increaseradius")]
+        protected void IncreaseRadius()
+        {
+            if (radius < panel.MaxRadius)
+            {
+                radius = Math.Min(radius + General.Map.Grid.GridSize, panel.MaxRadius);
+                panel.Radius = radius;
+                Update();
+            }
+        }
+
+        [BeginAction("decreaseradius")]
+        protected void DecreaseRadius()
+        {
+            if (radius > panel.MinRadius)
+            {
+                radius = Math.Max(radius - General.Map.Grid.GridSize, panel.MinRadius);
+                panel.Radius = radius;
+                Update();
+            }
+        }
+
+        #endregion
     }
 }

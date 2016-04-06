@@ -308,11 +308,9 @@ namespace CodeImp.DoomBuilder.SRB2
                             char c4 = (char)datareader.ReadByte();
                             if (c4 == '[')
                             {
-                                //Skip until ]]--
+                                //Skip until ]]
                                 char c5 = '\0';
                                 char c6 = '\0';
-                                char c7 = '\0';
-                                char c8 = '\0';
                                 prevstreamposition = datastream.Position; //mxd
                                 do
                                 {
@@ -323,11 +321,9 @@ namespace CodeImp.DoomBuilder.SRB2
                                     }
 
                                     c5 = c6;
-                                    c6 = c7;
-                                    c7 = c8;
-                                    c8 = (char)datareader.ReadByte();
+                                    c6 = (char)datareader.ReadByte();
                                 }
-                                while ((c8 != '-') || (c7 != '-') || (c6 != ']') || (c5 != ']'));
+                                while ((c6 != ']') || (c5 != ']'));
                                 c = ' ';
                             }
                             else

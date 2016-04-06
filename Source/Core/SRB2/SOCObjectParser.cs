@@ -135,9 +135,10 @@ namespace CodeImp.DoomBuilder.SRB2
             return true;
         }*/
 
-        private bool ParseObject(string name)
+        private bool ParseObject(string objname)
         {
-            if (name == null) return false;
+            if (objname == null) return false;
+            string name = objname;
             string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
             string[] states = new string[8];
             int mapThingNum = -1;
@@ -159,6 +160,11 @@ namespace CodeImp.DoomBuilder.SRB2
                         continue;
                     }
                     ReportError("The sprite \"" + spritename + "\" assigned by the \"$sprite\" property does not exist");
+                }
+                if (line.StartsWith("#$Name "))
+                {
+                    name = line.Substring(7);
+                    continue;
                 }
                 if (line.StartsWith("#")) continue;
                 line = RemoveComments(line);
@@ -225,10 +231,10 @@ namespace CodeImp.DoomBuilder.SRB2
             if (mapThingNum > 0)
             {
                 SRB2Object o = new SRB2Object(name, sprite, states, mapThingNum, radius, height);
-                if (objects.ContainsKey(name))
-                    objects[name] = o;
+                if (objects.ContainsKey(objname))
+                    objects[objname] = o;
                 else
-                    objects.Add(name, o);
+                    objects.Add(objname, o);
             }
 
             return true;

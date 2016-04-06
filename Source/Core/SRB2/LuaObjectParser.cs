@@ -86,6 +86,7 @@ namespace CodeImp.DoomBuilder.SRB2
                 {
                     if (!token.StartsWith("mobjinfo[") || !token.EndsWith("]")) continue;
                     string objname = token.Substring(9);
+                    string name = objname;
                     string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
                     string[] states = new string[8];
                     int mapThingNum = -1;
@@ -118,6 +119,11 @@ namespace CodeImp.DoomBuilder.SRB2
                         if (finished) break;
                         switch (token)
                         {
+                            case "$Name":
+                                SkipWhitespace(true);
+                                token = ReadToken();
+                                name = token;
+                                break;
                             case "$Sprite":
                                 SkipWhitespace(true);
                                 token = ReadToken();
@@ -226,7 +232,7 @@ namespace CodeImp.DoomBuilder.SRB2
 
                     if (mapThingNum > 0)
                     {
-                        SRB2Object o = new SRB2Object(objname, sprite, states, mapThingNum, radius, height);
+                        SRB2Object o = new SRB2Object(name, sprite, states, mapThingNum, radius, height);
                         if (objects.ContainsKey(objname))
                             objects[objname] = o;
                         else

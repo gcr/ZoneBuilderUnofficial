@@ -112,6 +112,7 @@ namespace CodeImp.DoomBuilder.SRB2
                     SkipWhitespace(true);
                     token = ReadToken();
                     bool finished = false;
+                    bool blockclosed = false;
                     while (token != null)
                     {
                         if (finished) break;
@@ -202,12 +203,19 @@ namespace CodeImp.DoomBuilder.SRB2
                             case "flags":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 break;
+                            case "}":
+                                finished = true;
+                                blockclosed = true;
+                                break;
                             default:
                                 ReportError("Unknown object definition parameter " + token);
                                 return false;
                         }
-                        SkipWhitespace(true);
-                        token = ReadToken();
+                        if (!blockclosed)
+                        {
+                            SkipWhitespace(true);
+                            token = ReadToken();
+                        }
                     }
 
                     if (token != "}")

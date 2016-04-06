@@ -880,6 +880,23 @@ namespace CodeImp.DoomBuilder.Data
             return streams;
         }
 
+        public override Dictionary<string, Stream> GetLuaData()
+        {
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+            string prefix = "LUA_";
+
+            foreach (Lump lump in file.Lumps)
+            {
+                if (lump.Name.StartsWith(prefix))
+                {
+                    streams.Add(lump.Name, lump.Stream);
+                }
+            }
+            return streams;
+        }
+
         //mxd
         public override Dictionary<string, Stream> GetGldefsData(GameType gameType) 
 		{

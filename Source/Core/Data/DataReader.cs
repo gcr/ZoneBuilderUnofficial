@@ -170,6 +170,9 @@ namespace CodeImp.DoomBuilder.Data
         //mxd. When implemented, this returns the SOC_ lumps
         public virtual Dictionary<string, Stream> GetSOCData() { return new Dictionary<string, Stream>(); }
 
+        //mxd. When implemented, this returns the LUA_ lumps
+        public virtual Dictionary<string, Stream> GetLuaData() { return new Dictionary<string, Stream>(); }
+
         //mxd. When implemented, this returns the GLDEFS lump
         public abstract Dictionary<string, Stream> GetGldefsData(GameType gametype); // { return new Dictionary<string, Stream>(); }
 

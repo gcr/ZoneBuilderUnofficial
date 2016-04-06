@@ -186,6 +186,7 @@
     <Compile Include="Map\Node.cs" />
     <Compile Include="Map\Seg.cs" />
     <Compile Include="Map\Subsector.cs" />
+    <Compile Include="SRB2\LuaObjectParser.cs" />
     <Compile Include="SRB2\SRB2Object.cs" />
     <Compile Include="SRB2\SOCObjectParser.cs" />
     <Compile Include="SRB2\LevelHeaderParser.cs" />

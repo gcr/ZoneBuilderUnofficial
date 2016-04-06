@@ -1720,7 +1720,27 @@ namespace CodeImp.DoomBuilder.Data
 
         public int LoadCustomObjects()
         {
-            SOCObjectParser parser = new SOCObjectParser { OnInclude = ParseFromLocation };
+            LuaObjectParser LuaParser = new LuaObjectParser { OnInclude = ParseFromLocation };
+
+            // Parse lumps 
+            foreach (DataReader dr in containers)
+            {
+                currentreader = dr;
+                Dictionary<string, Stream> stream = dr.GetLuaData();
+
+                foreach (KeyValuePair<string, Stream> group in stream)
+                {
+                    // Parse the data
+                    LuaParser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), false);
+                }
+            }
+
+            if (LuaParser.HasError)
+            {
+                LuaParser.LogError();
+            }
+
+            SOCObjectParser SOCParser = new SOCObjectParser { OnInclude = ParseFromLocation };
 
             // Parse lumps 
             foreach (DataReader dr in containers)
@@ -1735,16 +1755,25 @@ namespace CodeImp.DoomBuilder.Data
                 foreach (KeyValuePair<string, Stream> group in streams)
                 {
                     // Parse the data
-                    parser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), false);
+                    SOCParser.Parse(group.Value, Path.Combine(dr.Location.location, group.Key), false);
                 }
+            }
+
+            if (SOCParser.HasError)
+            {
+                SOCParser.LogError();
             }
 
             currentreader = null;
 
-            if (!parser.HasError && parser.Objects.Count > 0)
+            IDictionary<string, SRB2Object> objects = new Dictionary<string, SRB2Object>();
+            if (!LuaParser.HasError) objects = objects.Concat(LuaParser.Objects).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            if (!SOCParser.HasError) objects = objects.Concat(SOCParser.Objects).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            if (objects.Count > 0)
             {
                 ThingCategory cat = new ThingCategory(null, "customthings", "Custom Things");
-                foreach (KeyValuePair<string,SRB2Object> o in parser.Objects)
+                foreach (KeyValuePair<string,SRB2Object> o in objects)
                 {
                     ThingTypeInfo t = new ThingTypeInfo(cat, o.Value);
                     cat.AddThing(t);
@@ -1764,7 +1793,7 @@ namespace CodeImp.DoomBuilder.Data
                 thingcategories.Add(cat);
 
             }
-            return parser.Objects.Count;
+            return objects.Count;
         }
 
 		//mxd

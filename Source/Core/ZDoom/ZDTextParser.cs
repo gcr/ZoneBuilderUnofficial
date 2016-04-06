@@ -54,7 +54,7 @@ namespace CodeImp.DoomBuilder.ZDoom
         protected int errorline;
         protected string errordesc;
         protected string errorsource;
-		private long prevstreamposition; //mxd. Text stream position storted before performing ReadToken.
+		protected long prevstreamposition; //mxd. Text stream position storted before performing ReadToken.
 		
 		#endregion
 		
@@ -116,13 +116,13 @@ namespace CodeImp.DoomBuilder.ZDoom
 		}
 		
 		// This returns true if the given character is whitespace
-		private bool IsWhitespace(char c)
+		protected bool IsWhitespace(char c)
 		{
 			return (whitespace.IndexOf(c) > -1);
 		}
 
 		// This returns true if the given character is a special token
-		private bool IsSpecialToken(char c)
+		protected bool IsSpecialToken(char c)
 		{
 			return (specialtokens.IndexOf(c) > -1);
 		}
@@ -157,7 +157,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 		// This skips whitespace on the stream, placing the read
 		// position right before the first non-whitespace character
 		// Returns false when the end of the stream is reached
-		protected internal bool SkipWhitespace(bool skipnewline)
+		protected internal virtual bool SkipWhitespace(bool skipnewline)
 		{
 			int offset = skipnewline ? 0 : 1;
 			char c;
@@ -228,7 +228,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 		// This reads a token (all sequential non-whitespace characters or a single character)
 		// Returns null when the end of the stream has been reached
 		protected internal string ReadToken() { return ReadToken(true); } //mxd. Added "multiline" param
-		protected internal string ReadToken(bool multiline)
+		protected internal virtual string ReadToken(bool multiline)
 		{
 			//mxd. Return empty string when the end of the stream has been reached
 			if(datastream.Position == datastream.Length) return string.Empty;
@@ -321,7 +321,7 @@ namespace CodeImp.DoomBuilder.ZDoom
 
 		// This reads a token (all sequential non-whitespace characters or a single character) using custom set of special tokens
 		// Returns null when the end of the stream has been reached (mxd)
-		protected internal string ReadToken(string specialTokens) 
+		protected internal virtual string ReadToken(string specialTokens) 
 		{
 			// Return null when the end of the stream has been reached
 			if(datastream.Position == datastream.Length) return null;

@@ -230,6 +230,345 @@ namespace CodeImp.DoomBuilder.SRB2
             return !this.HasError;
         }
 
+        // This skips whitespace on the stream, placing the read
+        // position right before the first non-whitespace character
+        // Returns false when the end of the stream is reached
+        protected internal override bool SkipWhitespace(bool skipnewline)
+        {
+            int offset = skipnewline ? 0 : 1;
+            char c;
+            prevstreamposition = datastream.Position; //mxd
+
+            do
+            {
+                if (datastream.Position == datastream.Length) return false;
+                c = (char)datareader.ReadByte();
+
+                // Check if this is comment
+                if (c == '/')
+                {
+                    if (datastream.Position == datastream.Length) return false;
+                    char c2 = (char)datareader.ReadByte();
+                    if (c2 == '/')
+                    {
+                        // Check if not a special comment with a token
+                        if (datastream.Position == datastream.Length) return false;
+                        char c3 = (char)datareader.ReadByte();
+                        if (c3 != '$')
+                        {
+                            // Skip entire line
+                            char c4 = ' ';
+                            while ((c4 != '\n') && (datastream.Position < datastream.Length)) { c4 = (char)datareader.ReadByte(); }
+                            c = c4;
+                        }
+                        else
+                        {
+                            // Not a comment
+                            c = c3;
+                        }
+                    }
+                    else if (c2 == '*')
+                    {
+                        // Skip until */
+                        char c4, c3 = '\0';
+                        prevstreamposition = datastream.Position; //mxd
+                        do
+                        {
+                            if (datastream.Position == datastream.Length) //mxd
+                            {
+                                // ZDoom doesn't give even a warning message about this, so we shouldn't report error or fail parsing.
+                                General.ErrorLogger.Add(ErrorType.Warning, "Lua warning in '" + sourcename + "', line " + GetCurrentLineNumber() + ". Block comment is not closed.");
+                                return false;
+                            }
+
+                            c4 = c3;
+                            c3 = (char)datareader.ReadByte();
+                        }
+                        while ((c4 != '*') || (c3 != '/'));
+                        c = ' ';
+                    }
+                    else
+                    {
+                        // Not a comment, rewind from reading c2
+                        datastream.Seek(-1, SeekOrigin.Current);
+                    }
+                }
+
+                if (c == '-')
+                {
+                    if (datastream.Position == datastream.Length) return false;
+                    char c2 = (char)datareader.ReadByte();
+                    if (c2 == '-')
+                    {
+                        if (datastream.Position == datastream.Length) return false;
+                        char c3 = (char)datareader.ReadByte();
+                        if (c3 == '[')
+                        {
+                            if (datastream.Position == datastream.Length) return false;
+                            char c4 = (char)datareader.ReadByte();
+                            if (c4 == '[')
+                            {
+                                //Skip until ]]--
+                                char c5 = '\0';
+                                char c6 = '\0';
+                                char c7 = '\0';
+                                char c8 = '\0';
+                                prevstreamposition = datastream.Position; //mxd
+                                do
+                                {
+                                    if (datastream.Position == datastream.Length) //mxd
+                                    {
+                                        General.ErrorLogger.Add(ErrorType.Warning, "Lua warning in '" + sourcename + "', line " + GetCurrentLineNumber() + ". Block comment is not closed.");
+                                        return false;
+                                    }
+
+                                    c5 = c6;
+                                    c6 = c7;
+                                    c7 = c8;
+                                    c8 = (char)datareader.ReadByte();
+                                }
+                                while ((c8 != '-') || (c7 != '-') || (c6 != ']') || (c5 != ']'));
+                                c = ' ';
+                            }
+                            else
+                            {
+                                // Not a multiline comment, rewind from reading c4
+                                datastream.Seek(-1, SeekOrigin.Current);
+                            }
+                        }
+                        while ((c3 != '\n') && (datastream.Position < datastream.Length)) { c3 = (char)datareader.ReadByte(); }
+                        c = c3;
+                    }
+                    else
+                    {
+                        // Not a comment, rewind from reading c2
+                        datastream.Seek(-1, SeekOrigin.Current);
+                    }
+                }
+            }
+            while (whitespace.IndexOf(c, offset) > -1);
+
+            // Go one character back so we can read this non-whitespace character again
+            datastream.Seek(-1, SeekOrigin.Current);
+            return true;
+        }
+
+        protected internal override string ReadToken(bool multiline)
+        {
+            //mxd. Return empty string when the end of the stream has been reached
+            if (datastream.Position == datastream.Length) return string.Empty;
+
+            //mxd. Store starting position 
+            prevstreamposition = datastream.Position;
+
+            string token = "";
+            bool quotedstring = false;
+
+            // Start reading
+            char c = (char)datareader.ReadByte();
+            while (!IsWhitespace(c) || quotedstring || IsSpecialToken(c))
+            {
+                //mxd. Break at newline?
+                if (!multiline && c == '\r')
+                {
+                    // Go one character back so line number is correct
+                    datastream.Seek(-1, SeekOrigin.Current);
+                    return token;
+                }
+
+                // Special token?
+                if (!quotedstring && IsSpecialToken(c))
+                {
+                    // Not reading a token yet?
+                    if (token.Length == 0)
+                    {
+                        // This is our whole token
+                        token += c;
+                        break;
+                    }
+                    else
+                    {
+                        // This is a new token and shouldn't be read now
+                        // Go one character back so we can read this token again
+                        datastream.Seek(-1, SeekOrigin.Current);
+                        break;
+                    }
+                }
+                else
+                {
+                    // Quote?
+                    if (c == '"')
+                    {
+                        // Quote to end the string?
+                        if (quotedstring) quotedstring = false;
+
+                        // First character is a quote?
+                        if (token.Length == 0) quotedstring = true;
+
+                        token += c;
+                    }
+                    // Potential comment?
+                    else if ((c == '/') && !quotedstring)
+                    {
+                        // Check the next byte
+                        if (datastream.Position == datastream.Length) return token;
+                        char c2 = (char)datareader.ReadByte();
+                        if ((c2 == '/') || (c2 == '*'))
+                        {
+                            // This is a comment start, so the token ends here
+                            // Go two characters back so we can read this comment again
+                            datastream.Seek(-2, SeekOrigin.Current);
+                            break;
+                        }
+                        else
+                        {
+                            // Not a comment
+                            // Go one character back so we can read this char again
+                            datastream.Seek(-1, SeekOrigin.Current);
+                            token += c;
+                        }
+                    }
+                    // Potential comment?
+                    else if ((c == '-') && !quotedstring)
+                    {
+                        // Check the next byte
+                        if (datastream.Position == datastream.Length) return token;
+                        char c2 = (char)datareader.ReadByte();
+                        if (c2 == '-')
+                        {
+                            // This is a comment start, so the token ends here
+                            // Go two characters back so we can read this comment again
+                            datastream.Seek(-2, SeekOrigin.Current);
+                            break;
+                        }
+                        else
+                        {
+                            // Not a comment
+                            // Go one character back so we can read this char again
+                            datastream.Seek(-1, SeekOrigin.Current);
+                            token += c;
+                        }
+                    }
+                    else
+                    {
+                        token += c;
+                    }
+                }
+
+                // Next character
+                if (datastream.Position < datastream.Length)
+                    c = (char)datareader.Read();
+                else
+                    break;
+            }
+
+            return token;
+        }
+
+        // This reads a token (all sequential non-whitespace characters or a single character) using custom set of special tokens
+        // Returns null when the end of the stream has been reached (mxd)
+        protected internal override string ReadToken(string specialTokens)
+        {
+            // Return null when the end of the stream has been reached
+            if (datastream.Position == datastream.Length) return null;
+
+            //mxd. Store starting position 
+            prevstreamposition = datastream.Position;
+
+            string token = "";
+            bool quotedstring = false;
+
+            // Start reading
+            char c = (char)datareader.ReadByte();
+            while (!IsWhitespace(c) || quotedstring || specialTokens.IndexOf(c) != -1)
+            {
+                // Special token?
+                if (!quotedstring && specialTokens.IndexOf(c) != -1)
+                {
+                    // Not reading a token yet?
+                    if (token.Length == 0)
+                    {
+                        // This is our whole token
+                        token += c;
+                        break;
+                    }
+
+                    // This is a new token and shouldn't be read now
+                    // Go one character back so we can read this token again
+                    datastream.Seek(-1, SeekOrigin.Current);
+                    break;
+                }
+                else
+                {
+                    // Quote?
+                    if (c == '"')
+                    {
+                        // Quote to end the string?
+                        if (quotedstring) quotedstring = false;
+
+                        // First character is a quote?
+                        if (token.Length == 0) quotedstring = true;
+
+                        token += c;
+                    }
+                    // Potential comment?
+                    else if ((c == '/') && !quotedstring)
+                    {
+                        // Check the next byte
+                        if (datastream.Position == datastream.Length) return token;
+                        char c2 = (char)datareader.ReadByte();
+                        if ((c2 == '/') || (c2 == '*'))
+                        {
+                            // This is a comment start, so the token ends here
+                            // Go two characters back so we can read this comment again
+                            datastream.Seek(-2, SeekOrigin.Current);
+                            break;
+                        }
+                        else
+                        {
+                            // Not a comment
+                            // Go one character back so we can read this char again
+                            datastream.Seek(-1, SeekOrigin.Current);
+                            token += c;
+                        }
+                    }
+                    // Potential comment?
+                    else if ((c == '-') && !quotedstring)
+                    {
+                        // Check the next byte
+                        if (datastream.Position == datastream.Length) return token;
+                        char c2 = (char)datareader.ReadByte();
+                        if (c2 == '-')
+                        {
+                            // This is a comment start, so the token ends here
+                            // Go two characters back so we can read this comment again
+                            datastream.Seek(-2, SeekOrigin.Current);
+                            break;
+                        }
+                        else
+                        {
+                            // Not a comment
+                            // Go one character back so we can read this char again
+                            datastream.Seek(-1, SeekOrigin.Current);
+                            token += c;
+                        }
+                    }
+                    else
+                    {
+                        token += c;
+                    }
+                }
+
+                // Next character
+                if (datastream.Position < datastream.Length)
+                    c = (char)datareader.Read();
+                else
+                    break;
+            }
+
+            return token;
+        }
+
         #endregion
 
         #region ================== Methods

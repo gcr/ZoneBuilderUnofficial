@@ -150,8 +150,15 @@ namespace CodeImp.DoomBuilder.SRB2
                 if (String.IsNullOrEmpty(line) || line.StartsWith("\n")) break;
                 if (line.StartsWith("#$Sprite "))
                 {
-                    sprite = line.Substring(9);
-                    continue;
+                    string spritename = line.Substring(9);
+                    if (((spritename.Length > DataManager.INTERNAL_PREFIX.Length) &&
+                        spritename.ToLowerInvariant().StartsWith(DataManager.INTERNAL_PREFIX)) ||
+                        General.Map.Data.GetSpriteExists(spritename))
+                    {
+                        sprite = spritename;
+                        continue;
+                    }
+                    ReportError("The sprite \"" + spritename + "\" assigned by the \"$sprite\" property does not exist");
                 }
                 if (line.StartsWith("#")) continue;
                 line = RemoveComments(line);

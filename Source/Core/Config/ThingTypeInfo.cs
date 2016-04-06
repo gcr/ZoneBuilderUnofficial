@@ -440,6 +440,12 @@ namespace CodeImp.DoomBuilder.Config
             if (this.radius < 4f) this.radius = 8f;
             if (this.hangs && this.absolutez) this.hangs = false; //mxd
 
+            // Make long name for sprite lookup
+            if (this.sprite.Length <= 8)
+                this.spritelongname = Lump.MakeLongName(this.sprite);
+            else
+                this.spritelongname = long.MaxValue;
+
             // We have no destructor
             GC.SuppressFinalize(this);
         }

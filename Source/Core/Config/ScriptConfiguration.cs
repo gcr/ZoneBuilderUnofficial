@@ -38,21 +38,24 @@ namespace CodeImp.DoomBuilder.Config
 	
 	internal class ScriptConfiguration : IComparable<ScriptConfiguration>
 	{
-		#region ================== Constants
+        #region ================== Constants
 
-		#endregion
+        private const string WORD_CHARS = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; //mxd
 
-		#region ================== Variables
-		
-		// Compiler settings
-		private readonly CompilerInfo compiler;
+        #endregion
+
+        #region ================== Variables
+
+        // Compiler settings
+        private readonly CompilerInfo compiler;
 		private readonly string parameters;
 		private readonly string resultlump;
 		
 		// Editor settings
 		private readonly string description;
 		private readonly int codepage;
-		private readonly string[] extensions;
+        private readonly string wordchars; //mxd. Characters to be threated as part of a word by Scintilla
+        private readonly string[] extensions;
 		private readonly bool casesensitive;
 		private readonly int insertcase;
         private readonly Lexer lexer;
@@ -102,7 +105,8 @@ namespace CodeImp.DoomBuilder.Config
         public string ArrayClose { get { return arrayclose; } } //mxd
         public string ArgumentDelimiter { get { return argumentdelimiter; } }
 		public string Terminator { get { return terminator; } }
-		public ScriptType ScriptType { get { return scripttype; } } //mxd
+        public string WordCharacters { get { return wordchars; } } //mxd
+        public ScriptType ScriptType { get { return scripttype; } } //mxd
 
         // Collections
         public ICollection<string> Keywords { get { return keywordkeyssorted; } }
@@ -146,7 +150,8 @@ namespace CodeImp.DoomBuilder.Config
 			terminator = "";
 			description = "Plain text";
 			scripttype = ScriptType.UNKNOWN; //mxd
-			extensions = new[] { "txt" };
+            wordchars = WORD_CHARS; //mxd
+            extensions = new[] { "txt" };
 		}
 		
 		// Constructor
@@ -181,6 +186,7 @@ namespace CodeImp.DoomBuilder.Config
             argumentdelimiter = cfg.ReadSetting("argumentdelimiter", "");
 			terminator = cfg.ReadSetting("terminator", "");
 			scripttype = (ScriptType)cfg.ReadSetting("scripttype", (int)ScriptType.UNKNOWN); //mxd
+            wordchars = WORD_CHARS + cfg.ReadSetting("extrawordchars", ""); //mxd
 
             //mxd. Make braces array
             if (!string.IsNullOrEmpty(functionopen)) braces.Add(functionopen[0]);

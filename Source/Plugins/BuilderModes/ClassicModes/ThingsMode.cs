@@ -596,47 +596,58 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 					// Start dragging the selection
 					if(!BuilderPlug.Me.DontMoveGeometryOutsideMapBoundary || CanDrag()) //mxd
-					{ 
-						// Shift pressed? Clone things!
-						if(General.Interface.ShiftState) 
-						{
-							ICollection<Thing> selection = General.Map.Map.GetSelectedThings(true);
-							foreach(Thing t in selection) 
-							{
-								Thing clone = InsertThing(t.Position);
-								t.CopyPropertiesTo(clone);
+					{
+                        // Shift pressed? Clone things!
+                        bool thingscloned = false;
+                        if (General.Interface.ShiftState)
+                        {
+                            ICollection<Thing> selection = General.Map.Map.GetSelectedThings(true);
+                            if (selection.Count > 0)
+                            {
+                                // Make undo
+                                General.Map.UndoRedo.CreateUndo((selection.Count == 1 ? "Clone-drag thing" : "Clone-drag " + selection.Count + " things"));
 
-								// If the cloned item is an interpolation point or patrol point, then insert the point in the path
-								ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
-								int nextpointtagargnum = -1;
+                                // Clone things
+                                foreach (Thing t in selection)
+                                {
+                                    Thing clone = InsertThing(t.Position);
+                                    t.CopyPropertiesTo(clone);
 
-								// Thing type can be changed in MAPINFO DoomEdNums block...
-								switch(info.ClassName.ToLowerInvariant())
-								{
-									case "interpolationpoint":
-										nextpointtagargnum = 3;
-										break;
+                                    // If the cloned item is an interpolation point or patrol point, then insert the point in the path
+                                    ThingTypeInfo info = General.Map.Data.GetThingInfo(t.SRB2Type);
+                                    int nextpointtagargnum = -1;
 
-									case "patrolpoint":
-										nextpointtagargnum = 0;
-										break;
-								}
+                                    // Thing type can be changed in MAPINFO DoomEdNums block...
+                                    switch (info.ClassName.ToLowerInvariant())
+                                    {
+                                        case "interpolationpoint":
+                                            nextpointtagargnum = 3;
+                                            break;
 
-								// Apply changes?
-								if(nextpointtagargnum != -1)
-								{
-									if(t.Tag == 0) t.Tag = General.Map.Map.GetNewTag();
-									t.Args[nextpointtagargnum] = clone.Tag = General.Map.Map.GetNewTag();
-								}
+                                        case "patrolpoint":
+                                            nextpointtagargnum = 0;
+                                            break;
+                                    }
 
-								t.Selected = false;
-								clone.Selected = true;
-							}
-						}
+                                    // Apply changes?
+                                    if (nextpointtagargnum != -1)
+                                    {
+                                        if (t.Tag == 0) t.Tag = General.Map.Map.GetNewTag();
+                                        t.Args[nextpointtagargnum] = clone.Tag = General.Map.Map.GetNewTag();
+                                    }
 
-						General.Editing.ChangeMode(new DragThingsMode(new ThingsMode(), mousedownmappos));
-					}
-				}
+                                    t.Selected = false;
+                                    clone.Selected = true;
+                                }
+
+                                // We'll want to skip creating additional Undo in DragThingsMode
+                                thingscloned = true;
+                            }
+                        }
+
+                        General.Editing.ChangeMode(new DragThingsMode(new ThingsMode(), mousedownmappos, !thingscloned));
+                    }
+                }
 			}
 		}
 

@@ -54,7 +54,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private readonly Vector2D dragstartmappos;
 
 		//mxd. Offset from nearest grid intersection to dragstartmappos
-		private Vector2D dragstartoffset;
+		private readonly Vector2D dragstartoffset;
 
 		// Item used as reference for snapping to the grid
 		private readonly Thing dragitem;
@@ -63,8 +63,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		// List of old thing positions
 		private readonly List<Vector2D> oldpositions;
 
-		//mxd
-		private class AlignData
+        //mxd
+        private bool makeundo;
+
+        //mxd
+        private class AlignData
 		{
 			public readonly int InitialAngle;
 			public int CurrentAngle;
@@ -105,19 +108,20 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 		// Just keep the base mode button checked
 		public override string EditModeButtonName { get { return basemode.GetType().Name; } }
-		
-		#endregion
 
-		#region ================== Constructor / Disposer
+        #endregion
 
-		// Constructor to start dragging immediately
-		public DragThingsMode(EditMode basemode, Vector2D dragstartmappos)
-		{
+        #region ================== Constructor / Disposer
+
+        // Constructor to start dragging immediately
+        public DragThingsMode(EditMode basemode, Vector2D dragstartmappos, bool makeundo)
+        {
 			// Initialize
 			this.dragstartmappos = dragstartmappos;
 			this.basemode = basemode;
+            this.makeundo = makeundo; //mxd
 
-			Cursor.Current = Cursors.AppStarting;
+            Cursor.Current = Cursors.AppStarting;
 
 			// Mark what we are dragging
 			General.Map.Map.ClearAllMarks(false);
@@ -371,11 +375,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					dragitem.Move(dragitem.Position.x, dragitem.Position.y, aligndata.InitialHeight);
 				}
 
-				// Make undo for the dragging
-				General.Map.UndoRedo.CreateUndo((selectedthings.Count == 1 ? "Drag thing" : "Drag " + selectedthings.Count + " things"));
+                if (makeundo) //mxd
+                    General.Map.UndoRedo.CreateUndo((selectedthings.Count == 1 ? "Drag thing" : "Drag " + selectedthings.Count + " things"));
 
-				// Move selected geometry to final position
-				if(aligndata != null && aligndata.Active) //mxd. Apply aligning
+                // Move selected geometry to final position
+                if (aligndata != null && aligndata.Active) //mxd. Apply aligning
 				{
 					if(!aligndata.Position.IsEmpty) 
 						dragitem.Move(aligndata.Position.X, aligndata.Position.Y, aligndata.CurrentHeight);

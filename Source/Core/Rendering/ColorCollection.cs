@@ -37,7 +37,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		private const float DARK_ADDITION = -0.2f;
 
 		// Palette size
-		private const int NUM_COLORS = 59;
+		private const int NUM_COLORS = 60;
 		public const int NUM_THING_COLORS = 20;
 		public const int THING_COLORS_OFFSET = 20;
 
@@ -101,6 +101,7 @@ namespace CodeImp.DoomBuilder.Rendering
         public const int INCLUDES = 56;
         public const int SCRIPTFOLDFORE = 57;
         public const int SCRIPTFOLDBACK = 58;
+        public const int PROPERTIES = 59;
         #endregion
 
         #region ================== Variables
@@ -150,7 +151,8 @@ namespace CodeImp.DoomBuilder.Rendering
         public PixelColor PlainText { get { return colors[PLAINTEXT]; } internal set { colors[PLAINTEXT] = value; } }
 		public PixelColor Comments { get { return colors[COMMENTS]; } internal set { colors[COMMENTS] = value; } }
 		public PixelColor Keywords { get { return colors[KEYWORDS]; } internal set { colors[KEYWORDS] = value; } }
-		public PixelColor Literals { get { return colors[LITERALS]; } internal set { colors[LITERALS] = value; } }
+        public PixelColor Properties { get { return colors[PROPERTIES]; } internal set { colors[PROPERTIES] = value; } }
+        public PixelColor Literals { get { return colors[LITERALS]; } internal set { colors[LITERALS] = value; } }
 		public PixelColor Constants { get { return colors[CONSTANTS]; } internal set { colors[CONSTANTS] = value; } }
         public PixelColor Strings { get { return colors[STRINGS]; } internal set { colors[STRINGS] = value; } } //mxd
         public PixelColor Includes { get { return colors[INCLUDES]; } internal set { colors[INCLUDES] = value; } } //mxd

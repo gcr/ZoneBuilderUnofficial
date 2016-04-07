@@ -1112,6 +1112,13 @@ namespace CodeImp.DoomBuilder.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+		
+		internal static System.Drawing.Bitmap ScriptProperty {
+            get {
+                object obj = ResourceManager.GetObject("ScriptProperty", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }     
 
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Byte[].

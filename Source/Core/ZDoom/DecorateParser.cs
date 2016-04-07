@@ -48,16 +48,19 @@ namespace CodeImp.DoomBuilder.ZDoom
 		private Dictionary<string, ActorStructure> archivedactors;
 
 		//mxd. Includes tracking
-		private readonly HashSet<string> parsedlumps; 
-		
-		#endregion
-		
-		#region ================== Properties
-		
-		/// <summary>
-		/// All actors that are supported by the current game.
-		/// </summary>
-		public ICollection<ActorStructure> Actors { get { return actors.Values; } }
+		private readonly HashSet<string> parsedlumps;
+
+        //mxd. Disposing. Is that really needed?..
+        private bool isdisposed;
+
+        #endregion
+
+        #region ================== Properties
+
+        /// <summary>
+        /// All actors that are supported by the current game.
+        /// </summary>
+        public IEnumerable<ActorStructure> Actors { get { return actors.Values; } }
 
 		/// <summary>
 		/// All actors defined in the loaded DECORATE structures. This includes actors not supported in the current game.
@@ -90,11 +93,11 @@ namespace CodeImp.DoomBuilder.ZDoom
             archivedactors = new Dictionary<string, ActorStructure>(StringComparer.OrdinalIgnoreCase);
             parsedlumps = new HashSet<string>(StringComparer.OrdinalIgnoreCase); //mxd
 		}
-		
-		// Disposer
-		override public void Dispose()
-		{
-            // Not already disposed?
+
+        // Disposer
+        public void Dispose()
+        {
+            //mxd. Not already disposed?
             if (!isdisposed)
             {
                 foreach (KeyValuePair<string, ActorStructure> a in archivedactors)
@@ -103,17 +106,17 @@ namespace CodeImp.DoomBuilder.ZDoom
                 actors = null;
                 archivedactors = null;
 
-                base.Dispose();
+                isdisposed = true;
             }
         }
-		
-		#endregion
 
-		#region ================== Parsing
+        #endregion
 
-		// This parses the given decorate stream
-		// Returns false on errors
-		public override bool Parse(Stream stream, string sourcefilename, bool clearerrors)
+        #region ================== Parsing
+
+        // This parses the given decorate stream
+        // Returns false on errors
+        public override bool Parse(Stream stream, string sourcefilename, bool clearerrors)
 		{
 			if(!base.Parse(stream, sourcefilename, clearerrors)) return false;
 			

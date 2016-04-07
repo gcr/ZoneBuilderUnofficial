@@ -71,6 +71,7 @@ namespace CodeImp.DoomBuilder.Controls
                     editor.ClearUndoRedo();
                     UpdateNavigator();
                 }
+                stream.Dispose();
             }
             file.Dispose();
 

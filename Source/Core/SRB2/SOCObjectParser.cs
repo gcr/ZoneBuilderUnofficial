@@ -57,17 +57,13 @@ namespace CodeImp.DoomBuilder.SRB2
         }
 
         // Disposer
-        override public void Dispose()
+        public void Dispose()
         {
-            // Not already disposed?
-            if (!isdisposed)
-            {
-                objects = null;
-                /*states = null;
-                objectfreeslots = null;
-                statefreeslots = null;
-                spritefreeslots = null;*/
-            }
+            objects = null;
+            /*states = null;
+            objectfreeslots = null;
+            statefreeslots = null;
+            spritefreeslots = null;*/
         }
 
         #endregion

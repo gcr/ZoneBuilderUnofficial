@@ -338,8 +338,6 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-
-            parser.Dispose();
         }
 
 		//mxd
@@ -358,8 +356,6 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-
-            parser.Dispose();
         }
 
 		//mxd
@@ -380,8 +376,6 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-
-            parser.Dispose();
         }
 		
 		//mxd
@@ -399,7 +393,6 @@ namespace CodeImp.DoomBuilder.Controls
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
 
-            parser.Dispose();
             return ScriptType.UNKNOWN;
 		}
 

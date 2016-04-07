@@ -28,7 +28,7 @@ using CodeImp.DoomBuilder.Data;
 
 namespace CodeImp.DoomBuilder.ZDoom
 {
-	public abstract class ZDTextParser : IDisposable
+	public abstract class ZDTextParser
 	{
 		#region ================== Constants
 
@@ -56,9 +56,6 @@ namespace CodeImp.DoomBuilder.ZDoom
         protected string errorsource;
 		protected long prevstreamposition; //mxd. Text stream position storted before performing ReadToken.
 
-        //mxd. Disposing
-        protected bool isdisposed;
-
         #endregion
 
         #region ================== Properties
@@ -80,23 +77,6 @@ namespace CodeImp.DoomBuilder.ZDoom
 			// Initialize
 			errordesc = null;
 		}
-
-        //mxd
-        public virtual void Dispose()
-        {
-            // Not already disposed?
-            if (!isdisposed)
-            {
-                if (datareader != null) datareader.Close();
-                if (datastream != null)
-                {
-                    datastream.Dispose();
-                    datastream = null;
-                }
-
-                isdisposed = true;
-            }
-        }
 
         #endregion
 

@@ -1105,10 +1105,10 @@ namespace CodeImp.DoomBuilder.StairSectorBuilderMode
 			si.ceilingheight = primary.Sector.CeilHeight;
 			si.floorheight = primary.Sector.FloorHeight;
 
-			if(stairsectorbuilderform.UpperTextureTexture == "")
+			if(String.IsNullOrEmpty(stairsectorbuilderform.UpperTextureTexture))
 				stairsectorbuilderform.UpperTextureTexture = (secondary == null) ? primary.MiddleTexture : primary.HighTexture;
 
-			if(stairsectorbuilderform.LowerTextureTexture == "")
+			if(String.IsNullOrEmpty(stairsectorbuilderform.LowerTextureTexture))
 				stairsectorbuilderform.LowerTextureTexture = (secondary == null) ? primary.MiddleTexture : primary.LowTexture;
 
 			siout = si;

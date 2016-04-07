@@ -139,7 +139,7 @@ namespace CodeImp.DoomBuilder.Controls
                     tabs.TabPages.Add(t);
                 }
             }
-            if (General.Map.FilePathName != "")
+            if (!String.IsNullOrEmpty(General.Map.FilePathName))
             {
                 WAD file = new WAD(General.Map.FilePathName);
                 List<Lump> lumps = file.Lumps;
@@ -630,7 +630,7 @@ namespace CodeImp.DoomBuilder.Controls
                 foreach (string ext in cfg.Extensions)
                 {
                     // Use this configuration if the extension matches
-                    if (filename.EndsWith("." + ext, true, CultureInfo.InvariantCulture))
+                    if (filename.EndsWith("." + ext, StringComparison.OrdinalIgnoreCase))
                     {
                         foundconfig = cfg;
                         break;

@@ -382,9 +382,9 @@ namespace CodeImp.DoomBuilder.Controls
 						fieldslist.CurrentCell = fieldslist.SelectedRows[0].Cells[0];
 						fieldslist.CurrentCell.ReadOnly = false;
 
-						if((e.RowIndex == fieldslist.NewRowIndex) ||
-						   frow.Name.StartsWith(FIELD_PREFIX_SUGGESTION, true, CultureInfo.InvariantCulture))
-							fieldslist.BeginEdit(false);
+						if((e.RowIndex == fieldslist.NewRowIndex) || 
+                            frow.Name.StartsWith(FIELD_PREFIX_SUGGESTION, StringComparison.OrdinalIgnoreCase))
+                            fieldslist.BeginEdit(false);
 						else
 							fieldslist.BeginEdit(true);
 					}
@@ -468,12 +468,13 @@ namespace CodeImp.DoomBuilder.Controls
 						// Select the value of this field (for DropDownList style combo)
 						foreach(EnumItem i in enumscombo.Items)
 						{
-							// Matches?
-							if(string.Compare(i.Title, frow.TypeHandler.GetStringValue(), true, CultureInfo.InvariantCulture) == 0)
-							{
+                            // Matches?
+                            if (string.Compare(i.Title, frow.TypeHandler.GetStringValue(), StringComparison.OrdinalIgnoreCase) == 0)
+                            {
 								// Select this item
 								enumscombo.SelectedItem = i;
-							}
+                                break; //mxd
+                            }
 						}
 
 						// Put the display text in the text (for DropDown style combo)

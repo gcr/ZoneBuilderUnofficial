@@ -16,6 +16,7 @@
 
 #region ================== Namespaces
 
+using System;
 using System.Collections.Generic;
 using CodeImp.DoomBuilder.Geometry;
 using System.IO;
@@ -24,7 +25,7 @@ using System.IO;
 
 namespace CodeImp.DoomBuilder.IO
 {
-	internal sealed class DeserializerStream : IReadWriteStream
+	internal sealed class DeserializerStream : IReadWriteStream, IDisposable
 	{
 		#region ================== Constants
 
@@ -33,15 +34,16 @@ namespace CodeImp.DoomBuilder.IO
 		#region ================== Variables
 
 		private Stream stream;
-		private BinaryReader reader;
+		private readonly BinaryReader reader;
 		private string[] stringstable;
 		private int stringtablepos;
+        private bool isdisposed; //mxd
 
-		#endregion
+        #endregion
 
-		#region ================== Properties
+        #region ================== Properties
 
-		public bool IsWriting { get { return false; } }
+        public bool IsWriting { get { return false; } }
 
 		public int EndPosition { get { return stringtablepos; } }
 
@@ -57,12 +59,29 @@ namespace CodeImp.DoomBuilder.IO
 			this.reader = new BinaryReader(stream);
 		}
 
-		#endregion
+        //mxd
+        public void Dispose()
+        {
+            // Not already disposed?
+            if (!isdisposed)
+            {
+                if (reader != null) reader.Close();
+                if (stream != null)
+                {
+                    stream.Dispose();
+                    stream = null;
+                }
 
-		#region ================== Methods
+                isdisposed = true;
+            }
+        }
 
-		// Management
-		public void Begin()
+        #endregion
+
+        #region ================== Methods
+
+        // Management
+        public void Begin()
 		{
 			// First 4 bytes are reserved for the offset of the strings table
 			stringtablepos = reader.ReadInt32();

@@ -185,8 +185,8 @@ namespace CodeImp.DoomBuilder.Windows
 
 				// Level name changed and the map exists in a source wad?
 				if((levelname.Text != options.CurrentName) && (General.Map != null) &&
-				   (General.Map.FilePathName != "") && File.Exists(General.Map.FilePathName))
-				{
+                   (!string.IsNullOrEmpty(General.Map.FilePathName)) && File.Exists(General.Map.FilePathName))
+                {
 					// Open the source wad file to check for conflicting name
 					WAD sourcewad = new WAD(General.Map.FilePathName, true);
 					bool conflictingname = (sourcewad.FindLumpIndex(levelname.Text) > -1);
@@ -213,7 +213,7 @@ namespace CodeImp.DoomBuilder.Windows
 				// we have to warn the user that the map may not be compatible.
 				
 				// Configuration changed?
-				if((options.ConfigFile != "") && (configinfo.Filename != options.ConfigFile))
+				if((!String.IsNullOrEmpty(options.ConfigFile)) && (configinfo.Filename != options.ConfigFile))
 				{
 					// Check if the config uses a different IO interface
 					if(configinfo.Configuration.ReadSetting("formatinterface", "") != General.Map.Config.FormatInterface)

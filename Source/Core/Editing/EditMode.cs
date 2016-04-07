@@ -78,12 +78,13 @@ namespace CodeImp.DoomBuilder.Editing
 			object[] attrs = this.GetType().GetCustomAttributes(true);
 			foreach(object a in attrs)
 			{
-				if(a is EditModeAttribute)
-				{
-					attributes = (EditModeAttribute)a;
-					break;
-				}
-			}
+                EditModeAttribute attribute = a as EditModeAttribute;
+                if (attribute != null)
+                {
+                    attributes = attribute;
+                    break;
+                }
+            }
 
 			// No attributes found?
 			if(attributes == null) throw new Exception("Editing mode \"" + this.GetType().Name + "\" is missing EditMode attributes!");

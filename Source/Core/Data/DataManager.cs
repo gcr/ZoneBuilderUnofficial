@@ -1855,7 +1855,7 @@ namespace CodeImp.DoomBuilder.Data
 				//mxd. DECORATE lumps are interdepandable. Can't carry on...
 				if(parser.HasError)
 				{
-					decorate.LogError();
+					parser.LogError();
 					return;
 				}
 			}
@@ -2011,8 +2011,9 @@ namespace CodeImp.DoomBuilder.Data
 			}
 
 			currentreader = null;
+            parser.Dispose();
 
-			foreach(KeyValuePair<string, ModelData> e in modeldefentriesbyname) 
+            foreach (KeyValuePair<string, ModelData> e in modeldefentriesbyname) 
 			{
 				if(actorsbyclass.ContainsKey(e.Key))
 					modeldefentries[actorsbyclass[e.Key]] = modeldefentriesbyname[e.Key];
@@ -2098,9 +2099,10 @@ namespace CodeImp.DoomBuilder.Data
 			}
 
 			currentreader = null;
+            parser.Dispose();
 
-			//get voxel models
-			foreach(KeyValuePair<string, bool> group in voxelNames) 
+            //get voxel models
+            foreach (KeyValuePair<string, bool> group in voxelNames) 
 			{
 				if(processed.ContainsKey(group.Key)) continue;
 				foreach(KeyValuePair<string, List<int>> sc in sprites) 
@@ -2160,6 +2162,8 @@ namespace CodeImp.DoomBuilder.Data
 
             // And skyboxes
             skyboxes = parser.Skyboxes;
+
+            parser.Dispose();
         }
 
         //mxd. This updates mapinfo class only
@@ -2207,6 +2211,7 @@ namespace CodeImp.DoomBuilder.Data
 
                 spawnnums = new Dictionary<int, string>();
                 doomednums = new Dictionary<int, string>();
+                parser.Dispose();
             }
             else
             {
@@ -2246,6 +2251,7 @@ namespace CodeImp.DoomBuilder.Data
                     doomednums = new Dictionary<int, string>();
                     mapinfo = new MapInfo();
                 }
+                parser.Dispose();
             }
             currentreader = null;
         }
@@ -2281,7 +2287,8 @@ namespace CodeImp.DoomBuilder.Data
 
 			currentreader = null;
 			reverbs = parser.GetReverbs();
-		}
+            parser.Dispose();
+        }
 
 		//mxd. This loads SNDSEQ
 		private void LoadSndSeq()
@@ -2309,7 +2316,8 @@ namespace CodeImp.DoomBuilder.Data
 
 			currentreader = null;
 			soundsequences = parser.GetSoundSequences();
-		}
+            parser.Dispose();
+        }
 
 		//mxd. This loads cameratextures from ANIMDEFS
 		private void LoadAnimdefs()
@@ -2376,7 +2384,8 @@ namespace CodeImp.DoomBuilder.Data
 			}
 
 			currentreader = null;
-		}
+            parser.Dispose();
+        }
 
 		//mxd
 		internal Stream LoadFile(string name) 

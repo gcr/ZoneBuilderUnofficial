@@ -279,12 +279,12 @@ namespace CodeImp.DoomBuilder
 		{
 			Cursor oldcursor = Cursor.Current;
 
-			// Check if configuration is OK
-			if(General.Map.ConfigSettings.TestProgram == "" || !File.Exists(General.Map.ConfigSettings.TestProgram))
-			{
+            // Check if configuration is OK
+            if (string.IsNullOrEmpty(General.Map.ConfigSettings.TestProgram) || !File.Exists(General.Map.ConfigSettings.TestProgram))
+            {
 				//mxd. Let's be more precise
 				string message;
-				if(General.Map.ConfigSettings.TestProgram == "")
+				if(String.IsNullOrEmpty(General.Map.ConfigSettings.TestProgram))
 					message = "Your test program is not set for the current game configuration";
 				else
 					message = "Current test program has invalid path";

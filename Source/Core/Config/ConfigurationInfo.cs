@@ -236,7 +236,8 @@ namespace CodeImp.DoomBuilder.Config
 		~ConfigurationInfo()
 		{
 			foreach(ThingsFilter tf in thingsfilters) tf.Dispose();
-		}
+            foreach(EngineInfo ei in testEngines) ei.Dispose();
+        }
 		
 		#endregion
 

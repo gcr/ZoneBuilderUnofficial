@@ -410,7 +410,9 @@ namespace CodeImp.DoomBuilder.Data
 				ImageData img = t.MakeImage();
 				images.Add(img);
 			}
-		}
+
+            parser.Dispose();
+        }
 		
 		// This loads a set of textures
 		public static void LoadTextureSet(string sourcename, Stream texturedata, ref List<ImageData> images, PatchNames pnames)
@@ -640,7 +642,9 @@ namespace CodeImp.DoomBuilder.Data
 				ImageData img = t.MakeImage();
 				images.Add(img);
 			}
-		}
+
+            parser.Dispose();
+        }
 		
 		// This finds and returns a patch stream
 		public override Stream GetFlatData(string pname, bool longname)
@@ -702,7 +706,9 @@ namespace CodeImp.DoomBuilder.Data
 				ImageData img = t.MakeImage();
 				images.Add(img);
 			}
-		}
+
+            parser.Dispose();
+        }
 		
 		// This finds and returns a sprite stream
 		public override Stream GetSpriteData(string pname)

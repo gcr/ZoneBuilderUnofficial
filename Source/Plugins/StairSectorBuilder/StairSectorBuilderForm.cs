@@ -374,7 +374,7 @@ namespace CodeImp.DoomBuilder.StairSectorBuilderMode
 
 		private void numberofsectors_WhenTextChanged(object sender, EventArgs e)
 		{
-			if(numberofsectors.Text == "" || numberofsectors.GetResult(1) == 0) numberofsectors.Text = "1";
+			if(String.IsNullOrEmpty(numberofsectors.Text) || numberofsectors.GetResult(1) == 0) numberofsectors.Text = "1";
 			ComputeHeights();
 			DoRedrawDisplay();
 		}
@@ -635,7 +635,7 @@ namespace CodeImp.DoomBuilder.StairSectorBuilderMode
             int overwrite = -1;
 
             // Prefab name may not be empty
-            if(name == "")
+            if(String.IsNullOrEmpty(name))
             {
                 MessageBox.Show(this.Owner, "Please enter a name for the prefab", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

@@ -188,7 +188,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
             bsp = new BSP(BuilderPlug.Me.DontUseNodes);
             useblockmap = bsp.IsDeactivated;
-            if (useblockmap && bsp.ErrorMessage != "")
+            if (useblockmap && !String.IsNullOrEmpty(bsp.ErrorMessage))
                 MessageBox.Show("Could not load the map's nodes: " + bsp.ErrorMessage + " Defaulting to blockmap.", "Error loading nodes!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             // We have no destructor
@@ -787,7 +787,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			sectordata = new Dictionary<Sector, SectorData>(General.Map.Map.Sectors.Count);
 			thingdata = new Dictionary<Thing, ThingData>(General.Map.Map.Things.Count);
 
-            if (bsp.IsDeactivated && bsp.ErrorMessage != "")
+            if (bsp.IsDeactivated && !String.IsNullOrEmpty(bsp.ErrorMessage))
                 MessageBox.Show("Could not load the map's nodes: " + bsp.ErrorMessage + " Defaulting to blockmap.", "Error loading nodes!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
 

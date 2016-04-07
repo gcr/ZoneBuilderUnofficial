@@ -338,7 +338,9 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-		}
+
+            parser.Dispose();
+        }
 
 		//mxd
 		private void UpdateNavigatorModeldef(MemoryStream stream) 
@@ -356,7 +358,9 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-		}
+
+            parser.Dispose();
+        }
 
 		//mxd
 		private void UpdateNavigatorAcs(MemoryStream stream) 
@@ -376,7 +380,9 @@ namespace CodeImp.DoomBuilder.Controls
 			{
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
-		}
+
+            parser.Dispose();
+        }
 		
 		//mxd
 		internal ScriptType VerifyScriptType() 
@@ -393,7 +399,8 @@ namespace CodeImp.DoomBuilder.Controls
 				panel.ShowErrors(new List<CompilerError> { new CompilerError(parser.ErrorDescription, parser.ErrorSource, parser.ErrorLine) });
 			}
 
-			return ScriptType.UNKNOWN;
+            parser.Dispose();
+            return ScriptType.UNKNOWN;
 		}
 
         //mxd

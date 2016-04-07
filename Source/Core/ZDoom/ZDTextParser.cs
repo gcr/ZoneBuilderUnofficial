@@ -28,7 +28,7 @@ using CodeImp.DoomBuilder.Data;
 
 namespace CodeImp.DoomBuilder.ZDoom
 {
-	public abstract class ZDTextParser
+	public abstract class ZDTextParser : IDisposable
 	{
 		#region ================== Constants
 
@@ -55,12 +55,15 @@ namespace CodeImp.DoomBuilder.ZDoom
         protected string errordesc;
         protected string errorsource;
 		protected long prevstreamposition; //mxd. Text stream position storted before performing ReadToken.
-		
-		#endregion
-		
-		#region ================== Properties
-		
-		internal Stream DataStream { get { return datastream; } }
+
+        //mxd. Disposing
+        protected bool isdisposed;
+
+        #endregion
+
+        #region ================== Properties
+
+        internal Stream DataStream { get { return datastream; } }
 		internal BinaryReader DataReader { get { return datareader; } }
 		public int ErrorLine { get { return errorline; } }
 		public string ErrorDescription { get { return errordesc; } }
@@ -77,13 +80,30 @@ namespace CodeImp.DoomBuilder.ZDoom
 			// Initialize
 			errordesc = null;
 		}
-		
-		#endregion
 
-		#region ================== Parsing
+        //mxd
+        public virtual void Dispose()
+        {
+            // Not already disposed?
+            if (!isdisposed)
+            {
+                if (datareader != null) datareader.Close();
+                if (datastream != null)
+                {
+                    datastream.Dispose();
+                    datastream = null;
+                }
 
-		//mxd. This parses the given decorate stream. Returns false on errors
-		public virtual bool Parse(Stream stream, string sourcefilename, bool clearerrors)
+                isdisposed = true;
+            }
+        }
+
+        #endregion
+
+        #region ================== Parsing
+
+        //mxd. This parses the given decorate stream. Returns false on errors
+        public virtual bool Parse(Stream stream, string sourcefilename, bool clearerrors)
 		{
 			//mxd. Clear error status?
 			if(clearerrors) ClearError();
@@ -588,8 +608,8 @@ namespace CodeImp.DoomBuilder.ZDoom
 			{
 				foreach(DataReader reader in General.Map.Data.Containers)
 				{
-					if(reader is DirectoryReader && filename.StartsWith(reader.Location.location, true, CultureInfo.InvariantCulture))
-					{
+                    if (reader is DirectoryReader && filename.StartsWith(reader.Location.location, StringComparison.OrdinalIgnoreCase))
+                    {
 						filename = filename.Substring(reader.Location.location.Length + 1, filename.Length - reader.Location.location.Length - 1);
 						break;
 					}

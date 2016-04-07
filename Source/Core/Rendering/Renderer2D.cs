@@ -161,7 +161,7 @@ namespace CodeImp.DoomBuilder.Rendering
 		}
 
 		// Disposer
-		internal override void Dispose()
+		public override void Dispose()
 		{
 			// Not already disposed?
 			if(!isdisposed)

@@ -92,14 +92,20 @@ namespace CodeImp.DoomBuilder.ZDoom
 		}
 		
 		// Disposer
-		public void Dispose()
+		override public void Dispose()
 		{
-			foreach(KeyValuePair<string, ActorStructure> a in archivedactors)
-				a.Value.Dispose();
-			
-			actors = null;
-			archivedactors = null;
-		}
+            // Not already disposed?
+            if (!isdisposed)
+            {
+                foreach (KeyValuePair<string, ActorStructure> a in archivedactors)
+                    a.Value.Dispose();
+
+                actors = null;
+                archivedactors = null;
+
+                base.Dispose();
+            }
+        }
 		
 		#endregion
 

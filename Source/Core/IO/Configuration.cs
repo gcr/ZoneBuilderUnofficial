@@ -443,10 +443,10 @@ namespace CodeImp.DoomBuilder.IO
 		private bool ValidateKey(string key, string file, int errorline)
 		{
 			bool validateresult;
-			
-			// Check if key is an empty string
-			if(key == "")
-			{
+
+            // Check if key is an empty string
+            if (string.IsNullOrEmpty(key))
+            {
 				// ERROR: Missing key name in statement
 				if(errorline > -1) RaiseError(file, errorline, ERROR_KEYMISSING);
 				validateresult = false;
@@ -498,10 +498,10 @@ namespace CodeImp.DoomBuilder.IO
 		private bool ValidateKeyword(string keyword, string file, int errorline)
 		{
 			bool validateresult;
-			
-			// Check if key is an empty string
-			if(keyword == "")
-			{
+
+            // Check if key is an empty string
+            if (string.IsNullOrEmpty(keyword))
+            {
 				// ERROR: Missing key name in statement
 				if(errorline > -1) RaiseError(file, errorline, ERROR_ASSIGNINVALID);
 				validateresult = false;

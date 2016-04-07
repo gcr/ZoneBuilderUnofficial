@@ -126,8 +126,8 @@ namespace CodeImp.DoomBuilder.Controls
 			// Dispose compiler
 			compiler.Dispose();
 
-			//mxd. Update script navigator
-			UpdateNavigator();
+            //mxd. Update script navigator
+            UpdateNavigator();
 			
 			// Feed errors to panel
 			panel.ShowErrors(errors);
@@ -256,9 +256,10 @@ namespace CodeImp.DoomBuilder.Controls
 
 			// Dispose compiler
 			compiler.Dispose();
+            parser.Dispose();
 
-			// Update script navigator
-			UpdateNavigator();
+            // Update script navigator
+            UpdateNavigator();
 
 			// Feed errors to panel
 			panel.ShowErrors(errors);

@@ -16,16 +16,18 @@
 
 #region ================== Namespaces
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
+using CodeImp.DoomBuilder.Config;
+using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Geometry;
 using CodeImp.DoomBuilder.IO;
-using System.IO;
-using CodeImp.DoomBuilder.Data;
 using CodeImp.DoomBuilder.Plugins;
-using System.Collections.Specialized;
 
 #endregion
 
@@ -40,7 +42,7 @@ namespace CodeImp.DoomBuilder.Map
 		#region ================== Variables
 
 		// Map configuration
-		private Configuration mapconfig;
+		private readonly Configuration mapconfig;
 		
 		// Game configuration
 		private string configfile;
@@ -55,11 +57,12 @@ namespace CodeImp.DoomBuilder.Map
 		// Additional resources
 		private DataLocationList resources;
 
-		// Script files opened
-		private List<string> scriptfiles;
+        //mxd. View settings for opened script files and lumps
+        private Dictionary<string, ScriptDocumentSettings> scriptfilesettings;
+        private Dictionary<string, ScriptDocumentSettings> scriptlumpsettings;
 
-		// mxd. Script compiler
-		private string scriptcompiler;
+        // mxd. Script compiler
+        private string scriptcompiler;
 
 		//mxd. Sector drawing options
 		private string defaultfloortexture;
@@ -85,8 +88,8 @@ namespace CodeImp.DoomBuilder.Map
 		private bool uselongtexturenames;
 
 		//mxd. Position and scale
-		private Vector2D viewposition;
-		private float viewscale;
+		private readonly Vector2D viewposition;
+		private readonly float viewscale;
 		
 		#endregion
 
@@ -95,9 +98,10 @@ namespace CodeImp.DoomBuilder.Map
 		internal string ConfigFile { get { return configfile; } set { configfile = value; } }
 		internal DataLocationList Resources { get { return resources; } }
 		internal bool StrictPatches { get { return strictpatches; } set { strictpatches = value; } }
-		internal List<string> ScriptFiles { get { return scriptfiles; } set { scriptfiles = value; } }
-		internal string ScriptCompiler { get { return scriptcompiler; } set { scriptcompiler = value; } } //mxd
-		internal string PreviousName { get { return previousname; } set { previousname = value; } }
+        internal Dictionary<string, ScriptDocumentSettings> ScriptFileSettings { get { return scriptfilesettings; } } //mxd
+        internal Dictionary<string, ScriptDocumentSettings> ScriptLumpSettings { get { return scriptlumpsettings; } } //mxd
+        internal string ScriptCompiler { get { return scriptcompiler; } set { scriptcompiler = value; } } //mxd
+        internal string PreviousName { get { return previousname; } set { previousname = value; } }
 		internal string CurrentName
 		{
 			get { return currentname; }
@@ -159,9 +163,10 @@ namespace CodeImp.DoomBuilder.Map
 			this.strictpatches = false;
 			this.resources = new DataLocationList();
 			this.mapconfig = new Configuration(true);
-			this.scriptfiles = new List<string>();
-			this.scriptcompiler = ""; //mxd
-			this.tagLabels = new Dictionary<int, string>(); //mxd
+            this.scriptfilesettings = new Dictionary<string, ScriptDocumentSettings>(); //mxd
+            this.scriptlumpsettings = new Dictionary<string, ScriptDocumentSettings>(); //mxd
+            this.scriptcompiler = ""; //mxd
+            this.tagLabels = new Dictionary<int, string>(); //mxd
 			this.viewposition = new Vector2D(float.NaN, float.NaN); //mxd
 			this.viewscale = float.NaN; //mxd
 
@@ -180,8 +185,9 @@ namespace CodeImp.DoomBuilder.Map
 			this.configfile = cfg.ReadSetting("gameconfig", "");
 			this.resources = new DataLocationList();
 			this.mapconfig = new Configuration(true);
-			this.scriptfiles = new List<string>();
-			
+			this.scriptfilesettings = new Dictionary<string, ScriptDocumentSettings>(); //mxd
+			this.scriptlumpsettings = new Dictionary<string, ScriptDocumentSettings>(); //mxd
+            			
 			// Read map configuration
 			this.mapconfig.Root = cfg.ReadSetting("maps." + mapname, new Hashtable());
 
@@ -243,11 +249,11 @@ namespace CodeImp.DoomBuilder.Map
 			IDictionary reslist = this.mapconfig.ReadSetting("resources", new Hashtable());
 			foreach(DictionaryEntry mp in reslist)
 			{
-				// Item is a structure?
-				if(mp.Value is IDictionary)
-				{
+                // Item is a structure?
+                IDictionary resinfo = mp.Value as IDictionary;
+                if (resinfo != null)
+                {
 					// Create resource
-					IDictionary resinfo = (IDictionary)mp.Value;
 					DataLocation res = new DataLocation();
 					
 					// Copy information from Configuration to ResourceLocation
@@ -261,25 +267,48 @@ namespace CodeImp.DoomBuilder.Map
 				}
 			}
 
-			// Scripts
-			IDictionary scplist = this.mapconfig.ReadSetting("scripts", new Hashtable());
-			foreach(DictionaryEntry mp in scplist)
-				scriptfiles.Add(mp.Value.ToString());
-		}
+            //mxd. Script files settings
+            IDictionary sflist = this.mapconfig.ReadSetting("scriptfiles", new Hashtable());
+            foreach (DictionaryEntry mp in sflist)
+            {
+                // Item is a structure?
+                IDictionary scfinfo = mp.Value as IDictionary;
+                if (scfinfo != null)
+                {
+                    ScriptDocumentSettings settings = ReadScriptDocumentSettings(scfinfo);
+                    if (!string.IsNullOrEmpty(settings.Filename)) scriptfilesettings.Add(settings.Filename, settings);
+                }
+            }
 
-		~MapOptions()
-		{
-			// Clean up
-			this.resources = null;
-			this.scriptfiles = null;
-		}
-		
-		#endregion
+            //mxd. Script lumps settings
+            IDictionary sllist = this.mapconfig.ReadSetting("scriptlumps", new Hashtable());
+            foreach (DictionaryEntry mp in sllist)
+            {
+                // Item is a structure?
+                IDictionary sclinfo = mp.Value as IDictionary;
+                if (sclinfo != null)
+                {
+                    ScriptDocumentSettings settings = ReadScriptDocumentSettings(sclinfo);
+                    if (!string.IsNullOrEmpty(settings.Filename)) scriptlumpsettings.Add(settings.Filename, settings);
+                }
+            }
+        }
 
-		#region ================== Methods
+        //mxd. Is that really needed?..
+        ~MapOptions()
+        {
+            // Clean up
+            this.resources = null;
+            this.scriptfilesettings = null; //mxd
+            this.scriptlumpsettings = null; //mxd
+        }
 
-		// This makes the path prefix for the given assembly
-		private static string GetPluginPathPrefix(Assembly asm)
+        #endregion
+
+        #region ================== Methods
+
+        // This makes the path prefix for the given assembly
+        private static string GetPluginPathPrefix(Assembly asm)
 		{
 			Plugin p = General.Plugins.FindPluginByAssembly(asm);
 			return "plugins." + p.Name.ToLowerInvariant() + ".";
@@ -375,13 +404,19 @@ namespace CodeImp.DoomBuilder.Map
 			// Write grid settings
 			General.Map.Grid.WriteToConfig(mapconfig, "grid");
 
-			// Write scripts to config
-			mapconfig.DeleteSetting("scripts");
-			for(int i = 0; i < scriptfiles.Count; i++)
-				mapconfig.WriteSetting("scripts." + "file" + i.ToString(CultureInfo.InvariantCulture), scriptfiles[i]);
+            //mxd. Write script files settings to config
+            mapconfig.DeleteSetting("scriptfiles");
+            foreach (ScriptDocumentSettings settings in scriptfilesettings.Values)
+                WriteScriptDocumentSettings(mapconfig, "scriptfiles.file", settings);
 
-			// Load the file or make a new file
-			if(File.Exists(settingsfile))
+
+            //mxd. Write script lumps settings to config
+            mapconfig.DeleteSetting("scriptlumps");
+            foreach (ScriptDocumentSettings settings in scriptlumpsettings.Values)
+                WriteScriptDocumentSettings(mapconfig, "scriptlumps.lump", settings);
+
+            // Load the file or make a new file
+            if (File.Exists(settingsfile))
 				wadcfg = new Configuration(settingsfile, true);
 			else
 				wadcfg = new Configuration(true);
@@ -397,9 +432,89 @@ namespace CodeImp.DoomBuilder.Map
 			// Save file
 			wadcfg.SaveConfiguration(settingsfile);
 		}
-		
-		// This adds a resource location and returns the index where the item was added
-		internal int AddResource(DataLocation res)
+
+        //mxd
+        private static ScriptDocumentSettings ReadScriptDocumentSettings(IDictionary scfinfo)
+        {
+            ScriptDocumentSettings settings = new ScriptDocumentSettings { FoldLevels = new Dictionary<int, HashSet<int>>() };
+
+            // Copy information from Configuration to ScriptDocumentSaveSettings
+            if (scfinfo.Contains("filename") && (scfinfo["filename"] is string)) settings.Filename = (string)scfinfo["filename"];
+            if (scfinfo.Contains("hash") && (scfinfo["hash"] is long)) settings.Hash = (long)scfinfo["hash"];
+            if (scfinfo.Contains("caretposition") && (scfinfo["caretposition"] is int)) settings.CaretPosition = (int)scfinfo["caretposition"];
+            if (scfinfo.Contains("firstvisibleline") && (scfinfo["firstvisibleline"] is int)) settings.FirstVisibleLine = (int)scfinfo["firstvisibleline"];
+            if (scfinfo.Contains("activetab") && (scfinfo["activetab"] is bool)) settings.IsActiveTab = (bool)scfinfo["activetab"];
+            if (scfinfo.Contains("foldlevels") && (scfinfo["foldlevels"] is string))
+            {
+                // 1:12,13,14;2:21,43,36
+                string foldstr = (string)scfinfo["foldlevels"];
+
+                // Convert string to dictionary
+                if (!string.IsNullOrEmpty(foldstr))
+                {
+                    //TODO: add all kinds of warnings?
+                    string[] foldlevels = foldstr.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string foldlevel in foldlevels)
+                    {
+                        // 1:12,13,14
+                        string[] parts = foldlevel.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (parts.Length != 2) continue;
+
+                        int fold;
+                        if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out fold)) continue;
+                        if (settings.FoldLevels.ContainsKey(fold)) continue;
+
+                        string[] linenumbersstr = parts[1].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (linenumbersstr.Length == 0) continue;
+
+                        HashSet<int> linenumbers = new HashSet<int>();
+                        foreach (string linenumber in linenumbersstr)
+                        {
+                            int linenum;
+                            if (int.TryParse(linenumber, NumberStyles.Integer, CultureInfo.InvariantCulture, out linenum))
+                                linenumbers.Add(linenum);
+                        }
+
+                        if (linenumbers.Count != linenumbersstr.Length) continue;
+
+                        // Add to collection
+                        settings.FoldLevels.Add(fold, new HashSet<int>(linenumbers));
+                    }
+                }
+            }
+
+            return settings;
+        }
+
+        //mxd
+        private static void WriteScriptDocumentSettings(Configuration mapconfig, string prefix, ScriptDocumentSettings settings)
+        {
+            // Store data
+            ListDictionary data = new ListDictionary();
+            data.Add("filename", settings.Filename);
+            data.Add("hash", settings.Hash);
+            if (settings.CaretPosition > 0) data.Add("caretposition", settings.CaretPosition);
+            if (settings.FirstVisibleLine > 0) data.Add("firstvisibleline", settings.FirstVisibleLine);
+            if (settings.IsActiveTab) data.Add("activetab", true);
+
+            // Convert dictionary to string
+            List<string> foldlevels = new List<string>();
+            foreach (KeyValuePair<int, HashSet<int>> group in settings.FoldLevels)
+            {
+                List<string> linenums = new List<string>(group.Value.Count);
+                foreach (int i in group.Value) linenums.Add(i.ToString());
+                foldlevels.Add(group.Key + ":" + string.Join(",", linenums.ToArray()));
+            }
+
+            // Add to collection
+            if (foldlevels.Count > 0) data.Add("foldlevels", string.Join(";", foldlevels.ToArray()));
+
+            // Write to config
+            mapconfig.WriteSetting(prefix, data);
+        }
+
+        // This adds a resource location and returns the index where the item was added
+        internal int AddResource(DataLocation res)
 		{
 			// Get a fully qualified path
 			res.location = Path.GetFullPath(res.location);

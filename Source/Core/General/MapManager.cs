@@ -251,7 +251,7 @@ namespace CodeImp.DoomBuilder
 			
 			// Apply settings
 			this.filetitle = options.CurrentName + ".wad";
-			this.filepathname = "";
+			this.filepathname = String.Empty;
 			this.maploading = true; //mxd
 			this.changed = false;
 			this.options = options;
@@ -956,9 +956,9 @@ namespace CodeImp.DoomBuilder
 						General.ShowErrorMessage("Error renaming map lump name: the original map lump could not be found!", MessageBoxButtons.OK);
 						options.CurrentName = options.PreviousName;
 					}
-					
 				}
-				options.PreviousName = "";
+
+				options.PreviousName = String.Empty;
 			}
 
 			// Done with the target file
@@ -1194,15 +1194,15 @@ namespace CodeImp.DoomBuilder
 					else 
 					{
 						//mxd. collect errors
-						string compilererrors = "";
+						string compilererrors = String.Empty;
 						foreach(CompilerError e in compiler.Errors)
 							compilererrors += Environment.NewLine + e.description;
 
 						// Nodebuilder did not build the lumps!
 						if(failaswarning)
-							General.ShowWarningMessage("Unable to build the nodes: The nodebuilder failed to build the expected data structures.\nThe map will be saved without the nodes." + (compiler.Errors.Length > 0 ? Environment.NewLine + compilererrors : ""), MessageBoxButtons.OK);
+							General.ShowWarningMessage("Unable to build the nodes: The nodebuilder failed to build the expected data structures.\nThe map will be saved without the nodes." + (compiler.Errors.Length > 0 ? Environment.NewLine + compilererrors : String.Empty), MessageBoxButtons.OK);
 						else
-							General.ShowErrorMessage("Unable to build the nodes: The nodebuilder failed to build the expected data structures." + (compiler.Errors.Length > 0 ? Environment.NewLine + compilererrors : ""), MessageBoxButtons.OK);
+							General.ShowErrorMessage("Unable to build the nodes: The nodebuilder failed to build the expected data structures." + (compiler.Errors.Length > 0 ? Environment.NewLine + compilererrors : String.Empty), MessageBoxButtons.OK);
 					}
 
 					// Done with the build wad
@@ -1211,7 +1211,7 @@ namespace CodeImp.DoomBuilder
 				else //mxd
 				{
 					//collect errors
-					string compilererrors = "";
+					string compilererrors = String.Empty;
 					foreach(CompilerError e in compiler.Errors)
 						compilererrors += Environment.NewLine + e.description;
 
@@ -2081,7 +2081,7 @@ namespace CodeImp.DoomBuilder
 				//INFO: also, error.linenumber is zero-based
 				foreach(CompilerError error in compilererrors)
 				{
-					General.ErrorLogger.Add(ErrorType.Error, "ACS error in '" + (error.filename.StartsWith("?") ? error.filename.Replace("?", "") : error.filename)
+					General.ErrorLogger.Add(ErrorType.Error, "ACS error in '" + (error.filename.StartsWith("?") ? error.filename.Replace("?", String.Empty) : error.filename)
 						+ (error.linenumber != CompilerError.NO_LINE_NUMBER ? "', line " + (error.linenumber + 1) : "'") 
 						+ ". " + error.description + ".");
 				}

@@ -33,7 +33,8 @@ namespace CodeImp.DoomBuilder.Data
 		// Members
 		public int type;
 		public string location;
-		public bool option1;
+        private string name; //mxd
+        public bool option1;
 		public bool option2;
 		public bool notfortesting;
 		
@@ -46,7 +47,8 @@ namespace CodeImp.DoomBuilder.Data
 			this.option1 = option1;
 			this.option2 = option2;
 			this.notfortesting = notfortesting;
-		}
+            this.name = string.Empty; //mxd
+        }
 
 		// This displays the struct as string
 		public override string ToString()
@@ -55,8 +57,33 @@ namespace CodeImp.DoomBuilder.Data
 			return location;
 		}
 
-		// This compares two locations
-		public int CompareTo(DataLocation other)
+        //mxd. This returns short location name
+        public string GetShortName()
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                // Make shorter name for display purposes
+                switch (type)
+                {
+                    case RESOURCE_DIRECTORY:
+                        name = location.Substring(location.LastIndexOf(Path.DirectorySeparatorChar) + 1);
+                        break;
+
+                    case RESOURCE_WAD:
+                    case RESOURCE_PK3:
+                        name = Path.GetFileName(location);
+                        break;
+
+                    default:
+                        throw new NotImplementedException("Unknown location type: " + type);
+                }
+            }
+
+            return name;
+        }
+
+        // This compares two locations
+        public int CompareTo(DataLocation other)
 		{
 			return string.Compare(this.location, other.location, true);
 		}
@@ -88,8 +115,8 @@ namespace CodeImp.DoomBuilder.Data
 					break;
 
 				default:
-					throw new NotImplementedException("ResourceListEditor.FixedResourceLocationList: got unknown location type: " + type);
-			}
+                    throw new NotImplementedException("Unknown location type: " + type);
+            }
 
 			return true;
 		}

@@ -200,8 +200,8 @@ namespace CodeImp.DoomBuilder.Data
 							if(General.Map.Config.MixTexturesFlats)
 							{
 								ImageData img = General.Map.Data.GetTextureImage(p.lumpname);
-								if(!(img is UnknownImage))
-								{
+                                if (!(img is UnknownImage) && img != this)
+                                {
 									if(!img.IsImageLoaded) img.LoadImage();
 
 									//mxd. Apply transformations from TexturePatch. We don't want to modify the original bitmap here, so make a copy

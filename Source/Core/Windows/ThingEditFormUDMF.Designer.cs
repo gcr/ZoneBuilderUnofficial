@@ -91,7 +91,8 @@
 			this.tabcomment = new System.Windows.Forms.TabPage();
 			this.commenteditor = new CodeImp.DoomBuilder.Controls.CommentEditor();
 			this.tabcustom = new System.Windows.Forms.TabPage();
-			this.fieldslist = new CodeImp.DoomBuilder.Controls.FieldsEditorControl();
+            this.hidefixedfields = new System.Windows.Forms.CheckBox();
+            this.fieldslist = new CodeImp.DoomBuilder.Controls.FieldsEditorControl();
 			this.cancel = new System.Windows.Forms.Button();
 			this.apply = new System.Windows.Forms.Button();
 			this.hint = new System.Windows.Forms.PictureBox();
@@ -878,10 +879,11 @@
 			this.commenteditor.Name = "commenteditor";
 			this.commenteditor.Size = new System.Drawing.Size(621, 396);
 			this.commenteditor.TabIndex = 0;
-			// 
-			// tabcustom
-			// 
-			this.tabcustom.Controls.Add(this.fieldslist);
+            // 
+            // tabcustom
+            // 
+            this.tabcustom.Controls.Add(this.hidefixedfields);
+            this.tabcustom.Controls.Add(this.fieldslist);
 			this.tabcustom.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tabcustom.Location = new System.Drawing.Point(4, 22);
 			this.tabcustom.Name = "tabcustom";
@@ -890,10 +892,21 @@
 			this.tabcustom.Text = "Custom";
 			this.tabcustom.UseVisualStyleBackColor = true;
 			this.tabcustom.MouseEnter += new System.EventHandler(this.tabcustom_MouseEnter);
-			// 
-			// fieldslist
-			// 
-			this.fieldslist.AllowInsert = true;
+            //
+            // hidefixedfields
+            // 
+            this.hidefixedfields.AutoSize = true;
+            this.hidefixedfields.Location = new System.Drawing.Point(10, 381);
+            this.hidefixedfields.Name = "hidefixedfields";
+            this.hidefixedfields.Size = new System.Drawing.Size(195, 17);
+            this.hidefixedfields.TabIndex = 2;
+            this.hidefixedfields.Text = "Show user-added custom fields only";
+            this.hidefixedfields.UseVisualStyleBackColor = true;
+            this.hidefixedfields.CheckedChanged += new System.EventHandler(this.hidefixedfields_CheckedChanged);
+            //  
+            // fieldslist
+            // 
+            this.fieldslist.AllowInsert = true;
 			this.fieldslist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
@@ -904,8 +917,9 @@
 			this.fieldslist.Name = "fieldslist";
 			this.fieldslist.PropertyColumnVisible = true;
 			this.fieldslist.PropertyColumnWidth = 150;
-			this.fieldslist.Size = new System.Drawing.Size(611, 389);
-			this.fieldslist.TabIndex = 1;
+            this.fieldslist.ShowFixedFields = true;
+            this.fieldslist.Size = new System.Drawing.Size(611, 368);
+            this.fieldslist.TabIndex = 1;
 			this.fieldslist.TypeColumnVisible = true;
 			this.fieldslist.TypeColumnWidth = 100;
 			this.fieldslist.ValueColumnVisible = true;
@@ -1006,7 +1020,8 @@
 			this.grouptag.ResumeLayout(false);
 			this.tabcomment.ResumeLayout(false);
 			this.tabcustom.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.hint)).EndInit();
+            this.tabcustom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.hint)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1082,5 +1097,6 @@
 		private CodeImp.DoomBuilder.Controls.ArgumentsControl argscontrol;
 		private CodeImp.DoomBuilder.Controls.ButtonsNumericTextbox floatbobphase;
 		private System.Windows.Forms.Label label1;
-	}
+        private System.Windows.Forms.CheckBox hidefixedfields;
+    }
 }

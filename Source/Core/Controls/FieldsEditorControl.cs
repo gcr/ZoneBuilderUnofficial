@@ -61,25 +61,27 @@ namespace CodeImp.DoomBuilder.Controls
 		private string lasteditfieldname;
 		private bool autoinsertuserprefix;
 		private Dictionary<string, UniversalType> uifields;//mxd
-		
-		#endregion
+        private bool showfixedfields = true; //mxd
 
-		#region ================== Properties
+        #endregion
 
-		public bool AllowInsert { get { return fieldslist.AllowUserToAddRows; } set { fieldslist.AllowUserToAddRows = value; SetupNewRowStyle(); } }
+        #region ================== Properties
+
+        public bool AllowInsert { get { return fieldslist.AllowUserToAddRows; } set { fieldslist.AllowUserToAddRows = value; SetupNewRowStyle(); } }
 		public bool AutoInsertUserPrefix { get { return autoinsertuserprefix; } set { autoinsertuserprefix = value; } }
 		public int PropertyColumnWidth { get { return fieldname.Width; } set { fieldname.Width = value; UpdateValueColumn(); UpdateBrowseButton(); } }
 		public int TypeColumnWidth { get { return fieldtype.Width; } set { fieldtype.Width = value; UpdateValueColumn(); UpdateBrowseButton(); } }
 		public bool PropertyColumnVisible { get { return fieldname.Visible; } set { fieldname.Visible = value; UpdateValueColumn(); UpdateBrowseButton(); } }
 		public bool TypeColumnVisible { get { return fieldtype.Visible; } set { fieldtype.Visible = value; UpdateValueColumn(); UpdateBrowseButton(); } }
 		public bool ValueColumnVisible { get { return fieldvalue.Visible; } set { fieldvalue.Visible = value; UpdateValueColumn(); UpdateBrowseButton(); } }
-		
-		#endregion
+        public bool ShowFixedFields { get { return showfixedfields; } set { showfixedfields = value; UpdateFixedFieldsVisibility(); } } //mxd
 
-		#region ================== Constructor
+        #endregion
 
-		// Constructor
-		public FieldsEditorControl()
+        #region ================== Constructor
+
+        // Constructor
+        public FieldsEditorControl()
 		{
 			InitializeComponent();
 			autoinsertuserprefix = true;
@@ -96,7 +98,7 @@ namespace CodeImp.DoomBuilder.Controls
 			// Keep element name
 			this.elementname = elementname;
 
-			//mxd. get proper UIFields
+			//mxd. Get proper UIFields
 			uifields = General.Map.FormatInterface.UIFields[General.Map.FormatInterface.GetElementType(elementname)];
 			
 			// Make types list
@@ -639,11 +641,18 @@ namespace CodeImp.DoomBuilder.Controls
 			// Delete all rows that must be deleted
 			for(int i = fieldslist.Rows.Count - 1; i >= 0; i--)
 			{
-				if(fieldslist.Rows[i].ReadOnly)
-					try { fieldslist.Rows.RemoveAt(i); } catch(Exception) { }
-				else
-					fieldslist.Rows[i].Visible = true;
-			}
+                if (fieldslist.Rows[i].ReadOnly)
+                {
+                    try { fieldslist.Rows.RemoveAt(i); } catch { }
+                }
+                else
+                {
+                    //mxd. Preserve fixed fields visibility setting
+                    FieldsEditorRow frow = (fieldslist.Rows[i] as FieldsEditorRow);
+                    if (frow != null && frow.IsFixed) frow.Visible = showfixedfields;
+                    else fieldslist.Rows[i].Visible = true;
+                }
+            }
 
 			// Update new row
 			SetupNewRowStyle();
@@ -831,7 +840,17 @@ namespace CodeImp.DoomBuilder.Controls
 				HideBrowseButton();
 			}
 		}
-		
-		#endregion
-	}
+
+        //mxd
+        private void UpdateFixedFieldsVisibility()
+        {
+            foreach (var row in fieldslist.Rows)
+            {
+                FieldsEditorRow frow = (row as FieldsEditorRow);
+                if (frow != null && frow.IsFixed) frow.Visible = showfixedfields;
+            }
+        }
+
+        #endregion
+    }
 }

@@ -121,6 +121,7 @@ namespace CodeImp.DoomBuilder.Config
 		private string lastUsedMapFolder;
 		private bool gzMarkExtraFloors;
         private bool gzdoomrenderingeffects = true; //mxd
+        private bool showcolormaps = true;
         private bool drawFullCrosshair;
 		private int maxRecentFiles;
 		private bool autoClearSideTextures;
@@ -226,6 +227,7 @@ namespace CodeImp.DoomBuilder.Config
 		public string LastUsedMapFolder { get { return lastUsedMapFolder; } internal set { lastUsedMapFolder = value; } }
 		public bool GZMarkExtraFloors { get { return gzMarkExtraFloors; } internal set { gzMarkExtraFloors = value; } }
         public bool GZDoomRenderingEffects { get { return gzdoomrenderingeffects; } set { gzdoomrenderingeffects = value; } } //mxd
+        public bool ShowColormaps { get { return showcolormaps; } set { showcolormaps = value; } } //mxd
         public bool DrawFullCrosshair { get { return drawFullCrosshair; } internal set { drawFullCrosshair = value; } }
         public int MaxRecentFiles { get { return maxRecentFiles; } internal set { maxRecentFiles = General.Clamp(value, 8, 25); } }
 		public bool AutoClearSidedefTextures { get { return autoClearSideTextures; } internal set { autoClearSideTextures = value; } }

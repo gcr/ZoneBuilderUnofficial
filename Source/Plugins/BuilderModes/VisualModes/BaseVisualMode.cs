@@ -999,7 +999,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     }
 
                     //MascaraSnake: Colormap
-                    if (l.IsColormap && l.Front != null)
+                    if (l.IsColormap && l.Front != null && General.Settings.ShowColormaps)
                     {
                         int sectortag = l.Tag;
                         int color;
@@ -3522,8 +3522,28 @@ namespace CodeImp.DoomBuilder.BuilderModes
             General.Interface.DisplayStatus(StatusType.Info, "(G)ZDoom geometry effects are " + (General.Settings.GZDoomRenderingEffects ? "ENABLED" : "DISABLED"));
         }
 
-		//mxd
-		[BeginAction("thingaligntowall")]
+        //mxd
+        [BeginAction("togglecolormaps")]
+        public void ToggleColormaps()
+        {
+            General.Settings.ShowColormaps = !General.Settings.ShowColormaps;
+            RebuildElementData();
+            //Ugly hack #1354: Get all Things to update so that their colormap is updated.
+            foreach (KeyValuePair<Thing, VisualThing> vt in allthings)
+            {
+                if (vt.Value != null)
+                {
+                    BaseVisualThing bvt = vt.Value as BaseVisualThing;
+                    bvt.Changed = true;
+                }
+            }
+
+            UpdateChangedObjects();
+            General.Interface.DisplayStatus(StatusType.Info, "Colormap rendering is " + (General.Settings.ShowColormaps ? "ENABLED" : "DISABLED"));
+        }
+
+        //mxd
+        [BeginAction("thingaligntowall")]
 		public void AlignThingsToWall() 
 		{
 			List<VisualThing> visualThings = GetSelectedVisualThings(true);

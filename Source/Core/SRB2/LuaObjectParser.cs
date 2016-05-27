@@ -121,7 +121,7 @@ namespace CodeImp.DoomBuilder.SRB2
                         {
                             case "$Name":
                                 SkipWhitespace(true);
-                                token = ReadToken();
+                                token = ReadLine();
                                 name = token;
                                 break;
                             case "$Sprite":

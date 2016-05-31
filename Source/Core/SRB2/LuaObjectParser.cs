@@ -85,14 +85,13 @@ namespace CodeImp.DoomBuilder.SRB2
                 if (!string.IsNullOrEmpty(token))
                 {
                     if (!token.StartsWith("mobjinfo[") || !token.EndsWith("]")) continue;
-                    string objname = token.Substring(9);
+                    string objname = token.Substring(9).TrimEnd(new char[] { ']' });
                     string name = objname;
                     string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
                     string[] states = new string[8];
                     int mapThingNum = -1;
                     int radius = 0;
                     int height = 0;
-                    objname = objname.TrimEnd(new char[] { ']' });
 
                     SkipWhitespace(true);
                     token = ReadToken();

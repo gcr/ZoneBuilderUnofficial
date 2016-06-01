@@ -210,7 +210,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
 					if(!info.Bright)
 					{
-						Vector3D thingpos = new Vector3D(Thing.Position.x, Thing.Position.y, Thing.Position.z + sd.Floor.plane.GetZ(Thing.Position));
+                        float thingz = Thing.IsFlipped ? sd.Ceiling.plane.GetZ(Thing.Position) - Thing.Position.z - Thing.Height : Thing.Position.z + sd.Floor.plane.GetZ(Thing.Position);
+						Vector3D thingpos = new Vector3D(Thing.Position.x, Thing.Position.y, thingz);
 						SectorLevel level = sd.GetLevelAboveOrAt(thingpos);
 
 						//mxd. Let's use point on floor plane instead of Thing.Sector.FloorHeight;
@@ -270,8 +271,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					//TECH: even Bright Thing frames are affected by custom fade...
 					else
 					{
-						Vector3D thingpos = new Vector3D(Thing.Position.x, Thing.Position.y, Thing.Position.z + sd.Floor.plane.GetZ(Thing.Position));
-						SectorLevel level = sd.GetLevelAboveOrAt(thingpos);
+                        float thingz = Thing.IsFlipped ? sd.Ceiling.plane.GetZ(Thing.Position) - Thing.Position.z - Thing.Height : Thing.Position.z + sd.Floor.plane.GetZ(Thing.Position);
+                        Vector3D thingpos = new Vector3D(Thing.Position.x, Thing.Position.y, thingz);
+                        SectorLevel level = sd.GetLevelAboveOrAt(thingpos);
 
                         if (level != null && level.sector.FogMode > SectorFogMode.CLASSIC)
                         {

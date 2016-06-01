@@ -174,9 +174,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 else
                 {
                     // Skewed by bottom
-                    tlb.y = texturevpeg + sd.Ceiling.plane.GetZ(vl) - osd.Ceiling.plane.GetZ(vr);
-                    trt.y = tlt.y - (sd.Ceiling.plane.GetZ(vr) - sd.Ceiling.plane.GetZ(vl));
-                    trb.y = trt.y - (osd.Ceiling.plane.GetZ(vr) - sd.Ceiling.plane.GetZ(vr));
+                    tlb.y = texturevpeg + sd.Ceiling.plane.GetZ(vl) - osd.Ceiling.plane.GetZ(vl);
+                    trb.y = tlb.y;
+                    tlt.y = tlb.y - (sd.Ceiling.plane.GetZ(vl) - osd.Ceiling.plane.GetZ(vl));
+                    trt.y = trb.y - (sd.Ceiling.plane.GetZ(vr) - osd.Ceiling.plane.GetZ(vr));
                 }
             }
 

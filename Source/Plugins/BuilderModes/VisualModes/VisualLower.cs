@@ -138,17 +138,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			{
                 if (General.Map.SRB2 && Sidedef.Line.IsFlagSet("32"))
                 {
-                    texturevpeg = sd.Ceiling.plane.GetZ(vl) - osd.Floor.plane.GetZ(vl);
+                    texturevpeg = sd.Floor.plane.GetZ(vl) - osd.Floor.plane.GetZ(vl);
                 }
-                else if(Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName && Sidedef.Other.Sector.CeilTexture == General.Map.Config.SkyFlatName) 
+                /*else if(Sidedef.Sector.CeilTexture == General.Map.Config.SkyFlatName && Sidedef.Other.Sector.CeilTexture == General.Map.Config.SkyFlatName) 
 				{
                     // mxd. Replicate Doom texture offset glitch when front and back sector's ceilings are sky
                     texturevpeg = (float)Sidedef.Other.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
-				} 
+				}*/ 
 				else 
 				{
                     // When lower unpegged is set, the lower texture is bound to the bottom
-                    texturevpeg = (float) Sidedef.Sector.CeilHeight - Sidedef.Other.Sector.FloorHeight;
+                    texturevpeg = (float) Sidedef.Sector.FloorHeight - Sidedef.Other.Sector.FloorHeight;
 				}
 			}
             tlt.x = tlb.x = 0;
@@ -170,9 +170,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
                 else if (IsLowerUnpegged())
                 {
                     // Skewed by bottom
-                    tlb.y = texturevpeg + osd.Floor.plane.GetZ(vl) - sd.Floor.plane.GetZ(vr);
-                    trt.y = tlt.y - (osd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vl));
-                    trb.y = trt.y - (sd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vr));
+                    tlb.y = texturevpeg + osd.Floor.plane.GetZ(vl) - sd.Floor.plane.GetZ(vl);
+                    trb.y = tlb.y;
+                    trt.y = trb.y - (osd.Floor.plane.GetZ(vr) - osd.Floor.plane.GetZ(vr));
                 }
                 else
                 {

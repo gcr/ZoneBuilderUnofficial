@@ -150,29 +150,42 @@ namespace CodeImp.DoomBuilder.BuilderModes
 
             // Determine if we should repeat the middle texture
             bool srb2repeat = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag);
-            repeatmidtex = srb2repeat || Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex"); //mxd
-            if (!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096))
+            bool doomrepeat = !General.Map.SRB2 && Sidedef.IsFlagSet("wrapmidtex") || Sidedef.Line.IsFlagSet("wrapmidtex");
+            bool repeatmidtex = srb2repeat || doomrepeat;
+
+            //A little redundant, but having a separate boolean value for each case makes the code a little more readable
+            bool srb2repeatfixed = srb2repeat && Sidedef.OffsetX >= 4096;
+            bool srb2repeatindefinite = srb2repeat && !srb2repeatfixed;
+
+            float topheight = !General.Map.SRB2 || Sidedef.Line.IsFlagSet("128") ? geotop : geoplanetop;
+            float bottomheight = !General.Map.SRB2 || Sidedef.Line.IsFlagSet("128") ? geobottom : geoplanebottom;
+            if (!repeatmidtex || srb2repeatfixed) //Tile the texture a fixed number of times
             {
-                float top = Sidedef.Line.IsFlagSet("128") ? geotop : geoplanetop;
-                float bottom = Sidedef.Line.IsFlagSet("128") ? geobottom : geoplanebottom;
-                // First determine the visible portion of the texture
-                //Due to the condition of the if-block, Sidedef.OffsetX >= 4096 automatically holds if srb2repeat does, so we don't have to handle negative offsets here.
-                repetitions = srb2repeat ? (Sidedef.OffsetX / 4096) + 1 : 1;
+                // How often is it tiled?
+                repetitions = srb2repeatfixed ? (Sidedef.OffsetX / 4096) + 1 : 1;
 
                 // Determine top portion height
                 if (IsLowerUnpegged())
-                    textop = bottom + tof.y + repetitions * Math.Abs(tsz.y);
+                    textop = bottomheight + tof.y + repetitions * Math.Abs(tsz.y);
                 else
-                    textop = top + tof.y;
+                    textop = topheight + tof.y;
 
                 // Calculate bottom portion height
                 texbottom = textop - repetitions * Math.Abs(tsz.y);
             }
-            else
+            else //Fill up the whole gap
             {
                 repetitions = (geotop - geobottom) / Math.Abs(tsz.y);
                 if ((geotop - geobottom) % Math.Abs(tsz.y) != 0)
                     repetitions++; // tile an extra time to fill the gap
+
+                if (srb2repeatindefinite) //Still consider offsets
+                {
+                    if (IsLowerUnpegged())
+                        texbottom = bottomheight + tof.y;
+                    else
+                        textop = topheight + tof.y;
+                }
             }
 
             float h = Math.Min(textop, geoplanetop);
@@ -280,22 +293,23 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			CropPoly(ref poly, osd.Floor.plane, true);
 
             //Repeat middle texture
-			if(!repeatmidtex || (srb2repeat && Sidedef.OffsetX >= 4096)) 
+            if (!doomrepeat) //Need to crop at least some part of the texture
 			{
                 // Create crop planes (we also need these for intersection testing)
-                if (!Sidedef.Line.IsFlagSet("128"))
+                if (!Sidedef.Line.IsFlagSet("128")) //Skew the texture according to the slope
                 {
-                    if (IsLowerUnpegged())
+                    if (IsLowerUnpegged()) //Skew according to floor
                     {
                         bottomclipplane = sd.Floor.plane.GetZ(vl) > osd.Floor.plane.GetZ(vl) ? sd.Floor.plane : osd.Floor.plane;
                         Vector3D up = new Vector3D(0f, 0f, texbottom - bottomclipplane.GetZ(vl));
                         bottomclipplane.Offset -= Vector3D.DotProduct(up, bottomclipplane.Normal);
-                        
+
                         topclipplane = bottomclipplane.GetInverted();
                         Vector3D up2 = new Vector3D(0f, 0f, textop - texbottom);
                         topclipplane.Offset -= Vector3D.DotProduct(up2, topclipplane.Normal);
+
                     }
-                    else
+                    else //Skew according to ceiling
                     {
                         topclipplane = sd.Ceiling.plane.GetZ(vl) < osd.Ceiling.plane.GetZ(vl) ? sd.Ceiling.plane : osd.Ceiling.plane;
                         Vector3D up = new Vector3D(0f, 0f, textop - topclipplane.GetZ(vl));
@@ -306,15 +320,18 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         bottomclipplane.Offset -= Vector3D.DotProduct(down, bottomclipplane.Normal);
                     }
                 }
-                else
+                else //Don't skew textures
                 {
                     topclipplane = new Plane(new Vector3D(0, 0, -1), textop);
                     bottomclipplane = new Plane(new Vector3D(0, 0, 1), -texbottom);
                 }
 
                 // Crop polygon by these heights
-                CropPoly(ref poly, topclipplane, true);
-				CropPoly(ref poly, bottomclipplane, true);
+                // In SRB2, if the texture is tiled indefinitely, only crop towards the plane it's pegged to
+                if (!srb2repeatindefinite || !IsLowerUnpegged())
+                    CropPoly(ref poly, topclipplane, true);
+                if (!srb2repeatindefinite || IsLowerUnpegged())
+				    CropPoly(ref poly, bottomclipplane, true);
 			}
 
 			//mxd. In(G)ZDoom, middle sidedef parts are not clipped by extrafloors of any type...

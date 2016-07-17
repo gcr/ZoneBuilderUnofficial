@@ -779,6 +779,7 @@ namespace CodeImp.DoomBuilder.Map
                 string tex = Back.HighTexture;
                 try { value = Convert.ToInt32(Back.HighTexture, 16); }
                 catch (FormatException) { return; }
+                catch (ArgumentException) { return; }
             }
             else value = General.Map.Config.GetLinedefActionInfo(Action).Get3DFloorFlags(flags);
 

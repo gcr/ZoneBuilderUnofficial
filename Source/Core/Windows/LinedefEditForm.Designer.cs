@@ -535,7 +535,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.action.Name = "action";
             this.action.Size = new System.Drawing.Size(412, 21);
             this.action.TabIndex = 0;
-            this.action.Value = 402;
+            this.action.Value = -1;
             this.action.ValueChanges += new System.EventHandler(this.action_ValueChanges);
             // 
             // idgroup

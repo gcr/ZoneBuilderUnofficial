@@ -158,7 +158,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private List<Vector2D> vertexpos;
 		private List<Vector2D> thingpos;
 		private List<float> thingangle;
-		private ICollection<Vertex> unselectedvertices;
+        private List<int> thingangledoom;
+        private ICollection<Vertex> unselectedvertices;
 		private ICollection<Linedef> unselectedlines;
 
 		// Modification
@@ -731,7 +732,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private void UpdateGeometry()
 		{
 			float[] newthingangle = thingangle.ToArray();
-			int index;
+            int index;
 
 			// Flip things horizontally
 			if(size.x < 0.0f)
@@ -834,7 +835,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			index = 0;
 			foreach(Thing t in selectedthings)
 			{
-				if(!fixedrotationthingtypes.Contains(t.SRB2Type)) //mxd. Polyobject Anchors, I hate you!
+				if(!fixedrotationthingtypes.Contains(t.SRB2Type) && newthingangle[index] != thingangle[index]) //mxd. Polyobject Anchors, I hate you!
 					t.Rotate(Angle2D.Normalized(newthingangle[index]));
 				index++;
 			}
@@ -1093,7 +1094,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			vertexpos = new List<Vector2D>(selectedvertices.Count);
 			thingpos = new List<Vector2D>(selectedthings.Count);
 			thingangle = new List<float>(selectedthings.Count);
-			fixedrotationthingtypes = new List<int>(); //mxd
+            thingangledoom = new List<int>(selectedthings.Count);
+            fixedrotationthingtypes = new List<int>(); //mxd
 
 			// A selection must be made!
 			if((selectedvertices.Count > 0) || (selectedthings.Count > 0))
@@ -1135,7 +1137,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					// Keep original coordinates
 					thingpos.Add(t.Position);
 					thingangle.Add(t.Angle);
-				}
+                    thingangledoom.Add(t.AngleDoom);
+                }
 				
 				// Calculate size
 				size = right - offset;
@@ -1243,7 +1246,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				index = 0;
 				foreach(Thing t in selectedthings)
 				{
-					t.Rotate(thingangle[index]);
+					t.Rotate(thingangledoom[index]);
 					t.Move(thingpos[index++]);
 				}
 
@@ -1305,7 +1308,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 						index = 0;
 						foreach(Thing t in selectedthings)
 						{
-							t.Rotate(thingangle[index]);
+							t.Rotate(thingangledoom[index]);
 							t.Move(thingpos[index++]);
 						}
 
@@ -1333,7 +1336,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					index = 0;
 					foreach(Thing t in selectedthings)
 					{
-						t.Rotate(thingangle[index]);
+						t.Rotate(thingangledoom[index]);
 						t.Move(thingpos[index++]);
 					}
 

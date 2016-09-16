@@ -439,7 +439,7 @@ namespace CodeImp.DoomBuilder.Windows
 			foreach(CheckBox c in flags.Checkboxes)
 				if(c.CheckState == CheckState.Checked) defaultflags.Add(c.Tag.ToString());
 			General.Settings.DefaultThingType = thingtype.GetResult(General.Settings.DefaultThingType);
-			General.Settings.DefaultThingAngle = Angle2D.DegToRad((float)angle.GetResult((int)Angle2D.RadToDeg(General.Settings.DefaultThingAngle) - 90) + 90);
+			General.Settings.DefaultThingAngle = angle.GetResult(General.Settings.DefaultThingAngle);
 			General.Settings.SetDefaultThingFlags(defaultflags);
 			
 			// Done

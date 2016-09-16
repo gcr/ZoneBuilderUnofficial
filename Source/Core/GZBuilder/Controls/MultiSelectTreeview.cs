@@ -1450,7 +1450,8 @@ namespace CodeImp.DoomBuilder.GZBuilder.Controls
 			int intNumber = 0;
 
 			TreeNode tnNewlySelectedNodeWithKeys = null;
-			switch(e.KeyCode)
+            if (tnMostRecentSelectedNode == null) tnMostRecentSelectedNode = this.Nodes[0];
+            switch (e.KeyCode)
 			{
 				case Keys.Down:
 					tnNewlySelectedNodeWithKeys = tnMostRecentSelectedNode.NextVisibleNode;

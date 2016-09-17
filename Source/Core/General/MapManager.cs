@@ -1366,7 +1366,10 @@ namespace CodeImp.DoomBuilder
 				//this lump well be recreated by a nodebuilder when saving the map 
 				//(or it won't be if the new map format or nodebuilder doesn't require / build this lump, 
 				//so it will just stay there, possibly messing things up)
-				if(group.Value.NodeBuild && (!glnodesonly || group.Key.ToUpperInvariant().StartsWith("GL_"))) continue; 
+				if(group.Value.NodeBuild && (!glnodesonly || group.Key.ToUpperInvariant().StartsWith("GL_"))) continue;
+
+                //Skip lumps that aren't required.
+                if (!group.Value.Required) continue;
 
 				string lumpname = group.Key;
 				if(lumpname == CONFIG_MAP_HEADER) lumpname = mapname;

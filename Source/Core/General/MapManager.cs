@@ -1368,8 +1368,8 @@ namespace CodeImp.DoomBuilder
 				//so it will just stay there, possibly messing things up)
 				if(group.Value.NodeBuild && (!glnodesonly || group.Key.ToUpperInvariant().StartsWith("GL_"))) continue;
 
-                //Skip lumps that aren't required.
-                if (!group.Value.Required) continue;
+                //SRB2: Skip BLOCKMAP and REJECT to prevent outdated data from persisting.
+                if (General.Map.SRB2 && (group.Key.ToUpperInvariant() == "BLOCKMAP" || group.Key.ToUpperInvariant() == "REJECT")) continue;
 
 				string lumpname = group.Key;
 				if(lumpname == CONFIG_MAP_HEADER) lumpname = mapname;

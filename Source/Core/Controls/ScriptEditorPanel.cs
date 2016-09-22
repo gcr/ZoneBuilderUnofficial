@@ -166,6 +166,7 @@ namespace CodeImp.DoomBuilder.Controls
                 //Load the global script lumps
                 foreach (ScriptLumpInfo scriptlumpinfo in General.Map.Config.ScriptLumps.Values)
                 {
+                    List<string> addedLumps = new List<string>();
                     if (scriptlumpinfo.Script != null)
                     {
                         if (scriptlumpinfo.IsPrefix)
@@ -174,6 +175,8 @@ namespace CodeImp.DoomBuilder.Controls
                             {
                                 if (l.Name.ToUpperInvariant().StartsWith(scriptlumpinfo.Name.ToUpperInvariant()))
                                 {
+                                    //Don't add lumps with duplicate names.
+                                    if (addedLumps.Contains(l.Name.ToUpperInvariant())) continue;
                                     GlobalScriptLumpDocumentTab t = new GlobalScriptLumpDocumentTab(this, l.Name, scriptlumpinfo.Script, General.Map.FilePathName);
 
                                     //mxd. Apply stored settings?
@@ -187,6 +190,7 @@ namespace CodeImp.DoomBuilder.Controls
                                     t.OnTextChanged += tabpage_OnTextChanged;
                                     t.Scintilla.UpdateUI += scintilla_OnUpdateUI;
                                     tabs.TabPages.Add(t);
+                                    addedLumps.Add(l.Name.ToUpperInvariant());
                                 }
                             }
                         }

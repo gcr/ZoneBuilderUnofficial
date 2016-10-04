@@ -93,10 +93,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				foreach(Thing t in list)
 				{
 					// Match?
-					if(Angle2D.RealToDoom(t.Angle) == angle)
+					if(t.AngleDoom == angle)
 					{
 						// Replace
-						if(replace) t.Rotate(Angle2D.DoomToReal(replaceangle));
+						if(replace) t.Rotate(replaceangle);
 
 						// Add to list
 						ThingTypeInfo ti = General.Map.Data.GetThingInfo(t.SRB2Type);

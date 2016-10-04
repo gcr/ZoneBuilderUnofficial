@@ -1028,7 +1028,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         {
                             bool slopefloor = l.Args[0] == 0 || l.Args[0] == 2;
                             List<Thing> slopevertices = new List<Thing>(3);
-                            Sector s = (l.Args[0] == 0 || l.Args[0] == 1) ? l.Front.Sector : l.Back.Sector;
+                            Sidedef side = (l.Args[0] == 0 || l.Args[0] == 1) ? l.Front : l.Back;
+                            Sector s = side.Sector;
 
                             //If NOKNUCKLES is set, use tag, X offset and Y offset to search for slope vertices.
                             if (l.IsFlagSet("8192"))
@@ -1045,12 +1046,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
                                             slopevertices.Add(t);
                                             foundtag = true;
                                         }
-                                        if (!foundxoffset && (int)t.AngleDoom == l.Front.OffsetX)
+                                        if (!foundxoffset && (int)t.AngleDoom == side.OffsetX)
                                         {
                                             slopevertices.Add(t);
                                             foundxoffset = true;
                                         }
-                                        if (!foundyoffset && (int)t.AngleDoom == l.Front.OffsetY)
+                                        if (!foundyoffset && (int)t.AngleDoom == side.OffsetY)
                                         {
                                             slopevertices.Add(t);
                                             foundyoffset = true;

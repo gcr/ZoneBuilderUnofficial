@@ -872,8 +872,13 @@ namespace CodeImp.DoomBuilder.Data
 
             foreach (Lump lump in file.Lumps)
             {
-                if (lump.Name.StartsWith(prefix) && !streams.ContainsKey(lump.Name))
+                if (lump.Name.StartsWith(prefix))
                 {
+                    if (streams.ContainsKey(lump.Name))
+                    {
+                        General.ErrorLogger.Add(ErrorType.Warning, "Found multiple lumps with the name " + lump.Name + ". All but the first one will be ignored!");
+                        continue;
+                    }
                     streams.Add(lump.Name, lump.Stream);
                 }
             }
@@ -889,8 +894,13 @@ namespace CodeImp.DoomBuilder.Data
 
             foreach (Lump lump in file.Lumps)
             {
-                if (lump.Name.StartsWith(prefix) && !streams.ContainsKey(lump.Name))
+                if (lump.Name.StartsWith(prefix))
                 {
+                    if (streams.ContainsKey(lump.Name))
+                    {
+                        General.ErrorLogger.Add(ErrorType.Warning, "Found multiple lumps with the name " + lump.Name + ". All but the first one will be ignored!");
+                        continue;
+                    }
                     streams.Add(lump.Name, lump.Stream);
                 }
             }

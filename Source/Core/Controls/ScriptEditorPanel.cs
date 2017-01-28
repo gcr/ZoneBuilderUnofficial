@@ -115,7 +115,7 @@ namespace CodeImp.DoomBuilder.Controls
                     filterall += exts;
                 }
             }
-            openfile.Filter = "Script files|" + filterall + "|" + filterseperate + "|All files|*.*";
+            openfile.Filter = "Script files|" + filterall + "|" + filterseperate + "|All files|*";
 
             // Load the script lumps
             ScriptDocumentTab activetab = null; //mxd
@@ -974,7 +974,7 @@ namespace CodeImp.DoomBuilder.Controls
             {
                 // Setup save dialog
                 string scriptfilter = t.Config.Description + "|*." + string.Join(";*.", t.Config.Extensions);
-                savefile.Filter = scriptfilter + "|All files|*.*";
+                savefile.Filter = scriptfilter + "|All files|*";
                 if (savefile.ShowDialog(this.ParentForm) == DialogResult.OK)
                 {
                     // Save to new filename

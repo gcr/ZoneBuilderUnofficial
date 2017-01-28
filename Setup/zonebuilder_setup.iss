@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Zone Builder
-AppVerName=Zone Builder 2.5
+AppVerName=Zone Builder 2.6
 AppPublisher=MascaraSnake
 AppPublisherURL=http://mb.srb2.org/member.php?u=3131
 AppSupportURL=http://mb.srb2.org/showthread.php?t=41033

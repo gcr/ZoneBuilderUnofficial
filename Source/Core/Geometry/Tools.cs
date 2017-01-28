@@ -1572,8 +1572,12 @@ namespace CodeImp.DoomBuilder.Geometry
 						texture = General.Map.Data.GetTextureImage(l.Front.LongLowTexture);
 
 					if(texture != null)
-						l.Front.OffsetX = (int)Math.Round((reversed ? totalLength - curLength - l.Length : curLength)) % texture.Width;
-				}
+                    {
+                        int repeatmidtexoffset = General.Map.SRB2 && l.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (l.Front.OffsetX / 4096) * 4096 : 0;
+                        l.Front.OffsetX = (int)Math.Round((reversed ? totalLength - curLength - l.Length : curLength)) % texture.Width + repeatmidtexoffset;
+
+                    }
+                }
 
 				if(l.Back != null) 
 				{
@@ -1587,8 +1591,11 @@ namespace CodeImp.DoomBuilder.Geometry
 						texture = General.Map.Data.GetTextureImage(l.Back.LongLowTexture);
 
 					if(texture != null)
-						l.Back.OffsetX = (int)Math.Round((reversed ? totalLength - curLength - l.Length : curLength)) % texture.Width;
-				}
+                    {
+                        int repeatmidtexoffset = General.Map.SRB2 && l.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (l.Back.OffsetX / 4096) * 4096 : 0;
+                        l.Back.OffsetX = (int)Math.Round((reversed ? totalLength - curLength - l.Length : curLength)) % texture.Width + repeatmidtexoffset;
+                    }
+                }
 
 				curLength += l.Length;
 			}

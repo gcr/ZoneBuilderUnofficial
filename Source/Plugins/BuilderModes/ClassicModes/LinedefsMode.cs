@@ -257,7 +257,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				}
 				else
 				{
-					offset.x %= texture.Width / s.Fields.GetValue((alignFloors ? "xscalefloor" : "xscaleceiling"), 1.0f);
+                    offset.x %= texture.Width / s.Fields.GetValue((alignFloors ? "xscalefloor" : "xscaleceiling"), 1.0f);
 					offset.y %= texture.Height / s.Fields.GetValue((alignFloors ? "yscalefloor" : "yscaleceiling"), 1.0f);
 				}
 

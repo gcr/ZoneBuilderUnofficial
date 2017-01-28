@@ -3963,7 +3963,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					// NOTE: We don't use ScaledWidth here because the texture offset is in pixels, not mappixels
 					if(texture.IsImageLoaded && Tools.SidedefTextureMatch(j.sidedef, texture.LongName)) 
 					{
-						if(alignx) j.sidedef.OffsetX %= texture.Width;
+                        if (alignx)
+                        {
+                            int repeatmidtexoffset = General.Map.SRB2 && j.sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (j.sidedef.OffsetX / 4096) * 4096 : 0;
+                            j.sidedef.OffsetX %= texture.Width;
+                            j.sidedef.OffsetX += repeatmidtexoffset;
+                        }
                         if (aligny)
                         {
                             if (General.Map.SRB2) j.controlSide.OffsetY %= texture.Height;

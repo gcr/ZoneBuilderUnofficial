@@ -1510,8 +1510,13 @@ namespace CodeImp.DoomBuilder.Map
 						else if(newline.front.LowRequired() && newline.front.LongLowTexture != MapSet.EmptyLongName && General.Map.Data.GetTextureExists(newline.front.LongLowTexture)) 
 							texture = General.Map.Data.GetTextureImage(newline.front.LowTexture);
 
-						//clamp offsetX
-						if(texture != null) newline.front.OffsetX %= texture.Width;
+                        //clamp offsetX
+                        if (texture != null)
+                        {
+                            int repeatmidtexoffset = General.Map.SRB2 && newline.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (newline.front.OffsetX / 4096) * 4096 : 0;
+                            newline.front.OffsetX %= texture.Width;
+                            newline.front.OffsetX += repeatmidtexoffset;
+                        }
 					}
 
 					if((oldline.back != null) && (newline.back != null)) 
@@ -1526,8 +1531,13 @@ namespace CodeImp.DoomBuilder.Map
 						else if(newline.back.LowRequired() && newline.back.LongLowTexture != MapSet.EmptyLongName && General.Map.Data.GetTextureExists(newline.back.LongLowTexture))
 							texture = General.Map.Data.GetTextureImage(newline.back.LowTexture);
 
-						//clamp offsetX
-						if(texture != null) newline.back.OffsetX %= texture.Width;
+                        //clamp offsetX
+                        if (texture != null)
+                        {
+                            int repeatmidtexoffset = General.Map.SRB2 && newline.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (newline.back.OffsetX / 4096) * 4096 : 0;
+                            newline.back.OffsetX %= texture.Width;
+                            newline.back.OffsetX += repeatmidtexoffset;
+                        }
 					}
 
 					break;

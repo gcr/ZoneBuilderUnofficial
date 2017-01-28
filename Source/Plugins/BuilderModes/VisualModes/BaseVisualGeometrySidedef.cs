@@ -1455,7 +1455,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
         protected virtual int ChangeOffsetX(int amount)
         {
             Sidedef.OffsetX -= amount;
-            if (Texture != null) Sidedef.OffsetX %= Texture.Width;
+            if (Texture != null)
+            {
+                int repeatmidtexoffset = General.Map.SRB2 && Sidedef.Line.IsFlagSet(General.Map.Config.RepeatMidtextureFlag) ? (Sidedef.OffsetX / 4096) * 4096 : 0;
+                Sidedef.OffsetX %= Texture.Width;
+                Sidedef.OffsetX += repeatmidtexoffset;
+            }
             return Sidedef.OffsetX;
         }
 

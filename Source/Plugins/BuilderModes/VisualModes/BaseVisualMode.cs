@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using CodeImp.DoomBuilder.BuilderModes.Interface;
 using CodeImp.DoomBuilder.Windows;
@@ -1005,9 +1006,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         int color;
                         int alpha;
                         l.ParseColor(l.Front.HighTexture, out color, out alpha);
-                        if (sectortags.ContainsKey(sectortag))
+                        if (sectortags.ContainsKey(sectortag) || sectortag == 65535)
                         {
-                            List<Sector> sectors = sectortags[sectortag];
+                            List<Sector> sectors = (sectortag == 65535) ? General.Map.Map.Sectors.ToList() : sectortags[sectortag];
                             foreach (Sector s in sectors)
                             {
                                 s.Fields.BeforeFieldsChange();
@@ -1086,9 +1087,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
                         if (!General.Map.FormatInterface.HasLinedefParameters) l.Set3DFloorArgs();
                         //mxd. Added hi-tag/line ID check 
                         int sectortag = (General.Map.UDMF || (l.Args[1] & (int)Effect3DFloor.FloorTypes.HiTagIsLineID) != 0) ? l.Args[0] : l.Args[0] + (l.Args[4] << 8);
-                        if (sectortags.ContainsKey(sectortag))
+                        if (sectortags.ContainsKey(sectortag) || sectortag == 65535)
                         {
-                            List<Sector> sectors = sectortags[sectortag];
+                            List<Sector> sectors = (sectortag == 65535) ? General.Map.Map.Sectors.ToList() : sectortags[sectortag];
                             foreach (Sector s in sectors)
                             {
                                 SectorData sd = GetSectorData(s);

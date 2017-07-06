@@ -38,6 +38,8 @@ namespace CodeImp.DoomBuilder.Data
 		protected const string COLORMAPS_DIR = "colormaps";
 		protected const string GRAPHICS_DIR = "graphics"; //mxd
 		protected const string VOXELS_DIR = "voxels"; //mxd
+        protected const string SOC_DIR = "socs";
+        protected const string LUA_DIR = "lua";
 		
 		#endregion
 
@@ -670,12 +672,52 @@ namespace CodeImp.DoomBuilder.Data
 			return streams;
 		}
 
-		#endregion
+        #endregion
 
-		#region ================== Methods
+        #region ================== SOC/Lua
 
-		// This loads the images in this directory
-		private ICollection<ImageData> LoadDirectoryImages(string path, int imagetype, bool includesubdirs)
+        public override Dictionary<string, Stream> GetSOCData()
+        {
+            // Error when suspended
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+
+            //Add all files in SOC directory
+            string[] files = GetAllFiles(SOC_DIR, true);
+            foreach (string s in files)
+            {
+                string filename = Path.GetFileNameWithoutExtension(s.ToLowerInvariant());
+                streams[s] = LoadFile(s);
+            }
+
+            return streams;
+        }
+
+        public override Dictionary<string, Stream> GetLuaData()
+        {
+            // Error when suspended
+            if (issuspended) throw new Exception("Data reader is suspended");
+
+            Dictionary<string, Stream> streams = new Dictionary<string, Stream>(StringComparer.Ordinal);
+
+            //Add all files in Lua directory
+            string[] files = GetAllFiles(LUA_DIR, true);
+            foreach (string s in files)
+            {
+                string filename = Path.GetFileNameWithoutExtension(s.ToLowerInvariant());
+                streams[s] = LoadFile(s);
+            }
+
+            return streams;
+        }
+
+        #endregion
+
+        #region ================== Methods
+
+        // This loads the images in this directory
+        private ICollection<ImageData> LoadDirectoryImages(string path, int imagetype, bool includesubdirs)
 		{
 			List<ImageData> images = new List<ImageData>();
 			

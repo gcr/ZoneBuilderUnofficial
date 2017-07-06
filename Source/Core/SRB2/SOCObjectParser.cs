@@ -159,7 +159,7 @@ namespace CodeImp.DoomBuilder.SRB2
                         sprite = spritename;
                         continue;
                     }
-                    ReportError("The sprite \"" + spritename + "\" assigned by the \"$sprite\" property does not exist");
+                    LogWarning("The sprite \"" + spritename + "\" assigned by the \"$sprite\" property does not exist");
                 }
                 if (line.StartsWith("#$Name "))
                 {

@@ -133,7 +133,7 @@ namespace CodeImp.DoomBuilder.SRB2
                                     sprite = token;
                                     break;
                                 }
-                                ReportError("The sprite \"" + token + "\" assigned by the \"$sprite\" property does not exist");
+                                LogWarning("The sprite \"" + token + "\" assigned by the \"$sprite\" property does not exist");
                                 return false;
                             case "doomednum":
                                 if (!ReadParameter(out token, out finished)) return false;
@@ -258,11 +258,11 @@ namespace CodeImp.DoomBuilder.SRB2
                 c = (char)datareader.ReadByte();
 
                 // Check if this is comment
-                if (c == '/')
+                if (c == '/' || c == '-')
                 {
                     if (datastream.Position == datastream.Length) return false;
                     char c2 = (char)datareader.ReadByte();
-                    if (c2 == '/')
+                    if (c2 == c)
                     {
                         // Check if not a special comment with a token
                         if (datastream.Position == datastream.Length) return false;

@@ -1773,9 +1773,10 @@ namespace CodeImp.DoomBuilder.Data
 
             if (objects.Count > 0)
             {
-                ThingCategory cat = new ThingCategory(null, "customthings", "Custom Things");
                 foreach (KeyValuePair<string,SRB2Object> o in objects)
                 {
+                    string catname = ZDTextParser.StripQuotes(o.Value.category);
+                    ThingCategory cat = GetSRB2ThingCategory(thingcategories, new string[] { ZDTextParser.StripQuotes(o.Value.category) });
                     ThingTypeInfo t = new ThingTypeInfo(cat, o.Value);
                     cat.AddThing(t);
                     // Check if we can find this thing in our existing collection
@@ -1791,8 +1792,6 @@ namespace CodeImp.DoomBuilder.Data
                         thingtypes.Add(t.Index, t);
                     }
                 }
-                thingcategories.Add(cat);
-
             }
             return objects.Count;
         }
@@ -1842,9 +1841,51 @@ namespace CodeImp.DoomBuilder.Data
 
 			return cat;
 		}
-		
-		// This loads Decorate data from a specific file or lump name
-		private void LoadDecorateFromLocation(DecorateParser parser, string location)
+
+        private static ThingCategory GetSRB2ThingCategory(List<ThingCategory> categories, string[] catnames)
+        {
+            // Find the category to put the actor in
+            ThingCategory cat = null;
+            string catname = catnames[0].ToLowerInvariant().Trim();
+            if (string.IsNullOrEmpty(catname)) catname = "customthings";
+
+            // First search by Title...
+            foreach (ThingCategory c in categories)
+            {
+                if (c.Title.ToLowerInvariant() == catname) cat = c;
+            }
+
+            //...then - by Name
+            if (cat == null)
+            {
+                foreach (ThingCategory c in categories)
+                {
+                    if (c.Name.ToLowerInvariant() == catname) cat = c;
+                }
+            }
+
+            // Make the category if needed
+            if (cat == null)
+            {
+                string cattitle = catnames[0].Trim();
+                if (string.IsNullOrEmpty(cattitle)) cattitle = "Custom Things";
+                cat = new ThingCategory(null, catname, cattitle);
+                categories.Add(cat); // ^.^
+            }
+
+            // Still have subcategories?
+            if (catnames.Length > 1)
+            {
+                string[] remainingnames = new string[catnames.Length - 1];
+                Array.Copy(catnames, 1, remainingnames, 0, remainingnames.Length);
+                return GetThingCategory(cat, cat.Children, remainingnames);
+            }
+
+            return cat;
+        }
+
+        // This loads Decorate data from a specific file or lump name
+        private void LoadDecorateFromLocation(DecorateParser parser, string location)
 		{
 			//General.WriteLogLine("Including DECORATE resource '" + location + "'...");
 			Dictionary<string, Stream> decostreams = currentreader.GetDecorateData(location);

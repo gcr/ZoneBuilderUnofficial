@@ -88,6 +88,7 @@ namespace CodeImp.DoomBuilder.SRB2
                     string objname = token.Substring(9).TrimEnd(new char[] { ']' });
                     string name = objname;
                     string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
+                    string category = "";
                     string[] states = new string[8];
                     int mapThingNum = -1;
                     int radius = 0;
@@ -121,7 +122,7 @@ namespace CodeImp.DoomBuilder.SRB2
                             case "$Name":
                                 SkipWhitespace(true);
                                 token = ReadLine();
-                                name = token;
+                                name = ZDTextParser.StripQuotes(token);
                                 break;
                             case "$Sprite":
                                 SkipWhitespace(true);
@@ -135,6 +136,11 @@ namespace CodeImp.DoomBuilder.SRB2
                                 }
                                 LogWarning("The sprite \"" + token + "\" assigned by the \"$sprite\" property does not exist");
                                 return false;
+                            case "$Category":
+                                SkipWhitespace(true);
+                                token = ReadLine();
+                                category = token;
+                                break;
                             case "doomednum":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 if (!int.TryParse(token, NumberStyles.Integer, CultureInfo.InvariantCulture, out mapThingNum))
@@ -231,7 +237,7 @@ namespace CodeImp.DoomBuilder.SRB2
 
                     if (mapThingNum > 0)
                     {
-                        SRB2Object o = new SRB2Object(name, sprite, states, mapThingNum, radius, height);
+                        SRB2Object o = new SRB2Object(name, sprite, category, states, mapThingNum, radius, height);
                         if (objects.ContainsKey(objname))
                             objects[objname] = o;
                         else

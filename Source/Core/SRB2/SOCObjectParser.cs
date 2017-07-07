@@ -139,6 +139,7 @@ namespace CodeImp.DoomBuilder.SRB2
         {
             if (objname == null) return false;
             string name = objname;
+            string category = "";
             string sprite = DataManager.INTERNAL_PREFIX + "unknownthing";
             string[] states = new string[8];
             int mapThingNum = -1;
@@ -163,7 +164,12 @@ namespace CodeImp.DoomBuilder.SRB2
                 }
                 if (line.StartsWith("#$Name "))
                 {
-                    name = line.Substring(7);
+                    name = ZDTextParser.StripQuotes(line.Substring(7));
+                    continue;
+                }
+                if (line.StartsWith("#$Category "))
+                {
+                    category = line.Substring(11);
                     continue;
                 }
                 if (line.StartsWith("#")) continue;
@@ -230,7 +236,7 @@ namespace CodeImp.DoomBuilder.SRB2
             }
             if (mapThingNum > 0)
             {
-                SRB2Object o = new SRB2Object(name, sprite, states, mapThingNum, radius, height);
+                SRB2Object o = new SRB2Object(name, sprite, category, states, mapThingNum, radius, height);
                 if (objects.ContainsKey(objname))
                     objects[objname] = o;
                 else

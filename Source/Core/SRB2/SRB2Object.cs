@@ -34,6 +34,7 @@ namespace CodeImp.DoomBuilder.SRB2
 		
 		public readonly string name;
         public readonly string sprite;
+        public readonly string category;
         public readonly string[] states;
         public readonly int mapThingNum;
         public readonly int radius;
@@ -44,10 +45,11 @@ namespace CodeImp.DoomBuilder.SRB2
 		#region ================== Constructor / Disposer
 		
 		// Constructor
-		internal SRB2Object(string name, string sprite, string[] states, int mapThingNum, int radius, int height)
+		internal SRB2Object(string name, string sprite, string category, string[] states, int mapThingNum, int radius, int height)
 		{
             this.name = name;
             this.sprite = sprite;
+            this.category = category;
             this.states = states;
             this.mapThingNum = mapThingNum;
             this.radius = radius;

@@ -45,11 +45,11 @@ namespace CodeImp.DoomBuilder.Windows
 				// Open the WAD file
 				wadfile = new WAD(filepathname, true);
 			}
-			catch(Exception)
+			catch(Exception e)
 			{
-				// Unable to open WAD file (or its config)
-				MessageBox.Show(this, "Could not open the WAD file for reading. Please make sure the file you selected is valid and is not in use by any other application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				this.DialogResult = DialogResult.Cancel;
+                // Unable to open WAD file (or its config)
+                MessageBox.Show(this, "Could not open the WAD file for reading.\n" + e.GetType().Name + ": " + e.Message + "\nPlease make sure the file you selected is valid and is not in use by any other application.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.DialogResult = DialogResult.Cancel;
 				this.Close();
 				return;
 			}

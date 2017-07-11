@@ -32,6 +32,7 @@ namespace CodeImp.DoomBuilder.IO
 		// WAD types
 		public const string TYPE_IWAD = "IWAD";
 		public const string TYPE_PWAD = "PWAD";
+        public const string TYPE_ZWAD = "ZWAD";
 		
 		// Encoder
 		public static readonly Encoding ENCODING = Encoding.ASCII;
@@ -194,6 +195,9 @@ namespace CodeImp.DoomBuilder.IO
 
 			// Read WAD type
 			type = ENCODING.GetString(reader.ReadBytes(4));
+
+            if (type == TYPE_ZWAD)
+                throw new IOException("Sorry, can't open ZWADs. Please decompress first.");
 			
 			// Number of lumps
 			numlumps = reader.ReadInt32();

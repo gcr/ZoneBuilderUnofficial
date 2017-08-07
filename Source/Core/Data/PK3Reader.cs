@@ -164,7 +164,7 @@ namespace CodeImp.DoomBuilder.Data
 				return (FileExists(pname) ? LoadFile(pname) : null);
 			}
 
-			if(General.Map.Config.MixTexturesFlats)
+			if(General.Map.Config.MixTexturesFlats || General.Map.SRB2)
 			{
 				//mxd. Find in directories ZDoom expects them to be
 				foreach(string loc in PatchLocations)

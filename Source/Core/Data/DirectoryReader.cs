@@ -89,7 +89,7 @@ namespace CodeImp.DoomBuilder.Data
 					pname = pname.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
 					return (FileExists(pname) ? LoadFile(pname) : null);
 				}
-				else if(General.Map.Config.MixTexturesFlats)
+				else if(General.Map.Config.MixTexturesFlats || General.Map.SRB2)
 				{
 					//mxd. Find in directories ZDoom expects them to be
 					string dir = Path.GetDirectoryName(pname);

@@ -135,7 +135,7 @@ namespace CodeImp.DoomBuilder.SRB2
                                     break;
                                 }
                                 LogWarning("The sprite \"" + token + "\" assigned by the \"$sprite\" property does not exist");
-                                return false;
+                                break;
                             case "$Category":
                                 SkipWhitespace(true);
                                 token = ReadLine();
@@ -144,27 +144,18 @@ namespace CodeImp.DoomBuilder.SRB2
                             case "doomednum":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 if (!int.TryParse(token, NumberStyles.Integer, CultureInfo.InvariantCulture, out mapThingNum))
-                                {
-                                    ReportError("Invalid map thing number");
-                                    return false;
-                                }
+                                    LogWarning("Could not parse map thing number");
                                 break;
                             case "radius":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 if (!ParseWithArithmetic(token, out radius))
-                                {
-                                    ReportError("Invalid radius");
-                                    return false;
-                                }
+                                    LogWarning("Could not parse radius");
                                 radius /= 65536;
                                 break;
                             case "height":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 if (!ParseWithArithmetic(token, out height))
-                                {
-                                    ReportError("Invalid height");
-                                    return false;
-                                }
+                                    LogWarning("Could not parse height");
                                 height /= 65536;
                                 break;
                             case "spawnstate":
@@ -611,6 +602,20 @@ namespace CodeImp.DoomBuilder.SRB2
 
         private bool ParseWithArithmetic(string input, out int output)
         {
+            output = 0;
+            string[] tokens = input.Split(new char[] { '+' });
+            foreach (string t in tokens)
+            {
+                int val = 0;
+                if (!ParseMultiplication(t, out val))
+                    return false;
+                output += val;
+            }
+            return true;
+        }
+
+        private bool ParseMultiplication(string input, out int output)
+        {
             output = 1;
             string[] tokens = input.Split(new char[] { '*' });
             foreach (string t in tokens)
@@ -619,10 +624,7 @@ namespace CodeImp.DoomBuilder.SRB2
                 int val = 1;
                 if (trimmed == "FRACUNIT") val = 65536;
                 else if (!int.TryParse(trimmed, NumberStyles.Integer, CultureInfo.InvariantCulture, out val))
-                {
-                    ReportError("Invalid radius");
                     return false;
-                }
                 output *= val;
             }
             return true;

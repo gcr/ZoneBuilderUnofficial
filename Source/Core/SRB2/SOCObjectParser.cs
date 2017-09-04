@@ -161,6 +161,7 @@ namespace CodeImp.DoomBuilder.SRB2
                         continue;
                     }
                     LogWarning("The sprite \"" + spritename + "\" assigned by the \"$sprite\" property does not exist");
+                    continue;
                 }
                 if (line.StartsWith("#$Name "))
                 {
@@ -186,25 +187,16 @@ namespace CodeImp.DoomBuilder.SRB2
                 {
                     case "MAPTHINGNUM":
                         if (!int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out mapThingNum))
-                        {
-                            ReportError("Invalid map thing number");
-                            return false;
-                        }
+                            LogWarning("Could not parse map thing number");
                         break;
                     case "RADIUS":
                         if (!ParseWithArithmetic(tokens[1], out radius))
-                        {
-                            ReportError("Invalid radius");
-                            return false;
-                        }
+                            LogWarning("Could not parse radius");
                         radius /= 65536;
                         break;
                     case "HEIGHT":
                         if (!ParseWithArithmetic(tokens[1], out height))
-                        {
-                            ReportError("Invalid height");
-                            return false;
-                        }
+                            LogWarning("Could not parse height");
                         height /= 65536;
                         break;
 
@@ -294,6 +286,20 @@ namespace CodeImp.DoomBuilder.SRB2
 
         private bool ParseWithArithmetic(string input, out int output)
         {
+            output = 0;
+            string[] tokens = input.Split(new char[] { '+' });
+            foreach (string t in tokens)
+            {
+                int val = 0;
+                if (!ParseMultiplication(t, out val))
+                    return false;
+                output += val;
+            }
+            return true;
+        }
+
+        private bool ParseMultiplication(string input, out int output)
+        {
             output = 1;
             string[] tokens = input.Split(new char[] { '*' });
             foreach (string t in tokens)
@@ -302,10 +308,7 @@ namespace CodeImp.DoomBuilder.SRB2
                 int val = 1;
                 if (trimmed == "FRACUNIT") val = 65536;
                 else if (!int.TryParse(trimmed, NumberStyles.Integer, CultureInfo.InvariantCulture, out val))
-                {
-                    ReportError("Invalid radius");
                     return false;
-                }
                 output *= val;
             }
             return true;

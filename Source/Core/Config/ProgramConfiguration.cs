@@ -122,6 +122,7 @@ namespace CodeImp.DoomBuilder.Config
 		private bool gzMarkExtraFloors;
         private bool gzdoomrenderingeffects = true; //mxd
         private bool showcolormaps = true;
+        private bool drawCrosshair;
         private bool drawFullCrosshair;
 		private int maxRecentFiles;
 		private bool autoClearSideTextures;
@@ -228,6 +229,7 @@ namespace CodeImp.DoomBuilder.Config
 		public bool GZMarkExtraFloors { get { return gzMarkExtraFloors; } internal set { gzMarkExtraFloors = value; } }
         public bool GZDoomRenderingEffects { get { return gzdoomrenderingeffects; } set { gzdoomrenderingeffects = value; } } //mxd
         public bool ShowColormaps { get { return showcolormaps; } set { showcolormaps = value; } } //mxd
+        public bool DrawCrosshair { get { return drawCrosshair; } internal set { drawCrosshair = value; } }
         public bool DrawFullCrosshair { get { return drawFullCrosshair; } internal set { drawFullCrosshair = value; } }
         public int MaxRecentFiles { get { return maxRecentFiles; } internal set { maxRecentFiles = General.Clamp(value, 8, 25); } }
 		public bool AutoClearSidedefTextures { get { return autoClearSideTextures; } internal set { autoClearSideTextures = value; } }
@@ -355,6 +357,7 @@ namespace CodeImp.DoomBuilder.Config
 				lastUsedConfigName = cfg.ReadSetting("lastusedconfigname", "");
 				lastUsedMapFolder = cfg.ReadSetting("lastusedmapfolder", "");
 				gzMarkExtraFloors = cfg.ReadSetting("gzmarkextrafloors", true);
+                DrawCrosshair = cfg.ReadSetting("drawcrosshair", true);
                 drawFullCrosshair = cfg.ReadSetting("drawfullcrosshair", false);
                 maxRecentFiles = cfg.ReadSetting("maxrecentfiles", 8);
 				autoClearSideTextures = cfg.ReadSetting("autoclearsidetextures", true);
@@ -462,6 +465,7 @@ namespace CodeImp.DoomBuilder.Config
 			cfg.WriteSetting("gzshowvisualvertices", gzShowVisualVertices);
 			cfg.WriteSetting("gzvertexscale3d", gzVertexScale3D);
 			cfg.WriteSetting("gzmarkextrafloors", gzMarkExtraFloors);
+            cfg.WriteSetting("drawcrosshair", drawCrosshair);
             cfg.WriteSetting("drawfullcrosshair", drawFullCrosshair);
             if (!string.IsNullOrEmpty(lastUsedConfigName))
 				cfg.WriteSetting("lastusedconfigname", lastUsedConfigName);

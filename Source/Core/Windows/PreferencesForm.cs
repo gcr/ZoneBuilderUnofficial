@@ -105,6 +105,7 @@ namespace CodeImp.DoomBuilder.Windows
 			vertexScale.Value = General.Clamp((int)(General.Settings.GZVertexScale2D), vertexScale.Minimum, vertexScale.Maximum);
 			vertexScaleLabel.Text = vertexScale.Value * 100 + "%" + (vertexScale.Value == 1 ? " (default)" : "");
 			cbMarkExtraFloors.Checked = General.Settings.GZMarkExtraFloors;
+            cbDrawCrosshair.Checked = General.Settings.DrawCrosshair;
             cbDrawFullCrosshair.Checked = General.Settings.DrawFullCrosshair;
             recentFiles.Value = General.Settings.MaxRecentFiles;
             maxBackups.Value = General.Settings.MaxBackups;
@@ -381,6 +382,7 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZVertexScale2D = vertexScale.Value;
 			General.Settings.GZOldHighlightMode = cbOldHighlightMode.Checked;
 			General.Settings.GZMarkExtraFloors = cbMarkExtraFloors.Checked;
+            General.Settings.DrawCrosshair = cbDrawCrosshair.Checked;
             General.Settings.DrawFullCrosshair = cbDrawFullCrosshair.Checked;
 
             // Paste options

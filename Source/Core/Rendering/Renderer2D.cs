@@ -896,9 +896,11 @@ namespace CodeImp.DoomBuilder.Rendering
                     left = cx - MAP_CENTER_SIZE;
                     right = cx + MAP_CENTER_SIZE;
                 }
-                gridplotter.DrawLineSolid(cx, top, cx, bottom, ref c);
-                gridplotter.DrawLineSolid(left, cy, right, cy, ref c);
-
+                if (General.Settings.DrawCrosshair)
+                {
+                    gridplotter.DrawLineSolid(cx, top, cx, bottom, ref c);
+                    gridplotter.DrawLineSolid(left, cy, right, cy, ref c);
+                }
 
                 // Done
                 backtex.UnlockRectangle(0);

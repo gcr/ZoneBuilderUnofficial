@@ -26,7 +26,10 @@ namespace CodeImp.DoomBuilder.SRB2
 {
 	public struct SRB2Object
 	{
-		#region ================== Constants
+        #region ================== Constants
+
+        public const int MF_SOLID = 0x2;
+        public const int MF_SPAWNCEILING = 0x100;
 
 		#endregion
 		
@@ -39,13 +42,14 @@ namespace CodeImp.DoomBuilder.SRB2
         public readonly int mapThingNum;
         public readonly int radius;
         public readonly int height;
-        		
-		#endregion
-		
-		#region ================== Constructor / Disposer
-		
-		// Constructor
-		internal SRB2Object(string name, string sprite, string category, string[] states, int mapThingNum, int radius, int height)
+        public readonly int flags;
+
+        #endregion
+
+        #region ================== Constructor / Disposer
+
+        // Constructor
+        internal SRB2Object(string name, string sprite, string category, string[] states, int mapThingNum, int radius, int height, int flags)
 		{
             this.name = name;
             this.sprite = sprite;
@@ -54,8 +58,21 @@ namespace CodeImp.DoomBuilder.SRB2
             this.mapThingNum = mapThingNum;
             this.radius = radius;
             this.height = height;
+            this.flags = flags;
 		}
-		
-		#endregion
-	}
+
+        #endregion
+
+        #region ================== Methods
+        internal bool Blocking()
+        {
+            return (flags & MF_SOLID) == MF_SOLID;
+        }
+
+        internal bool Hangs()
+        {
+            return (flags & MF_SPAWNCEILING) == MF_SPAWNCEILING;
+        }
+        #endregion
+    }
 }

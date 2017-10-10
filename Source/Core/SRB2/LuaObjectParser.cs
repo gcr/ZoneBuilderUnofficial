@@ -30,6 +30,39 @@ namespace CodeImp.DoomBuilder.SRB2
         private List<string> objectfreeslots;
         private List<string> statefreeslots;
         private List<string> spritefreeslots;*/
+        private IDictionary<string, int> flagValues = new Dictionary<string,int>
+        {
+            { "MF_SPECIAL", 0x1 },
+            { "MF_SOLID", 0x2 },
+            { "MF_SHOOTABLE", 0x4 },
+            { "MF_NOSECTOR", 0x8 },
+            { "MF_NOBLOCKMAP", 0x10 },
+            { "MF_AMBUSH", 0x20 },
+            { "MF_PUSHABLE", 0x40 },
+            { "MF_BOSS", 0x80 },
+            { "MF_SPAWNCEILING", 0x100 },
+            { "MF_NOGRAVITY", 0x200 },
+            { "MF_AMBIENT", 0x400 },
+            { "MF_SLIDEME", 0x800 },
+            { "MF_NOCLIP", 0x1000 },
+            { "MF_FLOAT", 0x2000 },
+            { "MF_BOXICON", 0x4000 },
+            { "MF_MISSILE", 0x8000 },
+            { "MF_SPRING", 0x10000 },
+            { "MF_BOUNCE", 0x20000 },
+            { "MF_MONITOR", 0x40000 },
+            { "MF_NOTHINK", 0x80000 },
+            { "MF_FIRE", 0x100000 },
+            { "MF_NOCLIPHEIGHT", 0x200000 },
+            { "MF_ENEMY", 0x400000 },
+            { "MF_SCENERY", 0x800000 },
+            { "MF_PAIN", 0x1000000 },
+            { "MF_STICKY", 0x2000000 },
+            { "MF_NIGHTSITEM", 0x4000000 },
+            { "MF_NOCLIPTHING", 0x8000000 },
+            { "MF_GRENADEBOUNCE", 0x10000000 },
+            { "MF_RUNSPAWNFUNC", 0x10000000 }
+        };
 
         #endregion
 
@@ -93,6 +126,7 @@ namespace CodeImp.DoomBuilder.SRB2
                     int mapThingNum = -1;
                     int radius = 0;
                     int height = 0;
+                    int flags = 0;
 
                     SkipWhitespace(true);
                     token = ReadToken();
@@ -190,6 +224,11 @@ namespace CodeImp.DoomBuilder.SRB2
                                 if (!ReadParameter(out token, out finished)) return false;
                                 states[7] = token;
                                 break;
+                            case "flags":
+                                if (!ReadParameter(out token, out finished)) return false;
+                                if (!ParseFlags(token, out flags))
+                                    LogWarning("Could not parse flags");
+                                break;
                             case "spawnhealth":
                             case "seesound":
                             case "reactiontime":
@@ -202,7 +241,6 @@ namespace CodeImp.DoomBuilder.SRB2
                             case "mass":
                             case "damage":
                             case "activesound":
-                            case "flags":
                                 if (!ReadParameter(out token, out finished)) return false;
                                 break;
                             case "}":
@@ -228,7 +266,7 @@ namespace CodeImp.DoomBuilder.SRB2
 
                     if (mapThingNum > 0)
                     {
-                        SRB2Object o = new SRB2Object(name, sprite, category, states, mapThingNum, radius, height);
+                        SRB2Object o = new SRB2Object(name, sprite, category, states, mapThingNum, radius, height, flags);
                         if (objects.ContainsKey(objname))
                             objects[objname] = o;
                         else
@@ -626,6 +664,27 @@ namespace CodeImp.DoomBuilder.SRB2
                 else if (!int.TryParse(trimmed, NumberStyles.Integer, CultureInfo.InvariantCulture, out val))
                     return false;
                 output *= val;
+            }
+            return true;
+        }
+
+        private bool ParseFlags(string input, out int output)
+        {
+            output = 0;
+            string[] tokens = input.Split(new char[] { '|' });
+            foreach (string token in tokens)
+            {
+                if (flagValues.ContainsKey(token))
+                {
+                    output |= flagValues[token];
+                }
+                else
+                {
+                    int val = 0;
+                    if (!int.TryParse(token, NumberStyles.Integer, CultureInfo.InvariantCulture, out val))
+                        return false;
+                    output |= val;
+                }
             }
             return true;
         }

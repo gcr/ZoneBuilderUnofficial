@@ -420,8 +420,8 @@ namespace CodeImp.DoomBuilder.Config
             this.arrow = (cat.Arrow != 0);
             this.radius = o.radius;
             this.height = o.height;
-            this.hangs = (cat.Hangs != 0);
-            this.blocking = cat.Blocking;
+            this.hangs = o.Hangs();
+            this.blocking = o.Blocking() ? 2 : 0;
             this.errorcheck = cat.ErrorCheck;
             this.fixedsize = cat.FixedSize;
             this.fixedrotation = cat.FixedRotation; //mxd

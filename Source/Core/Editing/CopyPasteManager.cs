@@ -105,7 +105,7 @@ namespace CodeImp.DoomBuilder.Editing
 					MapSet copyset = General.Map.Map.CloneMarked();
 					
 					// Convert flags and activations to UDMF fields, if needed
-					if(!(General.Map.FormatInterface is UniversalMapSetIO)) copyset.TranslateToUDMF(General.Map.FormatInterface.GetType());
+					if(!(General.Map.FormatInterface is UniversalMapSetIO || General.Map.FormatInterface is SRB2MapSetIO)) copyset.TranslateToUDMF(General.Map.FormatInterface.GetType());
 
 					// Write data to stream
 					MemoryStream memstream = new MemoryStream();
@@ -205,7 +205,7 @@ namespace CodeImp.DoomBuilder.Editing
 			General.Map.Map.InvertAllMarks();
 			
 			// Convert UDMF fields back to flags and activations, if needed
-			if(!(General.Map.FormatInterface is UniversalMapSetIO)) General.Map.Map.TranslateFromUDMF();
+			if(!(General.Map.FormatInterface is UniversalMapSetIO || General.Map.FormatInterface is SRB2MapSetIO)) General.Map.Map.TranslateFromUDMF();
 
 			// Modify tags and actions if preferred
 			if(options.ChangeTags == PasteOptions.TAGS_REMOVE) Tools.RemoveMarkedTags();
@@ -240,8 +240,8 @@ namespace CodeImp.DoomBuilder.Editing
 						// This links sidedefs that are not linked to a marked sector to a virtual sector
 						MapSet copyset = General.Map.Map.CloneMarked();
 
-						// Convert flags and activations to UDMF fields, if needed
-						if(!(General.Map.FormatInterface is UniversalMapSetIO)) copyset.TranslateToUDMF(General.Map.FormatInterface.GetType());
+                        // Convert flags and activations to UDMF fields, if needed
+                        if (!(General.Map.FormatInterface is UniversalMapSetIO || General.Map.FormatInterface is SRB2MapSetIO)) copyset.TranslateToUDMF(General.Map.FormatInterface.GetType());
 
 						// Write data to stream
 						MemoryStream memstream = new MemoryStream();
@@ -308,7 +308,7 @@ namespace CodeImp.DoomBuilder.Editing
 							General.Map.Map.InvertAllMarks();
 
 							// Convert UDMF fields back to flags and activations, if needed
-							if(!(General.Map.FormatInterface is UniversalMapSetIO)) General.Map.Map.TranslateFromUDMF();
+							if(!(General.Map.FormatInterface is UniversalMapSetIO || General.Map.FormatInterface is SRB2MapSetIO)) General.Map.Map.TranslateFromUDMF();
 
 							//mxd. Translate texture names
 							General.Map.Map.TranslateTextureNames(General.Map.Config.UseLongTextureNames, true);

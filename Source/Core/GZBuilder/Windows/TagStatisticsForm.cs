@@ -212,7 +212,7 @@ namespace CodeImp.DoomBuilder.GZBuilder.Windows
 
 			foreach(DataGridViewRow row in dataGridView.Rows) 
 			{
-				string label = row.Cells[1].Value.ToString();
+				string label = row.Cells[1].Value == null ? "" : row.Cells[1].Value.ToString();
 				if(!string.IsNullOrEmpty(label))
 					General.Map.Options.TagLabels.Add((int)row.Cells[0].Value, label);
 			}

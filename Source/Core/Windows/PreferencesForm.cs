@@ -107,6 +107,9 @@ namespace CodeImp.DoomBuilder.Windows
 			cbMarkExtraFloors.Checked = General.Settings.GZMarkExtraFloors;
             cbDrawCrosshair.Checked = General.Settings.DrawCrosshair;
             cbDrawFullCrosshair.Checked = General.Settings.DrawFullCrosshair;
+            cbDrawThingsFixedSize.Checked = General.Settings.DrawThingsFixedSize;
+            tbDefaultThingSize.Value = General.Clamp((int)General.Settings.DefaultThingSize, tbDefaultThingSize.Minimum, tbDefaultThingSize.Maximum);
+            labelDefaultThingSize.Text = ((int)General.Settings.DefaultThingSize).ToString();
             recentFiles.Value = General.Settings.MaxRecentFiles;
             maxBackups.Value = General.Settings.MaxBackups;
             screenshotsfolderpath.Text = General.Settings.ScreenshotsPath;
@@ -384,6 +387,8 @@ namespace CodeImp.DoomBuilder.Windows
 			General.Settings.GZMarkExtraFloors = cbMarkExtraFloors.Checked;
             General.Settings.DrawCrosshair = cbDrawCrosshair.Checked;
             General.Settings.DrawFullCrosshair = cbDrawFullCrosshair.Checked;
+            General.Settings.DrawThingsFixedSize = cbDrawThingsFixedSize.Checked;
+            General.Settings.DefaultThingSize = tbDefaultThingSize.Value;
 
             // Paste options
             General.Settings.PasteOptions = pasteoptions.GetOptions();
@@ -963,6 +968,12 @@ namespace CodeImp.DoomBuilder.Windows
 		{
 			labelDynLightIntensity.Text = ((float)tbDynLightIntensity.Value / 10).ToString();
 		}
+
+        //mxd
+        private void tbDefaultThingSize_ValueChanged(object sender, EventArgs e)
+        {
+            labelDefaultThingSize.Text = ((int)tbDefaultThingSize.Value).ToString();
+        }
 
         #endregion
 

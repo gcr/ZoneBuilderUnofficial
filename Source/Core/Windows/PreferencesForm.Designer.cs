@@ -38,6 +38,7 @@ namespace CodeImp.DoomBuilder.Windows
             System.Windows.Forms.Label label18;
             System.Windows.Forms.Label label20;
             System.Windows.Forms.Label label21;
+            System.Windows.Forms.Label label29;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PreferencesForm));
             this.maxBackups = new System.Windows.Forms.TrackBar();
             this.labelBackups = new System.Windows.Forms.Label();
@@ -140,6 +141,10 @@ namespace CodeImp.DoomBuilder.Windows
             this.actionkey = new System.Windows.Forms.TextBox();
             this.tabcolors = new System.Windows.Forms.TabPage();
             this.appearancegroup1 = new System.Windows.Forms.GroupBox();
+            this.labelDefaultThingSize = new System.Windows.Forms.Label();
+            this.tbDefaultThingSize = new System.Windows.Forms.TrackBar();
+            this.cbDrawThingsFixedSize = new System.Windows.Forms.CheckBox();
+            this.cbDrawCrosshair = new System.Windows.Forms.CheckBox();
             this.cbDrawFullCrosshair = new System.Windows.Forms.CheckBox();
             this.capitalizetexturenames = new System.Windows.Forms.CheckBox();
             this.cbMarkExtraFloors = new System.Windows.Forms.CheckBox();
@@ -214,7 +219,6 @@ namespace CodeImp.DoomBuilder.Windows
             this.pasteoptions = new CodeImp.DoomBuilder.Controls.PasteOptionsControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.browseScreenshotsFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.cbDrawCrosshair = new System.Windows.Forms.CheckBox();
             label7 = new System.Windows.Forms.Label();
             label6 = new System.Windows.Forms.Label();
             label5 = new System.Windows.Forms.Label();
@@ -223,6 +227,7 @@ namespace CodeImp.DoomBuilder.Windows
             label18 = new System.Windows.Forms.Label();
             label20 = new System.Windows.Forms.Label();
             label21 = new System.Windows.Forms.Label();
+            label29 = new System.Windows.Forms.Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.maxBackups)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.recentFiles)).BeginInit();
@@ -247,6 +252,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.actioncontrolpanel.SuspendLayout();
             this.tabcolors.SuspendLayout();
             this.appearancegroup1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbDefaultThingSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightSize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightCount)).BeginInit();
@@ -641,6 +647,16 @@ namespace CodeImp.DoomBuilder.Windows
             label21.Text = "Dynamic light intensity:";
             label21.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // label29
+            // 
+            label29.AutoSize = true;
+            label29.Location = new System.Drawing.Point(51, 161);
+            label29.Name = "label29";
+            label29.Size = new System.Drawing.Size(118, 13);
+            label29.TabIndex = 41;
+            label29.Text = "Default Thing size (2D):";
+            label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // keyusedlabel
             // 
             this.keyusedlabel.AutoSize = true;
@@ -831,7 +847,7 @@ namespace CodeImp.DoomBuilder.Windows
             // cbStretchView
             // 
             this.cbStretchView.AutoSize = true;
-            this.cbStretchView.Location = new System.Drawing.Point(25, 277);
+            this.cbStretchView.Location = new System.Drawing.Point(25, 313);
             this.cbStretchView.Name = "cbStretchView";
             this.cbStretchView.Size = new System.Drawing.Size(172, 17);
             this.cbStretchView.TabIndex = 18;
@@ -843,7 +859,7 @@ namespace CodeImp.DoomBuilder.Windows
             // qualitydisplay
             // 
             this.qualitydisplay.AutoSize = true;
-            this.qualitydisplay.Location = new System.Drawing.Point(25, 191);
+            this.qualitydisplay.Location = new System.Drawing.Point(25, 227);
             this.qualitydisplay.Name = "qualitydisplay";
             this.qualitydisplay.Size = new System.Drawing.Size(128, 17);
             this.qualitydisplay.TabIndex = 7;
@@ -1510,6 +1526,10 @@ namespace CodeImp.DoomBuilder.Windows
             this.appearancegroup1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.appearancegroup1.Controls.Add(label29);
+            this.appearancegroup1.Controls.Add(this.labelDefaultThingSize);
+            this.appearancegroup1.Controls.Add(this.tbDefaultThingSize);
+            this.appearancegroup1.Controls.Add(this.cbDrawThingsFixedSize);
             this.appearancegroup1.Controls.Add(this.cbDrawCrosshair);
             this.appearancegroup1.Controls.Add(this.cbDrawFullCrosshair);
             this.appearancegroup1.Controls.Add(this.capitalizetexturenames);
@@ -1540,10 +1560,57 @@ namespace CodeImp.DoomBuilder.Windows
             this.appearancegroup1.TabStop = false;
             this.appearancegroup1.Text = " Additional Options ";
             // 
+            // labelDefaultThingSize
+            // 
+            this.labelDefaultThingSize.AutoSize = true;
+            this.labelDefaultThingSize.Location = new System.Drawing.Point(337, 161);
+            this.labelDefaultThingSize.Name = "labelDefaultThingSize";
+            this.labelDefaultThingSize.Size = new System.Drawing.Size(13, 13);
+            this.labelDefaultThingSize.TabIndex = 42;
+            this.labelDefaultThingSize.Text = "8";
+            // 
+            // tbDefaultThingSize
+            // 
+            this.tbDefaultThingSize.BackColor = System.Drawing.SystemColors.Window;
+            this.tbDefaultThingSize.LargeChange = 4;
+            this.tbDefaultThingSize.Location = new System.Drawing.Point(176, 151);
+            this.tbDefaultThingSize.Maximum = 64;
+            this.tbDefaultThingSize.Minimum = 1;
+            this.tbDefaultThingSize.Name = "tbDefaultThingSize";
+            this.tbDefaultThingSize.Size = new System.Drawing.Size(154, 45);
+            this.tbDefaultThingSize.TabIndex = 40;
+            this.tbDefaultThingSize.TickFrequency = 4;
+            this.tbDefaultThingSize.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.tbDefaultThingSize.Value = 8;
+            this.tbDefaultThingSize.ValueChanged += new System.EventHandler(this.tbDefaultThingSize_ValueChanged);
+            // 
+            // cbDrawThingsFixedSize
+            // 
+            this.cbDrawThingsFixedSize.AutoSize = true;
+            this.cbDrawThingsFixedSize.Location = new System.Drawing.Point(237, 313);
+            this.cbDrawThingsFixedSize.Name = "cbDrawThingsFixedSize";
+            this.cbDrawThingsFixedSize.Size = new System.Drawing.Size(172, 17);
+            this.cbDrawThingsFixedSize.TabIndex = 39;
+            this.cbDrawThingsFixedSize.Text = "Draw Things at fixed size in 2D";
+            this.toolTip1.SetToolTip(this.cbDrawThingsFixedSize, "If enabled, things in classic modes will be drawn at a fixed size, independent of" +
+        " their actual size.");
+            this.cbDrawThingsFixedSize.UseVisualStyleBackColor = true;
+            // 
+            // cbDrawCrosshair
+            // 
+            this.cbDrawCrosshair.AutoSize = true;
+            this.cbDrawCrosshair.Location = new System.Drawing.Point(237, 269);
+            this.cbDrawCrosshair.Name = "cbDrawCrosshair";
+            this.cbDrawCrosshair.Size = new System.Drawing.Size(176, 17);
+            this.cbDrawCrosshair.TabIndex = 38;
+            this.cbDrawCrosshair.Text = "Draw crosshair in classic modes";
+            this.toolTip1.SetToolTip(this.cbDrawCrosshair, "If disabled, the crosshair in classic modes\r\nwill not be drawn.");
+            this.cbDrawCrosshair.UseVisualStyleBackColor = true;
+            // 
             // cbDrawFullCrosshair
             // 
             this.cbDrawFullCrosshair.AutoSize = true;
-            this.cbDrawFullCrosshair.Location = new System.Drawing.Point(237, 254);
+            this.cbDrawFullCrosshair.Location = new System.Drawing.Point(237, 290);
             this.cbDrawFullCrosshair.Name = "cbDrawFullCrosshair";
             this.cbDrawFullCrosshair.Size = new System.Drawing.Size(192, 17);
             this.cbDrawFullCrosshair.TabIndex = 37;
@@ -1555,7 +1622,7 @@ namespace CodeImp.DoomBuilder.Windows
             // capitalizetexturenames
             // 
             this.capitalizetexturenames.AutoSize = true;
-            this.capitalizetexturenames.Location = new System.Drawing.Point(237, 170);
+            this.capitalizetexturenames.Location = new System.Drawing.Point(237, 206);
             this.capitalizetexturenames.Name = "capitalizetexturenames";
             this.capitalizetexturenames.Size = new System.Drawing.Size(140, 17);
             this.capitalizetexturenames.TabIndex = 36;
@@ -1567,7 +1634,7 @@ namespace CodeImp.DoomBuilder.Windows
             // cbMarkExtraFloors
             // 
             this.cbMarkExtraFloors.AutoSize = true;
-            this.cbMarkExtraFloors.Location = new System.Drawing.Point(25, 254);
+            this.cbMarkExtraFloors.Location = new System.Drawing.Point(25, 290);
             this.cbMarkExtraFloors.Name = "cbMarkExtraFloors";
             this.cbMarkExtraFloors.Size = new System.Drawing.Size(175, 17);
             this.cbMarkExtraFloors.TabIndex = 35;
@@ -1579,7 +1646,7 @@ namespace CodeImp.DoomBuilder.Windows
             // cbOldHighlightMode
             // 
             this.cbOldHighlightMode.AutoSize = true;
-            this.cbOldHighlightMode.Location = new System.Drawing.Point(237, 212);
+            this.cbOldHighlightMode.Location = new System.Drawing.Point(237, 248);
             this.cbOldHighlightMode.Name = "cbOldHighlightMode";
             this.cbOldHighlightMode.Size = new System.Drawing.Size(207, 17);
             this.cbOldHighlightMode.TabIndex = 33;
@@ -1660,7 +1727,7 @@ namespace CodeImp.DoomBuilder.Windows
             // animatevisualselection
             // 
             this.animatevisualselection.AutoSize = true;
-            this.animatevisualselection.Location = new System.Drawing.Point(237, 191);
+            this.animatevisualselection.Location = new System.Drawing.Point(237, 227);
             this.animatevisualselection.Name = "animatevisualselection";
             this.animatevisualselection.Size = new System.Drawing.Size(184, 17);
             this.animatevisualselection.TabIndex = 23;
@@ -1670,7 +1737,7 @@ namespace CodeImp.DoomBuilder.Windows
             // blackbrowsers
             // 
             this.blackbrowsers.AutoSize = true;
-            this.blackbrowsers.Location = new System.Drawing.Point(25, 170);
+            this.blackbrowsers.Location = new System.Drawing.Point(25, 206);
             this.blackbrowsers.Name = "blackbrowsers";
             this.blackbrowsers.Size = new System.Drawing.Size(195, 17);
             this.blackbrowsers.TabIndex = 4;
@@ -1680,7 +1747,7 @@ namespace CodeImp.DoomBuilder.Windows
             // visualbilinear
             // 
             this.visualbilinear.AutoSize = true;
-            this.visualbilinear.Location = new System.Drawing.Point(25, 233);
+            this.visualbilinear.Location = new System.Drawing.Point(25, 269);
             this.visualbilinear.Name = "visualbilinear";
             this.visualbilinear.Size = new System.Drawing.Size(171, 17);
             this.visualbilinear.TabIndex = 6;
@@ -1690,7 +1757,7 @@ namespace CodeImp.DoomBuilder.Windows
             // classicbilinear
             // 
             this.classicbilinear.AutoSize = true;
-            this.classicbilinear.Location = new System.Drawing.Point(25, 212);
+            this.classicbilinear.Location = new System.Drawing.Point(25, 248);
             this.classicbilinear.Name = "classicbilinear";
             this.classicbilinear.Size = new System.Drawing.Size(176, 17);
             this.classicbilinear.TabIndex = 5;
@@ -2424,17 +2491,6 @@ namespace CodeImp.DoomBuilder.Windows
             // 
             this.browseScreenshotsFolderDialog.Description = "Select a Folder to Save Screenshots Into";
             // 
-            // cbDrawCrosshair
-            // 
-            this.cbDrawCrosshair.AutoSize = true;
-            this.cbDrawCrosshair.Location = new System.Drawing.Point(237, 233);
-            this.cbDrawCrosshair.Name = "cbDrawCrosshair";
-            this.cbDrawCrosshair.Size = new System.Drawing.Size(176, 17);
-            this.cbDrawCrosshair.TabIndex = 38;
-            this.cbDrawCrosshair.Text = "Draw crosshair in classic modes";
-            this.toolTip1.SetToolTip(this.cbDrawCrosshair, "If disabled, the crosshair in classic modes\r\nwill not be drawn.");
-            this.cbDrawCrosshair.UseVisualStyleBackColor = true;
-            // 
             // PreferencesForm
             // 
             this.AcceptButton = this.apply;
@@ -2489,6 +2545,7 @@ namespace CodeImp.DoomBuilder.Windows
             this.tabcolors.ResumeLayout(false);
             this.appearancegroup1.ResumeLayout(false);
             this.appearancegroup1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbDefaultThingSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightSize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbDynLightCount)).EndInit();
@@ -2689,5 +2746,8 @@ namespace CodeImp.DoomBuilder.Windows
         private System.Windows.Forms.Label label28;
         private CodeImp.DoomBuilder.Controls.ColorControl colorproperties;
         private System.Windows.Forms.CheckBox cbDrawCrosshair;
+        private System.Windows.Forms.CheckBox cbDrawThingsFixedSize;
+        private System.Windows.Forms.Label labelDefaultThingSize;
+        private System.Windows.Forms.TrackBar tbDefaultThingSize;
     }
 }

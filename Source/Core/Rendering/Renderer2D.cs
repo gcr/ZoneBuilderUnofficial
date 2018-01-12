@@ -987,10 +987,11 @@ namespace CodeImp.DoomBuilder.Rendering
 		// Returns false when not on the screen
 		private bool CreateThingBoxVerts(Thing t, ref FlatVertex[] verts, Dictionary<Thing, Vector2D> thingsByPosition, int offset, PixelColor c)
 		{
-			if(t.Size * scale < MINIMUM_THING_RADIUS) return false; //mxd. Don't render tiny little things
+            float thingsize = General.Settings.DrawThingsFixedSize ? General.Settings.DefaultThingSize : t.Size;
+			if(thingsize * scale < MINIMUM_THING_RADIUS) return false; //mxd. Don't render tiny little things
 
 			// Determine size
-			float circlesize = (t.FixedSize && (scale > 1.0f) ? t.Size /* * THING_CIRCLE_SIZE*/ : t.Size * scale /* * THING_CIRCLE_SIZE*/);
+			float circlesize = (t.FixedSize && (scale > 1.0f) ? thingsize /* * THING_CIRCLE_SIZE*/ : thingsize * scale /* * THING_CIRCLE_SIZE*/);
 			
 			// Transform to screen coordinates
 			Vector2D screenpos = ((Vector2D)t.Position).GetTransformed(translatex, translatey, scale, -scale);
@@ -1042,8 +1043,9 @@ namespace CodeImp.DoomBuilder.Rendering
 		//mxd
 		private void CreateThingArrowVerts(Thing t, ref FlatVertex[] verts, Vector2D screenpos, int offset) 
 		{
-			// Determine size
-			float arrowsize = (t.FixedSize && (scale > 1.0f) ? t.Size : t.Size * scale) * THING_ARROW_SIZE; //mxd
+            // Determine size
+            float thingsize = General.Settings.DrawThingsFixedSize ? General.Settings.DefaultThingSize : t.Size;
+            float arrowsize = (t.FixedSize && (scale > 1.0f) ? thingsize : thingsize * scale) * THING_ARROW_SIZE; //mxd
 
 			// Setup rotated rect for arrow
 			float sinarrowsize = (float)Math.Sin(t.Angle + Angle2D.PI * 0.25f) * arrowsize;
@@ -1246,26 +1248,28 @@ namespace CodeImp.DoomBuilder.Rendering
 					float spriteWidth, spriteHeight;
 					float spriteScale = (group.Value[0].FixedSize && (scale > 1.0f)) ? 1.0f : scale;
 
+                    float radius = General.Settings.DrawThingsFixedSize ? General.Settings.DefaultThingSize : info.Radius;
 					if(sprite.Width > sprite.Height) 
 					{
-						spriteWidth = info.Radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
+						spriteWidth = radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
 						spriteHeight = spriteWidth * ((float)sprite.Height / sprite.Width);
 					} 
 					else if(sprite.Width < sprite.Height) 
 					{
-						spriteHeight = info.Radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
+						spriteHeight = radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
 						spriteWidth = spriteHeight * ((float)sprite.Width / sprite.Height);
 					} 
 					else 
 					{
-						spriteWidth = info.Radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
+						spriteWidth = radius * spriteScale - THING_SPRITE_SHRINK * spriteScale;
 						spriteHeight = spriteWidth;
 					}
 
 					foreach(Thing t in group.Value) 
 					{
 						if(t.IsModel && (General.Settings.GZDrawModelsMode == ModelRenderMode.ALL || (General.Settings.GZDrawModelsMode == ModelRenderMode.SELECTION && t.Selected) || (General.Settings.GZDrawModelsMode == ModelRenderMode.ACTIVE_THINGS_FILTER && alpha == 1.0f))) continue;
-						float scaler = t.Size / info.Radius;
+                        float thingsize = General.Settings.DrawThingsFixedSize ? General.Settings.DefaultThingSize : t.Size;
+                        float scaler = thingsize / radius;
 						if(Math.Max(spriteWidth, spriteHeight) * scaler < MINIMUM_SPRITE_RADIUS) continue; //don't render tiny little sprites
 						
 						CreateThingSpriteVerts(thingsByPosition[t], spriteWidth * scaler, spriteHeight * scaler, ref verts, buffercount * 6, t.Selected ? selectionColor : 0xFFFFFF);

@@ -38,7 +38,7 @@ namespace CodeImp.DoomBuilder.Data
 		protected const string COLORMAPS_DIR = "colormaps";
 		protected const string GRAPHICS_DIR = "graphics"; //mxd
 		protected const string VOXELS_DIR = "voxels"; //mxd
-        protected const string SOC_DIR = "socs";
+        protected const string SOC_DIR = "soc";
         protected const string LUA_DIR = "lua";
 		
 		#endregion

@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CodeImp, MaxED, MascaraSnake")]
 [assembly: AssemblyProduct("Zone Builder")]
-[assembly: AssemblyCopyright("Copyright © 2007, 2016")]
+[assembly: AssemblyCopyright("Copyright © 2007, 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.8.0.2501")]
+[assembly: AssemblyVersion("2.9.0.2501")]

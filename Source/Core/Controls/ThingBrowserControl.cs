@@ -364,6 +364,8 @@ namespace CodeImp.DoomBuilder.Controls
 						case ThingTypeInfo.THING_BLOCKING_HEIGHT: blockinglabel.Text = "True-Height"; break;
 						default: blockinglabel.Text = "Unknown"; break;
 					}
+
+					parametercaption.Text = thinginfo.ParameterText + ":";
 				}
 
 				if(doupdatenode)
@@ -405,6 +407,7 @@ namespace CodeImp.DoomBuilder.Controls
 				sizelabel.Text = "-";
 				positionlabel.Text = "-";
 				blockinglabel.Text = "-";
+				parametercaption.Text = "Parameter:";
 			}
 
 			//mxd. Update help link

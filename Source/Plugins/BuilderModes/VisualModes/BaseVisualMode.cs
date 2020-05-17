@@ -755,10 +755,33 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			else
 				vertices[v].Changed = true;
 		}
-		
-		// This rebuilds the sector data
-		// This requires that the blockmap is up-to-date!
-		internal void RebuildElementData()
+
+        internal void ApplyFlatAlignment(Linedef l, Sector s, bool alignfloor, bool alignceiling, Vector2D offset, float rotation)
+        {
+            s.Fields.BeforeFieldsChange();
+            if (alignfloor)
+            {
+                if (s.Fields.ContainsKey("xpanningfloor")) s.Fields["xpanningfloor"] = new UniValue(UniversalType.Float, offset.x);
+                else s.Fields.Add("xpanningfloor", new UniValue(UniversalType.Float, offset.x));
+                if (s.Fields.ContainsKey("ypanningfloor")) s.Fields["ypanningfloor"] = new UniValue(UniversalType.Float, offset.y);
+                else s.Fields.Add("ypanningfloor", new UniValue(UniversalType.Float, offset.y));
+                if (s.Fields.ContainsKey("rotationfloor")) s.Fields["rotationfloor"] = new UniValue(UniversalType.Float, rotation);
+                else s.Fields.Add("rotationfloor", new UniValue(UniversalType.Float, rotation));
+            }
+            if (alignceiling)
+            {
+                if (s.Fields.ContainsKey("xpanningceiling")) s.Fields["xpanningceiling"] = new UniValue(UniversalType.Float, offset.x);
+                else s.Fields.Add("xpanningceiling", new UniValue(UniversalType.Float, offset.x));
+                if (s.Fields.ContainsKey("ypanningceiling")) s.Fields["ypanningceiling"] = new UniValue(UniversalType.Float, offset.y);
+                else s.Fields.Add("ypanningceiling", new UniValue(UniversalType.Float, offset.y));
+                if (s.Fields.ContainsKey("rotationceiling")) s.Fields["rotationceiling"] = new UniValue(UniversalType.Float, rotation);
+                else s.Fields.Add("rotationceiling", new UniValue(UniversalType.Float, rotation));
+            }
+        }
+
+        // This rebuilds the sector data
+        // This requires that the blockmap is up-to-date!
+        internal void RebuildElementData()
 		{
 			//mxd
 			Sector[] sectorsWithEffects = null;
@@ -947,55 +970,24 @@ namespace CodeImp.DoomBuilder.BuilderModes
                     if (l.IsFlatAlignment)
                     {
                         int sectortag = l.Tag;
-                        bool alignonlyceiling = l.IsFlagSet("2");
-                        bool alignonlyfloor = l.IsFlagSet("64");
-                        bool rotate = l.IsFlagSet("512");
-                        bool rotateonlyceiling = l.IsFlagSet("1024");
-                        bool rotateonlyfloor = l.IsFlagSet("16384");
+                        bool alignfloor = !l.IsFlagSet("2048");
+                        bool alignceiling = !l.IsFlagSet("4096");
+                        bool useoffsets = l.IsFlagSet("8192");
+                        float xoffset = useoffsets ? -l.Front.OffsetY : -l.Start.Position.y;
+                        float yoffset = useoffsets ? l.Front.OffsetX : -l.Start.Position.x;
+                        Vector2D offset = new Vector2D(xoffset, yoffset);
+                        float rotation = General.ClampAngle(l.AngleDeg - 90);
+                        offset = offset.GetRotated(Angle2D.DegToRad(-l.AngleDeg));
 
-                        if (sectortags.ContainsKey(sectortag))
+                        if (sectortag == 0)
+                            ApplyFlatAlignment(l, l.Front.Sector, alignfloor, alignceiling, offset, rotation);
+                        else if (sectortags.ContainsKey(sectortag))
                         {
                             List<Sector> sectors = sectortags[sectortag];
                             foreach (Sector s in sectors)
                             {
-                                s.Fields.BeforeFieldsChange();
-                                if (rotate)
-                                {
-                                    float rotation = General.ClampAngle(l.AngleDeg - 90);
-
-                                    if (!rotateonlyceiling)
-                                    {
-                                        if (s.Fields.ContainsKey("rotationfloor")) s.Fields["rotationfloor"] = new UniValue(UniversalType.Float, rotation);
-                                        else s.Fields.Add("rotationfloor", new UniValue(UniversalType.Float, rotation));
-                                    }
-                                    if (!rotateonlyfloor)
-                                    {
-                                        if (s.Fields.ContainsKey("rotationceiling")) s.Fields["rotationceiling"] = new UniValue(UniversalType.Float, rotation);
-                                        else s.Fields.Add("rotationceiling", new UniValue(UniversalType.Float, rotation));
-                                    }
-                                }
-                                else
-                                {
-                                    float xoffset = l.Rect.Width;
-                                    float yoffset = l.Rect.Height;
-
-                                    if (!alignonlyceiling)
-                                    {
-                                        if (s.Fields.ContainsKey("xpanningfloor")) s.Fields["xpanningfloor"] = new UniValue(UniversalType.Float, xoffset);
-                                        else s.Fields.Add("xpanningfloor", new UniValue(UniversalType.Float, xoffset));
-                                        if (s.Fields.ContainsKey("ypanningfloor")) s.Fields["ypanningfloor"] = new UniValue(UniversalType.Float, yoffset);
-                                        else s.Fields.Add("ypanningfloor", new UniValue(UniversalType.Float, yoffset));
-                                    }
-                                    if (!alignonlyfloor)
-                                    {
-                                        if (s.Fields.ContainsKey("xpanningceiling")) s.Fields["xpanningceiling"] = new UniValue(UniversalType.Float, xoffset);
-                                        else s.Fields.Add("xpanningceiling", new UniValue(UniversalType.Float, xoffset));
-                                        if (s.Fields.ContainsKey("ypanningceiling")) s.Fields["ypanningceiling"] = new UniValue(UniversalType.Float, yoffset);
-                                        else s.Fields.Add("ypanningceiling", new UniValue(UniversalType.Float, yoffset));
-                                    }
-                                }
+                                ApplyFlatAlignment(l, s, alignfloor, alignceiling, offset, rotation);
                             }
-
                         }
                     }
 

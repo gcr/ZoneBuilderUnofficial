@@ -1159,7 +1159,7 @@
     <None Include="Resources\ModelDisabled.png" />
     <None Include="Resources\ModelFiltered.png" />
     <Content Include="Resources\Model_selected.png" />
-	<None Include="Resources\ScriptProperty.png" />
+    <None Include="Resources\ScriptProperty.png" />
     <None Include="Resources\TextWhitespace.png" />
     <None Include="Resources\TextIndent.png" />
     <None Include="Resources\TextUnindent.png" />
@@ -1361,7 +1361,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>call "$(DevEnvDir)..\tools\vsvars32.bat"
+    <PostBuildEvent>call "$(DevEnvDir)..\Tools\VsDevCmd.bat"
 EDITBIN.EXE /NOLOGO /LARGEADDRESSAWARE "$(TargetPath)"</PostBuildEvent>
   </PropertyGroup>
 </Project>

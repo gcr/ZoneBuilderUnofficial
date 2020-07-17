@@ -1,0 +1,457 @@
+
+# /
+/*.suo
+/PR
+/*.user
+/_ReSharper*
+/Thumbs.db
+/obj
+/log.xml
+/Release
+/Builder.ncb
+
+# /.vs/
+/.vs/
+
+# /Build/
+/Build/*.suo
+/Build/PR
+/Build/*.user
+/Build/_ReSharper*
+/Build/Thumbs.db
+/Build/obj
+/Build/Builder.exe
+/Build/Builder.pdb
+/Build/Builder.xml
+/Build/Refmanual.chm
+/Build/SlimDX.pdb
+/Build/SlimDX.xml
+
+# /Build/Compilers/
+/Build/Compilers/*.suo
+/Build/Compilers/PR
+/Build/Compilers/*.user
+/Build/Compilers/_ReSharper*
+/Build/Compilers/Thumbs.db
+/Build/Compilers/obj
+
+# /Build/Configurations/
+/Build/Configurations/*.suo
+/Build/Configurations/PR
+/Build/Configurations/*.user
+/Build/Configurations/_ReSharper*
+/Build/Configurations/Thumbs.db
+/Build/Configurations/obj
+
+# /Build/Plugins/
+/Build/Plugins/*.suo
+/Build/Plugins/*.user
+/Build/Plugins/Builder.exe
+/Build/Plugins/Builder.pdb
+/Build/Plugins/Builder.xml
+/Build/Plugins/BuilderEffects.dll
+/Build/Plugins/BuilderEffects.pdb
+/Build/Plugins/BuilderModes.dll
+/Build/Plugins/BuilderModes.pdb
+/Build/Plugins/ColorPicker.dll
+/Build/Plugins/ColorPicker.pdb
+/Build/Plugins/CopyPasteSectorProps.dll
+/Build/Plugins/CopyPasteSectorProps.pdb
+/Build/Plugins/MassUndoRedo.dll
+/Build/Plugins/MassUndoRedo.pdb
+/Build/Plugins/NodesViewer.dll
+/Build/Plugins/NodesViewer.pdb
+/Build/Plugins/PR
+/Build/Plugins/Sharpzip.dll
+/Build/Plugins/SoundPropagationMode.dll
+/Build/Plugins/SoundPropagationMode.pdb
+/Build/Plugins/StairSectorBuilder.dll
+/Build/Plugins/StairSectorBuilder.pdb
+/Build/Plugins/Statistics.dll
+/Build/Plugins/Statistics.pdb
+/Build/Plugins/TagExplorer.dll
+/Build/Plugins/TagExplorer.pdb
+/Build/Plugins/Thumbs.db
+/Build/Plugins/TrackBar.dll
+/Build/Plugins/_ReSharper*
+/Build/Plugins/obj
+/Build/Plugins/ImageDrawingExample.dll
+/Build/Plugins/ImageDrawingExample.pdb
+/Build/Plugins/CommentsPanel.dll
+/Build/Plugins/CommentsPanel.pdb
+/Build/Plugins/GZDoomEditing.dll
+/Build/Plugins/GZDoomEditing.pdb
+/Build/Plugins/SlimDX.dll
+/Build/Plugins/TagRange.dll
+/Build/Plugins/TagRange.pdb
+/Build/Plugins/GZDoomEditing.txt
+/Build/Plugins/VisplaneExplorer.dll
+/Build/Plugins/VisplaneExplorer.pdb
+
+# /Build/Scripting/
+/Build/Scripting/*.suo
+/Build/Scripting/PR
+/Build/Scripting/*.user
+/Build/Scripting/_ReSharper*
+/Build/Scripting/Thumbs.db
+/Build/Scripting/obj
+
+# /Build/Setup/
+/Build/Setup/*.suo
+/Build/Setup/PR
+/Build/Setup/*.user
+/Build/Setup/_ReSharper*
+/Build/Setup/Thumbs.db
+/Build/Setup/obj
+
+# /Build/Sprites/
+/Build/Sprites/Thumbs.db
+
+# /Documents/
+/Documents/*.suo
+/Documents/PR
+/Documents/*.user
+/Documents/_ReSharper*
+/Documents/Thumbs.db
+/Documents/obj
+
+# /Documents/Scintilla/
+/Documents/Scintilla/*.suo
+/Documents/Scintilla/PR
+/Documents/Scintilla/*.user
+/Documents/Scintilla/_ReSharper*
+/Documents/Scintilla/Thumbs.db
+/Documents/Scintilla/obj
+
+# /Resources/
+/Resources/*.suo
+/Resources/PR
+/Resources/*.user
+/Resources/_ReSharper*
+/Resources/Thumbs.db
+/Resources/obj
+
+# /Resources/BitmapFont/
+/Resources/BitmapFont/*.suo
+/Resources/BitmapFont/PR
+/Resources/BitmapFont/*.user
+/Resources/BitmapFont/_ReSharper*
+/Resources/BitmapFont/Thumbs.db
+/Resources/BitmapFont/obj
+
+# /Resources/Icons/
+/Resources/Icons/*.suo
+/Resources/Icons/PR
+/Resources/Icons/*.user
+/Resources/Icons/_ReSharper*
+/Resources/Icons/Thumbs.db
+/Resources/Icons/obj
+
+# /Resources/Icons/Things/
+/Resources/Icons/Things/*.suo
+/Resources/Icons/Things/PR
+/Resources/Icons/Things/*.user
+/Resources/Icons/Things/_ReSharper*
+/Resources/Icons/Things/Thumbs.db
+/Resources/Icons/Things/obj
+
+# /Setup/
+/Setup/*.suo
+/Setup/PR
+/Setup/*.user
+/Setup/_ReSharper*
+/Setup/Thumbs.db
+/Setup/obj
+/Setup/builder2_setup.exe
+
+# /Source/
+/Source/*.suo
+/Source/PR
+/Source/*.user
+/Source/_ReSharper*
+/Source/Thumbs.db
+/Source/obj
+
+# /Source/Core/
+/Source/Core/*.suo
+/Source/Core/*.user
+/Source/Core/_ReSharper*
+/Source/Core/Thumbs.db
+/Source/Core/obj
+
+# /Source/Core/Actions/
+/Source/Core/Actions/*.suo
+/Source/Core/Actions/*.user
+/Source/Core/Actions/_ReSharper*
+/Source/Core/Actions/Thumbs.db
+
+# /Source/Core/Compilers/
+/Source/Core/Compilers/*.suo
+/Source/Core/Compilers/*.user
+/Source/Core/Compilers/_ReSharper*
+/Source/Core/Compilers/Thumbs.db
+
+# /Source/Core/Config/
+/Source/Core/Config/*.suo
+/Source/Core/Config/*.user
+/Source/Core/Config/_ReSharper*
+/Source/Core/Config/Thumbs.db
+
+# /Source/Core/Controls/
+/Source/Core/Controls/*.suo
+/Source/Core/Controls/*.user
+/Source/Core/Controls/_ReSharper*
+/Source/Core/Controls/Thumbs.db
+
+# /Source/Core/Data/
+/Source/Core/Data/*.suo
+/Source/Core/Data/*.user
+/Source/Core/Data/_ReSharper*
+/Source/Core/Data/Thumbs.db
+
+# /Source/Core/Editing/
+/Source/Core/Editing/*.suo
+/Source/Core/Editing/*.user
+/Source/Core/Editing/_ReSharper*
+/Source/Core/Editing/Thumbs.db
+
+# /Source/Core/General/
+/Source/Core/General/*.suo
+/Source/Core/General/*.user
+/Source/Core/General/_ReSharper*
+/Source/Core/General/Thumbs.db
+
+# /Source/Core/Geometry/
+/Source/Core/Geometry/*.suo
+/Source/Core/Geometry/*.user
+/Source/Core/Geometry/_ReSharper*
+/Source/Core/Geometry/Thumbs.db
+
+# /Source/Core/IO/
+/Source/Core/IO/*.suo
+/Source/Core/IO/*.user
+/Source/Core/IO/_ReSharper*
+/Source/Core/IO/Thumbs.db
+
+# /Source/Core/Map/
+/Source/Core/Map/*.suo
+/Source/Core/Map/*.user
+/Source/Core/Map/_ReSharper*
+/Source/Core/Map/Thumbs.db
+
+# /Source/Core/Plugins/
+/Source/Core/Plugins/*.suo
+/Source/Core/Plugins/*.user
+/Source/Core/Plugins/_ReSharper*
+/Source/Core/Plugins/Thumbs.db
+
+# /Source/Core/Properties/
+/Source/Core/Properties/*.suo
+/Source/Core/Properties/*.user
+/Source/Core/Properties/_ReSharper*
+/Source/Core/Properties/Thumbs.db
+
+# /Source/Core/Rendering/
+/Source/Core/Rendering/*.suo
+/Source/Core/Rendering/*.user
+/Source/Core/Rendering/_ReSharper*
+/Source/Core/Rendering/Thumbs.db
+
+# /Source/Core/Resources/
+/Source/Core/Resources/*.suo
+/Source/Core/Resources/*.user
+/Source/Core/Resources/_ReSharper*
+/Source/Core/Resources/Thumbs.db
+
+# /Source/Core/Types/
+/Source/Core/Types/*.suo
+/Source/Core/Types/*.user
+/Source/Core/Types/_ReSharper*
+/Source/Core/Types/Thumbs.db
+
+# /Source/Core/VisualModes/
+/Source/Core/VisualModes/*.suo
+/Source/Core/VisualModes/*.user
+/Source/Core/VisualModes/_ReSharper*
+/Source/Core/VisualModes/Thumbs.db
+
+# /Source/Core/Windows/
+/Source/Core/Windows/*.suo
+/Source/Core/Windows/*.user
+/Source/Core/Windows/_ReSharper*
+/Source/Core/Windows/Thumbs.db
+
+# /Source/Core/ZDoom/
+/Source/Core/ZDoom/*.suo
+/Source/Core/ZDoom/*.user
+/Source/Core/ZDoom/_ReSharper*
+/Source/Core/ZDoom/Thumbs.db
+
+# /Source/Plugins/
+/Source/Plugins/*.suo
+/Source/Plugins/*.user
+/Source/Plugins/_ReSharper*
+/Source/Plugins/Thumbs.db
+
+# /Source/Plugins/BuilderEffects/
+/Source/Plugins/BuilderEffects/*.suo
+/Source/Plugins/BuilderEffects/*.user
+/Source/Plugins/BuilderEffects/_ReSharper*
+/Source/Plugins/BuilderEffects/Thumbs.db
+/Source/Plugins/BuilderEffects/obj
+
+# /Source/Plugins/BuilderModes/
+/Source/Plugins/BuilderModes/*.suo
+/Source/Plugins/BuilderModes/*.user
+/Source/Plugins/BuilderModes/_ReSharper*
+/Source/Plugins/BuilderModes/Thumbs.db
+/Source/Plugins/BuilderModes/obj
+
+# /Source/Plugins/BuilderModes/ClassicModes/
+/Source/Plugins/BuilderModes/ClassicModes/*.suo
+/Source/Plugins/BuilderModes/ClassicModes/*.user
+/Source/Plugins/BuilderModes/ClassicModes/_ReSharper*
+/Source/Plugins/BuilderModes/ClassicModes/Thumbs.db
+
+# /Source/Plugins/BuilderModes/ErrorChecks/
+/Source/Plugins/BuilderModes/ErrorChecks/*.suo
+/Source/Plugins/BuilderModes/ErrorChecks/*.user
+/Source/Plugins/BuilderModes/ErrorChecks/_ReSharper*
+/Source/Plugins/BuilderModes/ErrorChecks/Thumbs.db
+
+# /Source/Plugins/BuilderModes/FindReplace/
+/Source/Plugins/BuilderModes/FindReplace/*.suo
+/Source/Plugins/BuilderModes/FindReplace/*.user
+/Source/Plugins/BuilderModes/FindReplace/_ReSharper*
+/Source/Plugins/BuilderModes/FindReplace/Thumbs.db
+
+# /Source/Plugins/BuilderModes/General/
+/Source/Plugins/BuilderModes/General/*.suo
+/Source/Plugins/BuilderModes/General/*.user
+/Source/Plugins/BuilderModes/General/_ReSharper*
+/Source/Plugins/BuilderModes/General/Thumbs.db
+
+# /Source/Plugins/BuilderModes/Interface/
+/Source/Plugins/BuilderModes/Interface/*.suo
+/Source/Plugins/BuilderModes/Interface/*.user
+/Source/Plugins/BuilderModes/Interface/_ReSharper*
+/Source/Plugins/BuilderModes/Interface/Thumbs.db
+
+# /Source/Plugins/BuilderModes/Properties/
+/Source/Plugins/BuilderModes/Properties/*.suo
+/Source/Plugins/BuilderModes/Properties/*.user
+/Source/Plugins/BuilderModes/Properties/_ReSharper*
+/Source/Plugins/BuilderModes/Properties/Thumbs.db
+
+# /Source/Plugins/BuilderModes/Resources/
+/Source/Plugins/BuilderModes/Resources/*.suo
+/Source/Plugins/BuilderModes/Resources/*.user
+/Source/Plugins/BuilderModes/Resources/_ReSharper*
+/Source/Plugins/BuilderModes/Resources/Thumbs.db
+
+# /Source/Plugins/BuilderModes/VisualModes/
+/Source/Plugins/BuilderModes/VisualModes/*.suo
+/Source/Plugins/BuilderModes/VisualModes/*.user
+/Source/Plugins/BuilderModes/VisualModes/_ReSharper*
+/Source/Plugins/BuilderModes/VisualModes/Thumbs.db
+
+# /Source/Plugins/ColorPicker/
+/Source/Plugins/ColorPicker/*.suo
+/Source/Plugins/ColorPicker/*.user
+/Source/Plugins/ColorPicker/_ReSharper*
+/Source/Plugins/ColorPicker/Thumbs.db
+/Source/Plugins/ColorPicker/obj
+
+# /Source/Plugins/CommentsPanel/
+/Source/Plugins/CommentsPanel/obj
+/Source/Plugins/CommentsPanel/*.user
+
+# /Source/Plugins/CopyPasteSectorProps/
+/Source/Plugins/CopyPasteSectorProps/obj
+
+# /Source/Plugins/GZDoomEditing/
+/Source/Plugins/GZDoomEditing/obj
+
+# /Source/Plugins/GZDoomEditing/ClassicModes/
+
+# /Source/Plugins/ImageDrawingExample/
+/Source/Plugins/ImageDrawingExample/obj
+
+# /Source/Plugins/NodesViewer/
+/Source/Plugins/NodesViewer/*.suo
+/Source/Plugins/NodesViewer/*.user
+/Source/Plugins/NodesViewer/_ReSharper*
+/Source/Plugins/NodesViewer/Thumbs.db
+/Source/Plugins/NodesViewer/obj
+
+# /Source/Plugins/SoundPropagationMode/
+/Source/Plugins/SoundPropagationMode/*.suo
+/Source/Plugins/SoundPropagationMode/*.user
+/Source/Plugins/SoundPropagationMode/_ReSharper*
+/Source/Plugins/SoundPropagationMode/Thumbs.db
+/Source/Plugins/SoundPropagationMode/obj
+
+# /Source/Plugins/StairSectorBuilder/
+/Source/Plugins/StairSectorBuilder/*.suo
+/Source/Plugins/StairSectorBuilder/*.user
+/Source/Plugins/StairSectorBuilder/_ReSharper*
+/Source/Plugins/StairSectorBuilder/Thumbs.db
+/Source/Plugins/StairSectorBuilder/obj
+
+# /Source/Plugins/Statistics/
+/Source/Plugins/Statistics/*.suo
+/Source/Plugins/Statistics/*.user
+/Source/Plugins/Statistics/_ReSharper*
+/Source/Plugins/Statistics/Thumbs.db
+/Source/Plugins/Statistics/obj
+
+# /Source/Plugins/TagExplorer/
+/Source/Plugins/TagExplorer/*.suo
+/Source/Plugins/TagExplorer/*.user
+/Source/Plugins/TagExplorer/_ReSharper*
+/Source/Plugins/TagExplorer/Thumbs.db
+/Source/Plugins/TagExplorer/obj
+
+# /Source/Plugins/TagRange/
+/Source/Plugins/TagRange/obj
+
+# /Source/Plugins/USDF/
+/Source/Plugins/USDF/obj
+
+# /Source/Plugins/VisplaneExplorer/
+/Source/Plugins/VisplaneExplorer/obj
+/Source/Plugins/VisplaneExplorer/*.user
+
+# /Source/Plugins/VisplaneExplorer/Resources/
+/Source/Plugins/VisplaneExplorer/Resources/vpo.exp
+/Source/Plugins/VisplaneExplorer/Resources/vpo.ilk
+/Source/Plugins/VisplaneExplorer/Resources/vpo.lib
+/Source/Plugins/VisplaneExplorer/Resources/vpo.pdb
+
+# /Source/Plugins/WadAuthorMode/
+/Source/Plugins/WadAuthorMode/obj
+
+# /Source/Plugins/vpo_dll/
+/Source/Plugins/vpo_dll/Debug
+/Source/Plugins/vpo_dll/*.user
+/Source/Plugins/vpo_dll/Release
+
+# /Tests/CopyPaste/
+/Tests/CopyPaste/copypaste_a.dbs
+/Tests/CopyPaste/copypaste_a.wad.backup1
+/Tests/CopyPaste/copypaste_a.wad.backup2
+/Tests/CopyPaste/copypaste_a.wad.backup3
+
+# /Tests/ErrorChecking/
+/Tests/ErrorChecking/overlappinglines_a.dbs
+/Tests/ErrorChecking/overlappinglines_a.wad.backup1
+
+# /Tests/Textures/Medricel/
+/Tests/Textures/Medricel/textest.dbs
+/Tests/Textures/Medricel/textest.wad.backup1
+/Tests/Textures/Medricel/textest.wad.backup2
+/Tests/Textures/Medricel/textest.wad.backup3
+
+# /Tests/Triangulation/
+/Tests/Triangulation/triangulation_a.dbs
+/Tests/Triangulation/triangulation_w.dbs

@@ -647,7 +647,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.MarqueSelectTouching); //mxd
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.SyncronizeThingEditButton); //mxd
 			if(General.Map.UDMF) General.Interface.AddButton(BuilderPlug.Me.MenusForm.TextureOffsetLock, ToolbarSection.Geometry); //mxd
-			
+
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PlaceThings); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PerpendicularVertex); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PerpendicularLinedef); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.ParallelLinedef); //JBR
+
 			// Convert geometry selection to sectors only
 			General.Map.Map.ConvertSelection(SelectionType.Sectors);
 
@@ -705,6 +710,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.SyncronizeThingEditButton); //mxd
 			if(General.Map.UDMF) General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.TextureOffsetLock); //mxd
 			
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PlaceThings); //JBR
+            General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PerpendicularVertex); //JBR
+            General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PerpendicularLinedef); //JBR
+            General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.ParallelLinedef); //JBR
+
 			// Keep only sectors selected
 			General.Map.Map.ClearSelectedLinedefs();
 			
@@ -1349,7 +1359,82 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			PixelColor c = (s == highlighted ? General.Colors.Highlight : PixelColor.FromColor(Color.White));
 			renderer.RenderRectangleFilled(rect, c, true, General.Map.Data.CommentTextures[iconindex]);
 		}
-		
+
+		//JBR Perpendicular Vertex
+		[BeginAction("perpendicularvertex")]
+		public void PerpendicularVertex()
+		{
+			ICollection<Sector> selected = General.Map.Map.GetSelectedSectors(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new PerpendicularVertexMode(new SectorsMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
+		//JBR Perpendicular Linedef
+		[BeginAction("perpendicularlinedef")]
+		public void PerpendicularLinedef()
+		{
+			ICollection<Sector> selected = General.Map.Map.GetSelectedSectors(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new PerpendicularLinedefMode(new SectorsMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
+		//JBR Parallel Linedef
+		[BeginAction("parallellinedef")]
+		public void ParallelLinedef()
+		{
+			ICollection<Sector> selected = General.Map.Map.GetSelectedSectors(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new ParallelLinedefMode(new SectorsMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
 		#endregion
 
 		#region ================== Actions

@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Builder Modes")]
 [assembly: AssemblyDescription("GZDoom Builder Editing Modes")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CodeImp, MaxED")]
+[assembly: AssemblyCompany("CodeImp, MaxED, Justburner")]
 [assembly: AssemblyProduct("Doom Builder")]
-[assembly: AssemblyCopyright("Copyright ©  2007, 2016")]
+[assembly: AssemblyCopyright("Copyright © 2007, 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.9.0.2501")]
+[assembly: AssemblyVersion("2.10.0.2507")]

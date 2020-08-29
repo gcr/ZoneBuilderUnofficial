@@ -170,6 +170,13 @@
     <Compile Include="Actions\ActionManager.cs" />
     <Compile Include="Config\CompilerInfo.cs" />
     <Compile Include="Config\ConfigurationInfo.cs" />
+    <Compile Include="Geometry\TracksTracer.cs" />
+    <Compile Include="GZBuilder\Controls\AngleControlF.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GZBuilder\Controls\AngleControlF.designer.cs">
+      <DependentUpon>AngleControlF.cs</DependentUpon>
+    </Compile>
     <Compile Include="GZBuilder\Controls\PairedFloatControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -442,6 +449,12 @@
     <Compile Include="Windows\TextureSetForm.Designer.cs">
       <DependentUpon>TextureSetForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ThingBrowser2Form.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Windows\ThingBrowser2Form.designer.cs">
+      <DependentUpon>ThingBrowser2Form.cs</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ThingEditForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -557,6 +570,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GZBuilder\Controls\AngleControlF.resx">
+      <DependentUpon>AngleControlF.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GZBuilder\Controls\PairedFloatControl.resx">
       <DependentUpon>PairedFloatControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -708,6 +724,7 @@
     <None Include="Resources\ZBLogo.png" />
     <None Include="Resources\axis1.png" />
     <None Include="Resources\ZB16.png" />
+    <Content Include="Resources\Snap1mp.png" />
     <Content Include="ZB.ico" />
     <None Include="Resources\zonebuilder.png" />
     <None Include="Resources\ZoneBuilder.bmp" />
@@ -1331,6 +1348,9 @@
     <EmbeddedResource Include="Windows\TextureSetForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>TextureSetForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Windows\ThingBrowser2Form.resx">
+      <DependentUpon>ThingBrowser2Form.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Windows\ThingBrowserForm.resx">
       <SubType>Designer</SubType>

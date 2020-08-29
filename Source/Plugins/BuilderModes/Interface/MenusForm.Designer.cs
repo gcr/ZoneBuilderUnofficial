@@ -41,6 +41,9 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.flipsidedefsitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.curvelinedefsitem = new System.Windows.Forms.ToolStripMenuItem();
+			this.perpendicularVertexL = new System.Windows.Forms.ToolStripMenuItem();
+			this.perpendicularLinedefL = new System.Windows.Forms.ToolStripMenuItem();
+			this.parallelLinedefL = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
 			this.splitlinedefsitem = new System.Windows.Forms.ToolStripMenuItem();
 			this.updatelightfogitem = new System.Windows.Forms.ToolStripMenuItem();
@@ -49,7 +52,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.alignFloorToBackItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.alignCeilingToFrontItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.alignCeilingToBackItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectSimilarLinesItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.sectorsmenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.placethingss = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +65,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
 			this.makedooritem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+			this.perpendicularVertexS = new System.Windows.Forms.ToolStripMenuItem();
+			this.perpendicularLinedefS = new System.Windows.Forms.ToolStripMenuItem();
+			this.parallelLinedefS = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectSimilarSectors = new System.Windows.Forms.ToolStripMenuItem();
 			this.thingsmenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.selectInSectorsItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,11 +76,17 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.alignToWallItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pointAtCursorItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.vertexSlopeAssistT = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectSimilarThingsItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.vertsmenu = new System.Windows.Forms.ToolStripMenuItem();
 			this.placethingsv = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+			this.vertexIntoShapeV = new System.Windows.Forms.ToolStripMenuItem();
+			this.perpendicularVertexV = new System.Windows.Forms.ToolStripMenuItem();
+			this.perpendicularLinedefV = new System.Windows.Forms.ToolStripMenuItem();
+			this.parallelLinedefV = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
 			this.selectSimilarVertsItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.globalstrip = new System.Windows.Forms.ToolStrip();
 			this.manualstrip = new System.Windows.Forms.ToolStrip();
@@ -99,6 +112,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.syncthingteditbutton = new System.Windows.Forms.ToolStripButton();
 			this.buttonAlignThingsToWall = new System.Windows.Forms.ToolStripButton();
 			this.buttonTextureOffsetLock = new System.Windows.Forms.ToolStripButton();
+			this.buttonPlaceThings = new System.Windows.Forms.ToolStripButton();
+			this.buttonPointAtCursor = new System.Windows.Forms.ToolStripButton();
+			this.buttonPerpendicularVertex = new System.Windows.Forms.ToolStripButton();
+			this.buttonPerpendicularLinedef = new System.Windows.Forms.ToolStripButton();
+			this.buttonVertexIntoShape = new System.Windows.Forms.ToolStripButton();
+			this.buttonParallelLinedef = new System.Windows.Forms.ToolStripButton();
+			this.buttonVertexSlopeAssist = new System.Windows.Forms.ToolStripButton();
 			this.fileMenuStrip = new System.Windows.Forms.MenuStrip();
 			this.exportStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
@@ -138,11 +158,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.flipsidedefsitem,
             this.toolStripMenuItem1,
             this.curvelinedefsitem,
+            this.perpendicularVertexL,
+            this.perpendicularLinedefL,
+            this.parallelLinedefL,
             this.toolStripMenuItem3,
             this.splitlinedefsitem,
             this.updatelightfogitem,
             this.aligntexturesitem,
-            this.toolStripSeparator5,
+            this.toolStripMenuItem7,
             this.selectSimilarLinesItem});
 			this.linedefsmenu.Name = "linedefsmenu";
 			this.linedefsmenu.Size = new System.Drawing.Size(63, 20);
@@ -168,8 +191,8 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.syncthingeditlinedefsitem.Tag = "syncedthingedit";
 			this.syncthingeditlinedefsitem.Text = "&Synchronized Things Editing";
 			this.syncthingeditlinedefsitem.ToolTipText = "When enabled, selected things will be dragged when dragging linedefs.\r\nRectangula" +
-				"r selection will also select things (holding Alt while selecting \r\ninverts this " +
-				"behaviour).";
+    "r selection will also select things (holding Alt while selecting \r\ninverts this " +
+    "behaviour).";
 			this.syncthingeditlinedefsitem.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
 			// toolStripSeparator2
@@ -229,6 +252,33 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.curvelinedefsitem.Tag = "curvelinesmode";
 			this.curvelinedefsitem.Text = "&Curve Linedefs...";
 			this.curvelinedefsitem.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// perpendicularVertexL
+			// 
+			this.perpendicularVertexL.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularVertex;
+			this.perpendicularVertexL.Name = "perpendicularVertexL";
+			this.perpendicularVertexL.Size = new System.Drawing.Size(224, 22);
+			this.perpendicularVertexL.Tag = "perpendicularvertex";
+			this.perpendicularVertexL.Text = "Perpendicular Vertex...";
+			this.perpendicularVertexL.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// perpendicularLinedefL
+			// 
+			this.perpendicularLinedefL.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularLinedef;
+			this.perpendicularLinedefL.Name = "perpendicularLinedefL";
+			this.perpendicularLinedefL.Size = new System.Drawing.Size(224, 22);
+			this.perpendicularLinedefL.Tag = "perpendicularlinedef";
+			this.perpendicularLinedefL.Text = "Perpendicular Linedef...";
+			this.perpendicularLinedefL.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// parallelLinedefL
+			// 
+			this.parallelLinedefL.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.ParallelLinedef;
+			this.parallelLinedefL.Name = "parallelLinedefL";
+			this.parallelLinedefL.Size = new System.Drawing.Size(224, 22);
+			this.parallelLinedefL.Tag = "parallellinedef";
+			this.parallelLinedefL.Text = "Parallel Linedef...";
+			this.parallelLinedefL.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
 			// toolStripMenuItem3
 			// 
@@ -294,10 +344,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.alignCeilingToBackItem.Text = "Ceiling to Back Side";
 			this.alignCeilingToBackItem.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
-			// toolStripSeparator5
+			// toolStripMenuItem7
 			// 
-			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(221, 6);
+			this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+			this.toolStripMenuItem7.Size = new System.Drawing.Size(221, 6);
 			// 
 			// selectSimilarLinesItem
 			// 
@@ -321,6 +371,10 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.toolStripSeparator8,
             this.makedooritem,
             this.toolStripSeparator4,
+            this.perpendicularVertexS,
+            this.perpendicularLinedefS,
+            this.parallelLinedefS,
+            this.toolStripMenuItem11,
             this.selectSimilarSectors});
 			this.sectorsmenu.Name = "sectorsmenu";
 			this.sectorsmenu.Size = new System.Drawing.Size(57, 20);
@@ -404,6 +458,38 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
 			this.toolStripSeparator4.Visible = false;
 			// 
+			// perpendicularVertexS
+			// 
+			this.perpendicularVertexS.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularVertex;
+			this.perpendicularVertexS.Name = "perpendicularVertexS";
+			this.perpendicularVertexS.Size = new System.Drawing.Size(224, 22);
+			this.perpendicularVertexS.Tag = "perpendicularvertex";
+			this.perpendicularVertexS.Text = "Perpendicular Vertex...";
+			this.perpendicularVertexS.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// perpendicularLinedefS
+			// 
+			this.perpendicularLinedefS.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularLinedef;
+			this.perpendicularLinedefS.Name = "perpendicularLinedefS";
+			this.perpendicularLinedefS.Size = new System.Drawing.Size(224, 22);
+			this.perpendicularLinedefS.Tag = "perpendicularlinedef";
+			this.perpendicularLinedefS.Text = "Perpendicular Linedef...";
+			this.perpendicularLinedefS.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// parallelLinedefS
+			// 
+			this.parallelLinedefS.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.ParallelLinedef;
+			this.parallelLinedefS.Name = "parallelLinedefS";
+			this.parallelLinedefS.Size = new System.Drawing.Size(224, 22);
+			this.parallelLinedefS.Tag = "parallellinedef";
+			this.parallelLinedefS.Text = "Parallel Linedef...";
+			this.parallelLinedefS.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// toolStripMenuItem11
+			// 
+			this.toolStripMenuItem11.Name = "toolStripMenuItem11";
+			this.toolStripMenuItem11.Size = new System.Drawing.Size(221, 6);
+			// 
 			// selectSimilarSectors
 			// 
 			this.selectSimilarSectors.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.Similar;
@@ -421,6 +507,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.toolStripSeparator3,
             this.alignToWallItem,
             this.pointAtCursorItem,
+            this.vertexSlopeAssistT,
             this.toolStripSeparator6,
             this.selectSimilarThingsItem});
 			this.thingsmenu.Name = "thingsmenu";
@@ -469,6 +556,15 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.pointAtCursorItem.Text = "&Point to Cursor";
 			this.pointAtCursorItem.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
+			// vertexSlopeAssistT
+			// 
+			this.vertexSlopeAssistT.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.VertexSlope;
+			this.vertexSlopeAssistT.Name = "vertexSlopeAssistT";
+			this.vertexSlopeAssistT.Size = new System.Drawing.Size(245, 22);
+			this.vertexSlopeAssistT.Tag = "vertexslopeassist";
+			this.vertexSlopeAssistT.Text = "Vertex Slope Assistant (SRB2)...";
+			this.vertexSlopeAssistT.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
 			// toolStripSeparator6
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
@@ -488,6 +584,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.vertsmenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.placethingsv,
             this.toolStripSeparator7,
+            this.vertexIntoShapeV,
+            this.perpendicularVertexV,
+            this.perpendicularLinedefV,
+            this.parallelLinedefV,
+            this.toolStripMenuItem6,
             this.selectSimilarVertsItem});
 			this.vertsmenu.Name = "vertsmenu";
 			this.vertsmenu.Size = new System.Drawing.Size(60, 20);
@@ -498,7 +599,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// 
 			this.placethingsv.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PlaceThings;
 			this.placethingsv.Name = "placethingsv";
-			this.placethingsv.Size = new System.Drawing.Size(153, 22);
+			this.placethingsv.Size = new System.Drawing.Size(198, 22);
 			this.placethingsv.Tag = "placethings";
 			this.placethingsv.Text = "&Place Things...";
 			this.placethingsv.Click += new System.EventHandler(this.InvokeTaggedAction);
@@ -506,13 +607,54 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			// toolStripSeparator7
 			// 
 			this.toolStripSeparator7.Name = "toolStripSeparator7";
-			this.toolStripSeparator7.Size = new System.Drawing.Size(150, 6);
+			this.toolStripSeparator7.Size = new System.Drawing.Size(195, 6);
+			// 
+			// vertexIntoShapeV
+			// 
+			this.vertexIntoShapeV.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.VertexIntoShape;
+			this.vertexIntoShapeV.Name = "vertexIntoShapeV";
+			this.vertexIntoShapeV.Size = new System.Drawing.Size(198, 22);
+			this.vertexIntoShapeV.Tag = "vertexintoshape";
+			this.vertexIntoShapeV.Text = "Vertex into Shape...";
+			this.vertexIntoShapeV.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// perpendicularVertexV
+			// 
+			this.perpendicularVertexV.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularVertex;
+			this.perpendicularVertexV.Name = "perpendicularVertexV";
+			this.perpendicularVertexV.Size = new System.Drawing.Size(198, 22);
+			this.perpendicularVertexV.Tag = "perpendicularvertex";
+			this.perpendicularVertexV.Text = "Perpendicular Vertex...";
+			this.perpendicularVertexV.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// perpendicularLinedefV
+			// 
+			this.perpendicularLinedefV.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularLinedef;
+			this.perpendicularLinedefV.Name = "perpendicularLinedefV";
+			this.perpendicularLinedefV.Size = new System.Drawing.Size(198, 22);
+			this.perpendicularLinedefV.Tag = "perpendicularlinedef";
+			this.perpendicularLinedefV.Text = "Perpendicular Linedef...";
+			this.perpendicularLinedefV.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// parallelLinedefV
+			// 
+			this.parallelLinedefV.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.ParallelLinedef;
+			this.parallelLinedefV.Name = "parallelLinedefV";
+			this.parallelLinedefV.Size = new System.Drawing.Size(198, 22);
+			this.parallelLinedefV.Tag = "parallellinedef";
+			this.parallelLinedefV.Text = "Parallel Linedef...";
+			this.parallelLinedefV.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// toolStripMenuItem6
+			// 
+			this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+			this.toolStripMenuItem6.Size = new System.Drawing.Size(195, 6);
 			// 
 			// selectSimilarVertsItem
 			// 
 			this.selectSimilarVertsItem.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.Similar;
 			this.selectSimilarVertsItem.Name = "selectSimilarVertsItem";
-			this.selectSimilarVertsItem.Size = new System.Drawing.Size(153, 22);
+			this.selectSimilarVertsItem.Size = new System.Drawing.Size(198, 22);
 			this.selectSimilarVertsItem.Tag = "selectsimilar";
 			this.selectSimilarVertsItem.Text = "Select Similar...";
 			this.selectSimilarVertsItem.Click += new System.EventHandler(this.InvokeTaggedAction);
@@ -549,7 +691,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
             this.buttonMarqueSelectTouching,
             this.syncthingteditbutton,
             this.buttonAlignThingsToWall,
-            this.buttonTextureOffsetLock});
+            this.buttonTextureOffsetLock,
+            this.buttonPlaceThings,
+            this.buttonPointAtCursor,
+            this.buttonPerpendicularVertex,
+            this.buttonPerpendicularLinedef,
+            this.buttonVertexIntoShape,
+            this.buttonParallelLinedef,
+            this.buttonVertexSlopeAssist});
 			this.manualstrip.Location = new System.Drawing.Point(0, 73);
 			this.manualstrip.Name = "manualstrip";
 			this.manualstrip.Size = new System.Drawing.Size(794, 25);
@@ -739,7 +888,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.buttonMarqueSelectTouching.Size = new System.Drawing.Size(23, 22);
 			this.buttonMarqueSelectTouching.Text = "Select Touching";
 			this.buttonMarqueSelectTouching.ToolTipText = "Toggle between \"select touching\" and \"select inside\"\r\nrectangular selection modes" +
-				"";
+    "";
 			this.buttonMarqueSelectTouching.Click += new System.EventHandler(this.buttonMarqueSelectTouching_Click);
 			// 
 			// syncthingteditbutton
@@ -774,8 +923,90 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			this.buttonTextureOffsetLock.Name = "buttonTextureOffsetLock";
 			this.buttonTextureOffsetLock.Size = new System.Drawing.Size(23, 22);
 			this.buttonTextureOffsetLock.ToolTipText = "Pin Texture Offsets.\r\nWhen enabled, keeps floor and ceiling texture offsets\r\ncons" +
-				"tant while sector is dragged";
+    "tant while sector is dragged";
 			this.buttonTextureOffsetLock.Click += new System.EventHandler(this.buttonTextureOffsetLock_Click);
+			// 
+			// buttonPlaceThings
+			// 
+			this.buttonPlaceThings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonPlaceThings.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PlaceThings;
+			this.buttonPlaceThings.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonPlaceThings.Name = "buttonPlaceThings";
+			this.buttonPlaceThings.Size = new System.Drawing.Size(23, 22);
+			this.buttonPlaceThings.Tag = "placethings";
+			this.buttonPlaceThings.Text = "Place Things...";
+			this.buttonPlaceThings.ToolTipText = "Place Things on each vertex.";
+			this.buttonPlaceThings.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonPointAtCursor
+			// 
+			this.buttonPointAtCursor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonPointAtCursor.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.ThingPointAtCursor;
+			this.buttonPointAtCursor.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonPointAtCursor.Name = "buttonPointAtCursor";
+			this.buttonPointAtCursor.Size = new System.Drawing.Size(23, 22);
+			this.buttonPointAtCursor.Tag = "thinglookatcursor";
+			this.buttonPointAtCursor.Text = "Points selected things to cursor position. Hold Ctrl to point away from cursor.";
+			this.buttonPointAtCursor.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonPerpendicularVertex
+			// 
+			this.buttonPerpendicularVertex.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonPerpendicularVertex.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularVertex;
+			this.buttonPerpendicularVertex.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonPerpendicularVertex.Name = "buttonPerpendicularVertex";
+			this.buttonPerpendicularVertex.Size = new System.Drawing.Size(23, 22);
+			this.buttonPerpendicularVertex.Tag = "perpendicularvertex";
+			this.buttonPerpendicularVertex.Text = "Perpendicular Tool";
+			this.buttonPerpendicularVertex.ToolTipText = "Create perpendicular from selected vertices.";
+			this.buttonPerpendicularVertex.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonPerpendicularLinedef
+			// 
+			this.buttonPerpendicularLinedef.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonPerpendicularLinedef.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.PerpendicularLinedef;
+			this.buttonPerpendicularLinedef.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonPerpendicularLinedef.Name = "buttonPerpendicularLinedef";
+			this.buttonPerpendicularLinedef.Size = new System.Drawing.Size(23, 20);
+			this.buttonPerpendicularLinedef.Tag = "perpendicularlinedef";
+			this.buttonPerpendicularLinedef.Text = "Perpendicular Linedef";
+			this.buttonPerpendicularLinedef.ToolTipText = "Create perpendicular from selected linedefs.";
+			this.buttonPerpendicularLinedef.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonVertexIntoShape
+			// 
+			this.buttonVertexIntoShape.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonVertexIntoShape.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.VertexIntoShape;
+			this.buttonVertexIntoShape.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonVertexIntoShape.Name = "buttonVertexIntoShape";
+			this.buttonVertexIntoShape.Size = new System.Drawing.Size(23, 20);
+			this.buttonVertexIntoShape.Tag = "vertexintoshape";
+			this.buttonVertexIntoShape.Text = "Vertex into Shape...";
+			this.buttonVertexIntoShape.ToolTipText = "Create shapes for each selected vertex.";
+			this.buttonVertexIntoShape.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonParallelLinedef
+			// 
+			this.buttonParallelLinedef.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonParallelLinedef.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.ParallelLinedef;
+			this.buttonParallelLinedef.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonParallelLinedef.Name = "buttonParallelLinedef";
+			this.buttonParallelLinedef.Size = new System.Drawing.Size(23, 20);
+			this.buttonParallelLinedef.Tag = "parallellinedef";
+			this.buttonParallelLinedef.Text = "Parallel Linedef...";
+			this.buttonParallelLinedef.ToolTipText = "Create parallel linedefs from selected linedefs.";
+			this.buttonParallelLinedef.Click += new System.EventHandler(this.InvokeTaggedAction);
+			// 
+			// buttonVertexSlopeAssist
+			// 
+			this.buttonVertexSlopeAssist.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.buttonVertexSlopeAssist.Image = global::CodeImp.DoomBuilder.BuilderModes.Properties.Resources.VertexSlope;
+			this.buttonVertexSlopeAssist.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.buttonVertexSlopeAssist.Name = "buttonVertexSlopeAssist";
+			this.buttonVertexSlopeAssist.Size = new System.Drawing.Size(23, 20);
+			this.buttonVertexSlopeAssist.Tag = "vertexslopeassist";
+			this.buttonVertexSlopeAssist.Text = "Vertex Slope Assistant (SRB2)";
+			this.buttonVertexSlopeAssist.Click += new System.EventHandler(this.InvokeTaggedAction);
 			// 
 			// fileMenuStrip
 			// 
@@ -935,8 +1166,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private System.Windows.Forms.ToolStripMenuItem exportStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
 		private System.Windows.Forms.ToolStripButton buttonpastepropertiesoptions;
-		private System.Windows.Forms.ToolStripMenuItem filterSelectionItem;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem filterSelectionItem;
 		private System.Windows.Forms.ToolStripMenuItem selectSimilarLinesItem;
 		private System.Windows.Forms.ToolStripMenuItem selectSimilarSectors;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
@@ -954,6 +1184,27 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private System.Windows.Forms.ToolStripMenuItem itemcopyprops;
 		private System.Windows.Forms.ToolStripMenuItem itempasteprops;
 		private System.Windows.Forms.ToolStripMenuItem itempastepropsoptions;
-		private System.Windows.Forms.ToolStripSeparator separatorcopyprops;
+        private System.Windows.Forms.ToolStripSeparator separatorcopyprops;
+        private System.Windows.Forms.ToolStripButton buttonPerpendicularLinedef;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularLinedefL;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripButton buttonPlaceThings;
+        private System.Windows.Forms.ToolStripButton buttonVertexIntoShape;
+        private System.Windows.Forms.ToolStripMenuItem vertexIntoShapeV;
+        private System.Windows.Forms.ToolStripButton buttonPerpendicularVertex;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularVertexL;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularVertexV;
+        private System.Windows.Forms.ToolStripMenuItem parallelLinedefL;
+        private System.Windows.Forms.ToolStripButton buttonParallelLinedef;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem11;
+        private System.Windows.Forms.ToolStripMenuItem parallelLinedefS;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularLinedefS;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularVertexS;
+        private System.Windows.Forms.ToolStripMenuItem perpendicularLinedefV;
+        private System.Windows.Forms.ToolStripMenuItem parallelLinedefV;
+        private System.Windows.Forms.ToolStripButton buttonPointAtCursor;
+        private System.Windows.Forms.ToolStripButton buttonVertexSlopeAssist;
+        private System.Windows.Forms.ToolStripMenuItem vertexSlopeAssistT;
 	}
 }

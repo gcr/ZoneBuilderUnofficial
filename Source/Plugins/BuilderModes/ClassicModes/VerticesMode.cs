@@ -98,6 +98,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				General.Interface.AddButton(BuilderPlug.Me.MenusForm.TextureOffsetLock, ToolbarSection.Geometry); //mxd
 			}
 
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PlaceThings); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.VertexIntoShape); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PerpendicularVertex); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PerpendicularLinedef); //JBR
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.ParallelLinedef); //JBR
+
 			// Convert geometry selection to vertices only
 			General.Map.Map.ConvertSelection(SelectionType.Vertices);
 			UpdateSelectionInfo(); //mxd
@@ -117,8 +123,14 @@ namespace CodeImp.DoomBuilder.BuilderModes
 				General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.TextureOffsetLock); //mxd
 			}
 
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PlaceThings); //JBR
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.VertexIntoShape); //JBR
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PerpendicularVertex); //JBR
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PerpendicularLinedef); //JBR
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.ParallelLinedef); //JBR
+
 			// Going to EditSelectionMode?
-			if(General.Editing.NewMode is EditSelectionMode)
+			if (General.Editing.NewMode is EditSelectionMode)
 			{
 				// Not pasting anything?
 				EditSelectionMode editmode = (General.Editing.NewMode as EditSelectionMode);
@@ -1104,6 +1116,107 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			if(form.Setup(this)) form.ShowDialog();
 		}
 
+		//JBR Perpendicular Vertex
+		[BeginAction("perpendicularvertex")]
+		public void PerpendicularVertex()
+		{
+			ICollection<Vertex> selected = General.Map.Map.GetSelectedVertices(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new PerpendicularVertexMode(new VerticesMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
+
+		//JBR Perpendicular Linedef
+		[BeginAction("perpendicularlinedef")]
+		public void PerpendicularLinedef()
+		{
+			ICollection<Vertex> selected = General.Map.Map.GetSelectedVertices(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new PerpendicularLinedefMode(new VerticesMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
+		//JBR Parallel Linedef
+		[BeginAction("parallellinedef")]
+		public void ParallelLinedef()
+		{
+			ICollection<Vertex> selected = General.Map.Map.GetSelectedVertices(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new ParallelLinedefMode(new VerticesMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
+		//JBR Vertex into Shape
+		[BeginAction("vertexintoshape")]
+		public void VertexIntoShape()
+		{
+			ICollection<Vertex> selected = General.Map.Map.GetSelectedVertices(true);
+
+			// Nothing selected?
+			if (selected.Count == 0)
+			{
+				// Anything highlighted?
+				if (highlighted != null)
+				{
+					// Select the highlighted item
+					highlighted.Selected = true;
+					selected.Add(highlighted);
+				}
+			}
+
+			// Anything selected?
+			if (selected.Count > 0)
+				General.Editing.ChangeMode(new VertexIntoShapeMode(new VerticesMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This action requires a selection!");
+		}
+
 		#endregion
 
 		#region ================== Action assist (mxd)
@@ -1186,7 +1299,7 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					ld.Front.Sector.Join(ld.Back.Sector);
 			}
 		}
-		
+
 		#endregion
 	}
 }

@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Zone Builder")]
 [assembly: AssemblyDescription("SRB2 map editor, forked from GZDoom Builder")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CodeImp, MaxED, MascaraSnake")]
+[assembly: AssemblyCompany("CodeImp, MaxED, MascaraSnake, Justburner")]
 [assembly: AssemblyProduct("Zone Builder")]
-[assembly: AssemblyCopyright("Copyright © 2007, 2018")]
+[assembly: AssemblyCopyright("Copyright © 2007, 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -28,4 +28,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.9.0.2501")]
+[assembly: AssemblyVersion("2.10.0.2507")]

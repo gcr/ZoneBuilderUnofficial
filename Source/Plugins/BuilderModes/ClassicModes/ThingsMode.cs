@@ -123,7 +123,18 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PastePropertiesOptions); //mxd
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.SeparatorCopyPaste); //mxd
 			General.Interface.AddButton(BuilderPlug.Me.MenusForm.AlignThingsToWall); //mxd
-			
+
+			General.Interface.AddButton(BuilderPlug.Me.MenusForm.PointAtCursor); //JBR
+
+			//JBR Add exclusive tool for SRB2 only
+			if (General.Map.SRB2)
+			{
+				General.Interface.AddButton(BuilderPlug.Me.MenusForm.VertexSlopeAssist);
+				BuilderPlug.Me.MenusForm.VertexSlopeAssistMenu.Visible = true;
+			}
+			else
+				BuilderPlug.Me.MenusForm.VertexSlopeAssistMenu.Visible = false;
+
 			// Convert geometry selection to linedefs selection
 			General.Map.Map.ConvertSelection(SelectionType.Linedefs);
 			General.Map.Map.SelectionType = SelectionType.Things;
@@ -142,9 +153,13 @@ namespace CodeImp.DoomBuilder.BuilderModes
 			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PastePropertiesOptions); //mxd
 			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.SeparatorCopyPaste); //mxd
 			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.AlignThingsToWall); //mxd
-			
+
+			General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.PointAtCursor); //JBR
+			if (General.Map.SRB2)
+				General.Interface.RemoveButton(BuilderPlug.Me.MenusForm.VertexSlopeAssist); //JBR
+
 			//mxd. Do some highlight management...
-			if(highlighted != null) highlighted.Highlighted = false;
+			if (highlighted != null) highlighted.Highlighted = false;
 
 			// Going to EditSelectionMode?
 			if(General.Editing.NewMode is EditSelectionMode)
@@ -1167,6 +1182,19 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					t.Rotate(Vector2D.GetAngle(mousemappos, t.Position));
 				}
 			}
+
+			// Redraw screen
+			General.Interface.RedrawDisplay();
+		}
+
+		//JBR Vertex slope assistant
+		[BeginAction("vertexslopeassist")]
+		public void VertexSlopeAssist()
+		{
+			if (General.Map.SRB2)
+				General.Editing.ChangeMode(new VertexSlopeAssistMode(new ThingsMode()));
+			else
+				General.Interface.DisplayStatus(StatusType.Warning, "This tool is only available to SRB2 maps!");
 
 			// Redraw screen
 			General.Interface.RedrawDisplay();

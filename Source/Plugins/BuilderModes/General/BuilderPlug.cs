@@ -90,7 +90,12 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		private FindReplaceForm findreplaceform;
 		private ErrorCheckForm errorcheckform;
 		private PreferencesForm preferencesform;
-		
+		private PerpendicularLinedefForm perpendicularlinedefform; //JBR
+		private PerpendicularVertexForm perpendicularvertexform; //JBR
+		private ParallelLinedefForm parallellinedefform; //JBR
+		private VertexIntoShapeForm vertexintoshapeform; //JBR
+		private VertexSlopeAssistForm vertexslopeassistform; //JBR
+
 		// Dockers
 		private UndoRedoPanel undoredopanel;
 		private Docker undoredodocker;
@@ -147,6 +152,11 @@ namespace CodeImp.DoomBuilder.BuilderModes
 		public FindReplaceForm FindReplaceForm { get { return findreplaceform ?? (findreplaceform = new FindReplaceForm()); } }
 		public ErrorCheckForm ErrorCheckForm { get { return errorcheckform ?? (errorcheckform = new ErrorCheckForm()); } }
 		public PreferencesForm PreferencesForm { get { return preferencesform; } }
+		public PerpendicularLinedefForm PerpendicularLinedefForm { get { return perpendicularlinedefform ?? (perpendicularlinedefform = new PerpendicularLinedefForm()); } } //JBR
+		public PerpendicularVertexForm PerpendicularVertexForm { get { return perpendicularvertexform ?? (perpendicularvertexform = new PerpendicularVertexForm()); } } //JBR
+		public ParallelLinedefForm ParallelLinedefForm { get { return parallellinedefform ?? (parallellinedefform = new ParallelLinedefForm()); } } //JBR
+		public VertexIntoShapeForm VertexIntoShapeForm { get { return vertexintoshapeform ?? (vertexintoshapeform = new VertexIntoShapeForm()); } } //JBR
+		public VertexSlopeAssistForm VertexSlopeAssistForm { get { return vertexslopeassistform ?? (vertexslopeassistform = new VertexSlopeAssistForm()); } } //JBR
 
 		// Settings
 		public int ShowVisualThings { get { return showvisualthings; } set { showvisualthings = value; } }
@@ -263,7 +273,33 @@ namespace CodeImp.DoomBuilder.BuilderModes
 					errorcheckform.Dispose();
 					errorcheckform = null;
 				}
-				
+
+				if (perpendicularlinedefform != null)  //JBR
+				{
+					perpendicularlinedefform.Dispose();
+					perpendicularlinedefform = null;
+				}
+				if (perpendicularvertexform != null)  //JBR
+				{
+					perpendicularvertexform.Dispose();
+					perpendicularvertexform = null;
+				}
+				if (parallellinedefform != null)  //JBR
+				{
+					parallellinedefform.Dispose();
+					parallellinedefform = null;
+				}
+				if (vertexintoshapeform != null)  //JBR
+				{
+					vertexintoshapeform.Dispose();
+					vertexintoshapeform = null;
+				}
+				if (vertexslopeassistform != null)  //JBR
+				{
+					vertexslopeassistform.Dispose();
+					vertexslopeassistform = null;
+				}
+
 				// Done
 				me = null;
 				base.Dispose();

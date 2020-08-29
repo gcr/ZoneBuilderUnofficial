@@ -81,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassicModes\BaseClassicMode.cs" />
+    <Compile Include="ClassicModes\DrawShapeMode.cs" />
     <Compile Include="ClassicModes\InsertThingsRadiallyMode.cs" />
     <Compile Include="ClassicModes\ErrorCheckMode.cs" />
     <Compile Include="ClassicModes\EditSelectionMode.cs" />
@@ -91,6 +92,11 @@
     <Compile Include="ClassicModes\DrawGeometryMode.cs" />
     <Compile Include="ClassicModes\FindReplaceMode.cs" />
     <Compile Include="ClassicModes\MakeSectorMode.cs" />
+    <Compile Include="ClassicModes\ParallelLinedefMode.cs" />
+    <Compile Include="ClassicModes\PerpendicularLinedefMode.cs" />
+    <Compile Include="ClassicModes\PerpendicularVertexMode.cs" />
+    <Compile Include="ClassicModes\VertexIntoShapeMode.cs" />
+    <Compile Include="ClassicModes\VertexSlopeAssistMode.cs" />
     <Compile Include="ErrorChecks\CheckClosedSectors.cs" />
     <Compile Include="ErrorChecks\CheckStuckThings.cs" />
     <Compile Include="ErrorChecks\CheckLineReferences.cs" />
@@ -119,6 +125,12 @@
     </Compile>
     <Compile Include="Interface\CurveLinedefsForm.Designer.cs">
       <DependentUpon>CurveLinedefsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\DrawShapeOptionsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Interface\DrawShapeOptionsPanel.Designer.cs">
+      <DependentUpon>DrawShapeOptionsPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Interface\InsertThingsRadiallyOptionsPanel.cs">
       <SubType>UserControl</SubType>
@@ -150,11 +162,47 @@
     <Compile Include="Interface\MenusForm.Designer.cs">
       <DependentUpon>MenusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Interface\ParallelLinedefForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\ParallelLinedefForm.designer.cs">
+      <DependentUpon>ParallelLinedefForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\PerpendicularLinedefForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\PerpendicularLinedefForm.designer.cs">
+      <DependentUpon>PerpendicularLinedefForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\PerpendicularVertexForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\PerpendicularVertexForm.designer.cs">
+      <DependentUpon>PerpendicularVertexForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interface\PreferencesForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Interface\PreferencesForm.Designer.cs">
       <DependentUpon>PreferencesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\VertexIntoShapeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\VertexIntoShapeForm.designer.cs">
+      <DependentUpon>VertexIntoShapeForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\VertexSlopeAssistForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\VertexSlopeAssistForm.designer.cs">
+      <DependentUpon>VertexSlopeAssistForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\VertexSlopeAssistTagForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Interface\VertexSlopeAssistTagForm.designer.cs">
+      <DependentUpon>VertexSlopeAssistTagForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -171,9 +219,30 @@
     <Compile Include="ClassicModes\VerticesMode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Interface\DrawShapeOptionsPanel.resx">
+      <DependentUpon>DrawShapeOptionsPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Interface\InsertThingsRadiallyOptionsPanel.resx">
       <DependentUpon>InsertThingsRadiallyOptionsPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\ParallelLinedefForm.resx">
+      <DependentUpon>ParallelLinedefForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\PerpendicularLinedefForm.resx">
+      <DependentUpon>PerpendicularLinedefForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\PerpendicularVertexForm.resx">
+      <DependentUpon>PerpendicularVertexForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\VertexIntoShapeForm.resx">
+      <DependentUpon>VertexIntoShapeForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\VertexSlopeAssistForm.resx">
+      <DependentUpon>VertexSlopeAssistForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Interface\VertexSlopeAssistTagForm.resx">
+      <DependentUpon>VertexSlopeAssistTagForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Actions.cfg" />
   </ItemGroup>
@@ -632,6 +701,60 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\InsertThingsRadiallyMode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddTriangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AddVertex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawShape3Sides.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawShape8Sides.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawShape24Sides.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\DrawShapeMode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawShapeSpike0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawShapeSpike50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawTaggedTriangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DrawTriangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ParallelLinedef.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PerpendicularLinedef.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\PerpendicularVertex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SingleVertex.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VertexIntoShape.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VertexSlope.png" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
